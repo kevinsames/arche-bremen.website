@@ -55,6 +55,14 @@ Erscheinungsbild (August 2026) kamen zwei weitere Stufen dazu:
 Hero- und Vollbild-Sektionsflächen. Gleiches Prinzip: frei gewählt, keine
 Print-Herkunft.
 
+Das Kachel-Muster (Karte + Popup, `--radius-md`, Akzentrotation über
+`--accent-warm`/`--accent-warm-alt`/`--accent-nature`) wiederholt sich
+mittlerweile ein drittes Mal: Predigten, Älteste und seit August 2026 auch
+die 25 Artikel des Glaubensbekenntnisses (`/glaubensbekenntnis`, vorher eine
+einzige lange `.prose`-Seite). Keine neuen Tokens dafür nötig — nur die
+Nummer im Kachelkopf ist neu, in `--text-primary` statt in der Akzentfarbe
+(siehe Abschnitt „Sekundärfarben tragen keinen Text" unten).
+
 **Bewegung:** `--duration-fast: 150ms` für Hover- und Focus-Übergänge,
 `--duration-slow: 400ms` für das Scroll-Reveal der Sektionsüberschriften,
 `--ease-out` als gemeinsame Timing-Funktion. Ausschließlich CSS

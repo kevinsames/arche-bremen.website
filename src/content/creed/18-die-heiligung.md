@@ -1,0 +1,35 @@
+---
+title: "Die Heiligung"
+number: 18
+---
+
+Während uns die Rechtfertigung in einen endgültigen, festen Stand
+hineinstellt (1. Korinther 6,11), ist die Heiligung ein lebenslanger Prozess
+(Römer 6,5-6; 2. Korinther 3,18; Galater 4,19; Philipper 3,10). Bei der
+Wiedergeburt wird uns zu unserer alten, unerlösten Natur eine neue
+hinzugegeben, nämlich die des Herrn Jesus Christus (2. Korinther 5,17; Römer
+8,9-10; Kolosser 1,27). Zwischen diesen beiden in uns wohnenden Naturen
+entsteht ein lebenslanger, unversöhnlicher Kampf (Galater 5,17; 1. Petrus
+2,11; Römer 7,14-23). Durch die überlegene, heiligende Kraft Christi in uns
+wird die Herrschaft der Sünde in der Weise gebrochen, dass auf der einen
+Seite die sündhaften Begierden des alten Menschen mehr und mehr geschwächt
+und abgetötet werden (Römer 6,14; Galater 5,24). Auf der anderen Seite werden
+die heiligen Wesenszüge des neuen Menschen so belebt und gestärkt (Kolosser
+1,11; Epheser 3,16-19), dass wir schließlich das Ebenbild Gottes, wie es in
+Christus vollkommen ist, widerspiegeln und in Gottes Herrlichkeit
+aufgenommen werden (1. Johannes 5,4; 2. Korinther 3,18; 7,1).
+
+Die Heiligung ist ein Werk Gottes, das Er durch Seinen Geist und durch Sein
+Wort an den Herzen der Seinen durchführt (Johannes 17,17; Epheser 5,26; 2.
+Thessalonicher 2,13). Aber auch durch alle Ereignisse und Lebenserfahrungen
+heiligt der Herr Seine Kinder, sodass sie dadurch väterlich erzogen, zu
+geistlicher Reife gebracht und für ein himmlisches Leben zugerüstet werden
+(1. Thessalonicher 5,23; 1. Korinther 1,8). Zudem sind wir aufgefordert,
+durch die Gnade Gottes die Heiligung auch selbst zu erstreben und sie durch
+konkreten Gehorsam dem Wort Gottes gegenüber ganz aktiv zu fördern (1.
+Petrus 1,15-16; 3,15; Philipper 4,8; Epheser 2,10; Kolosser 3,12). Leider
+versagen wir dabei immer wieder, dürfen aber täglich durch das Blut Jesu
+Christi neue Vergebung empfangen (Matthäus 6,12; 1. Johannes 1,7+9; 2,1-2),
+sodass wir künftig immer vorsichtiger wandeln (1. Petrus 5,8; 1.
+Thessalonicher 5,6), sodass die Gemeinschaft mit dem Herrn immer inniger
+wird (Johannes 17,20+22-24+26).

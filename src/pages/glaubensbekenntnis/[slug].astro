@@ -1,0 +1,41 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+
+// Detailseite eines Artikels — Rückfallebene für Browser ohne
+// Popover-Unterstützung (siehe @supports-Block in CreedCard.astro) und
+// Ziel des Permalinks aus dessen Popup.
+export async function getStaticPaths() {
+  // Nur die 25 nummerierten Artikel bekommen eine Detailseite — Vorwort und
+  // Quelle stehen bereits als Fließtext auf /glaubensbekenntnis und haben
+  // keine Kachel, die hierher verlinken könnte.
+  const articles = await getCollection('creed');
+  return articles
+    .filter((article) => article.data.number != null)
+    .map((article) => ({
+      params: { slug: article.id },
+      props: { article },
+    }));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+---
+
+<BaseLayout title={article.data.title}>
+  <Section tone="light" width="measure">
+    {article.data.number != null && <p class="number">Artikel {article.data.number}</p>}
+    <h1>{article.data.title}</h1>
+    <div class="prose">
+      <Content />
+    </div>
+    <p><a href="/glaubensbekenntnis">&larr; Zurück zum Glaubensbekenntnis</a></p>
+  </Section>
+</BaseLayout>
+
+<style>
+  .number {
+    color: var(--text-secondary);
+  }
+</style>

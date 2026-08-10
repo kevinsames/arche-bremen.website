@@ -102,7 +102,7 @@ a:visited {
 }
 
 /* Fließtext aus Markdown (Content Collections). Trägt die Typografie für
-   Glaubensbekenntnis, Prediger-Profile, Impressum etc. */
+   Glaubensbekenntnis-Artikel, Prediger-Profile, Impressum etc. */
 .prose {
   max-width: var(--measure);
 }

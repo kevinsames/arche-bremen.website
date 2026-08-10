@@ -83,8 +83,9 @@ Freitext im Schema, sonst ist Filterbarkeit dauerhaft zerstört.
 
 | Collection | Zweck | Beispiel |
 |---|---|---|
-| `pages` | Statische Seiten (Glaubensbekenntnis, später Impressum etc.) | `src/content/pages/glaubensbekenntnis.md` |
+| `pages` | Statische Seiten (Impressum, Datenschutz, später Vision etc.) | `src/content/pages/impressum.md` |
 | `elders` | Profile der Ältesten (Gemeindeleitung) | `src/content/elders/niklas-meyer.md` |
+| `creed` | Die 25 Artikel des Glaubensbekenntnisses, dazu Vorwort und Quelle — eine Datei pro Artikel, siehe `/glaubensbekenntnis` | `src/content/creed/01-die-heilige-schrift.md` |
 
 Verknüpfung: `sermon.preacher` ist reiner Freitext in Sanity. Stimmt der Name
 (Groß-/Kleinschreibung und Leerzeichen egal) mit `name` in einem
@@ -111,7 +112,17 @@ Link und ohne Fehler. Die verknüpften Profile erscheinen unter `/aelteste`.
 `1. Korinther 9,22`), liest Markdown das als numerierte Liste und reißt den
 Absatz auf. In solchen Fällen den Punkt maskieren: `1\. Korinther`. Nur die
 Ziffer `1` ist betroffen. Nach dem Neuumbrechen einer Datei mit
-`grep -n '^[0-9]\+\. ' src/content/pages/*.md` prüfen.
+`grep -n '^[0-9]\+\. ' src/content/pages/*.md src/content/creed/*.md` prüfen.
+
+### Wie ein Artikel des Glaubensbekenntnisses geändert wird
+
+Jeder Artikel ist eine eigene Datei unter `src/content/creed/<nn>-<slug>.md`
+mit Frontmatter `title` und `number` (Vorwort und Quelle haben kein
+`number` — sie erscheinen nicht als Kachel). `/glaubensbekenntnis` rendert
+die Kacheln sortiert nach `number`, `/glaubensbekenntnis/<slug>` ist die
+Detailseite dazu. Einen neuen Artikel einfügen heißt: neue Datei mit der
+nächsten Nummer anlegen — die Nummern in den bestehenden Dateinamen und
+`title` bleiben davon unberührt (keine automatische Umnummerierung).
 
 ## Markendateien
 

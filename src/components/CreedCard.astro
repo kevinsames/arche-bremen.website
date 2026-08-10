@@ -1,0 +1,132 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Overlay from './Overlay.astro';
+
+// Kachel für einen Artikel des Glaubensbekenntnisses, gleiche Bauweise wie
+// SermonCard/ElderCard: Anker (Tastatur-Weg zur Detailseite) und
+// deckungsgleicher Button (Maus/Touch, öffnet das Popup mit dem gerenderten
+// Markdown-Body). Details siehe Kommentar in SermonCard.astro. Die
+// Akzentrotation über den Index ist ebenfalls von dort übernommen.
+interface Props {
+  article: CollectionEntry<'creed'>;
+  index: number;
+}
+
+const { article, index } = Astro.props;
+const { Content } = await render(article);
+
+const accents = ['--accent-warm', '--accent-warm-alt', '--accent-nature'] as const;
+const accent = accents[index % accents.length];
+
+const overlayId = `creed-${article.id}`;
+const permalink = `/glaubensbekenntnis/${article.id}`;
+---
+
+<div class="card-wrap">
+  <a href={permalink} class="card">
+    <div class="head" style={`background-color: var(${accent})`}>
+      <span class="number">{article.data.number}</span>
+    </div>
+    <p class="title">{article.data.title}</p>
+  </a>
+  <button
+    type="button"
+    popovertarget={overlayId}
+    class="open"
+    tabindex="-1"
+    aria-label={`Artikel öffnen: ${article.data.title}`}
+  >
+  </button>
+</div>
+
+<Overlay id={overlayId} label={article.data.title}>
+  <p class="overlay-number">Artikel {article.data.number}</p>
+  <h2 class="overlay-title">{article.data.title}</h2>
+  <div class="prose">
+    <Content />
+  </div>
+  <p><a href={permalink}>Zum Artikel &rarr;</a></p>
+</Overlay>
+
+<style>
+  .card-wrap {
+    position: relative;
+  }
+
+  .card {
+    display: block;
+    text-decoration: none;
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background-color: var(--bg-page);
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .card-wrap:has(.open:hover) .card {
+    border-color: var(--c-blue);
+    transform: scale(1.02);
+  }
+
+  .card:focus-visible {
+    border-color: var(--c-blue);
+    transform: scale(1.02);
+  }
+
+  .card:visited {
+    color: var(--text-primary);
+  }
+
+  .head {
+    padding: var(--sp-2) var(--sp-3);
+  }
+
+  .number {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: var(--tracking-display);
+    font-size: var(--fs-l);
+    color: var(--text-primary);
+  }
+
+  .title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+    font-size: var(--fs-s);
+    margin: 0;
+    padding: var(--sp-3);
+  }
+
+  .open {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  @supports not selector(:popover-open) {
+    .open {
+      display: none;
+    }
+  }
+
+  .overlay-number {
+    color: var(--text-secondary);
+    font-size: var(--fs-xs);
+    margin: 0;
+  }
+
+  .overlay-title {
+    margin: var(--sp-1) 0 0;
+  }
+</style>

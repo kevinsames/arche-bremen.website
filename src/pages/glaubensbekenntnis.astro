@@ -1,0 +1,80 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import CreedCard from '../components/CreedCard.astro';
+
+// Bis August 2026 eine einzige 759-Zeilen-Markdown-Datei, die als lange
+// .prose-Spalte ausgegeben wurde (siehe Git-Historie). Jetzt ein
+// Kachelraster: Vorwort und Quelle bleiben Fließtext, die 25 Artikel
+// werden über die Collection `creed` einzeln geladen, sortiert nach
+// `number` (siehe content.config.ts).
+const vorwort = await getEntry('creed', '00-vorwort');
+const quelle = await getEntry('creed', '99-quelle');
+const articles = (await getCollection('creed'))
+  .filter((entry) => entry.data.number != null)
+  .sort((a, b) => (a.data.number ?? 0) - (b.data.number ?? 0));
+
+const { Content: VorwortContent } = await render(vorwort);
+const { Content: QuelleContent } = await render(quelle);
+---
+
+<BaseLayout
+  title="Glaubensbekenntnis"
+  description="Das Glaubensbekenntnis der Arche in 25 Artikeln, mit Vorwort und Bibelstellen."
+>
+  <Section tone="light" width="measure">
+    <h1>Glaubensbekenntnis</h1>
+    <p class="lead">
+      Die Arche versteht sich als evangelisch-reformierte Freikirche. Das folgende
+      Bekenntnis fasst in 25 Artikeln zusammen, wofür sie steht — mit den
+      Bibelstellen, auf die sich jede Aussage stützt.
+    </p>
+    <div class="prose">
+      <VorwortContent />
+    </div>
+  </Section>
+
+  <Section tone="muted">
+    <div class="creed-grid">
+      {articles.map((article, index) => (
+        <CreedCard article={article} index={index} />
+      ))}
+    </div>
+  </Section>
+
+  <Section tone="light" width="measure">
+    <div class="prose quelle">
+      <QuelleContent />
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .lead {
+    color: var(--text-secondary);
+  }
+
+  .creed-grid {
+    display: grid;
+    gap: var(--sp-3);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 40rem) {
+    .creed-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .creed-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .quelle {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+  }
+</style>
