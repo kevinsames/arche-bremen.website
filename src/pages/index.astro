@@ -3,8 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
 import SermonCard from '../components/SermonCard.astro';
 import Slider from '../components/Slider.astro';
+import Overlay from '../components/Overlay.astro';
 import { SITE, SERVICE, ADDRESS, WEEKLY_EVENTS } from '../consts';
-import { getSermons, getEvents } from '../lib/sanity';
+import { getSermons, getEvents, type Event } from '../lib/sanity';
 import { getCollection } from 'astro:content';
 
 // Above the fold, ohne Scrollen: Gottesdienstzeit und Adresse (siehe
@@ -24,6 +25,26 @@ const eventDateFormatter = new Intl.DateTimeFormat('de-DE', {
   dateStyle: 'medium',
   timeStyle: 'short',
 });
+// Popup zeigt das Datum ausgeschrieben, die Zeile bleibt kompakt.
+const eventDateLongFormatter = new Intl.DateTimeFormat('de-DE', {
+  dateStyle: 'full',
+  timeStyle: 'short',
+});
+const eventTimeFormatter = new Intl.DateTimeFormat('de-DE', { timeStyle: 'short' });
+
+// Endzeit nur mit Uhrzeit, wenn der Termin am selben Tag endet — sonst mit
+// vollem Datum (z.B. eine mehrtägige Gemeindefreizeit).
+function formatEventRange(event: Event) {
+  const start = new Date(event.start);
+  const startText = eventDateLongFormatter.format(start);
+  if (!event.end) return startText;
+  const end = new Date(event.end);
+  const endText =
+    start.toDateString() === end.toDateString()
+      ? eventTimeFormatter.format(end)
+      : eventDateLongFormatter.format(end);
+  return `${startText} – ${endText}`;
+}
 ---
 
 <BaseLayout title={SITE.name}>
@@ -83,11 +104,25 @@ const eventDateFormatter = new Intl.DateTimeFormat('de-DE', {
           <ul class="events">
             {events.map((event) => (
               <li>
-                <span class="event-title">{event.title}</span>
-                <span class="event-detail">
-                  {eventDateFormatter.format(new Date(event.start))}
-                  {event.location && <> &middot; {event.location}</>}
-                </span>
+                <button
+                  type="button"
+                  popovertarget={`event-${event._id}`}
+                  class="event-row"
+                  aria-label={`Termin öffnen: ${event.title}`}
+                >
+                  <span class="event-title">{event.title}</span>
+                  <span class="event-detail">
+                    {eventDateFormatter.format(new Date(event.start))}
+                    {event.location && <> &middot; {event.location}</>}
+                  </span>
+                </button>
+
+                <Overlay id={`event-${event._id}`} label={event.title}>
+                  <h2>{event.title}</h2>
+                  <p class="overlay-meta">{formatEventRange(event)}</p>
+                  {event.location && <p class="overlay-meta">{event.location}</p>}
+                  {event.description && <p>{event.description}</p>}
+                </Overlay>
               </li>
             ))}
           </ul>
@@ -129,12 +164,45 @@ const eventDateFormatter = new Intl.DateTimeFormat('de-DE', {
   }
 
   .events li {
-    padding: var(--sp-2) 0;
     border-bottom: 1px solid var(--border-subtle);
+    transition: border-color var(--duration-fast) var(--ease-out);
+  }
+
+  /* Fixtermine (WEEKLY_EVENTS) haben kein .event-row — nur reiner Text,
+     kein Button, kein Popup (siehe Plan: keine Zusatzinfos vorhanden). */
+  .events li:not(:has(.event-row)) {
+    padding: var(--sp-2) 0;
     display: flex;
     flex-wrap: wrap;
     gap: var(--sp-2);
     justify-content: space-between;
+  }
+
+  .event-row {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    justify-content: space-between;
+    padding: var(--sp-2) 0;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .events li:has(.event-row:hover),
+  .events li:has(.event-row:focus-visible) {
+    border-color: var(--c-blue);
+  }
+
+  @supports not selector(:popover-open) {
+    .event-row {
+      cursor: default;
+    }
   }
 
   .event-title {
@@ -147,5 +215,10 @@ const eventDateFormatter = new Intl.DateTimeFormat('de-DE', {
 
   .event-detail {
     color: var(--text-secondary);
+  }
+
+  .overlay-meta {
+    color: var(--text-secondary);
+    margin: var(--sp-2) 0 0;
   }
 </style>
