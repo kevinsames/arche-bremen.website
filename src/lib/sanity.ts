@@ -51,3 +51,24 @@ export async function getSermon(slug: string): Promise<Sermon | null> {
     fetchOptions,
   );
 }
+
+export interface Event {
+  _id: string;
+  title: string;
+  start: string;
+  end?: string;
+  location?: string;
+  description?: string;
+}
+
+export async function getEvents(): Promise<Event[]> {
+  return sanityClient.fetch(
+    // start >= now(): now() ist der Build-Zeitpunkt, da die Seite statisch
+    // ist. Abgelaufene Termine verschwinden erst mit dem nächsten Build.
+    `*[_type == "event" && start >= now()] | order(start asc) {
+      _id, title, start, end, location, description
+    }`,
+    {},
+    fetchOptions,
+  );
+}

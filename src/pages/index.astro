@@ -4,7 +4,7 @@ import Section from '../components/Section.astro';
 import SermonCard from '../components/SermonCard.astro';
 import Slider from '../components/Slider.astro';
 import { SITE, SERVICE, ADDRESS, WEEKLY_EVENTS } from '../consts';
-import { getSermons } from '../lib/sanity';
+import { getSermons, getEvents } from '../lib/sanity';
 import { getCollection } from 'astro:content';
 
 // Above the fold, ohne Scrollen: Gottesdienstzeit und Adresse (siehe
@@ -19,6 +19,11 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
 // Gleiche Datenquellen wie /predigten — kein neues Datenmodell.
 const sermons = (await getSermons()).slice(0, 3);
 const preacherProfiles = await getCollection('preachers');
+const events = await getEvents();
+const eventDateFormatter = new Intl.DateTimeFormat('de-DE', {
+  dateStyle: 'medium',
+  timeStyle: 'short',
+});
 ---
 
 <BaseLayout title={SITE.name}>
@@ -56,6 +61,8 @@ const preacherProfiles = await getCollection('preachers');
 
   <Section tone="muted">
     <h2>Termine</h2>
+
+    <h3>Jede Woche</h3>
     <ul class="events">
       {
         WEEKLY_EVENTS.map((event) => (
@@ -68,6 +75,25 @@ const preacherProfiles = await getCollection('preachers');
         ))
       }
     </ul>
+
+    {
+      events.length > 0 && (
+        <>
+          <h3>Kommende Termine</h3>
+          <ul class="events">
+            {events.map((event) => (
+              <li>
+                <span class="event-title">{event.title}</span>
+                <span class="event-detail">
+                  {eventDateFormatter.format(new Date(event.start))}
+                  {event.location && <> &middot; {event.location}</>}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )
+    }
   </Section>
 </BaseLayout>
 
@@ -90,6 +116,10 @@ const preacherProfiles = await getCollection('preachers');
 
   .button {
     margin-top: var(--sp-4);
+  }
+
+  h3 {
+    margin: var(--sp-6) 0 0;
   }
 
   .events {
