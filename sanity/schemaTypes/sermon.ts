@@ -81,8 +81,9 @@ export const sermon = defineType({
     defineField({
       name: 'preacher',
       title: 'Prediger',
-      type: 'reference',
-      to: [{ type: 'preacher' }],
+      type: 'string',
+      description:
+        'Name des Predigers als Freitext. Stimmt der Name (Groß-/Kleinschreibung und Leerzeichen egal) mit einem Ältesten-Profil in src/content/elders/ überein, wird der Name auf der Website automatisch verlinkt.',
       validation: (rule) => rule.required(),
     }),
     defineField({

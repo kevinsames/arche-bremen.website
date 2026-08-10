@@ -76,7 +76,9 @@ function formatEventRange(event: Event) {
       ) : (
         <Slider>
           {sermons.map((sermon, index) => {
-            const profile = preacherProfiles.find((p) => p.id === sermon.preacher.slug);
+            const profile = preacherProfiles.find(
+              (p) => p.data.name.trim().toLowerCase() === sermon.preacher.trim().toLowerCase(),
+            );
             return <SermonCard sermon={sermon} index={index} preacherProfile={profile} />;
           })}
         </Slider>

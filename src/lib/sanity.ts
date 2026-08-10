@@ -6,11 +6,9 @@ export interface Sermon {
   title: string;
   slug: string;
   date: string;
-  preacher: {
-    name: string;
-    // undefined, wenn der preacher kein slug-Feld gesetzt hat.
-    slug?: string;
-  };
+  // Freitext, kein Sanity-Dokument mehr. Wird verlinkt, wenn der Name mit
+  // einem Ältesten-Profil übereinstimmt — siehe predigten/index.astro.
+  preacher: string;
   series?: string;
   passages: Passage[];
   audioUrl?: string;
@@ -23,7 +21,7 @@ const sermonProjection = `{
   title,
   "slug": slug.current,
   date,
-  "preacher": preacher->{name, "slug": slug.current},
+  preacher,
   series,
   passages,
   audioUrl,

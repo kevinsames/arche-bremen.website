@@ -118,7 +118,7 @@ sind Free-Datasets **öffentlich lesbar, inklusive Entwürfe**: Es gibt kein
 
 ## Datenmodell (Sanity)
 
-Drei Dokumenttypen. Schema von Tag eins vollständig, auch wo die UI noch fehlt —
+Zwei Dokumenttypen. Schema von Tag eins vollständig, auch wo die UI noch fehlt —
 nachträgliches Verschlagworten von 80 Predigten passiert nie.
 
 ### `sermon`
@@ -126,7 +126,12 @@ nachträgliches Verschlagworten von 80 Predigten passiert nie.
 - `title` (string, required)
 - `slug` (slug, aus title)
 - `date` (date, required)
-- `preacher` (reference → `preacher`, required)
+- `preacher` (string, required) — Freitext, kein eigener Dokumenttyp. Stimmt
+  der Name (Groß-/Kleinschreibung und Leerzeichen egal) mit einem
+  Ältesten-Profil in `src/content/elders/` überein, verlinkt die Website
+  automatisch dorthin; sonst erscheint der Name nur als Text (deckt
+  Gastprediger ohne Ältestenamt ab). Ein Tippfehler ergibt keinen Fehler, nur
+  keinen Link.
 - `series` (string, optional)
 - `passages` (array, min. 1 Eintrag, required) — pro Eintrag:
   - `book` — **Liste mit exakt 66 festen Werten. Niemals ein Freitextfeld.**
@@ -135,21 +140,6 @@ nachträgliches Verschlagworten von 80 Predigten passiert nie.
   - `chapterStart`, `verseStart`, `chapterEnd`, `verseEnd` (number)
 - `audioUrl` (url) oder `audioFile` (file)
 - `description` (text, optional)
-
-### `preacher`
-
-Absichtlich minimal: `name` (string, required), `slug` (slug, optional).
-
-Hält fest, wer eine konkrete Predigt gehalten hat — nicht, wer Ältester ist.
-Das schließt Gastprediger ohne Ältestenamt ein. Deshalb bleibt der
-Dokumenttyp `preacher`, auch wenn die Website den Reiter „Älteste" nennt
-(`/aelteste`, Content Collection `elders` unter `src/content/elders/`):
-Nicht jeder Prediger ist ein Ältester der Gemeinde.
-
-Die vollständige Biografie der Ältesten liegt als Markdown im Repo, verknüpft
-über denselben Slug. Existiert kein passendes Repo-Profil (Gastprediger), wird
-der Name nur angezeigt, nicht verlinkt. Keine Biografien, Fotos oder
-Kontaktdaten in diesem Dokumenttyp.
 
 ### `event`
 

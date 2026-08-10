@@ -21,7 +21,14 @@ const preacherProfiles = await getCollection('elders');
       ) : (
         <div class="sermon-grid">
           {sermons.map((sermon, index) => {
-            const profile = preacherProfiles.find((p) => p.id === sermon.preacher.slug);
+            // preacher ist Freitext (siehe lib/sanity.ts) — Verlinkung nur
+            // bei exakter Namensübereinstimmung (Groß-/Kleinschreibung und
+            // Leerzeichen egal). Ein Tippfehler ergibt keinen Fehler, nur
+            // keinen Link — dieselbe stille Grenze wie zuvor bei fehlendem
+            // Slug.
+            const profile = preacherProfiles.find(
+              (p) => p.data.name.trim().toLowerCase() === sermon.preacher.trim().toLowerCase(),
+            );
             return <SermonCard sermon={sermon} index={index} preacherProfile={profile} />;
           })}
         </div>

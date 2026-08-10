@@ -15,7 +15,9 @@ export async function getStaticPaths() {
 
 const { sermon } = Astro.props;
 const preacherProfiles = await getCollection('elders');
-const profile = preacherProfiles.find((p) => p.id === sermon.preacher.slug);
+const profile = preacherProfiles.find(
+  (p) => p.data.name.trim().toLowerCase() === sermon.preacher.trim().toLowerCase(),
+);
 ---
 
 <BaseLayout title={sermon.title} description={sermon.description}>

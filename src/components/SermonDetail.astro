@@ -29,9 +29,9 @@ const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
   {dateFormatter.format(new Date(sermon.date))} &middot;{' '}
   {
     profile ? (
-      <a href={`/aelteste/${profile.id}`}>{sermon.preacher.name}</a>
+      <a href={`/aelteste/${profile.id}`}>{sermon.preacher}</a>
     ) : (
-      sermon.preacher.name
+      sermon.preacher
     )
   }
 </p>

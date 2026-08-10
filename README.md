@@ -51,15 +51,15 @@ npx sanity login              # einmalig
 npm run seed:development
 ```
 
-Importiert `sanity/seed/development.ndjson` (zwei Prediger, eine
-Beispielpredigt, ein Beispieltermin) fest in das Dataset `development` — das
-Zielname steht im npm-Skript, nicht in `SANITY_DATASET`, damit ein falsch
-gesetzter Wert nie versehentlich `production` überschreibt. `--replace`
-ersetzt nur Dokumente mit gleicher `_id`, leert das Dataset nicht.
+Importiert `sanity/seed/development.ndjson` (drei Beispielpredigten, zwei
+Beispieltermine) fest in das Dataset `development` — das Zielname steht im
+npm-Skript, nicht in `SANITY_DATASET`, damit ein falsch gesetzter Wert nie
+versehentlich `production` überschreibt. `--replace` ersetzt nur Dokumente
+mit gleicher `_id`, leert das Dataset nicht.
 
 Free-Datasets sind öffentlich lesbar (siehe CLAUDE.md) — deshalb im Seed keine
-personenbezogenen Daten außer dem Namen, den das `preacher`-Schema ohnehin
-vorsieht.
+personenbezogenen Daten außer dem Namen, den das Freitextfeld `preacher` bei
+`sermon` ohnehin vorsieht.
 
 ## Datenmodell
 
@@ -70,8 +70,7 @@ Kurzreferenz:
 
 | Typ | Felder | Datei |
 |---|---|---|
-| `sermon` | title, slug*, date, preacher→, series, passages[], audioUrl/audioFile, description | `sermon.ts` |
-| `preacher` | name, slug | `preacher.ts` |
+| `sermon` | title, slug*, date, preacher (Freitext), series, passages[], audioUrl/audioFile, description | `sermon.ts` |
 | `event` | title, start, end, location, description | `event.ts` |
 
 \* Abweichung vom Datenmodell in `CLAUDE.md`: `sermon.slug` ist hier Pflicht,
@@ -87,12 +86,12 @@ Freitext im Schema, sonst ist Filterbarkeit dauerhaft zerstört.
 | `pages` | Statische Seiten (Glaubensbekenntnis, später Impressum etc.) | `src/content/pages/glaubensbekenntnis.md` |
 | `elders` | Profile der Ältesten (Gemeindeleitung) | `src/content/elders/niklas-meyer.md` |
 
-Verknüpfung: Ein `preacher`-Dokument in Sanity und ein Markdown-Profil im Repo
-gehören zusammen, wenn ihr Slug (Sanity) bzw. Dateiname (Repo) übereinstimmt.
-Gibt es keine Übereinstimmung (z.B. Gastprediger ohne Ältestenamt), wird nur
-der Name als Text angezeigt, ohne Link. `preacher` bleibt bewusst der
-technische Name in Sanity — er beantwortet "wer hat gepredigt", nicht "wer ist
-Ältester". Die Website zeigt die verknüpften Profile unter `/aelteste`.
+Verknüpfung: `sermon.preacher` ist reiner Freitext in Sanity. Stimmt der Name
+(Groß-/Kleinschreibung und Leerzeichen egal) mit `name` in einem
+Markdown-Profil unter `src/content/elders/` überein, verlinkt die Website
+automatisch dorthin. Gibt es keine Übereinstimmung (z.B. Gastprediger ohne
+Ältestenamt, oder ein Tippfehler), wird nur der Name als Text angezeigt, ohne
+Link und ohne Fehler. Die verknüpften Profile erscheinen unter `/aelteste`.
 
 ### Wie ein neuer Dokumenttyp entsteht (Sanity)
 
