@@ -116,7 +116,7 @@ function formatEventRange(event: Event) {
           <li>
             <span class="event-title">{event.title}</span>
             <span class="event-detail">
-              {event.weekday}, {event.time} &middot; {event.location}
+              <span class="event-datetime">{event.weekday}, {event.time}</span> &middot; {event.location}
             </span>
           </li>
         ))
@@ -138,7 +138,7 @@ function formatEventRange(event: Event) {
                 >
                   <span class="event-title">{event.title}</span>
                   <span class="event-detail">
-                    {eventDateFormatter.format(new Date(event.start))}
+                    <span class="event-datetime">{eventDateFormatter.format(new Date(event.start))}</span>
                     {event.location && <> &middot; {event.location}</>}
                   </span>
                 </button>
@@ -242,18 +242,16 @@ function formatEventRange(event: Event) {
      kein Button, kein Popup (siehe Plan: keine Zusatzinfos vorhanden). */
   .events li:not(:has(.event-row)) {
     padding: var(--sp-2) 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-2);
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: var(--sp-1);
   }
 
   .event-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: var(--sp-1);
     width: 100%;
-    flex-wrap: wrap;
-    gap: var(--sp-2);
-    justify-content: space-between;
     padding: var(--sp-2) 0;
     margin: 0;
     border: 0;
@@ -262,6 +260,24 @@ function formatEventRange(event: Event) {
     color: inherit;
     text-align: left;
     cursor: pointer;
+  }
+
+  /* Ab hier passt die Titelspalte auf eine Zeile neben das Datum. Titel darf
+     weiterhin umbrechen (kein Kürzen), das Datum behält seine Breite und
+     rutscht dabei nicht mehr in die Titelzeile hinein wie noch mit Flex und
+     justify-content: space-between — siehe Plan. */
+  @media (min-width: 48rem) {
+    .events li:not(:has(.event-row)),
+    .event-row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: var(--sp-4);
+      row-gap: 0;
+      align-items: baseline;
+    }
+
+    .event-detail {
+      text-align: right;
+    }
   }
 
   .events li:has(.event-row:hover),
@@ -285,6 +301,12 @@ function formatEventRange(event: Event) {
 
   .event-detail {
     color: var(--text-secondary);
+  }
+
+  /* Datum und Uhrzeit sollen nicht mittendrin umbrechen — der Ortsteil
+     danach bleibt umbrechbar, siehe Plan. */
+  .event-datetime {
+    white-space: nowrap;
   }
 
   .overlay-meta {
