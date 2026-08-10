@@ -1,0 +1,46 @@
+---
+import { CONTACT } from '../consts';
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer>
+  <div class="bar">
+    <p>
+      Kontakt: {CONTACT.local}&#64;{CONTACT.domain}
+    </p>
+    <ul>
+      <li><a href="/impressum">Impressum</a></li>
+      <li><a href="/datenschutz">Datenschutz</a></li>
+    </ul>
+    <p class="copyright">&copy; {currentYear}</p>
+  </div>
+</footer>
+
+<style>
+  footer {
+    border-top: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    margin-top: var(--space-2xl);
+  }
+
+  .bar {
+    max-width: var(--content-max-width);
+    margin-inline: auto;
+    padding: var(--space-lg) var(--space-md);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  ul {
+    list-style: none;
+    display: flex;
+    gap: var(--space-md);
+    margin: var(--space-sm) 0;
+    padding: 0;
+  }
+
+  .copyright {
+    margin: 0;
+  }
+</style>
