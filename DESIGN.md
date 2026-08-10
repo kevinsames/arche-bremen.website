@@ -30,6 +30,11 @@ existiert nicht. Nicht spezifiziert und für diese Website erfunden:
   (`--fs-display`)
 - Overlay-Darstellung für Popups (`--scrim`, `--blur-overlay`,
   `--shadow-overlay`)
+- Icons (Header/Footer, August 2026): keine Icon-Font, keine Sprite-Datei,
+  keine neue Dependency — handgeschriebene Inline-SVGs, `stroke="currentColor"`
+  statt festem Farbwert (funktioniert auf hellem Header und dunklem Footer
+  gleichermaßen), Größe in `em` statt `px`, damit sie mit der Schriftgröße
+  skalieren. Rein dekorativ, `aria-hidden="true"`.
 
 Diese Entscheidungen stehen in `tokens.css` und sind dort als erfunden
 gekennzeichnet. Sie sollten Hamburg zur Kenntnis gegeben werden — nicht zur

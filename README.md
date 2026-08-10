@@ -117,15 +117,19 @@ Ziffer `1` ist betroffen. Nach dem Neuumbrechen einer Datei mit
 Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
 
 - **Platzhalterwerte in `src/consts.ts`:** Gottesdienstzeit und Adresse sind
-  gesetzt. `SITE.domain` und `CONTACT.domain` bleiben `PLATZHALTER`, bis die
-  Domain bzw. eine Funktionsadresse (`kontakt@…`) eingerichtet ist — eine
-  personengebundene Adresse wurde bewusst verworfen (siehe CLAUDE.md).
+  gesetzt. `CONTACT` ist mit `info@bremen.arche-gemeinde.de` eingerichtet.
+  `SITE.domain` bleibt `PLATZHALTER`, bis die Domain feststeht.
 - **Impressum:** `/impressum` ist vorhanden, Angaben 1:1 von arche-gemeinde.de
   übernommen. **Juristisch nicht bestätigt** — nur korrekt, wenn Arche Bremen
   rechtlich Teil des Hamburger Vereins ist. Vor dem ersten Deploy von
   fachkundiger Seite prüfen lassen, ebenso Registereintrag und USt-IdNr.
-- **Datenschutz:** `/datenschutz` existiert noch nicht, der Footer-Link bleibt
-  vorerst tot.
+- **Datenschutz:** `/datenschutz` existiert, eigens für diese Seite verfasst
+  (nicht von arche-gemeinde.de übernommen — dort werden Dienste beschrieben,
+  die es hier nicht gibt). **Juristisch nicht bestätigt**, insbesondere die
+  Einschätzung, dass mangels Cookies/Tracking kein Consent-Banner nötig ist.
+  Sobald ein Dienst mit Speicherzugriff dazukommt (eingebettete Karte,
+  Newsletter, Zahlungsformular auf der eigenen Seite), wird ein
+  Consent-Banner Pflicht und diese Erklärung muss erweitert werden.
 - **Offline-Fallback für Sanity:** Noch kein `sanity dataset export`-Snapshot
   als Fallback, falls die API zur Buildzeit nicht erreichbar ist.
 - Kalenderansicht, Predigtfilter, Audio-Player, Über-uns- und

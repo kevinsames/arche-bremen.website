@@ -15,7 +15,13 @@ const currentYear = new Date().getFullYear();
     </div>
 
     <div class="col">
-      <p>Kontakt: {CONTACT.local}&#64;{CONTACT.domain}</p>
+      <p class="contact">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <rect x="2" y="4" width="20" height="16" rx="2" />
+          <path d="m2 6 10 7 10-7" />
+        </svg>
+        Kontakt: {CONTACT.local}&#64;{CONTACT.domain}
+      </p>
     </div>
 
     <div class="col">
@@ -75,6 +81,18 @@ const currentYear = new Date().getFullYear();
 
   .col p {
     margin: 0;
+  }
+
+  .contact {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-1);
+  }
+
+  .contact .icon {
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
   }
 
   ul {

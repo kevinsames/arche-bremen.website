@@ -27,14 +27,9 @@ export const ADDRESS = {
 // local/domain statt als ein String, damit sich HTML-Entities für die
 // @-Ersetzung im Footer sauber anwenden lassen, ohne die Adresse selbst zu
 // zerlegen.
-//
-// Noch keine Funktionsadresse eingerichtet — PLATZHALTER bleibt bewusst
-// stehen. Eine personengebundene Adresse (niklas.meyer@…) wurde geprüft und
-// verworfen: widerspricht CLAUDE.md ("Kontakt über Funktionsadresse, nie
-// personengebunden"). Nicht erneut diskutieren, sondern kontakt@… einrichten.
 export const CONTACT = {
-  local: 'kontakt',
-  domain: 'PLATZHALTER-arche-bremen.de',
+  local: 'info',
+  domain: 'bremen.arche-gemeinde.de',
 };
 
 // Reiner Anzeigetext für die wöchentlichen Fixtermine. Keine
