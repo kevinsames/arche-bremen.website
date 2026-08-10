@@ -236,8 +236,10 @@ Bewertung nicht durch uns.
 
 Seit 10. August 2026 liegt die offizielle Vektordatei vor:
 `src/assets/brand/arche-logo.svg` — Lockup „ARCHE" + Unterzeile
-„Ev.-Reformierte Freikirche" + Bogen, einfarbig Dunkelblau (`#003a57`,
-entspricht `--c-blue-dark`), echter Alphakanal. Löst die vorherige
+„Ev.-Reformierte Freikirche" + Bogen, einfarbig Dunkelblau (`#003a57` — ein
+Zeichen abweichend vom Token `--c-blue-dark`, `#003a56`; bekannte, minimale
+Abweichung des gelieferten Lockups, hier nicht korrigiert), echter
+Alphakanal. Löst die vorherige
 JPEG-Interimslösung (Header/Hero/Stilelement über `mix-blend-mode: multiply`)
 vollständig ab; die Blend-Mode-Regeln sind entfernt.
 
@@ -247,11 +249,14 @@ Verwendung:
 |---|---|---|
 | `arche-logo.svg` | Vollständiges Lockup, wie geliefert, unverändert | Header, Hero |
 | `bogen.svg` | Nur der Bogen — ein einzelner Pfad aus `arche-logo.svg` herausgelöst, viewBox auf diesen Pfad zugeschnitten (plus Rand), sonst keine Änderung | Stilelement (Termine-Sektion) |
+| `public/favicon.svg` / `public/favicon.png` | Derselbe Pfad wie `bogen.svg`, unverändert übernommen, per `transform` auf `<g>` in ein quadratisches 64×64-Format zentriert (kein Neuzeichnen). Farbe Dunkelblau (`#003a56`, Token `--c-blue-dark`), Hintergrund transparent | Tab-Icon |
 
 Eingebunden per direktem Astro-Asset-Import (`import logo from
 '.../arche-logo.svg'`, `<img src={logo.src} ...>`), nicht über die
 `Image`-Komponente — deren Sharp-Pipeline ist für Rasterbilder gedacht und
-verarbeitet Vektorgrafiken nicht sinnvoll.
+verarbeitet Vektorgrafiken nicht sinnvoll. Ausnahme `favicon.svg`/`.png`: liegt
+in `public/` und wird unverändert kopiert, kein Asset-Import (Browser laden
+Icons direkt per `<link rel="icon">` aus `BaseLayout.astro`).
 
 **Weiterhin offen:**
 
@@ -260,12 +265,16 @@ verarbeitet Vektorgrafiken nicht sinnvoll.
    Dateiformat. Footer behält die Textwortmarke (`SITE.name` in Jost) — eine
    bewusste Abweichung von harter Regel 8, siehe dort. Löst sich erst mit
    einer hellen Logo-Variante für dunklen Grund.
-2. **Favicon** (`public/favicon.png`, aktuell Bogen weiß auf Schwarz) ist
-   nicht aktualisiert. Schwarz ist keine Markenfarbe (Brandbook 1.6); eine
-   Neufassung aus `bogen.svg` steht noch aus.
-3. **Kein Ortszusatz.** Das Lockup zeigt „ARCHE", nicht „Arche Bremen" —
-   unverändert gegenüber dem Interim-Zustand, siehe offene Frage 1 unten.
+2. **Kein Ortszusatz.** Das Lockup zeigt „ARCHE", nicht „Arche Bremen" —
+   unverändert gegenüber dem Interim-Zustand, siehe offene Frage 1 oben.
    „Bremen" steht weiterhin im Seitentitel, im `alt`-Text und im Footer.
+
+**Favicon, bewusste Abweichung von der Kontrastregel:** Der Favicon-Bogen ist
+Dunkelblau auf transparentem Grund — eine der Ausnahmen, in denen eine
+Nicht-Textfarbe als Fläche gedacht war (siehe Regel 3 oben), hier aber
+zugunsten von Transparenz verworfen wurde. In einer dunklen Browser-Tableiste
+(Dark Mode) ist der Bogen dadurch kaum sichtbar. Bewusst in Kauf genommen,
+nicht versehentlich übersehen.
 
 **Tokens** (`tokens.css`, Abschnitt Bildgrößen): `--size-logo-header`,
 `--size-logo-hero`, `--size-mark` — reine Layout-Werte, keine

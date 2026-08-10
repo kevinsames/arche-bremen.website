@@ -167,14 +167,18 @@ Beide als reiner Asset-Import eingebunden (`import x from '.../datei.svg'`,
 `Image`-Komponente — deren Sharp-Pipeline ist für Rasterbilder gedacht und
 verarbeitet Vektorgrafiken nicht sinnvoll.
 
+`public/favicon.svg` (mit `public/favicon.png` als Fallback für ältere
+Browser) verwendet denselben Bogen-Pfad wie `bogen.svg`, unverändert, nur per
+`transform` auf ein quadratisches 64×64-Format zentriert. Dunkelblau
+(`--c-blue-dark`) auf transparentem Grund statt der alten JPEG-Interimslösung
+(Bogen weiß auf Schwarz). Details und die bewusste Abweichung von der
+Kontrastregel (Sichtbarkeit im Dark-Mode-Tab) in `DESIGN.md`, Abschnitt
+„Logo".
+
 Noch offen:
 
 - **Footer** behält die Textwortmarke. Das Lockup ist einfarbig Dunkelblau,
   auf dem dunklen Footer-Hintergrund unlesbar — unabhängig vom Dateiformat.
-- **Favicon** (`public/favicon.png`) ist noch nicht erneuert, zeigt weiterhin
-  den alten schwarzen Bogen aus der früheren JPEG-Quelle. Eine Neufassung aus
-  `bogen.svg` braucht eine Entscheidung zu Zuschnitt und Innenabstand im
-  quadratischen Format.
 
 ## Offene Punkte
 

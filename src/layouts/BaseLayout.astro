@@ -1,14 +1,19 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { SITE } from '../consts';
 import '../styles/global.css';
 
 interface Props {
   title: string;
   description?: string;
+  // Startseite setzt SITE.titleHome, das den Namen schon enthält, und
+  // schaltet den Zusatz aus. Unterseiten bekommen ihn automatisch.
+  titleSuffix?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, titleSuffix = true } = Astro.props;
+const pageTitle = titleSuffix ? `${title} · ${SITE.name}` : title;
 ---
 
 <!doctype html>
@@ -16,9 +21,10 @@ const { title, description } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
+    <title>{pageTitle}</title>
     {description && <meta name="description" content={description} />}
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
     <!-- Above the fold gebraucht, deshalb vorab geladen statt nur per
          @font-face in global.css referenziert. -->
     <link rel="preload" href="/fonts/jost-500.woff2" as="font" type="font/woff2" crossorigin />

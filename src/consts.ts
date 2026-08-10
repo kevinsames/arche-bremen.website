@@ -9,6 +9,9 @@
 
 export const SITE = {
   name: 'Arche Bremen',
+  // Nur der Tab-Titel der Startseite. Unterseiten setzt BaseLayout aus dem
+  // Seitentitel und `name` zusammen.
+  titleHome: 'Arche Bremen — Evangelisch-reformierte Freikirche',
   domain: 'PLATZHALTER: arche-bremen.de',
 };
 
