@@ -41,4 +41,10 @@ export const WEEKLY_EVENTS = [
     time: '11 Uhr',
     location: 'Norderoog 2',
   },
+  {
+    title: 'Gebetsstunde',
+    weekday: 'Dienstag',
+    time: '19 Uhr',
+    location: 'Norderoog 2',
+  },
 ];
