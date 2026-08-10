@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE, SERVICE, ADDRESS } from '../consts';
+---
+
+<BaseLayout title={SITE.name}>
+  <section class="service-info">
+    <p class="service-time">{SERVICE.display}</p>
+    <address>
+      {ADDRESS.street}<br />
+      {ADDRESS.postalCode} {ADDRESS.city}
+    </address>
+  </section>
+
+  <p class="intro">
+    PLATZHALTER: kurzer Einleitungstext zur Gemeinde folgt hier.
+  </p>
+</BaseLayout>
+
+<style>
+  .service-info {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--space-xs);
+    padding: var(--space-md);
+    margin-top: var(--space-md);
+  }
+
+  .service-time {
+    font-size: var(--font-size-xl);
+    font-weight: bold;
+    margin: 0 0 var(--space-sm);
+  }
+
+  address {
+    font-style: normal;
+    color: var(--color-text-muted);
+  }
+
+  .intro {
+    margin-top: var(--space-lg);
+  }
+</style>
