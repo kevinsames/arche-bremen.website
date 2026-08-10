@@ -14,6 +14,12 @@ const { SANITY_PROJECT_ID, SANITY_DATASET } = loadEnv(
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
+  // SANITY_PROJECT_ID/SANITY_DATASET aren't secret (needed client-side by the
+  // embedded Studio in sanity.config.ts), so expose them via import.meta.env
+  // alongside Astro's default PUBLIC_ prefix.
+  vite: {
+    envPrefix: ['PUBLIC_', 'SANITY_'],
+  },
   integrations: [
     sanity({
       projectId: SANITY_PROJECT_ID,
