@@ -29,7 +29,10 @@ const currentYear = new Date().getFullYear();
         <li><a href="/impressum">Impressum</a></li>
         <li><a href="/datenschutz">Datenschutz</a></li>
       </ul>
-      <p class="copyright">&copy; {currentYear}</p>
+      {/* Unauffälliger Redaktionszugang: gedimmt in der Copyright-Zeile,
+          kein Bestandteil der Rechtslinks. rel="nofollow" plus robots.txt
+          (public/robots.txt) halten die Login-Seite aus Suchergebnissen. */}
+      <p class="copyright">&copy; {currentYear} &middot; <a href="/studio" rel="nofollow">Redaktion</a></p>
     </div>
   </div>
 </footer>
