@@ -51,7 +51,7 @@ npx sanity login              # einmalig
 npm run seed:development
 ```
 
-Importiert `sanity/seed/development.ndjson` (20 Beispielpredigten, acht
+Importiert `sanity/seed/development.ndjson` (20 Beispielpredigten, neun
 Beispieltermine) fest in das Dataset `development` — das Zielname steht im
 npm-Skript, nicht in `SANITY_DATASET`, damit ein falsch gesetzter Wert nie
 versehentlich `production` überschreibt. `--replace` ersetzt nur Dokumente
@@ -60,7 +60,12 @@ mit gleicher `_id`, leert das Dataset nicht.
 Zwei der Beispieltermine liegen absichtlich in der Vergangenheit und
 erscheinen deshalb nicht auf der Startseite (`getEvents()` filtert auf
 `start >= now()`) — sie testen genau diesen Fall. Die künftigen Termine sind
-fest datiert bis Sommer 2027; danach im Seed neue nachtragen.
+fest datiert bis Sommer 2027; danach im Seed neue nachtragen. Ein weiterer
+Termin (`event-beispiel-ausfall-gottesdienst`) hat `cancelled: true` gesetzt
+und testet den Hinweisblock für ausgefallene Termine — zugleich das Muster,
+wie ein einmaliger Ausfall eines wöchentlichen Fixtermins (`WEEKLY_EVENTS` in
+`src/consts.ts`) abgebildet wird: als normaler Sanity-Termin mit dem
+passenden Datum und gesetztem Häkchen, nicht als eigenes Konzept.
 
 Free-Datasets sind öffentlich lesbar (siehe CLAUDE.md) — deshalb im Seed keine
 personenbezogenen Daten außer dem Namen, den das Freitextfeld `preacher` bei
@@ -76,7 +81,7 @@ Kurzreferenz:
 | Typ | Felder | Datei |
 |---|---|---|
 | `sermon` | title, slug*, date, preacher (Freitext), series, passages[], audioUrl/audioFile, description | `sermon.ts` |
-| `event` | title, start, end, location, description | `event.ts` |
+| `event` | title, start, end, location, description, cancelled | `event.ts` |
 
 \* Abweichung vom Datenmodell in `CLAUDE.md`: `sermon.slug` ist hier Pflicht,
 weil ohne Slug keine Detailseite unter `/predigten/<slug>` erreichbar wäre.

@@ -204,6 +204,13 @@ Frage (BFSG, Ausnahmen für nicht-wirtschaftliche Tätigkeit und
 Kleinstunternehmen). Wir halten AA aus Praxisgründen ein; eine verbindliche
 Einschätzung gehört zu jemandem mit Fachkunde.
 
+**Zweitverwendung als Hinweisfläche:** Der Hinweisblock für ausgefallene
+Termine (`index.astro`, `.notice`) nutzt dieselben Tokens wie die
+Kachelflächen — `--surface-warm-alt` als Fläche, `--accent-warm-alt` als
+Rahmenstreifen. Kein neues Tokenpaar für „Warnung"/„Hinweis": Die Farbwerte
+und ihre Kontrastprüfung oben gelten unverändert, Orange bleibt Fläche und
+Rahmen, nie Text.
+
 ### 2. Jost statt Futura
 
 Brandbook 2.1 schreibt Futura Bold und Medium für Logo und Headlines vor,

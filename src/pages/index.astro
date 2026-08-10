@@ -23,6 +23,10 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
 const sermons = (await getSermons()).slice(0, 3);
 const preacherProfiles = await getCollection('elders');
 const events = await getEvents();
+// Ausgefallene Termine stehen oben im Hinweisblock, nicht in der
+// chronologischen Liste — sonst übersieht sie, wer nur die Wochenzeiten liest.
+const cancelledEvents = events.filter((event) => event.cancelled);
+const upcomingEvents = events.filter((event) => !event.cancelled);
 const eventDateFormatter = new Intl.DateTimeFormat('de-DE', {
   dateStyle: 'medium',
   timeStyle: 'short',
@@ -109,6 +113,26 @@ function formatEventRange(event: Event) {
     <img src={mark.src} width={mark.width} height={mark.height} alt="" aria-hidden="true" class="section-mark" />
     <h2>Termine</h2>
 
+    {
+      cancelledEvents.length > 0 && (
+        <div class="notice">
+          <h3>Bitte beachten</h3>
+          <ul class="notice-list">
+            {cancelledEvents.map((event) => (
+              <li>
+                <span class="event-title">{event.title} — fällt aus</span>
+                <span class="notice-detail">
+                  {eventDateLongFormatter.format(new Date(event.start))}
+                  {event.location && <> &middot; {event.location}</>}
+                </span>
+                {event.description && <p class="notice-reason">{event.description}</p>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+
     <h3>Jede Woche</h3>
     <ul class="events">
       {
@@ -124,11 +148,11 @@ function formatEventRange(event: Event) {
     </ul>
 
     {
-      events.length > 0 && (
+      upcomingEvents.length > 0 && (
         <>
           <h3>Kommende Termine</h3>
           <ul class="events">
-            {events.map((event) => (
+            {upcomingEvents.map((event) => (
               <li>
                 <button
                   type="button"
@@ -265,12 +289,17 @@ function formatEventRange(event: Event) {
   /* Ab hier passt die Titelspalte auf eine Zeile neben das Datum. Titel darf
      weiterhin umbrechen (kein Kürzen), das Datum behält seine Breite und
      rutscht dabei nicht mehr in die Titelzeile hinein wie noch mit Flex und
-     justify-content: space-between — siehe Plan. */
+     justify-content: space-between — siehe Plan. column-gap ist bewusst
+     größer als das sonst hier übliche --sp-4: er ist zugleich der
+     Mindestabstand, auf den die Titelspalte schrumpft, bevor sie umbricht
+     (minmax(0, 1fr) gibt ihr keine andere Untergrenze). Mit --sp-4 wirkte
+     der Moment kurz vor dem Umbruch noch eng; --sp-5 bricht früher um und
+     lässt spürbar Luft. */
   @media (min-width: 48rem) {
     .events li:not(:has(.event-row)),
     .event-row {
       grid-template-columns: minmax(0, 1fr) auto;
-      column-gap: var(--sp-4);
+      column-gap: var(--sp-5);
       row-gap: 0;
       align-items: baseline;
     }
@@ -312,5 +341,44 @@ function formatEventRange(event: Event) {
   .overlay-meta {
     color: var(--text-secondary);
     margin: var(--sp-2) 0 0;
+  }
+
+  /* Hinweisblock für abgesagte Termine — eigene Klassen statt .events,
+     damit der Ausfall optisch nicht wie ein normaler Terminlink wirkt und
+     kein Button/Overlay braucht (der Grund muss ohne Klick lesbar sein). */
+  .notice {
+    background: var(--surface-warm-alt);
+    border-left: 3px solid var(--accent-warm-alt);
+    border-radius: var(--radius-md);
+    padding: var(--sp-4);
+    margin-top: var(--sp-4);
+  }
+
+  .notice h3 {
+    margin-top: 0;
+  }
+
+  .notice-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--sp-3) 0 0;
+  }
+
+  .notice-list li {
+    display: grid;
+    row-gap: var(--sp-1);
+  }
+
+  .notice-list li + li {
+    margin-top: var(--sp-3);
+  }
+
+  .notice-detail,
+  .notice-reason {
+    color: var(--text-secondary);
+  }
+
+  .notice-reason {
+    margin: 0;
   }
 </style>

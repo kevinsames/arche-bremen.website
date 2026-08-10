@@ -35,11 +35,24 @@ export const event = defineType({
       title: 'Beschreibung',
       type: 'text',
     }),
+    defineField({
+      name: 'cancelled',
+      title: 'Fällt aus',
+      type: 'boolean',
+      initialValue: false,
+      description:
+        'Der Termin bleibt auf der Website sichtbar und wird als Ausfall ' +
+        'gekennzeichnet. Bitte nicht stattdessen löschen — wer den Termin ' +
+        'schon gesehen hat, erfährt sonst nichts vom Ausfall. Fällt ein ' +
+        'wöchentlicher Termin einmalig aus (z. B. Gottesdienst in der ' +
+        'Sommerpause), hier einen normalen Termin mit diesem Datum anlegen ' +
+        'und das Häkchen setzen.',
+    }),
   ],
   preview: {
-    select: { title: 'title', start: 'start' },
-    prepare({ title, start }) {
-      return { title, subtitle: start };
+    select: { title: 'title', start: 'start', cancelled: 'cancelled' },
+    prepare({ title, start, cancelled }) {
+      return { title, subtitle: cancelled ? `Fällt aus · ${start}` : start };
     },
   },
 });

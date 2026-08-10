@@ -57,14 +57,17 @@ export interface Event {
   end?: string;
   location?: string;
   description?: string;
+  cancelled?: boolean;
 }
 
 export async function getEvents(): Promise<Event[]> {
   return sanityClient.fetch(
     // start >= now(): now() ist der Build-Zeitpunkt, da die Seite statisch
-    // ist. Abgelaufene Termine verschwinden erst mit dem nächsten Build.
+    // ist. Abgelaufene Termine verschwinden erst mit dem nächsten Build —
+    // auch abgesagte, ein Ausfallhinweis muss daher nicht separat aufgeräumt
+    // werden.
     `*[_type == "event" && start >= now()] | order(start asc) {
-      _id, title, start, end, location, description
+      _id, title, start, end, location, description, cancelled
     }`,
     {},
     fetchOptions,
