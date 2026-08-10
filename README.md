@@ -126,6 +126,11 @@ typografisch (siehe DESIGN.md, Abschnitt „Bildwelt"). Zum Hinzufügen:
    breit, JPEG. Astro erzeugt daraus beim Build automatisch die WebP-Varianten
    für Kachel und Detailseite.
 
+`niklas-meyer.jpg` unterschreitet diese Vorgabe bewusst (640×960 px, 2:3, keine
+höher aufgelöste Aufnahme vorhanden) — `object-fit: cover` schneidet im Browser
+mittig auf 4:5 zu, ohne die Datei zu bearbeiten. Für künftige Fotos bleibt
+Schritt 3 die Vorgabe.
+
 ### Wie ein Artikel des Glaubensbekenntnisses geändert wird
 
 Jeder Artikel ist eine eigene Datei unter `src/content/creed/<nn>-<slug>.md`
