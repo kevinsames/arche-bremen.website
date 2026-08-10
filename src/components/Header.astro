@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import { SITE } from '../consts';
+import logoLockup from '../assets/brand/logo-lockup-blue.jpg';
 
 const navItems = [
   { href: '/', label: 'Start' },
@@ -13,7 +15,9 @@ const currentPath = Astro.url.pathname;
 
 <header>
   <div class="bar">
-    <a href="/" class="site-name">{SITE.name}</a>
+    <a href="/" class="site-name">
+      <Image src={logoLockup} alt={SITE.name} width={216} densities={[1, 2]} format="webp" quality={90} />
+    </a>
     <nav>
       <ul>
         {
@@ -67,13 +71,19 @@ const currentPath = Astro.url.pathname;
   }
 
   .site-name {
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: var(--fs-m);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-display);
-    text-decoration: none;
-    color: var(--text-primary);
+    display: inline-flex;
+    line-height: 0;
+  }
+
+  /* Interim-Logo ist ein JPEG ohne Alphakanal (siehe DESIGN.md, Abschnitt
+     Logo) — der weiße Hintergrund würde als deckender Kasten über der
+     transluzenten Kopfzeile liegen. mix-blend-mode macht Weiß transparent
+     und lässt nur die dunkelblauen Konturen stehen. Funktioniert nur auf
+     hellem Grund; entfällt, sobald die offizielle SVG mit Alphakanal da ist. */
+  .site-name :global(img) {
+    width: var(--size-logo-header);
+    height: auto;
+    mix-blend-mode: multiply;
   }
 
   nav ul {

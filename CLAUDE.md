@@ -77,7 +77,12 @@ Regeln:
 7. **Keine neuen Tokens erfinden.** Fehlt ein Wert, in `DESIGN.md` unter offene
    Fragen ergänzen und fragen — nicht im Komponentencode improvisieren.
 8. Logo als offizielle SVG-Datei einbinden, nie als Text in einem Webfont
-   nachgebaut.
+   nachgebaut. **Ausnahme (Interim, August 2026):** Solange Hamburg keine SVG
+   liefert, sind die drei JPEGs unter `src/assets/brand/` im Einsatz
+   (Header, Hero, Termine-Sektion), mit `mix-blend-mode: multiply` gegen den
+   fehlenden Alphakanal. Der Footer behält bewusst die Textwortmarke — kein
+   Asset passt zum dunklen Grund. Ausstiegsbedingung und Details in
+   `DESIGN.md`, Abschnitt „Logo (Interim, August 2026)".
 9. Keine Stock-Fotografie. Brandbook 3.1 verlangt mindestens 70 % Fotos aus der
    lokalen Gemeinde; bis solche existieren, wird typografisch gestaltet.
 

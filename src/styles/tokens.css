@@ -116,6 +116,13 @@
   --duration-slow: 400ms;  /* Scroll-Reveal */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
+  /* ---------- Bildgrößen (im Brandbook nicht vorhanden, für Web definiert) ---
+     Obergrenze durch die Interim-JPEGs: 540 px Quellbreite, bei 2× also
+     maximal 270 CSS-px. Siehe DESIGN.md, Abschnitt Logo. */
+  --size-logo-header: 6.75rem;  /* 108 px */
+  --size-logo-hero:   16rem;    /* 256 px */
+  --size-mark:        4rem;     /* Bogen als Stilelement */
+
   /* ---------- Overlay (im Brandbook nicht vorhanden, für Web definiert) ---
      Für Predigt- und Prediger-Popups (siehe DESIGN.md, Abschnitt Overlay).
      Scrim aus Dunklem Blau statt Schwarz, damit die Marke auch im

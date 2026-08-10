@@ -127,12 +127,59 @@ Groteske. In Versalien mit weiter Laufweite ist der Unterschied gering.
 Der Fließtext bleibt regelkonform: **Source Serif Pro** ist unter SIL OFL frei
 verfügbar und selbst gehostet.
 
-Das **Logo** verwendet keinen Webfont, sondern die offizielle SVG-Datei mit
-Vektorkonturen. Damit entfällt die Lizenzfrage für die Wortmarke vollständig.
+Das **Logo** soll keinen Webfont verwenden, sondern die offizielle SVG-Datei
+mit Vektorkonturen — damit entfiele die Lizenzfrage für die Wortmarke
+vollständig. Diese SVG liegt noch nicht vor; siehe Abschnitt „Logo (Interim,
+August 2026)" unten für den aktuellen Zwischenstand.
 
 Falls Hamburg eine Futura-Webfont-Lizenz besitzt, die Bremen mitabdeckt, wird
 `--font-display` umgestellt und diese Abweichung entfällt. Lizenzrechtliche
 Bewertung nicht durch uns.
+
+## Logo (Interim, August 2026)
+
+Hamburg hat noch keine SVG/EPS geliefert (siehe offene Frage 2 unten). Ersatz
+sind sechs JPEGs, per WhatsApp geschickt und entsprechend rekomprimiert
+(258–540 px Kantenlänge). Committed sind drei davon, unter
+`src/assets/brand/`:
+
+| Datei | Herkunft | Verwendung |
+|---|---|---|
+| `logo-lockup-blue.jpg` | 540×200, Lockup „ARCHE" + Unterzeile + Bogen, dunkelblau auf Weiß | Header, Hero |
+| `mark-blue.jpg` | 258×176, nur der Bogen, dunkelblau auf gebrochenem Weiß | Stilelement (Termine-Sektion) |
+| `mark-white-on-black.jpg` | 300×300, Bogen weiß auf Schwarz | Favicon-Quelle |
+
+Nicht übernommen: eine schwarze Bogen-Variante (Dublette zu `mark-blue`,
+nicht markenkonform) und zwei helle-auf-hell-Varianten (auf weißem/hellem
+Grund praktisch unsichtbar).
+
+**Bekannte Einschränkungen:**
+
+1. **Kein Alphakanal.** JPEG kennt keine Transparenz. Gelöst über
+   `mix-blend-mode: multiply` (Header, Hero, Stilelement) — macht den weißen
+   Hintergrund transparent, lässt die dunkelblauen Konturen stehen.
+   Funktioniert nur auf hellem Grund. **Entfällt ersatzlos, sobald die
+   offizielle SVG mit Alphakanal vorliegt** — das ist die Ausstiegsbedingung
+   für diesen Interim-Zustand.
+2. **Footer bekommt kein Logo.** Grund ist dunkelblau (`--bg-inverted`), keine
+   der drei Dateien hat einen dunklen Hintergrund, kein Blend-Modus rettet
+   das. Footer behält bis auf Weiteres die Textwortmarke (`SITE.name` in
+   Jost) — das ist selbst eine kleine Abweichung von harter Regel 8
+   („Logo nie als Text im Webfont nachgebaut"), bewusst in Kauf genommen, weil
+   die Alternative (kein Markenzeichen im Footer) schlechter wäre.
+3. **Auflösungsgrenze.** Quellbreite 540 px reicht bei 2×-Pixeldichte für
+   maximal 270 CSS-px Darstellungsbreite. `--size-logo-header` (108 px) und
+   `--size-logo-hero` (256 px) bleiben knapp darunter. Nicht großzügiger
+   einsetzen, sonst wird die JPEG-Kompression sichtbar.
+4. **Kein Ortszusatz.** Das Lockup zeigt „ARCHE", nicht „Arche Bremen" — siehe
+   offene Frage 1. „Bremen" steht im Seitentitel, im `alt`-Text und im Footer.
+5. **Favicon ist schwarz.** Schwarz ist keine Markenfarbe (Brandbook 1.6),
+   aber die einzige quadratische Datei. Wird durch die SVG ersetzt, sobald
+   verfügbar.
+
+**Neue Tokens** (`tokens.css`, Abschnitt Bildgrößen): `--size-logo-header`,
+`--size-logo-hero`, `--size-mark` — Obergrenzen ergeben sich aus Punkt 3
+oben, nicht aus einem Gestaltungsraster.
 
 ## Bildwelt
 
@@ -152,11 +199,17 @@ Diese sollten in einer Mail gebündelt werden, bevor gestaltet wird:
    Variante? Brandbook 1.3 und 1.4 regeln Verwendung und Teilbereiche — gibt es
    einen dokumentierten Lockup mit Ortszusatz („Arche Bremen")?
 2. Gibt es das Logo als SVG oder EPS? Bitte nicht als PNG oder aus dem PDF
-   extrahiert.
+   extrahiert. **Stand August 2026:** Noch nicht — Interimslösung mit JPEGs
+   ist umgesetzt, siehe Abschnitt „Logo (Interim, August 2026)" oben. Sobald
+   die SVG da ist: Header, Hero und Termine-Sektion umstellen,
+   `mix-blend-mode`-Regeln entfernen, Footer-Textwortmarke ersetzen,
+   Favicon neu erzeugen.
 3. Besteht eine Futura-Webfont-Lizenz, die Bremen abdeckt?
 4. Existiert inzwischen ein Web-Anhang zum Brandbook oder eine v1.2? Unser Stand
    ist v1.1.
 5. RGB-Wert für „Dunkles Braun" (Pantone 412 C) — im PDF unlesbar extrahiert.
-6. Kapitel 4 beschreibt die Stilelemente „Bogen" und „Abstufung". Diese sind
-   rein visuell und aus der Textebene nicht erschließbar. Vor der Gestaltung
-   ansehen und hier dokumentieren.
+6. Kapitel 4 beschreibt die Stilelemente „Bogen" und „Abstufung". Der Bogen
+   ist über die Interim-JPEGs bekannt (die Bildmarke selbst — siehe Abschnitt
+   „Logo (Interim, August 2026)" oben) und als dekoratives Element in der
+   Termine-Sektion umgesetzt. „Abstufung" bleibt offen, aus der Textebene
+   nicht erschließbar.

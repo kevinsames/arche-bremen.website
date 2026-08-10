@@ -112,6 +112,28 @@ Absatz auf. In solchen Fällen den Punkt maskieren: `1\. Korinther`. Nur die
 Ziffer `1` ist betroffen. Nach dem Neuumbrechen einer Datei mit
 `grep -n '^[0-9]\+\. ' src/content/pages/*.md` prüfen.
 
+## Markendateien
+
+`src/assets/brand/` enthält das Logo als Interim-JPEG (Hamburg hat noch keine
+SVG geliefert). Details, Einschränkungen und Ausstiegsbedingung stehen in
+`DESIGN.md`, Abschnitt „Logo (Interim, August 2026)".
+
+Trifft die offizielle SVG ein:
+
+1. `src/assets/brand/logo-lockup-blue.jpg` und `mark-blue.jpg` durch die SVG
+   ersetzen, Referenzen in `Header.astro` und `index.astro` anpassen.
+2. `mix-blend-mode: multiply`-Regeln in `Header.astro` und `index.astro`
+   entfernen (nur für den JPEG-Interim nötig).
+3. Footer-Textwortmarke (`Footer.astro`) durch das Logo ersetzen — bisher
+   ohne Asset für dunklen Grund ausgelassen.
+4. Favicon aus der SVG neu erzeugen, `public/favicon.png` ersetzen. Das
+   aktuelle Favicon stammt aus einer JPEG-Quelle:
+   ```sh
+   sips -s format png "src/assets/brand/mark-white-on-black.jpg" --out public/favicon.png
+   ```
+5. `DESIGN.md` und `CLAUDE.md` (Design-und-Marke-Regel 8) entsprechend
+   aktualisieren.
+
 ## Offene Punkte
 
 Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
