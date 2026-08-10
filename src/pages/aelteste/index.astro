@@ -2,25 +2,25 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Section from '../../components/Section.astro';
-import PreacherCard from '../../components/PreacherCard.astro';
+import ElderCard from '../../components/ElderCard.astro';
 import Slider from '../../components/Slider.astro';
 
-const preachers = (await getCollection('preachers')).sort((a, b) =>
+const elders = (await getCollection('elders')).sort((a, b) =>
   a.data.name.localeCompare(b.data.name, 'de'),
 );
 ---
 
-<BaseLayout title="Prediger">
+<BaseLayout title="Älteste">
   <Section tone="light">
-    <h1>Prediger</h1>
+    <h1>Älteste</h1>
 
     {
-      preachers.length === 0 ? (
+      elders.length === 0 ? (
         <p>Noch keine Profile hinterlegt.</p>
       ) : (
         <Slider>
-          {preachers.map((preacher) => (
-            <PreacherCard preacher={preacher} />
+          {elders.map((elder) => (
+            <ElderCard elder={elder} />
           ))}
         </Slider>
       )

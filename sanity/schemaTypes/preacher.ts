@@ -1,7 +1,12 @@
 import { defineField, defineType } from 'sanity';
 
-// Absichtlich minimal. Die vollständige Biografie liegt als Markdown im Repo,
-// verknüpft über denselben Slug (siehe src/content/preachers/). Existiert kein
+// Absichtlich minimal. Hält fest, wer eine konkrete Predigt gehalten hat —
+// das schließt Gastprediger ohne Ältestenamt ein. Deshalb bleibt der Typ
+// "preacher" und wird nicht in "elder" umbenannt, obwohl die Website den
+// Reiter "Älteste" nennt: Nicht jeder preacher ist ein Ältester.
+//
+// Die vollständige Biografie der Ältesten liegt als Markdown im Repo,
+// verknüpft über denselben Slug (siehe src/content/elders/). Existiert kein
 // passendes Repo-Profil (Gastprediger), wird auf der Website nur der Name
 // angezeigt, nicht verlinkt.
 //
@@ -22,7 +27,7 @@ export const preacher = defineType({
       name: 'slug',
       title: 'Slug',
       description:
-        'Muss mit dem Dateinamen des Markdown-Profils in src/content/preachers/ übereinstimmen, damit der Name verlinkt wird. Ohne Übereinstimmung wird nur der Name als Text angezeigt.',
+        'Muss mit dem Dateinamen des Markdown-Profils in src/content/elders/ übereinstimmen, damit der Name verlinkt wird. Ohne Übereinstimmung wird nur der Name als Text angezeigt.',
       type: 'slug',
       options: { source: 'name' },
     }),

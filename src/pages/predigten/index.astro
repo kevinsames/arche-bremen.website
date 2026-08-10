@@ -8,7 +8,7 @@ import { getSermons } from '../../lib/sanity';
 // Chronologische Liste, kein Filter-UI (siehe CLAUDE.md — Filter erst ab
 // ca. 50 Einträgen).
 const sermons = await getSermons();
-const preacherProfiles = await getCollection('preachers');
+const preacherProfiles = await getCollection('elders');
 ---
 
 <BaseLayout title="Predigten">

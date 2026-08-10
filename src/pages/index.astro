@@ -22,7 +22,7 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
 
 // Gleiche Datenquellen wie /predigten — kein neues Datenmodell.
 const sermons = (await getSermons()).slice(0, 3);
-const preacherProfiles = await getCollection('preachers');
+const preacherProfiles = await getCollection('elders');
 const events = await getEvents();
 const eventDateFormatter = new Intl.DateTimeFormat('de-DE', {
   dateStyle: 'medium',

@@ -2,38 +2,38 @@
 import { render, type CollectionEntry } from 'astro:content';
 import Overlay from './Overlay.astro';
 
-// Kachel für ein Prediger-Profil auf /prediger, gleiche Bauweise wie
+// Kachel für ein Ältesten-Profil auf /aelteste, gleiche Bauweise wie
 // SermonCard: Anker (Tastatur-Weg zur Detailseite) und deckungsgleicher
 // Button (Maus/Touch, öffnet das Popup mit dem gerenderten Markdown-Body).
 // Details siehe Kommentar in SermonCard.astro.
 interface Props {
-  preacher: CollectionEntry<'preachers'>;
+  elder: CollectionEntry<'elders'>;
 }
 
-const { preacher } = Astro.props;
-const { Content } = await render(preacher);
-const overlayId = `preacher-${preacher.id}`;
-const permalink = `/prediger/${preacher.id}`;
+const { elder } = Astro.props;
+const { Content } = await render(elder);
+const overlayId = `elder-${elder.id}`;
+const permalink = `/aelteste/${elder.id}`;
 ---
 
 <div class="card-wrap">
   <a href={permalink} class="card">
-    <p class="name">{preacher.data.name}</p>
-    {preacher.data.role && <p class="role">{preacher.data.role}</p>}
+    <p class="name">{elder.data.name}</p>
+    {elder.data.role && <p class="role">{elder.data.role}</p>}
   </a>
   <button
     type="button"
     popovertarget={overlayId}
     class="open"
     tabindex="-1"
-    aria-label={`Prediger öffnen: ${preacher.data.name}`}
+    aria-label={`Profil öffnen: ${elder.data.name}`}
   >
   </button>
 </div>
 
-<Overlay id={overlayId} label={preacher.data.name}>
-  <h2 class="overlay-name">{preacher.data.name}</h2>
-  {preacher.data.role && <p class="overlay-role">{preacher.data.role}</p>}
+<Overlay id={overlayId} label={elder.data.name}>
+  <h2 class="overlay-name">{elder.data.name}</h2>
+  {elder.data.role && <p class="overlay-role">{elder.data.role}</p>}
   <div class="prose">
     <Content />
   </div>

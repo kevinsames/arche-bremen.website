@@ -64,13 +64,13 @@ svg {
   display: block;
 }
 
-/* Popups (Predigt-/Prediger-Kacheln, siehe Overlay.astro). Browser ohne
+/* Popups (Predigt-/Ältesten-Kacheln, siehe Overlay.astro). Browser ohne
    Popover-Unterstützung kennen das "popover"-Attribut nicht und würden
    den Popup-Inhalt sonst einfach unformatiert im Textfluss anzeigen —
    [popover] ist aber ein ganz normaler, immer funktionierender
    Attribut-Selektor, mit dem wir das für genau diesen Fall dauerhaft
    ausblenden. Ohne Popover-Unterstützung greift dann die Kachel als
-   normaler Link (siehe @supports-Block in SermonCard/PreacherCard).
+   normaler Link (siehe @supports-Block in SermonCard/ElderCard).
    In unterstützenden Browsern übernimmt :popover-open unverändert das
    Ein-/Ausblenden — deshalb nur hier aktiv, wo genau das NICHT geht. */
 @supports not selector(:popover-open) {

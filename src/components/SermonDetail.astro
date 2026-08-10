@@ -16,7 +16,7 @@ import { formatPassages } from '../lib/bible';
 
 interface Props {
   sermon: Sermon;
-  profile?: CollectionEntry<'preachers'>;
+  profile?: CollectionEntry<'elders'>;
   permalink?: string;
 }
 
@@ -29,7 +29,7 @@ const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
   {dateFormatter.format(new Date(sermon.date))} &middot;{' '}
   {
     profile ? (
-      <a href={`/prediger/${profile.id}`}>{sermon.preacher.name}</a>
+      <a href={`/aelteste/${profile.id}`}>{sermon.preacher.name}</a>
     ) : (
       sermon.preacher.name
     )

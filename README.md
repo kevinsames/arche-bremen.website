@@ -51,7 +51,7 @@ npx sanity login              # einmalig
 npm run seed:development
 ```
 
-Importiert `sanity/seed/development.ndjson` (ein Prediger, eine
+Importiert `sanity/seed/development.ndjson` (zwei Prediger, eine
 Beispielpredigt, ein Beispieltermin) fest in das Dataset `development` — das
 Zielname steht im npm-Skript, nicht in `SANITY_DATASET`, damit ein falsch
 gesetzter Wert nie versehentlich `production` überschreibt. `--replace`
@@ -85,12 +85,14 @@ Freitext im Schema, sonst ist Filterbarkeit dauerhaft zerstört.
 | Collection | Zweck | Beispiel |
 |---|---|---|
 | `pages` | Statische Seiten (Glaubensbekenntnis, später Impressum etc.) | `src/content/pages/glaubensbekenntnis.md` |
-| `preachers` | Vollständige Prediger-Profile | `src/content/preachers/niklas-meyer.md` |
+| `elders` | Profile der Ältesten (Gemeindeleitung) | `src/content/elders/niklas-meyer.md` |
 
 Verknüpfung: Ein `preacher`-Dokument in Sanity und ein Markdown-Profil im Repo
 gehören zusammen, wenn ihr Slug (Sanity) bzw. Dateiname (Repo) übereinstimmt.
-Gibt es keine Übereinstimmung (z.B. Gastprediger), wird nur der Name als Text
-angezeigt, ohne Link.
+Gibt es keine Übereinstimmung (z.B. Gastprediger ohne Ältestenamt), wird nur
+der Name als Text angezeigt, ohne Link. `preacher` bleibt bewusst der
+technische Name in Sanity — er beantwortet "wer hat gepredigt", nicht "wer ist
+Ältester". Die Website zeigt die verknüpften Profile unter `/aelteste`.
 
 ### Wie ein neuer Dokumenttyp entsteht (Sanity)
 

@@ -140,10 +140,16 @@ nachträgliches Verschlagworten von 80 Predigten passiert nie.
 
 Absichtlich minimal: `name` (string, required), `slug` (slug, optional).
 
-Die vollständige Biografie liegt als Markdown im Repo, verknüpft über denselben
-Slug. Existiert kein passendes Repo-Profil (Gastprediger), wird der Name nur
-angezeigt, nicht verlinkt. Keine Biografien, Fotos oder Kontaktdaten in diesem
-Dokumenttyp.
+Hält fest, wer eine konkrete Predigt gehalten hat — nicht, wer Ältester ist.
+Das schließt Gastprediger ohne Ältestenamt ein. Deshalb bleibt der
+Dokumenttyp `preacher`, auch wenn die Website den Reiter „Älteste" nennt
+(`/aelteste`, Content Collection `elders` unter `src/content/elders/`):
+Nicht jeder Prediger ist ein Ältester der Gemeinde.
+
+Die vollständige Biografie der Ältesten liegt als Markdown im Repo, verknüpft
+über denselben Slug. Existiert kein passendes Repo-Profil (Gastprediger), wird
+der Name nur angezeigt, nicht verlinkt. Keine Biografien, Fotos oder
+Kontaktdaten in diesem Dokumenttyp.
 
 ### `event`
 

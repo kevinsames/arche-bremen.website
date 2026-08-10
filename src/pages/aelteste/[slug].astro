@@ -4,21 +4,21 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Section from '../../components/Section.astro';
 
 export async function getStaticPaths() {
-  const preachers = await getCollection('preachers');
-  return preachers.map((preacher) => ({
-    params: { slug: preacher.id },
-    props: { preacher },
+  const elders = await getCollection('elders');
+  return elders.map((elder) => ({
+    params: { slug: elder.id },
+    props: { elder },
   }));
 }
 
-const { preacher } = Astro.props;
-const { Content } = await render(preacher);
+const { elder } = Astro.props;
+const { Content } = await render(elder);
 ---
 
-<BaseLayout title={preacher.data.name}>
+<BaseLayout title={elder.data.name}>
   <Section tone="light" width="measure">
-    <h1>{preacher.data.name}</h1>
-    {preacher.data.role && <p class="role">{preacher.data.role}</p>}
+    <h1>{elder.data.name}</h1>
+    {elder.data.role && <p class="role">{elder.data.role}</p>}
     <div class="prose">
       <Content />
     </div>

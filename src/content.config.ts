@@ -12,14 +12,17 @@ const pages = defineCollection({
   }),
 });
 
-// Vollständige Prediger-Profile. Verknüpft mit dem `preacher`-Dokument in
-// Sanity über den Dateinamen als Slug (siehe sanity/schemaTypes/preacher.ts).
-const preachers = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/preachers' }),
+// Profile der Ältesten (Gemeindeleitung). Nicht zu verwechseln mit dem
+// `preacher`-Dokument in Sanity, das festhält, wer eine konkrete Predigt
+// gehalten hat — das schließt Gastprediger ohne Ältestenamt ein. Verknüpft
+// mit `preacher` über den Dateinamen als Slug (siehe
+// sanity/schemaTypes/preacher.ts).
+const elders = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/elders' }),
   schema: z.object({
     name: z.string(),
     role: z.string().optional(),
   }),
 });
 
-export const collections = { pages, preachers };
+export const collections = { pages, elders };

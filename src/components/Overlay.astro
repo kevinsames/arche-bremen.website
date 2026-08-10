@@ -1,13 +1,13 @@
 ---
-// Popup-Hülle für Predigt- und Prediger-Kacheln (siehe SermonCard,
-// PreacherCard). Baut auf der HTML-Popover-API auf (popover="auto"),
+// Popup-Hülle für Predigt- und Ältesten-Kacheln (siehe SermonCard,
+// ElderCard). Baut auf der HTML-Popover-API auf (popover="auto"),
 // nicht auf JavaScript — Öffnen/Schließen per Klick, Escape und Klick
 // daneben erledigt der Browser. Damit bleibt die Seite bei 0 KB
 // Client-JS (siehe CLAUDE.md Regel 4).
 //
 // Unterstützt der Browser die Popover-API nicht (z.B. ältere iOS-Versionen),
 // bleibt dieses Element schlicht ungeöffnet liegen — der auslösende Anker
-// in SermonCard/PreacherCard führt dann stattdessen direkt zur Detailseite
+// in SermonCard/ElderCard führt dann stattdessen direkt zur Detailseite
 // (siehe dortiger @supports-Block).
 interface Props {
   id: string;

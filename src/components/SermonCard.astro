@@ -27,7 +27,7 @@ import SermonDetail from './SermonDetail.astro';
 interface Props {
   sermon: Sermon;
   index: number;
-  preacherProfile?: CollectionEntry<'preachers'>;
+  preacherProfile?: CollectionEntry<'elders'>;
 }
 
 const { sermon, index, preacherProfile } = Astro.props;
