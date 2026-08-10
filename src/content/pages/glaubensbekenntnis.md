@@ -229,7 +229,7 @@ Ewigkeit her (Kolosser 1,17; Offenbarung 1,17) die zweite Person der
 Dreieinigkeit (1. Korinther 8,6; 1. Timotheus 2,5). Er ist ungeschaffen
 (Johannes 8,58; Hebräer 1,7-8; 7,3), von einem Wesen mit dem Vater (Hebräer
 1,3) und wahrer Gott (Johannes 1,1; Hebräer 1,8+9; Johannes 20,28; Römer 9,5;
-1. Johannes 5,20), dem volle Ehre und Anbetung gebührt (Matthäus 2,11; 14,33;
+1\. Johannes 5,20), dem volle Ehre und Anbetung gebührt (Matthäus 2,11; 14,33;
 Offenbarung 5,8-14). Er ist der Abglanz der Herrlichkeit des Vaters (Hebräer
 1,3), der durch Ihn die Welt erschaffen hat (Hebräer 1,2) und durch den auch
 alle Dinge erhalten und regiert werden (Kolosser 1,17; Hebräer 1,3).
@@ -258,7 +258,7 @@ Mensch geworden war, blieb Er zugleich dennoch Gott (Lukas 1,35; Kolosser
 göttliches und auch menschliches Wesen vereinigt ist, jedoch nicht halb und
 halb, sondern zu unterscheiden und unvermischt, sodass Er ganz und gar wahrer
 Gott und zugleich ganz und gar wahrer Mensch ist (Römer 1,3-4; 9,5;
-1. Timotheus 2,5).
+1\. Timotheus 2,5).
 
 ### Der Erlöser
 
@@ -645,7 +645,7 @@ Der Missionsbefehl darf auch von niemandem eingeschränkt oder gar
 zurückgezogen werden, sondern er gilt bis zur Wiederkunft Christi, dem
 Zeitpunkt, an dem die volle Zahl (Römer 11,25) derer erreicht ist, die
 gerettet werden sollen. Bis dahin sollen wir Seelen gewinnen (Johannes 9,4;
-1. Korinther 9,22) und besonders für die beten, die wegen ihres Bekenntnisses
+1\. Korinther 9,22) und besonders für die beten, die wegen ihres Bekenntnisses
 verfolgt und sogar getötet werden.
 
 ## 22. Die Gemeinde

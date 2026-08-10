@@ -47,6 +47,41 @@ Begründung — stattdessen fragen.
 - Node-Version festgenagelt: `.nvmrc` + `engines` in `package.json`, Lockfile
   committed, Build mit `npm ci`.
 
+## Design und Marke
+
+Die Marke ist in zwei Dateien codiert. Das Brandbook-PDF liegt bewusst nicht im
+Repo.
+
+- `src/styles/tokens.css` — einzige Quelle für Farben, Schriften, Skala,
+  Abstände.
+- `DESIGN.md` — Begründungen, Abweichungen vom Brandbook, offene Fragen.
+
+Regeln:
+
+1. **Keine Farb-, Schrift- oder Abstandswerte im Komponentencode.**
+   Ausschließlich die Variablen aus `tokens.css`. Kein Hex, kein `rgb()`, kein
+   `px` für Abstände in Komponenten.
+2. **Nur semantische Tokens verwenden** (`--text-primary`, `--accent-warm`),
+   nie die Rohfarben (`--c-yellow`). Die semantische Ebene trägt die
+   Kontrastregeln; wer sie umgeht, produziert unlesbaren Text.
+3. **Gelb, Orange, Grün, Ocker und Braun-Grau sind niemals Textfarben.**
+   Kontrast auf Weiß liegt zwischen 1,44 : 1 und 2,90 : 1 und verfehlt WCAG AA
+   auch für große Schrift. Nur Flächen, Rahmen, Stilelemente.
+4. Textfarben sind `--text-primary` (Dunkles Blau), `--text-secondary` (Braun)
+   und auf dunklem Grund `--text-on-dark`. `--c-blue` nur für große Schrift und
+   UI-Rahmen.
+5. **Fonts selbst hosten**, WOFF2, `font-display: swap`, maximal zwei Familien.
+   Jost für Headlines, Source Serif Pro für Fließtext. Keine Google-Fonts-URL.
+6. Headlines primär in Versalien mit `--tracking-display`, entsprechend
+   Brandbook 2.1.
+7. **Keine neuen Tokens erfinden.** Fehlt ein Wert, in `DESIGN.md` unter offene
+   Fragen ergänzen und fragen — nicht im Komponentencode improvisieren.
+8. Logo als offizielle SVG-Datei einbinden, nie als Text in einem Webfont
+   nachgebaut.
+9. Keine Stock-Fotografie. Brandbook 3.1 verlangt mindestens 70 % Fotos aus der
+   lokalen Gemeinde; bis solche existieren, wird typografisch gestaltet.
+
+
 ## Content-Split — die zentrale Architekturentscheidung
 
 Inhalte liegen an zwei Orten. Diese Grenze ist bewusst gezogen und darf nicht

@@ -1,43 +1,121 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { SITE, SERVICE, ADDRESS } from '../consts';
+import Section from '../components/Section.astro';
+import SermonCard from '../components/SermonCard.astro';
+import Slider from '../components/Slider.astro';
+import { SITE, SERVICE, ADDRESS, WEEKLY_EVENTS } from '../consts';
+import { getSermons } from '../lib/sanity';
+import { getCollection } from 'astro:content';
+
+// Above the fold, ohne Scrollen: Gottesdienstzeit und Adresse (siehe
+// CLAUDE.md). Der Hero ist deshalb bewusst inhaltsgroß, nicht
+// bildschirmgroß — keine feste vh-Höhe, die auf kleinen Geräten den Rest
+// unter die Falz drückt.
+const mapsQuery = encodeURIComponent(
+  `${ADDRESS.street}, ${ADDRESS.postalCode} ${ADDRESS.city}`,
+);
+const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
+
+// Gleiche Datenquellen wie /predigten — kein neues Datenmodell.
+const sermons = (await getSermons()).slice(0, 3);
+const preacherProfiles = await getCollection('preachers');
 ---
 
 <BaseLayout title={SITE.name}>
-  <section class="service-info">
-    <p class="service-time">{SERVICE.display}</p>
-    <address>
+  <Section tone="light">
+    <h1 class="hero-title">{SITE.name}</h1>
+    <p class="hero-service">{SERVICE.display}</p>
+    <address class="hero-address">
       {ADDRESS.street}<br />
       {ADDRESS.postalCode} {ADDRESS.city}
     </address>
-  </section>
+    <a class="button" href={mapsUrl} target="_blank" rel="noopener">So findest du uns</a>
+  </Section>
 
-  <p class="intro">
-    PLATZHALTER: kurzer Einleitungstext zur Gemeinde folgt hier.
-  </p>
+  <Section tone="dark" width="measure">
+    <h2>Wer wir sind</h2>
+    <p>PLATZHALTER: kurzer Einleitungstext zur Gemeinde folgt hier.</p>
+  </Section>
+
+  <Section tone="light">
+    <h2>Predigten</h2>
+    {
+      sermons.length === 0 ? (
+        <p>Noch keine Predigten veröffentlicht.</p>
+      ) : (
+        <Slider>
+          {sermons.map((sermon, index) => {
+            const profile = preacherProfiles.find((p) => p.id === sermon.preacher.slug);
+            return <SermonCard sermon={sermon} index={index} preacherProfile={profile} />;
+          })}
+        </Slider>
+      )
+    }
+    <p><a href="/predigten">Alle Predigten &rarr;</a></p>
+  </Section>
+
+  <Section tone="muted">
+    <h2>Termine</h2>
+    <ul class="events">
+      {
+        WEEKLY_EVENTS.map((event) => (
+          <li>
+            <span class="event-title">{event.title}</span>
+            <span class="event-detail">
+              {event.weekday}, {event.time} &middot; {event.location}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
 </BaseLayout>
 
 <style>
-  .service-info {
-    background-color: var(--bg-muted);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-sm);
-    padding: var(--sp-3);
-    margin-top: var(--sp-3);
+  .hero-title {
+    font-size: var(--fs-display);
+    margin: 0;
   }
 
-  .service-time {
+  .hero-service {
     font-size: var(--fs-l);
-    font-weight: bold;
-    margin: 0 0 var(--sp-2);
+    margin: var(--sp-4) 0 0;
   }
 
-  address {
+  .hero-address {
     font-style: normal;
     color: var(--text-secondary);
+    margin: var(--sp-1) 0 0;
   }
 
-  .intro {
+  .button {
     margin-top: var(--sp-4);
+  }
+
+  .events {
+    list-style: none;
+    padding: 0;
+    margin: var(--sp-4) 0 0;
+  }
+
+  .events li {
+    padding: var(--sp-2) 0;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    justify-content: space-between;
+  }
+
+  .event-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+    font-size: var(--fs-xs);
+  }
+
+  .event-detail {
+    color: var(--text-secondary);
   }
 </style>

@@ -9,6 +9,25 @@
  * Basiselement-Stile, die diese Tokens referenzieren.
  */
 
+/* Selbst gehostet, siehe DESIGN.md Abweichung 2 und public/fonts/. Genau
+   ein Schnitt pro Familie — Performance-Budget in CLAUDE.md erlaubt
+   maximal zwei Schnitte insgesamt. */
+@font-face {
+  font-family: 'Jost';
+  src: url('/fonts/jost-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Source Serif Pro';
+  src: url('/fonts/source-serif-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 *,
 *::before,
 *::after {
@@ -29,7 +48,14 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
+  /* Nur ein Schnitt (500) geladen — explizit setzen statt der
+     Browser-Vorgabe "bold", sonst synthetisiert der Browser eine
+     Fett-Variante. Hierarchie kommt über Größe, Versalien und
+     Laufweite (Brandbook 2.1), nicht über Schriftgewicht. */
+  font-weight: 500;
   line-height: var(--lh-tight);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-display);
 }
 
 img,
@@ -38,10 +64,133 @@ svg {
   display: block;
 }
 
+/* Popups (Predigt-/Prediger-Kacheln, siehe Overlay.astro). Browser ohne
+   Popover-Unterstützung kennen das "popover"-Attribut nicht und würden
+   den Popup-Inhalt sonst einfach unformatiert im Textfluss anzeigen —
+   [popover] ist aber ein ganz normaler, immer funktionierender
+   Attribut-Selektor, mit dem wir das für genau diesen Fall dauerhaft
+   ausblenden. Ohne Popover-Unterstützung greift dann die Kachel als
+   normaler Link (siehe @supports-Block in SermonCard/PreacherCard).
+   In unterstützenden Browsern übernimmt :popover-open unverändert das
+   Ein-/Ausblenden — deshalb nur hier aktiv, wo genau das NICHT geht. */
+@supports not selector(:popover-open) {
+  [popover] {
+    display: none;
+  }
+}
+
+/* Hintergrund-Scroll sperren, solange ein Popup offen ist. Ohne :has()
+   greift die Regel nicht — dann scrollt der Hintergrund einfach mit,
+   kein Fehlerfall. */
+@supports selector(:has(a)) {
+  html:has([popover]:popover-open) {
+    overflow: hidden;
+  }
+}
+
 a {
   color: var(--link);
 }
 
 a:visited {
   color: var(--link-visited);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Fließtext aus Markdown (Content Collections). Trägt die Typografie für
+   Glaubensbekenntnis, Prediger-Profile, Impressum etc. */
+.prose {
+  max-width: var(--measure);
+}
+
+.prose > * + * {
+  margin-top: var(--sp-3);
+}
+
+.prose h2,
+.prose h3 {
+  margin-top: var(--sp-6);
+}
+
+.prose ul,
+.prose ol {
+  padding-left: var(--sp-4);
+}
+
+.prose li + li {
+  margin-top: var(--sp-1);
+}
+
+.prose blockquote {
+  margin: 0;
+  padding-left: var(--sp-3);
+  border-left: 3px solid var(--accent-warm);
+  color: var(--text-secondary);
+}
+
+/* Gefüllter Link/Button: dunkler Grund, heller Text — unabhängig von der
+   Sektion, in der er steht (siehe .section--dark-Ausnahme oben, die den
+   Button explizit ausnimmt). Es gibt aktuell keine Stelle mit einem
+   Button auf dunklem Grund; taucht die auf, braucht sie eine eigene
+   helle Variante — nicht vorab bauen (siehe CLAUDE.md Regel 2). */
+.button {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-display);
+  text-decoration: none;
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-inverted);
+  color: var(--text-on-dark);
+  border: 1px solid var(--bg-inverted);
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.button:visited {
+  color: var(--text-on-dark);
+}
+
+.button:hover {
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Dezentes Einblenden der Sektionsüberschriften beim Scrollen. Reines CSS,
+   kein JavaScript. Wo animation-timeline: view() fehlt (u.a. Firefox,
+   Stand 2026), bleibt der Inhalt schlicht sofort sichtbar. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    section h2 {
+      animation: reveal var(--duration-slow) var(--ease-out);
+      animation-timeline: view();
+      animation-range: entry 0% cover 30%;
+    }
+
+    @keyframes reveal {
+      from {
+        opacity: 0;
+        translate: 0 12px;
+      }
+      to {
+        opacity: 1;
+        translate: 0 0;
+      }
+    }
+  }
 }

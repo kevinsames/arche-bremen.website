@@ -1,0 +1,60 @@
+---
+// Vollbild-Band mit innerem Container. Ersetzt das früher siebenfach
+// duplizierte "max-width + margin-inline: auto"-Container-CSS pro Seite.
+//
+// tone steuert Hintergrund- und Textfarbe über die bestehenden semantischen
+// Tokens (siehe tokens.css) — keine neuen Farbwerte.
+interface Props {
+  tone?: 'light' | 'muted' | 'dark';
+  width?: 'content' | 'measure';
+}
+
+const { tone = 'light', width = 'content' } = Astro.props;
+---
+
+<section class={`section section--${tone}`}>
+  <div class={`container container--${width}`}>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    background-color: var(--bg-page);
+  }
+
+  .section--muted {
+    background-color: var(--bg-muted);
+  }
+
+  .section--dark {
+    background-color: var(--bg-inverted);
+    color: var(--text-on-dark);
+  }
+
+  /* Der globale Link-Stil (var(--link), Dunkles Blau) ist auf dunklem
+     Grund unlesbar. Innerhalb einer dunklen Sektion bleiben Links darum
+     schlicht die Textfarbe, mit Unterstrich als Erkennungsmerkmal. Der
+     .button gehört nicht dazu — er hat sein eigenes Kontrastpaar. */
+  .section--dark :global(a:not(.button)) {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  .section--dark :global(a:not(.button):visited) {
+    color: inherit;
+  }
+
+  .container {
+    margin-inline: auto;
+    padding: var(--sp-6) var(--sp-3);
+  }
+
+  .container--content {
+    max-width: var(--width-content);
+  }
+
+  .container--measure {
+    max-width: var(--measure);
+  }
+</style>

@@ -1,0 +1,62 @@
+---
+// Horizontale, wischbare Kachel-Reihe (Apple-Muster) für Startseite und
+// /prediger. Reines CSS: scroll-snap für das Wischen, ::scroll-button für
+// Pfeile auf Geräten mit Maus/Trackpad — beides progressiv, kein
+// JavaScript. Für lange Listen (z.B. das Predigt-Archiv) ungeeignet, dafür
+// bleibt /predigten ein normales Raster.
+---
+
+<div class="slider">
+  <slot />
+</div>
+
+<style>
+  /* Randabfluss bis zur Viewport-Kante: Section gibt --sp-3 Innenabstand
+     vor (siehe Section.astro), hier per negativem margin-inline
+     aufgehoben und als padding-inline zurückgegeben — so beginnt die
+     erste Kachel bündig mit der Überschrift und die letzte läuft am
+     Rand aus. scroll-padding-inline hält den Snap-Punkt am selben Rand. */
+  .slider {
+    display: flex;
+    gap: var(--sp-3);
+    margin: var(--sp-4) calc(var(--sp-3) * -1) 0;
+    padding: 0 var(--sp-3) var(--sp-2);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--sp-3);
+  }
+
+  .slider > :global(*) {
+    flex: 0 0 16rem;
+    scroll-snap-align: start;
+  }
+
+  @media (min-width: 40rem) {
+    .slider > :global(*) {
+      flex: 0 0 18rem;
+    }
+  }
+
+  /* Pfeiltasten am Rand der Reihe. Nur dort verfügbar, wo der Browser
+     ::scroll-button unterstützt (Stand 2026 primär Chromium) — ohne
+     Unterstützung bleibt Wischen bzw. Trackpad/Tastatur-Scroll, kein
+     Fehlerfall. Gleiches Muster wie das @supports (animation-timeline:
+     view())-Scroll-Reveal in global.css. */
+  @supports selector(::scroll-button(*)) {
+    .slider::scroll-button(inline-start),
+    .slider::scroll-button(inline-end) {
+      content: '';
+      width: 2rem;
+      height: 2rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+    }
+
+    .slider::scroll-button(inline-start):disabled,
+    .slider::scroll-button(inline-end):disabled {
+      opacity: 0.3;
+    }
+  }
+</style>

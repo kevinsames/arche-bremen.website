@@ -10,7 +10,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "seed:development": "sanity dataset import sanity/seed/development.ndjson --dataset development --replace"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.0",

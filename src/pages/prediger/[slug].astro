@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
 
 export async function getStaticPaths() {
   const preachers = await getCollection('preachers');
@@ -15,7 +16,17 @@ const { Content } = await render(preacher);
 ---
 
 <BaseLayout title={preacher.data.name}>
-  <h1>{preacher.data.name}</h1>
-  {preacher.data.role && <p class="role">{preacher.data.role}</p>}
-  <Content />
+  <Section tone="light" width="measure">
+    <h1>{preacher.data.name}</h1>
+    {preacher.data.role && <p class="role">{preacher.data.role}</p>}
+    <div class="prose">
+      <Content />
+    </div>
+  </Section>
 </BaseLayout>
+
+<style>
+  .role {
+    color: var(--text-secondary);
+  }
+</style>

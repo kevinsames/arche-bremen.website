@@ -1,70 +1,52 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SermonCard from '../../components/SermonCard.astro';
 import { getSermons } from '../../lib/sanity';
-import { formatPassages } from '../../lib/bible';
 
 // Chronologische Liste, kein Filter-UI (siehe CLAUDE.md — Filter erst ab
 // ca. 50 Einträgen).
 const sermons = await getSermons();
 const preacherProfiles = await getCollection('preachers');
-
-const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
 ---
 
 <BaseLayout title="Predigten">
-  <h1>Predigten</h1>
+  <Section tone="light">
+    <h1>Predigten</h1>
 
-  {
-    sermons.length === 0 ? (
-      <p>Noch keine Predigten veröffentlicht.</p>
-    ) : (
-      <ul class="sermon-list">
-        {sermons.map((sermon) => {
-          const profile = preacherProfiles.find((p) => p.id === sermon.preacher.slug);
-          return (
-            <li>
-              <a href={`/predigten/${sermon.slug}`} class="sermon-title">
-                {sermon.title}
-              </a>
-              <p class="meta">
-                {dateFormatter.format(new Date(sermon.date))} &middot;{' '}
-                {profile ? (
-                  <a href={`/prediger/${profile.id}`}>{sermon.preacher.name}</a>
-                ) : (
-                  sermon.preacher.name
-                )}
-                {' · '}
-                {formatPassages(sermon.passages)}
-              </p>
-            </li>
-          );
-        })}
-      </ul>
-    )
-  }
+    {
+      sermons.length === 0 ? (
+        <p>Noch keine Predigten veröffentlicht.</p>
+      ) : (
+        <div class="sermon-grid">
+          {sermons.map((sermon, index) => {
+            const profile = preacherProfiles.find((p) => p.id === sermon.preacher.slug);
+            return <SermonCard sermon={sermon} index={index} preacherProfile={profile} />;
+          })}
+        </div>
+      )
+    }
+  </Section>
 </BaseLayout>
 
 <style>
-  .sermon-list {
-    list-style: none;
-    padding: 0;
+  .sermon-grid {
+    display: grid;
+    gap: var(--sp-3);
+    grid-template-columns: 1fr;
+    margin-top: var(--sp-4);
   }
 
-  .sermon-list li {
-    padding: var(--sp-3) 0;
-    border-bottom: 1px solid var(--border-subtle);
+  @media (min-width: 40rem) {
+    .sermon-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
-  .sermon-title {
-    font-size: var(--fs-m);
-    font-weight: bold;
-    text-decoration: none;
-  }
-
-  .meta {
-    color: var(--text-secondary);
-    font-size: var(--fs-xs);
-    margin: var(--sp-1) 0 0;
+  @media (min-width: 64rem) {
+    .sermon-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 </style>

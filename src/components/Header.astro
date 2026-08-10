@@ -1,5 +1,14 @@
 ---
 import { SITE } from '../consts';
+
+const navItems = [
+  { href: '/', label: 'Start' },
+  { href: '/predigten', label: 'Predigten' },
+  { href: '/prediger', label: 'Prediger' },
+  { href: '/glaubensbekenntnis', label: 'Glaubensbekenntnis' },
+];
+
+const currentPath = Astro.url.pathname;
 ---
 
 <header>
@@ -7,9 +16,15 @@ import { SITE } from '../consts';
     <a href="/" class="site-name">{SITE.name}</a>
     <nav>
       <ul>
-        <li><a href="/">Start</a></li>
-        <li><a href="/predigten">Predigten</a></li>
-        <li><a href="/glaubensbekenntnis">Glaubensbekenntnis</a></li>
+        {
+          navItems.map((item) => (
+            <li>
+              <a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </nav>
   </div>
@@ -17,11 +32,25 @@ import { SITE } from '../consts';
 
 <style>
   header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
     border-bottom: 1px solid var(--border-subtle);
+    background-color: var(--bg-page);
+  }
+
+  /* Leicht transluzent mit Weichzeichner, wo unterstützt. Ohne Support
+     bleibt es die deckende Fläche oben — kein Fehlerfall. */
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    header {
+      background-color: color-mix(in srgb, var(--bg-page) 85%, transparent);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+    }
   }
 
   .bar {
-    max-width: var(--measure);
+    max-width: var(--width-content);
     margin-inline: auto;
     padding: var(--sp-2) var(--sp-3);
     display: flex;
@@ -32,8 +61,11 @@ import { SITE } from '../consts';
   }
 
   .site-name {
-    font-weight: bold;
+    font-family: var(--font-display);
+    font-weight: 500;
     font-size: var(--fs-m);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
     text-decoration: none;
     color: var(--text-primary);
   }
@@ -49,9 +81,19 @@ import { SITE } from '../consts';
 
   nav a {
     text-decoration: none;
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+    padding-bottom: var(--sp-1);
+    border-bottom: 2px solid transparent;
+    transition: border-color var(--duration-fast) var(--ease-out);
   }
 
   nav a:hover {
-    text-decoration: underline;
+    border-color: var(--border-subtle);
+  }
+
+  nav a[aria-current='page'] {
+    border-color: var(--accent-warm);
   }
 </style>

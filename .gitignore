@@ -15,3 +15,6 @@ dist/
 
 # logs
 npm-debug.log*
+
+# claude
+.claude/

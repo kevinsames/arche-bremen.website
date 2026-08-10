@@ -1,0 +1,72 @@
+---
+// Inhaltsblock einer Predigt: Datum, Prediger, Bibelstellen, Reihe,
+// Beschreibung, Audio-Link. Wird zweimal verwendet — im Popup von
+// SermonCard und auf der Detailseite predigten/[slug].astro — damit es
+// nur eine Darstellung gibt, die nicht auseinanderlaufen kann.
+//
+// Den Titel rendert bewusst der Aufrufer, nicht diese Komponente: auf der
+// Detailseite ist er ein <h1>, im Popup ein <h2> (das Popup liegt in der
+// Dokumentstruktur unterhalb der Seitenüberschrift).
+//
+// permalink: nur im Popup gesetzt, verlinkt von dort auf die Detailseite
+// (für Teilen, Google, Zurück-Button — siehe CLAUDE.md-Plan).
+import type { Sermon } from '../lib/sanity';
+import type { CollectionEntry } from 'astro:content';
+import { formatPassages } from '../lib/bible';
+
+interface Props {
+  sermon: Sermon;
+  profile?: CollectionEntry<'preachers'>;
+  permalink?: string;
+}
+
+const { sermon, profile, permalink } = Astro.props;
+
+const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
+---
+
+<p class="meta">
+  {dateFormatter.format(new Date(sermon.date))} &middot;{' '}
+  {
+    profile ? (
+      <a href={`/prediger/${profile.id}`}>{sermon.preacher.name}</a>
+    ) : (
+      sermon.preacher.name
+    )
+  }
+</p>
+<p class="passages">{formatPassages(sermon.passages)}</p>
+
+{sermon.series && <p class="series">Predigtreihe: {sermon.series}</p>}
+
+{sermon.description && <p>{sermon.description}</p>}
+
+{
+  (sermon.audioUrl || sermon.audioFile) && (
+    <p>
+      <a class="button" href={sermon.audioUrl ?? sermon.audioFile}>
+        Audio anhören
+      </a>
+    </p>
+  )
+}
+
+{permalink && <p><a href={permalink}>Zur Predigtseite &rarr;</a></p>}
+
+<style>
+  .meta {
+    margin: var(--sp-2) 0 0;
+  }
+
+  .passages {
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+    margin: var(--sp-1) 0 0;
+  }
+
+  .series {
+    color: var(--text-secondary);
+  }
+</style>

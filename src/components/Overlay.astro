@@ -1,0 +1,120 @@
+---
+// Popup-Hülle für Predigt- und Prediger-Kacheln (siehe SermonCard,
+// PreacherCard). Baut auf der HTML-Popover-API auf (popover="auto"),
+// nicht auf JavaScript — Öffnen/Schließen per Klick, Escape und Klick
+// daneben erledigt der Browser. Damit bleibt die Seite bei 0 KB
+// Client-JS (siehe CLAUDE.md Regel 4).
+//
+// Unterstützt der Browser die Popover-API nicht (z.B. ältere iOS-Versionen),
+// bleibt dieses Element schlicht ungeöffnet liegen — der auslösende Anker
+// in SermonCard/PreacherCard führt dann stattdessen direkt zur Detailseite
+// (siehe dortiger @supports-Block).
+interface Props {
+  id: string;
+  label: string;
+}
+
+const { id, label } = Astro.props;
+---
+
+<div id={id} popover="auto" aria-label={label} class="overlay">
+  <button type="button" popovertarget={id} popovertargetaction="hide" class="close" aria-label="Schließen">
+    &times;
+  </button>
+  <div class="content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  /* border/padding auf 0 zurückgesetzt — der Browser gibt [popover]
+     sonst eine UA-Rahmen/Abstand-Vorgabe mit, die die Tokens überschreiben
+     müssten. */
+  .overlay {
+    border: 0;
+    padding: 0;
+    margin: auto;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-overlay);
+    width: min(100% - 2 * var(--sp-3), var(--measure));
+    max-height: 85dvh;
+    overflow-y: auto;
+
+    opacity: 0;
+    translate: 0 var(--sp-2);
+    transition:
+      opacity var(--duration-fast) var(--ease-out),
+      translate var(--duration-fast) var(--ease-out),
+      overlay var(--duration-fast) var(--ease-out) allow-discrete,
+      display var(--duration-fast) var(--ease-out) allow-discrete;
+  }
+
+  .overlay:popover-open {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  @starting-style {
+    .overlay:popover-open {
+      opacity: 0;
+      translate: 0 var(--sp-2);
+    }
+  }
+
+  .overlay::backdrop {
+    background-color: var(--scrim);
+    -webkit-backdrop-filter: blur(var(--blur-overlay));
+    backdrop-filter: blur(var(--blur-overlay));
+  }
+
+  /* Mobil als von unten angedockte Sheet — die auf Telefonen erwartete
+     Geste für Popups, statt einer schwebenden Karte in der Bildschirmmitte. */
+  @media (max-width: 40rem) {
+    .overlay {
+      position: fixed;
+      inset: auto 0 0 0;
+      width: 100%;
+      max-height: 80dvh;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      translate: 0 100%;
+    }
+
+    .overlay:popover-open {
+      translate: 0 0;
+    }
+
+    @starting-style {
+      .overlay:popover-open {
+        translate: 0 100%;
+      }
+    }
+  }
+
+  .close {
+    position: sticky;
+    top: var(--sp-2);
+    float: right;
+    margin: var(--sp-2);
+    width: 2rem;
+    height: 2rem;
+    line-height: 1;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-size: var(--fs-m);
+    cursor: pointer;
+    transition: border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .close:hover {
+    border-color: var(--c-blue);
+  }
+
+  .content {
+    padding: var(--sp-4);
+    clear: both;
+  }
+</style>

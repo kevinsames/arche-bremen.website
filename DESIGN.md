@@ -21,8 +21,15 @@ existiert nicht. Nicht spezifiziert und für diese Website erfunden:
 - Fehler-, Warn- und Erfolgsfarben (Formularvalidierung)
 - Typo-Skala über Viewport-Breiten, Zeilenhöhen, maximale Zeilenlänge
 - Abstandssystem
-- Eckenradius für Flächen (`--radius-sm`)
+- Eckenradius für Flächen (`--radius-sm`, `--radius-md`, `--radius-lg`)
 - Verhalten des Logos unter ca. 320 px Breite
+- Bewegung/Übergänge (`--duration-fast`, `--duration-slow`, `--ease-out`)
+- Zweite Layout-Breite für Raster und Vollbild-Sektionen
+  (`--width-content`), zusätzlich zur Fließtext-Breite `--measure`
+- Eine Schriftgröße oberhalb der bisherigen Skala für den Startseiten-Hero
+  (`--fs-display`)
+- Overlay-Darstellung für Popups (`--scrim`, `--blur-overlay`,
+  `--shadow-overlay`)
 
 Diese Entscheidungen stehen in `tokens.css` und sind dort als erfunden
 gekennzeichnet. Sie sollten Hamburg zur Kenntnis gegeben werden — nicht zur
@@ -32,9 +39,41 @@ Genehmigung, aber damit ein späteres offizielles Web-Kapitel nicht abweicht.
 6,15 : 1 gegen Weiß, siehe Tabelle unten) statt auf einen eigenen Rohfarbwert.
 Kein neues Pantone nötig, und die Farbe ist bereits AA-geprüft.
 
-**Radius:** `--radius-sm: 0.25rem` deckt die einzige abgerundete Fläche der
-Seite ab (Gottesdienstzeit-Box auf der Startseite). Das Brandbook kennt keine
-Eckenradien; der Wert ist frei gewählt, nicht aus Pantone/Print abgeleitet.
+**Radius:** `--radius-sm: 0.25rem` ist reserviert, aktuell aber ungenutzt —
+die im Zuge des Redesigns geplante Gottesdienstzeit-Box im Hero wurde durch die
+schlichtere Kombination aus `h1`/`p`/`address` ersetzt. Das Brandbook kennt
+keine Eckenradien; der Wert ist frei gewählt, nicht aus Pantone/Print
+abgeleitet.
+Mit dem Redesign auf ein moderneres, an Apple/Netflix orientiertes
+Erscheinungsbild (August 2026) kamen zwei weitere Stufen dazu:
+`--radius-md: 0.75rem` für Predigt-Kacheln, `--radius-lg: 1.25rem` für
+Hero- und Vollbild-Sektionsflächen. Gleiches Prinzip: frei gewählt, keine
+Print-Herkunft.
+
+**Bewegung:** `--duration-fast: 150ms` für Hover- und Focus-Übergänge,
+`--duration-slow: 400ms` für das Scroll-Reveal der Sektionsüberschriften,
+`--ease-out` als gemeinsame Timing-Funktion. Ausschließlich CSS
+(`transition`/`animation`), kein JavaScript. Alles hinter
+`@media (prefers-reduced-motion: reduce)` abschaltbar.
+
+**Layout-Breiten:** `--measure` (62ch) bleibt die Breite für Fließtext.
+Für Raster (Predigt-Kacheln) und Vollbild-Sektionen kam `--width-content:
+72rem` dazu — breiter als eine lesbare Textspalte, aber begrenzt, damit
+Inhalte auf großen Monitoren nicht ausufern.
+
+**Overlay:** Mit dem Slider- und Popup-Muster (August 2026) kamen drei
+Werte für die Predigt- und Prediger-Popups dazu: `--scrim` (abgedunkelter,
+unscharfer Hintergrund hinter dem Popup), `--blur-overlay` (16px) und
+`--shadow-overlay`. Auch hier: frei gewählt, keine Print-Herkunft. Der
+Scrim ist aus `--c-blue-dark` gemischt statt aus reinem Schwarz, damit der
+abgedunkelte Zustand noch nach der Marke aussieht, nicht nach generischem
+UI. Kein eigenes `--z-*`-Token nötig — die Popups nutzen die
+HTML-Popover-API und damit den Top-Layer des Browsers, kein manuelles
+Stapeln.
+
+**`--fs-display`:** Eine Stufe oberhalb von `--fs-xxl`, ausschließlich für
+den Startseiten-Hero. Kein Ersatz für die bestehende Skala, sondern eine
+Ausnahme für genau eine Stelle.
 
 ## Bewusste Abweichungen
 

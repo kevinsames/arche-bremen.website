@@ -1,46 +1,91 @@
 ---
-import { CONTACT } from '../consts';
+import { SITE, CONTACT, ADDRESS } from '../consts';
 
 const currentYear = new Date().getFullYear();
 ---
 
 <footer>
   <div class="bar">
-    <p>
-      Kontakt: {CONTACT.local}&#64;{CONTACT.domain}
-    </p>
-    <ul>
-      <li><a href="/impressum">Impressum</a></li>
-      <li><a href="/datenschutz">Datenschutz</a></li>
-    </ul>
-    <p class="copyright">&copy; {currentYear}</p>
+    <div class="col">
+      <p class="site-name">{SITE.name}</p>
+      <address>
+        {ADDRESS.street}<br />
+        {ADDRESS.postalCode} {ADDRESS.city}
+      </address>
+    </div>
+
+    <div class="col">
+      <p>Kontakt: {CONTACT.local}&#64;{CONTACT.domain}</p>
+    </div>
+
+    <div class="col">
+      <ul>
+        <li><a href="/impressum">Impressum</a></li>
+        <li><a href="/datenschutz">Datenschutz</a></li>
+      </ul>
+      <p class="copyright">&copy; {currentYear}</p>
+    </div>
   </div>
 </footer>
 
 <style>
   footer {
-    border-top: 1px solid var(--border-subtle);
-    background-color: var(--bg-muted);
     margin-top: var(--sp-6);
+    background-color: var(--bg-inverted);
+    color: var(--text-on-dark);
+  }
+
+  /* Der globale Link-Stil (var(--link), Dunkles Blau) ist auf dunklem
+     Grund unlesbar — siehe Section.astro für dieselbe Regel. */
+  footer :global(a) {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  footer :global(a:visited) {
+    color: inherit;
   }
 
   .bar {
-    max-width: var(--measure);
+    max-width: var(--width-content);
     margin-inline: auto;
-    padding: var(--sp-4) var(--sp-3);
-    color: var(--text-secondary);
+    padding: var(--sp-6) var(--sp-3) var(--sp-4);
+    display: grid;
+    gap: var(--sp-4);
     font-size: var(--fs-xs);
+  }
+
+  @media (min-width: 48rem) {
+    .bar {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .site-name {
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+    margin: 0 0 var(--sp-2);
+  }
+
+  address {
+    font-style: normal;
+  }
+
+  .col p {
+    margin: 0;
   }
 
   ul {
     list-style: none;
     display: flex;
     gap: var(--sp-3);
-    margin: var(--sp-2) 0;
+    margin: 0 0 var(--sp-2);
     padding: 0;
   }
 
   .copyright {
-    margin: 0;
+    opacity: 0.8;
   }
 </style>

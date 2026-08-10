@@ -44,6 +44,23 @@ npm run build    # statischer Build nach dist/
 npm run preview  # Vorschau des Builds
 ```
 
+## Beispieldaten für `development`
+
+```sh
+npx sanity login              # einmalig
+npm run seed:development
+```
+
+Importiert `sanity/seed/development.ndjson` (ein Prediger, eine
+Beispielpredigt, ein Beispieltermin) fest in das Dataset `development` — das
+Zielname steht im npm-Skript, nicht in `SANITY_DATASET`, damit ein falsch
+gesetzter Wert nie versehentlich `production` überschreibt. `--replace`
+ersetzt nur Dokumente mit gleicher `_id`, leert das Dataset nicht.
+
+Free-Datasets sind öffentlich lesbar (siehe CLAUDE.md) — deshalb im Seed keine
+personenbezogenen Daten außer dem Namen, den das `preacher`-Schema ohnehin
+vorsieht.
+
 ## Datenmodell
 
 Details und Begründung in `CLAUDE.md`, Abschnitt "Datenmodell (Sanity)".
@@ -68,7 +85,7 @@ Freitext im Schema, sonst ist Filterbarkeit dauerhaft zerstört.
 | Collection | Zweck | Beispiel |
 |---|---|---|
 | `pages` | Statische Seiten (Glaubensbekenntnis, später Impressum etc.) | `src/content/pages/glaubensbekenntnis.md` |
-| `preachers` | Vollständige Prediger-Profile | `src/content/preachers/max-mustermann.md` |
+| `preachers` | Vollständige Prediger-Profile | `src/content/preachers/niklas-meyer.md` |
 
 Verknüpfung: Ein `preacher`-Dokument in Sanity und ein Markdown-Profil im Repo
 gehören zusammen, wenn ihr Slug (Sanity) bzw. Dateiname (Repo) übereinstimmt.
@@ -89,18 +106,26 @@ angezeigt, ohne Link.
    `title` (und optional `description`) anlegen.
 2. Fertig — `src/pages/[slug].astro` rendert sie automatisch unter `/<slug>`.
 
+**Achtung bei Bibelstellen:** Beginnt eine Zeile mit `1. ` (etwa
+`1. Korinther 9,22`), liest Markdown das als numerierte Liste und reißt den
+Absatz auf. In solchen Fällen den Punkt maskieren: `1\. Korinther`. Nur die
+Ziffer `1` ist betroffen. Nach dem Neuumbrechen einer Datei mit
+`grep -n '^[0-9]\+\. ' src/content/pages/*.md` prüfen.
+
 ## Offene Punkte
 
 Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
 
-- **Platzhalterwerte in `src/consts.ts`:** Gottesdienstzeit, Adresse, Domain,
-  Funktionsadresse und Fixtermine sind mit `PLATZHALTER` markiert und müssen
-  vor dem ersten Deploy durch echte Werte ersetzt werden.
-- **Fonts:** Aktuell Systemfont-Stack. `CLAUDE.md` fordert selbstgehostete
-  Fonts (max. zwei Schnitte, `font-display: swap`) — noch nicht umgesetzt.
-- **Impressum und Datenschutz:** Im Footer verlinkt (`/impressum`,
-  `/datenschutz`), aber die Seiten existieren noch nicht. Beide Links sind
-  aktuell tot.
+- **Platzhalterwerte in `src/consts.ts`:** Gottesdienstzeit und Adresse sind
+  gesetzt. `SITE.domain` und `CONTACT.domain` bleiben `PLATZHALTER`, bis die
+  Domain bzw. eine Funktionsadresse (`kontakt@…`) eingerichtet ist — eine
+  personengebundene Adresse wurde bewusst verworfen (siehe CLAUDE.md).
+- **Impressum:** `/impressum` ist vorhanden, Angaben 1:1 von arche-gemeinde.de
+  übernommen. **Juristisch nicht bestätigt** — nur korrekt, wenn Arche Bremen
+  rechtlich Teil des Hamburger Vereins ist. Vor dem ersten Deploy von
+  fachkundiger Seite prüfen lassen, ebenso Registereintrag und USt-IdNr.
+- **Datenschutz:** `/datenschutz` existiert noch nicht, der Footer-Link bleibt
+  vorerst tot.
 - **Offline-Fallback für Sanity:** Noch kein `sanity dataset export`-Snapshot
   als Fallback, falls die API zur Buildzeit nicht erreichbar ist.
 - Kalenderansicht, Predigtfilter, Audio-Player, Über-uns- und

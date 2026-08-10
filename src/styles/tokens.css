@@ -87,6 +87,10 @@
   --lh-body:  1.6;    /* Fließtext */
   --measure:  62ch;   /* max. Zeilenlänge Fließtext */
 
+  /* Nur für den Hero-Titel. Im Brandbook nicht vorhanden, für Web
+     definiert — siehe DESIGN.md. */
+  --fs-display: clamp(2.5rem, 1.2rem + 5.5vw, 5rem);
+
   /* ---------- Abstände ---------- */
   --sp-1: 0.25rem;
   --sp-2: 0.5rem;
@@ -96,6 +100,27 @@
   --sp-6: 4rem;
   --sp-7: 6rem;
 
+  /* ---------- Layout-Breiten ---------- */
+  /* --measure (oben) bleibt für Fließtext. --width-content ist breiter,
+     für Raster und Vollbild-Sektionen. Im Brandbook nicht vorhanden, für
+     Web definiert — siehe DESIGN.md. */
+  --width-content: 72rem;
+
   /* ---------- Radius (im Brandbook nicht vorhanden, für Web definiert) --- */
   --radius-sm: 0.25rem;
+  --radius-md: 0.75rem;  /* Kacheln */
+  --radius-lg: 1.25rem;  /* Hero- und Sektionsflächen */
+
+  /* ---------- Bewegung (im Brandbook nicht vorhanden, für Web definiert) */
+  --duration-fast: 150ms;  /* Hover, Focus */
+  --duration-slow: 400ms;  /* Scroll-Reveal */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ---------- Overlay (im Brandbook nicht vorhanden, für Web definiert) ---
+     Für Predigt- und Prediger-Popups (siehe DESIGN.md, Abschnitt Overlay).
+     Scrim aus Dunklem Blau statt Schwarz, damit die Marke auch im
+     abgedunkelten Zustand trägt. */
+  --scrim:          color-mix(in srgb, var(--c-blue-dark) 55%, transparent);
+  --blur-overlay:   16px;
+  --shadow-overlay: 0 1.5rem 3rem color-mix(in srgb, var(--c-blue-dark) 22%, transparent);
 }

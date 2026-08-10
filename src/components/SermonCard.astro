@@ -1,0 +1,165 @@
+---
+import type { Sermon } from '../lib/sanity';
+import type { CollectionEntry } from 'astro:content';
+import { formatPassages } from '../lib/bible';
+import Overlay from './Overlay.astro';
+import SermonDetail from './SermonDetail.astro';
+
+// Kachel für eine Predigt, genutzt auf der Startseite und der
+// Predigtübersicht. Ohne Foto (siehe CLAUDE.md — keine Stock-Fotografie,
+// echte Gemeindefotos gibt es noch nicht): die Kopffläche trägt die
+// Bibelstelle grafisch, in einer von drei Akzentfarben.
+//
+// Ein Klick öffnet den Inhalt als Popup (siehe Overlay.astro) statt einer
+// neuen Seite. Die Kachel bleibt zusätzlich ein echter Link zur
+// Detailseite (predigten/[slug].astro) — das hält den Permalink crawlbar
+// und ist der Rückfall für Browser ohne Popover-Unterstützung (siehe
+// @supports-Block unten).
+//
+// Zwei übereinanderliegende Elemente: der Anker (normal fokussierbar,
+// Tastatur-Weg zur Detailseite) und der deckungsgleiche Button
+// (tabindex="-1", nur per Maus/Touch erreichbar, öffnet das Popup). Ein
+// Element könnte nicht beides — <a popovertarget> wird vom Browser
+// ignoriert, das Attribut funktioniert nur auf <button>.
+//
+// preacherProfile: gesetzt, wenn ein passendes Repo-Profil existiert
+// (siehe predigten/index.astro für die Verknüpfungslogik).
+interface Props {
+  sermon: Sermon;
+  index: number;
+  preacherProfile?: CollectionEntry<'preachers'>;
+}
+
+const { sermon, index, preacherProfile } = Astro.props;
+
+const accents = ['--accent-warm', '--accent-warm-alt', '--accent-nature'] as const;
+const accent = accents[index % accents.length];
+
+const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
+const overlayId = `sermon-${sermon.slug}`;
+const permalink = `/predigten/${sermon.slug}`;
+---
+
+<div class="card-wrap">
+  <a href={permalink} class="card">
+    <div class="head" style={`background-color: var(${accent})`}>
+      <span class="passage">{formatPassages(sermon.passages)}</span>
+    </div>
+    <div class="body">
+      <p class="title">{sermon.title}</p>
+      <p class="meta">
+        {dateFormatter.format(new Date(sermon.date))} &middot;{' '}
+        {sermon.preacher.name}
+      </p>
+    </div>
+  </a>
+  <button
+    type="button"
+    popovertarget={overlayId}
+    class="open"
+    tabindex="-1"
+    aria-label={`Predigt öffnen: ${sermon.title}`}
+  >
+  </button>
+</div>
+
+<Overlay id={overlayId} label={sermon.title}>
+  <SermonDetail sermon={sermon} profile={preacherProfile} permalink={permalink} />
+</Overlay>
+
+<style>
+  .card-wrap {
+    position: relative;
+  }
+
+  .card {
+    display: block;
+    text-decoration: none;
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background-color: var(--bg-page);
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+
+  /* .open liegt im Stapel über .card und fängt den Zeiger zuerst ab —
+     card:hover würde nie feuern. Fokus kommt weiterhin über den Anker
+     selbst (Tab-Reihenfolge, siehe oben), dafür reicht die globale
+     :focus-visible-Regel in global.css. */
+  .card-wrap:has(.open:hover) .card {
+    border-color: var(--c-blue);
+    transform: scale(1.02);
+  }
+
+  .card:focus-visible {
+    border-color: var(--c-blue);
+    transform: scale(1.02);
+  }
+
+  .card:visited {
+    color: var(--text-primary);
+  }
+
+  .head {
+    padding: var(--sp-4) var(--sp-3);
+    min-height: 6rem;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .passage {
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+    font-size: var(--fs-xs);
+    color: var(--text-primary);
+  }
+
+  .body {
+    padding: var(--sp-3);
+  }
+
+  /* font-weight bleibt bei 400 (Normal) — es ist nur ein Schnitt von
+     Source Serif Pro geladen; "bold" würde der Browser synthetisch
+     nachzeichnen. Abhebung kommt über Größe, nicht Gewicht. */
+  .title {
+    font-size: var(--fs-m);
+    line-height: var(--lh-tight);
+    margin: 0;
+  }
+
+  .meta {
+    color: var(--text-secondary);
+    font-size: var(--fs-xs);
+    margin: var(--sp-1) 0 0;
+  }
+
+  /* Der Button liegt deckungsgleich über der Kachel und fängt den
+     Maus-/Touch-Klick zuerst ab — Öffnen des Popups ist damit die primäre
+     Zeigegeräte-Aktion. tabindex="-1" (im Markup) nimmt ihn aus der
+     Tab-Reihenfolge, sonst gäbe es zwei Tab-Stopps pro Kachel.
+     Ohne Popover-Unterstützung wird der Button ausgeblendet und der
+     Klick fällt durch auf den Anker darunter, der ganz normal zur
+     Detailseite führt. */
+  .open {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  @supports not selector(:popover-open) {
+    .open {
+      display: none;
+    }
+  }
+</style>
