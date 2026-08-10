@@ -34,6 +34,16 @@
   box-sizing: border-box;
 }
 
+/* Reserviert den Platz der vertikalen Scrollbar dauerhaft. Ohne das ist der
+   Viewport auf kurzen Seiten (z.B. /predigten) breiter als auf langen, und
+   die zentrierte Kopfzeile springt beim Seitenwechsel seitlich — sichtbar an
+   Logo und Spenden-Knopf. Gilt auch, während ein Popup offen ist und die
+   Regel weiter unten overflow: hidden setzt. Browser ohne Unterstützung
+   ignorieren die Zeile und verhalten sich wie bisher, kein Fehlerfall. */
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   margin: 0;
   font-family: var(--font-body);
