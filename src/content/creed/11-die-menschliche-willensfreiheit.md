@@ -1,6 +1,7 @@
 ---
 title: "Die menschliche Willensfreiheit"
 number: 11
+summary: "Erst durch die Wiedergeburt wird der Mensch wirklich frei, das geistlich Gute zu wollen und zu tun."
 ---
 
 In seinem paradiesischen Stand der Unschuld besaß der Mensch die Freiheit und

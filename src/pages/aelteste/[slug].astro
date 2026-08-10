@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Section from '../../components/Section.astro';
 
@@ -17,8 +18,30 @@ const { Content } = await render(elder);
 
 <BaseLayout title={elder.data.name}>
   <Section tone="light" width="measure">
-    <h1>{elder.data.name}</h1>
-    {elder.data.role && <p class="role">{elder.data.role}</p>}
+    {
+      elder.data.photo ? (
+        <div class="profile-head">
+          <Image
+            src={elder.data.photo}
+            alt=""
+            width={288}
+            densities={[1, 2]}
+            format="webp"
+            quality={90}
+            class="photo"
+          />
+          <div>
+            <h1>{elder.data.name}</h1>
+            {elder.data.role && <p class="role">{elder.data.role}</p>}
+          </div>
+        </div>
+      ) : (
+        <>
+          <h1>{elder.data.name}</h1>
+          {elder.data.role && <p class="role">{elder.data.role}</p>}
+        </>
+      )
+    }
     <div class="prose">
       <Content />
     </div>
@@ -28,5 +51,23 @@ const { Content } = await render(elder);
 <style>
   .role {
     color: var(--text-secondary);
+  }
+
+  .profile-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-4);
+    align-items: flex-start;
+  }
+
+  .profile-head h1 {
+    margin-top: 0;
+  }
+
+  .photo {
+    flex: 0 0 var(--size-portrait);
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--radius-md) var(--radius-lg) var(--radius-md) var(--radius-md);
   }
 </style>

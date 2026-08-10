@@ -1,6 +1,7 @@
 ---
 title: "Jesus Christus"
 number: 9
+summary: "Jesus Christus ist wahrer Gott und wahrer Mensch zugleich — er starb stellvertretend für Sünder und ist leiblich auferstanden."
 ---
 
 Im Folgenden werden einige wichtige Bekenntnisse über die Person Jesu Christi

@@ -1,6 +1,7 @@
 ---
 title: "Der Missionsbefehl"
 number: 21
+summary: "Jesus sendet seine Gemeinde, das Evangelium allen Völkern zu verkündigen — bis er wiederkommt."
 ---
 
 Der Herr Jesus Christus hat Seinen Jüngern kurz vor Seiner Himmelfahrt das

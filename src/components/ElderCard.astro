@@ -1,25 +1,55 @@
 ---
 import { render, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import Overlay from './Overlay.astro';
 
 // Kachel für ein Ältesten-Profil auf /aelteste, gleiche Bauweise wie
 // SermonCard: Anker (Tastatur-Weg zur Detailseite) und deckungsgleicher
 // Button (Maus/Touch, öffnet das Popup mit dem gerenderten Markdown-Body).
-// Details siehe Kommentar in SermonCard.astro.
+// Details siehe Kommentar in SermonCard.astro. Die Flächenrotation über
+// den Index ist ebenfalls von dort übernommen.
 interface Props {
   elder: CollectionEntry<'elders'>;
+  index: number;
 }
 
-const { elder } = Astro.props;
+const { elder, index } = Astro.props;
 const { Content } = await render(elder);
+
+const surfaces = [
+  ['--surface-warm', '--surface-warm-strong'],
+  ['--surface-warm-alt', '--surface-warm-alt-strong'],
+  ['--surface-nature', '--surface-nature-strong'],
+] as const;
+const [surface, surfaceHover] = surfaces[index % surfaces.length];
+
 const overlayId = `elder-${elder.id}`;
 const permalink = `/aelteste/${elder.id}`;
 ---
 
 <div class="card-wrap">
-  <a href={permalink} class="card">
-    <p class="name">{elder.data.name}</p>
-    {elder.data.role && <p class="role">{elder.data.role}</p>}
+  <a
+    href={permalink}
+    class="card"
+    style={`--card-surface: var(${surface}); --card-surface-hover: var(${surfaceHover})`}
+  >
+    {elder.data.photo && (
+      // alt="": Der Name steht als Text unmittelbar darunter, ein
+      // Alt-Text wäre für Screenreader nur eine Dopplung.
+      <Image
+        src={elder.data.photo}
+        alt=""
+        width={288}
+        densities={[1, 2]}
+        format="webp"
+        quality={90}
+        class="photo"
+      />
+    )}
+    <div class="card-text">
+      <p class="name">{elder.data.name}</p>
+      {elder.data.role && <p class="role">{elder.data.role}</p>}
+    </div>
   </a>
   <button
     type="button"
@@ -49,23 +79,35 @@ const permalink = `/aelteste/${elder.id}`;
     display: block;
     text-decoration: none;
     color: var(--text-primary);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    padding: var(--sp-3);
-    background-color: var(--bg-page);
+    padding: 0;
+    overflow: hidden;
+    border-radius: var(--radius-md) var(--radius-lg) var(--radius-md) var(--radius-md);
+    background-color: var(--card-surface);
     transition:
-      transform var(--duration-fast) var(--ease-out),
-      border-color var(--duration-fast) var(--ease-out);
+      translate var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
   }
 
-  .card-wrap:has(.open:hover) .card {
-    border-color: var(--c-blue);
-    transform: scale(1.02);
+  .card-text {
+    padding: var(--sp-4) var(--sp-3);
   }
 
+  .photo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .card-wrap:has(.open:hover) .card,
   .card:focus-visible {
-    border-color: var(--c-blue);
-    transform: scale(1.02);
+    background-color: var(--card-surface-hover);
+    translate: 0 -2px;
+  }
+
+  .card-wrap:has(.open:hover) .name,
+  .card:focus-visible .name {
+    text-decoration: underline;
   }
 
   .card:visited {

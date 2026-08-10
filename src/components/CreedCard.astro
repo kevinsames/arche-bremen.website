@@ -5,18 +5,18 @@ import Overlay from './Overlay.astro';
 // Kachel für einen Artikel des Glaubensbekenntnisses, gleiche Bauweise wie
 // SermonCard/ElderCard: Anker (Tastatur-Weg zur Detailseite) und
 // deckungsgleicher Button (Maus/Touch, öffnet das Popup mit dem gerenderten
-// Markdown-Body). Details siehe Kommentar in SermonCard.astro. Die
-// Akzentrotation über den Index ist ebenfalls von dort übernommen.
+// Markdown-Body). Details siehe Kommentar in SermonCard.astro.
+//
+// Anders als dort: keine Flächenrotation. Bei 25 Kacheln wirken drei
+// wechselnde Töne unruhig, ohne dass die Farbe etwas bedeutet — ein Ton
+// genügt. Stattdessen trägt die Kachel einen zusammenfassenden Satz
+// (article.data.summary), damit sich der Inhalt ohne Klick erschließt.
 interface Props {
   article: CollectionEntry<'creed'>;
-  index: number;
 }
 
-const { article, index } = Astro.props;
+const { article } = Astro.props;
 const { Content } = await render(article);
-
-const accents = ['--accent-warm', '--accent-warm-alt', '--accent-nature'] as const;
-const accent = accents[index % accents.length];
 
 const overlayId = `creed-${article.id}`;
 const permalink = `/glaubensbekenntnis/${article.id}`;
@@ -24,10 +24,9 @@ const permalink = `/glaubensbekenntnis/${article.id}`;
 
 <div class="card-wrap">
   <a href={permalink} class="card">
-    <div class="head" style={`background-color: var(${accent})`}>
-      <span class="number">{article.data.number}</span>
-    </div>
+    <span class="number">Artikel {article.data.number}</span>
     <p class="title">{article.data.title}</p>
+    {article.data.summary && <p class="summary">{article.data.summary}</p>}
   </a>
   <button
     type="button"
@@ -57,39 +56,37 @@ const permalink = `/glaubensbekenntnis/${article.id}`;
     display: block;
     text-decoration: none;
     color: var(--text-primary);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    background-color: var(--bg-page);
+    padding: var(--sp-4) var(--sp-3);
+    border-radius: var(--radius-md) var(--radius-lg) var(--radius-md) var(--radius-md);
+    background-color: var(--surface-warm);
     transition:
-      transform var(--duration-fast) var(--ease-out),
-      border-color var(--duration-fast) var(--ease-out);
+      translate var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
   }
 
-  .card-wrap:has(.open:hover) .card {
-    border-color: var(--c-blue);
-    transform: scale(1.02);
-  }
-
+  .card-wrap:has(.open:hover) .card,
   .card:focus-visible {
-    border-color: var(--c-blue);
-    transform: scale(1.02);
+    background-color: var(--surface-warm-strong);
+    translate: 0 -2px;
+  }
+
+  .card-wrap:has(.open:hover) .title,
+  .card:focus-visible .title {
+    text-decoration: underline;
   }
 
   .card:visited {
     color: var(--text-primary);
   }
 
-  .head {
-    padding: var(--sp-2) var(--sp-3);
-  }
-
   .number {
+    display: block;
     font-family: var(--font-display);
     font-weight: 500;
+    text-transform: uppercase;
     letter-spacing: var(--tracking-display);
-    font-size: var(--fs-l);
-    color: var(--text-primary);
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
   }
 
   .title {
@@ -97,9 +94,15 @@ const permalink = `/glaubensbekenntnis/${article.id}`;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: var(--tracking-display);
+    font-size: var(--fs-m);
+    margin: var(--sp-1) 0 0;
+  }
+
+  .summary {
     font-size: var(--fs-s);
-    margin: 0;
-    padding: var(--sp-3);
+    line-height: var(--lh-body);
+    color: var(--text-secondary);
+    margin: var(--sp-2) 0 0;
   }
 
   .open {

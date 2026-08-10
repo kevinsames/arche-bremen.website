@@ -30,6 +30,10 @@ existiert nicht. Nicht spezifiziert und für diese Website erfunden:
   (`--fs-display`)
 - Overlay-Darstellung für Popups (`--scrim`, `--blur-overlay`,
   `--shadow-overlay`)
+- Kachelflächen als verdünnte Akzente (`--surface-warm`, `--surface-warm-alt`,
+  `--surface-nature`), je eine kräftigere Hover-Stufe dazu
+  (`--surface-warm-strong`, `--surface-warm-alt-strong`,
+  `--surface-nature-strong`)
 - Icons (Header/Footer, August 2026): keine Icon-Font, keine Sprite-Datei,
   keine neue Dependency — handgeschriebene Inline-SVGs, `stroke="currentColor"`
   statt festem Farbwert (funktioniert auf hellem Header und dunklem Footer
@@ -55,13 +59,41 @@ Erscheinungsbild (August 2026) kamen zwei weitere Stufen dazu:
 Hero- und Vollbild-Sektionsflächen. Gleiches Prinzip: frei gewählt, keine
 Print-Herkunft.
 
-Das Kachel-Muster (Karte + Popup, `--radius-md`, Akzentrotation über
-`--accent-warm`/`--accent-warm-alt`/`--accent-nature`) wiederholt sich
-mittlerweile ein drittes Mal: Predigten, Älteste und seit August 2026 auch
-die 25 Artikel des Glaubensbekenntnisses (`/glaubensbekenntnis`, vorher eine
-einzige lange `.prose`-Seite). Keine neuen Tokens dafür nötig — nur die
-Nummer im Kachelkopf ist neu, in `--text-primary` statt in der Akzentfarbe
-(siehe Abschnitt „Sekundärfarben tragen keinen Text" unten).
+Das Kachel-Muster (Karte + Popup) wiederholt sich mittlerweile ein drittes
+Mal: Predigten, Älteste und seit August 2026 auch die 25 Artikel des
+Glaubensbekenntnisses (`/glaubensbekenntnis`, vorher eine einzige lange
+`.prose`-Seite). Überarbeitet im August 2026 von Rahmen auf Fläche: statt
+eines dünnen Akzentstreifens im Kachelkopf trägt jetzt die ganze Kachel eine
+verdünnte Akzentfläche, ohne Rahmen und ohne Schatten. Radius ist
+asymmetrisch — drei Ecken `--radius-md`, die Ecke oben rechts `--radius-lg`
+— als Anspielung auf das Bogen-Stilelement aus Brandbook Kapitel 4.
+Hover/Fokus heben die Kachel per `translate` an und vertiefen die Fläche auf
+die zugehörige `--surface-*-strong`-Stufe, zusätzlich wird der Titel
+unterstrichen. Ein erster Versuch mit einem innen liegenden `outline` in
+`--c-blue` (statt `border-color`) wurde verworfen: Blau auf einer warmen
+Fläche wirkte als Fremdfarbe, und ein umlaufender Ring direkt an der
+Kachelkante las sich als „ausgewählt", nicht als Hover — im Ergebnis wieder
+der Rahmen-Look, der mit dem Umbau verschwinden sollte. Der Tastatur-Fokus
+bleibt trotzdem sichtbar über die globale, außen liegende
+`:focus-visible`-Regel in `global.css` — die Kachel braucht dafür keinen
+eigenen Ring. Vor dieser Überarbeitung wurde die Kachel per `transform:
+scale()` vergrößert, was Text unscharf zeichnete und in `Slider.astro`
+(`overflow-x: auto`) Scrollweg erzeugte.
+
+Predigten und Älteste rotieren weiterhin über drei Töne
+(`--surface-warm`/`--surface-warm-alt`/`--surface-nature`, nach Index) — bei
+wenigen Kacheln grenzt das sie sinnvoll voneinander ab. Die 25
+Glaubensbekenntnis-Kacheln bekamen im September 2026 stattdessen einen
+einzigen Ton (`--surface-warm`): Bei 25 Stück wirkte die Rotation unruhig,
+ohne dass die Farbe etwas bedeutete. Zugleich wurde die Kachel inhaltlich
+ergänzt — sie zeigt jetzt neben Nummer und Titel auch einen
+zusammenfassenden Satz (`summary`-Feld, siehe `content.config.ts` und
+README), damit sich ein Artikel ohne Klick erschließt. Die Artikelnummer
+ist dafür von `--fs-xxl` auf `--fs-xs` geschrumpft und dient nur noch als
+Eyebrow über dem Titel (`--text-secondary`, Versalien) — vorher war sie das
+größte Element der Kachel, obwohl sie die am wenigsten wichtige Information
+trägt. Die 25 `summary`-Sätze sind Entwürfe und noch nicht von der Gemeinde
+oder Hamburg inhaltlich freigegeben (siehe Kommentar im Schema).
 
 **Bewegung:** `--duration-fast: 150ms` für Hover- und Focus-Übergänge,
 `--duration-slow: 400ms` für das Scroll-Reveal der Sektionsüberschriften,
@@ -107,6 +139,25 @@ WCAG-Kontraste gegen Weiß:
 | `--c-yellow` | `#ffd300` | 1,44 | verfehlt | verfehlt |
 
 Auf gebrochenem Weiß liegen alle Werte noch etwa 12–14 % darunter.
+
+**Kachelflächen sind keine Ausnahme von dieser Regel, sondern ihre Anwendung:**
+`--surface-warm`/`--surface-warm-alt`/`--surface-nature` (siehe oben) sind die
+Akzente auf 14–16 % gegen Weiß verdünnt — Flächen, kein Text. Beide Textfarben
+bleiben auf ihnen im AA-Bereich:
+
+| Fläche | Hex (ca.) | vs. `--text-secondary` (Braun) | vs. `--text-primary` |
+|---|---|---|---|
+| `--surface-warm` | `#fffbdd` | 5,87 : 1 — AA | ca. 11,4 : 1 — AAA |
+| `--surface-warm-alt` | `#fef4e0` | 5,63 : 1 — AA | ca. 11,0 : 1 — AAA |
+| `--surface-nature` | `#f2f7e4` | 5,62 : 1 — AA | ca. 10,9 : 1 — AAA |
+| `--surface-warm-strong` | `#fff3b8` | 5,51 : 1 — AA | ca. 10,7 : 1 — AAA |
+| `--surface-warm-alt-strong` | `#fde7c1` | 5,11 : 1 — AA | ca. 9,9 : 1 — AAA |
+| `--surface-nature-strong` | `#e4efca` | 5,25 : 1 — AA | ca. 10,2 : 1 — AAA |
+
+Grün ist auf 16 %/32 % statt 14 %/28 % gemischt, weil es bei gleicher
+Verdünnung wie Gelb/Orange farblich fast verschwindet. Die `*-strong`-Stufe
+ist die Hover-/Fokus-Fläche derselben Kacheln (siehe Kachel-Absatz oben) —
+kräftiger gemischt, aber weiterhin klar innerhalb AA.
 
 **Regel:** Gelb, Orange, Grün, Ocker und Braun-Grau sind Flächen-, Rahmen- und
 Stilelementfarben. Textfarben sind ausschließlich Dunkles Blau und Braun, auf
@@ -198,6 +249,19 @@ Zurückhaltendes, typografisch getragenes Design mit wenigen Bildern statt
 Stock-Fotografie. Bilder werden ergänzt, wenn echte entstehen. Keine
 Platzhalterfotos von lachenden Fremden — das verstößt gegen den Guide und wirkt
 bei einer neuen Gemeinde unglaubwürdig.
+
+**Ältesten-Porträts** (September 2026) sind das erste zugelassene Fotoformat:
+echte Fotos der Gemeindeleitung, kein Stock — genau die Art Bild, die
+Brandbook 3.1 verlangt. `elders.photo` in `content.config.ts` ist optional;
+ohne hinterlegtes Foto bleibt die Ältesten-Kachel wie bisher rein
+typografisch, es gibt kein Platzhalterbild und keine Silhouette. Zuschnitt
+4:5 (Hochformat), `object-fit: cover`, mit denselben asymmetrischen
+Kachel-Radien wie der Rest des Kachel-Musters (`--radius-md`/`--radius-lg`,
+siehe oben) — kein Kreis-Avatar, das würde die eckige Formensprache des
+Brandbooks brechen. Neuer Token `--size-portrait: 18rem` (Abschnitt
+Bildgrößen), verwendet auf der Kachel (`ElderCard.astro`) und der
+Detailseite (`/aelteste/<slug>`). Das Popup-Overlay der Kachel bleibt
+bewusst textlich — ein zweites, kleineres Foto dort brächte keinen Mehrwert.
 
 ## Offene Fragen an Hamburg
 

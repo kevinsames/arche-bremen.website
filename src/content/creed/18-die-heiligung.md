@@ -1,6 +1,7 @@
 ---
 title: "Die Heiligung"
 number: 18
+summary: "Heiligung ist ein lebenslanger Prozess, in dem Gottes Geist den Glaubenden zunehmend in das Bild Christi verwandelt."
 ---
 
 Während uns die Rechtfertigung in einen endgültigen, festen Stand

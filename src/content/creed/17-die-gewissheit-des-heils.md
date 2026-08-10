@@ -1,6 +1,7 @@
 ---
 title: "Die Gewissheit des Heils"
 number: 17
+summary: "Wahre Glaubende dürfen ihrer Errettung gewiss sein — diese Gewissheit kann getrübt, aber nie ganz verloren werden."
 ---
 
 Diejenigen, die wahrhaftig an den Herrn Jesus Christus glauben, Ihn

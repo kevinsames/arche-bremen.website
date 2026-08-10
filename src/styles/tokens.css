@@ -62,6 +62,21 @@
   --accent-mission:    var(--c-ochre);
   --border-subtle:     var(--c-brown-gray);
 
+  /* Kachelflächen — stark verdünnte Akzente. Ausschließlich Flächen,
+     die Akzente selbst bleiben Nicht-Textfarben (siehe oben). Gegen
+     --c-white gemischt, nicht gegen --bg-page: Kacheln stehen teils auf
+     gebrochenem Weiß (Glaubensbekenntnis, tone="muted") und sollen sich
+     dort abheben. Siehe DESIGN.md für Kontrastwerte. */
+  --surface-warm:      color-mix(in srgb, var(--accent-warm) 14%, var(--c-white));
+  --surface-warm-alt:  color-mix(in srgb, var(--accent-warm-alt) 14%, var(--c-white));
+  --surface-nature:    color-mix(in srgb, var(--accent-nature) 16%, var(--c-white));
+
+  /* Hover-Stufe derselben Flächen — kräftiger gemischt, gleiche Regel:
+     nur Fläche, nie Text. */
+  --surface-warm-strong:      color-mix(in srgb, var(--accent-warm) 28%, var(--c-white));
+  --surface-warm-alt-strong:  color-mix(in srgb, var(--accent-warm-alt) 28%, var(--c-white));
+  --surface-nature-strong:    color-mix(in srgb, var(--accent-nature) 32%, var(--c-white));
+
   /* ---------- Typografie (Brandbook 2.1 / 2.2) ---------- */
   /* Headlines: Brandbook schreibt Futura Bold/Medium vor.
      Futura ist nicht webfont-lizenziert — Jost ist die
@@ -122,6 +137,7 @@
   --size-logo-header: 6.75rem;  /* 108 px */
   --size-logo-hero:   16rem;    /* 256 px */
   --size-mark:        4rem;     /* Bogen als Stilelement */
+  --size-portrait:    18rem;    /* 288 px, Ältesten-Porträt (4:5) */
 
   /* ---------- Overlay (im Brandbook nicht vorhanden, für Web definiert) ---
      Für Predigt- und Prediger-Popups (siehe DESIGN.md, Abschnitt Overlay).

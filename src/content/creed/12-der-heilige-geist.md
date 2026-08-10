@@ -1,6 +1,7 @@
 ---
 title: "Der Heilige Geist"
 number: 12
+summary: "Der Heilige Geist ist Gott selbst — er bewirkt Wiedergeburt, wohnt in den Gläubigen und verteilt Gaben zum Dienst."
 ---
 
 Der Heilige Geist ist nicht eine unpersönliche Kraft, Energie oder ein

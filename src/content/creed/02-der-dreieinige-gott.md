@@ -1,6 +1,7 @@
 ---
 title: "Der dreieinige Gott"
 number: 2
+summary: "Der eine Gott existiert ewig als drei Personen — Vater, Sohn und Heiliger Geist —, gleich in Wesen und Herrlichkeit."
 ---
 
 Wir bekennen uns zu dem Einen, einzig wahren (5. Mose 4,35) und allmächtigen

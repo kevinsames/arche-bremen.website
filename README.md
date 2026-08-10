@@ -84,7 +84,7 @@ Freitext im Schema, sonst ist Filterbarkeit dauerhaft zerstört.
 | Collection | Zweck | Beispiel |
 |---|---|---|
 | `pages` | Statische Seiten (Impressum, Datenschutz, später Vision etc.) | `src/content/pages/impressum.md` |
-| `elders` | Profile der Ältesten (Gemeindeleitung) | `src/content/elders/niklas-meyer.md` |
+| `elders` | Profile der Ältesten (Gemeindeleitung), inkl. optionalem Foto (`photo`) | `src/content/elders/niklas-meyer.md` |
 | `creed` | Die 25 Artikel des Glaubensbekenntnisses, dazu Vorwort und Quelle — eine Datei pro Artikel, siehe `/glaubensbekenntnis` | `src/content/creed/01-die-heilige-schrift.md` |
 
 Verknüpfung: `sermon.preacher` ist reiner Freitext in Sanity. Stimmt der Name
@@ -113,6 +113,18 @@ Link und ohne Fehler. Die verknüpften Profile erscheinen unter `/aelteste`.
 Absatz auf. In solchen Fällen den Punkt maskieren: `1\. Korinther`. Nur die
 Ziffer `1` ist betroffen. Nach dem Neuumbrechen einer Datei mit
 `grep -n '^[0-9]\+\. ' src/content/pages/*.md src/content/creed/*.md` prüfen.
+
+### Wie ein Foto zu einem Ältesten-Profil hinzukommt
+
+`elders.photo` ist optional — ohne Foto bleibt die Kachel wie bisher rein
+typografisch (siehe DESIGN.md, Abschnitt „Bildwelt"). Zum Hinzufügen:
+
+1. Foto neben die passende Markdown-Datei legen, gleicher Basename, z. B.
+   `src/content/elders/niklas-meyer.jpg`.
+2. Im Frontmatter ergänzen: `photo: ./niklas-meyer.jpg`.
+3. Anforderung an die Datei: Hochformat (Zuschnitt 4:5), mindestens 1200 px
+   breit, JPEG. Astro erzeugt daraus beim Build automatisch die WebP-Varianten
+   für Kachel und Detailseite.
 
 ### Wie ein Artikel des Glaubensbekenntnisses geändert wird
 

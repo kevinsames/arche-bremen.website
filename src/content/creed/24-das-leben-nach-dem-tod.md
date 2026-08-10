@@ -1,6 +1,7 @@
 ---
 title: "Das Leben nach dem Tod"
 number: 24
+summary: "Nach dem Tod kehren die Seelen sofort zu Gott zurück — Glaubende in seine Herrlichkeit, Ungläubige in die Verdammnis."
 ---
 
 Die Körper der Menschen werden nach dem Tod wieder zu Staub verwesen (1.

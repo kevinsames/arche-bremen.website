@@ -1,6 +1,7 @@
 ---
 title: "Der gefallene Mensch"
 number: 6
+summary: "Durch Adams Sündenfall verlor die ganze Menschheit ihre Reinheit und steht seither unter Gottes Zorn und Verdammnis."
 ---
 
 Trotz der herrlichen Segnungen des Paradieses waren die ersten Menschen nicht

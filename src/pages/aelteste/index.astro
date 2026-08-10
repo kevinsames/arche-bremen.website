@@ -19,8 +19,8 @@ const elders = (await getCollection('elders')).sort((a, b) =>
         <p>Noch keine Profile hinterlegt.</p>
       ) : (
         <Slider>
-          {elders.map((elder) => (
-            <ElderCard elder={elder} />
+          {elders.map((elder, index) => (
+            <ElderCard elder={elder} index={index} />
           ))}
         </Slider>
       )

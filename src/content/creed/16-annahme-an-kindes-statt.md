@@ -1,6 +1,7 @@
 ---
 title: "Annahme an Kindes Statt"
 number: 16
+summary: "Wer wiedergeboren und gerechtfertigt ist, wird von Gott als Kind angenommen — mit allen Rechten und der Verheißung des Erbes."
 ---
 
 Allen denen, die von neuem geboren und gerechtfertigt sind, spricht Gott auch

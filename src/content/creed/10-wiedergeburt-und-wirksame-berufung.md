@@ -1,6 +1,7 @@
 ---
 title: "Wiedergeburt und wirksame Berufung"
 number: 10
+summary: "Weil der Mensch geistlich tot ist, schenkt Gottes Geist ihm durch die Wiedergeburt neues Leben und Glauben."
 ---
 
 Da jeder Mensch aufgrund der Sünde geistlich tot und somit absolut

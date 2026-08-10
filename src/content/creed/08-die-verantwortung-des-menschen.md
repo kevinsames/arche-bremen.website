@@ -1,6 +1,7 @@
 ---
 title: "Die Verantwortung des Menschen"
 number: 8
+summary: "Gottes Vorherbestimmung hebt die Verantwortung des Menschen nicht auf — jeder ist zu Umkehr und Glauben aufgerufen."
 ---
 
 Die Lehre von der Souveränität Gottes, dass Er nämlich auch alle Gedanken,

@@ -1,6 +1,7 @@
 ---
 title: "Der Ratschluss Gottes"
 number: 3
+summary: "Gott hat alles, was geschieht, von Ewigkeit her frei beschlossen, ohne selbst Urheber der Sünde zu sein."
 ---
 
 Gott hat in sich selbst von aller Ewigkeit her durch den vollkommenen, weisen

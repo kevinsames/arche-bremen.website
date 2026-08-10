@@ -22,6 +22,13 @@ const creed = defineCollection({
   schema: z.object({
     title: z.string(),
     number: z.number().optional(),
+    // Ein Satz für die Kachel auf /glaubensbekenntnis. Bewusst
+    // handgeschrieben statt aus dem Fließtext extrahiert — die Artikel
+    // beginnen mit langen Sätzen samt Klammerverweisen, die sich nicht
+    // sauber kürzen lassen. Die aktuellen Sätze sind Entwürfe und
+    // inhaltlich noch nicht von der Gemeinde freigegeben — beim
+    // Korrigieren einfach überschreiben.
+    summary: z.string().optional(),
   }),
 });
 
@@ -32,10 +39,15 @@ const creed = defineCollection({
 // sanity/schemaTypes/preacher.ts).
 const elders = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/elders' }),
-  schema: z.object({
-    name: z.string(),
-    role: z.string().optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      name: z.string(),
+      role: z.string().optional(),
+      // Porträt, optional — Datei liegt neben der Markdown-Datei
+      // (`photo: ./name.jpg`). Ohne Foto bleibt die Kachel typografisch,
+      // kein Platzhalterbild (siehe CLAUDE.md, keine Stock-Fotografie).
+      photo: image().optional(),
+    }),
 });
 
 export const collections = { pages, elders, creed };

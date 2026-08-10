@@ -7,8 +7,9 @@ import SermonDetail from './SermonDetail.astro';
 
 // Kachel für eine Predigt, genutzt auf der Startseite und der
 // Predigtübersicht. Ohne Foto (siehe CLAUDE.md — keine Stock-Fotografie,
-// echte Gemeindefotos gibt es noch nicht): die Kopffläche trägt die
-// Bibelstelle grafisch, in einer von drei Akzentfarben.
+// echte Gemeindefotos gibt es noch nicht): die ganze Kachelfläche trägt
+// eine von drei stark verdünnten Akzentfarben (siehe tokens.css,
+// --surface-*), die Bibelstelle steht als Eyebrow über dem Titel.
 //
 // Ein Klick öffnet den Inhalt als Popup (siehe Overlay.astro) statt einer
 // neuen Seite. Die Kachel bleibt zusätzlich ein echter Link zur
@@ -32,8 +33,12 @@ interface Props {
 
 const { sermon, index, preacherProfile } = Astro.props;
 
-const accents = ['--accent-warm', '--accent-warm-alt', '--accent-nature'] as const;
-const accent = accents[index % accents.length];
+const surfaces = [
+  ['--surface-warm', '--surface-warm-strong'],
+  ['--surface-warm-alt', '--surface-warm-alt-strong'],
+  ['--surface-nature', '--surface-nature-strong'],
+] as const;
+const [surface, surfaceHover] = surfaces[index % surfaces.length];
 
 const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
 const overlayId = `sermon-${sermon.slug}`;
@@ -41,17 +46,17 @@ const permalink = `/predigten/${sermon.slug}`;
 ---
 
 <div class="card-wrap">
-  <a href={permalink} class="card">
-    <div class="head" style={`background-color: var(${accent})`}>
-      <span class="passage">{formatPassages(sermon.passages)}</span>
-    </div>
-    <div class="body">
-      <p class="title">{sermon.title}</p>
-      <p class="meta">
-        {dateFormatter.format(new Date(sermon.date))} &middot;{' '}
-        {sermon.preacher}
-      </p>
-    </div>
+  <a
+    href={permalink}
+    class="card"
+    style={`--card-surface: var(${surface}); --card-surface-hover: var(${surfaceHover})`}
+  >
+    <span class="passage">{formatPassages(sermon.passages)}</span>
+    <p class="title">{sermon.title}</p>
+    <p class="meta">
+      {dateFormatter.format(new Date(sermon.date))} &middot;{' '}
+      {sermon.preacher}
+    </p>
   </a>
   <button
     type="button"
@@ -76,51 +81,42 @@ const permalink = `/predigten/${sermon.slug}`;
     display: block;
     text-decoration: none;
     color: var(--text-primary);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    background-color: var(--bg-page);
+    padding: var(--sp-4) var(--sp-3);
+    border-radius: var(--radius-md) var(--radius-lg) var(--radius-md) var(--radius-md);
+    background-color: var(--card-surface);
     transition:
-      transform var(--duration-fast) var(--ease-out),
-      border-color var(--duration-fast) var(--ease-out);
+      translate var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
   }
 
   /* .open liegt im Stapel über .card und fängt den Zeiger zuerst ab —
      card:hover würde nie feuern. Fokus kommt weiterhin über den Anker
      selbst (Tab-Reihenfolge, siehe oben), dafür reicht die globale
      :focus-visible-Regel in global.css. */
-  .card-wrap:has(.open:hover) .card {
-    border-color: var(--c-blue);
-    transform: scale(1.02);
+  .card-wrap:has(.open:hover) .card,
+  .card:focus-visible {
+    background-color: var(--card-surface-hover);
+    translate: 0 -2px;
   }
 
-  .card:focus-visible {
-    border-color: var(--c-blue);
-    transform: scale(1.02);
+  .card-wrap:has(.open:hover) .title,
+  .card:focus-visible .title {
+    text-decoration: underline;
   }
 
   .card:visited {
     color: var(--text-primary);
   }
 
-  .head {
-    padding: var(--sp-4) var(--sp-3);
-    min-height: 6rem;
-    display: flex;
-    align-items: flex-end;
-  }
-
   .passage {
+    display: block;
+    margin-bottom: var(--sp-2);
     font-family: var(--font-display);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: var(--tracking-display);
     font-size: var(--fs-xs);
     color: var(--text-primary);
-  }
-
-  .body {
-    padding: var(--sp-3);
   }
 
   /* font-weight bleibt bei 400 (Normal) — es ist nur ein Schnitt von
