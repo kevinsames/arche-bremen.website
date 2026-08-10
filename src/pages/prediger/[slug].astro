@@ -1,0 +1,21 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const preachers = await getCollection('preachers');
+  return preachers.map((preacher) => ({
+    params: { slug: preacher.id },
+    props: { preacher },
+  }));
+}
+
+const { preacher } = Astro.props;
+const { Content } = await render(preacher);
+---
+
+<BaseLayout title={preacher.data.name}>
+  <h1>{preacher.data.name}</h1>
+  {preacher.data.role && <p class="role">{preacher.data.role}</p>}
+  <Content />
+</BaseLayout>
