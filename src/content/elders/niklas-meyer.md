@@ -1,6 +1,6 @@
 ---
 name: Niklas Meyer
-role: Prediger
+role: Pastor
 ---
 
 PLATZHALTER: Profiltext folgt hier.
