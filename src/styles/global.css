@@ -1,46 +1,13 @@
+@import './tokens.css';
+
 /*
- * Minimaler Reset + Design-Tokens als CSS Custom Properties.
+ * Minimaler Reset + Basisstile.
  *
- * Absichtlich nur Tokens hier — Farben, Abstände, Typo-Skala. Kein
- * Utility-Framework, kein Präprozessor (Zehnjahreshorizont, Build-Einfachheit,
- * siehe CLAUDE.md). Fonts sind vorerst Systemfonts; selbstgehostete Fonts
- * folgen in einer späteren Session (siehe README, Abschnitt "Offene Punkte").
+ * Alle Design-Tokens (Farben, Abstände, Typo-Skala) leben ausschließlich in
+ * tokens.css — siehe CLAUDE.md, Abschnitt "Design und Marke". Diese Datei
+ * enthält keine eigenen Custom Properties mehr, nur Reset und
+ * Basiselement-Stile, die diese Tokens referenzieren.
  */
-
-:root {
-  /* Farben */
-  --color-text: #1a1a1a;
-  --color-text-muted: #55565a;
-  --color-background: #ffffff;
-  --color-surface: #f4f3f0;
-  --color-primary: #1d4d3e;
-  --color-primary-contrast: #ffffff;
-  --color-border: #d9d7d2;
-  --color-link: var(--color-primary);
-  --color-link-visited: #14352a;
-
-  /* Abstände */
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2.5rem;
-  --space-2xl: 4rem;
-
-  /* Layout */
-  --content-max-width: 40rem;
-
-  /* Typo-Skala */
-  --font-family-base:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.25rem;
-  --font-size-xl: 1.5rem;
-  --font-size-2xl: 2rem;
-  --line-height-base: 1.5;
-  --line-height-heading: 1.2;
-}
 
 *,
 *::before,
@@ -50,18 +17,19 @@
 
 body {
   margin: 0;
-  font-family: var(--font-family-base);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-base);
-  color: var(--color-text);
-  background-color: var(--color-background);
+  font-family: var(--font-body);
+  font-size: var(--fs-s);
+  line-height: var(--lh-body);
+  color: var(--text-primary);
+  background-color: var(--bg-page);
 }
 
 h1,
 h2,
 h3,
 h4 {
-  line-height: var(--line-height-heading);
+  font-family: var(--font-display);
+  line-height: var(--lh-tight);
 }
 
 img,
@@ -71,9 +39,9 @@ svg {
 }
 
 a {
-  color: var(--color-link);
+  color: var(--link);
 }
 
 a:visited {
-  color: var(--color-link-visited);
+  color: var(--link-visited);
 }

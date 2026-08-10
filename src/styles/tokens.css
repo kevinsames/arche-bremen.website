@@ -1,0 +1,101 @@
+/* ============================================================
+   Design Tokens — abgeleitet aus Brandbook ARCHE v1.1 (2020/2023)
+   Einzige Quelle der Wahrheit für Farben und Typografie.
+   Hex-Werte sind aus den RGB-Angaben des Brandbooks konvertiert.
+   Nicht ohne Abgleich mit DESIGN.md ändern.
+   ============================================================ */
+
+:root {
+  /* ---------- Primärfarben (Brandbook 1.6) ---------- */
+  --c-white:        #ffffff;  /* Weiß */
+  --c-offwhite:     #efeee8;  /* Gebrochenes Weiß, Pantone 9064 C */
+  --c-blue-dark:    #003a56;  /* Dunkles Blau, Pantone 303 C */
+  --c-blue:         #4e87a0;  /* Blau, Pantone 7697 C */
+
+  /* ---------- Sekundärfarben (Brandbook 1.7) ---------- */
+  --c-brown-gray:   #a19688;  /* Gedämpftes Braun, Warm Gray 9 C */
+  --c-brown:        #666157;  /* Braun, Pantone P 170 12 C */
+  --c-yellow:       #ffd300;  /* Gelb, Pantone 116 C */
+  --c-orange:       #f7a823;  /* Orange, Pantone 1375 C */
+  --c-green:        #abcc59;  /* Sanftes Grün, Pantone 375 C */
+  /* TODO Dunkles Braun (Pantone 412 C): RGB-Angabe im PDF unlesbar
+     extrahiert ("20|40|03"). Bei Hamburg erfragen, nicht raten. */
+
+  /* ---------- Arche Mission (Brandbook 1.8) ---------- */
+  --c-ochre:        #d9a500;  /* Ocker-Gelb, Pantone 1245 C */
+
+  /* ============================================================
+     SEMANTISCHE ZUWEISUNG — hier stehen die Regeln.
+     Im Code ausschließlich diese Variablen verwenden, nie die
+     Rohfarben oben. Wer --c-yellow direkt benutzt, umgeht die
+     Kontrastregeln.
+     ============================================================ */
+
+  /* Text — nur geprüfte Kombinationen.
+     Kontrast gegen --c-white bzw. --c-offwhite: */
+  --text-primary:      var(--c-blue-dark);   /* 12.07 : 1  — AAA */
+  --text-secondary:    var(--c-brown);       /*  6.15 : 1  — AA  */
+  --text-on-dark:      var(--c-white);       /* 12.07 : 1  — AAA */
+
+  /* Flächen */
+  --bg-page:           var(--c-white);
+  --bg-muted:          var(--c-offwhite);
+  --bg-inverted:       var(--c-blue-dark);
+
+  /* Interaktion */
+  --link:              var(--c-blue-dark);
+  --link-hover:        var(--c-blue);
+  --link-visited:      var(--text-secondary); /* Brandbook kennt keine
+                                                Zustände — erfunden,
+                                                siehe DESIGN.md */
+  --focus-ring:        var(--c-blue);        /* Brandbook kennt keine
+                                                Zustände — erfunden,
+                                                siehe DESIGN.md */
+
+  /* Akzente — ausschließlich Flächen, Rahmen, Stilelemente.
+     NIEMALS als Textfarbe. Kontrast auf Weiß liegt zwischen
+     1.44 : 1 und 2.90 : 1 und verfehlt AA in jedem Fall,
+     auch für große Schrift. */
+  --accent-warm:       var(--c-yellow);
+  --accent-warm-alt:   var(--c-orange);
+  --accent-nature:     var(--c-green);
+  --accent-mission:    var(--c-ochre);
+  --border-subtle:     var(--c-brown-gray);
+
+  /* ---------- Typografie (Brandbook 2.1 / 2.2) ---------- */
+  /* Headlines: Brandbook schreibt Futura Bold/Medium vor.
+     Futura ist nicht webfont-lizenziert — Jost ist die
+     SIL-OFL-Ersatzschrift. Siehe DESIGN.md, offene Frage 2. */
+  --font-display: "Jost", "Futura", "Century Gothic", sans-serif;
+  --font-body:    "Source Serif Pro", Georgia, serif;
+
+  /* Headlines primär in Versalien mit weiter Laufweite
+     (Brandbook: "Laufweite 70" ≈ 0.07em). */
+  --tracking-display: 0.07em;
+  --tracking-body:    0.007em;   /* Brandbook: min. 7 */
+
+  /* Skala — im Brandbook nicht vorhanden, für Web definiert.
+     Mobile first, fluid ab 375 px. */
+  --fs-xs:   0.875rem;
+  --fs-s:    1rem;
+  --fs-m:    clamp(1.125rem, 1rem + 0.5vw,  1.25rem);
+  --fs-l:    clamp(1.375rem, 1.1rem + 1.2vw, 1.75rem);
+  --fs-xl:   clamp(1.75rem,  1.3rem + 2vw,   2.5rem);
+  --fs-xxl:  clamp(2.25rem,  1.5rem + 3.5vw, 3.5rem);
+
+  --lh-tight: 1.15;   /* Headlines */
+  --lh-body:  1.6;    /* Fließtext */
+  --measure:  62ch;   /* max. Zeilenlänge Fließtext */
+
+  /* ---------- Abstände ---------- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 1rem;
+  --sp-4: 1.5rem;
+  --sp-5: 2.5rem;
+  --sp-6: 4rem;
+  --sp-7: 6rem;
+
+  /* ---------- Radius (im Brandbook nicht vorhanden, für Web definiert) --- */
+  --radius-sm: 0.25rem;
+}
