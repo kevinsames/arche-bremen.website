@@ -17,6 +17,12 @@ const currentPath = Astro.url.pathname;
     <a href="/" class="site-name">
       <img src={logo.src} width={logo.width} height={logo.height} alt={SITE.name} />
     </a>
+    <a class="button donate" href="https://www.arche-gemeinde.de/spenden" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <path d="M12 21s-7.5-4.6-10-9.2C.5 8.2 2 4.5 5.5 4c2-.3 3.8.7 6.5 3 2.7-2.3 4.5-3.3 6.5-3C22 4.5 23.5 8.2 22 11.8 19.5 16.4 12 21 12 21Z" />
+      </svg>
+      Spenden
+    </a>
     <nav>
       <ul>
         {
@@ -30,12 +36,6 @@ const currentPath = Astro.url.pathname;
         }
       </ul>
     </nav>
-    <a class="button donate" href="https://www.arche-gemeinde.de/spenden" target="_blank" rel="noopener">
-      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-        <path d="M12 21s-7.5-4.6-10-9.2C.5 8.2 2 4.5 5.5 4c2-.3 3.8.7 6.5 3 2.7-2.3 4.5-3.3 6.5-3C22 4.5 23.5 8.2 22 11.8 19.5 16.4 12 21 12 21Z" />
-      </svg>
-      Spenden
-    </a>
   </div>
 </header>
 
@@ -58,20 +58,54 @@ const currentPath = Astro.url.pathname;
     }
   }
 
+  /* Zwei feste Zustände statt freiem Umbruch: unter 64rem reicht die Breite
+     nicht für Logo, Navigation und Spenden-Knopf in einer Zeile — mit
+     flex-wrap entscheidet dann der Browser zufällig, welches Element wohin
+     rutscht (sichtbar z.B. bei ca. 530px: alle drei Elemente einzeln
+     untereinander). Das Grid gibt der Navigation stattdessen ausdrücklich
+     eine eigene zweite Zeile; ab 64rem (Breite bereits an anderer Stelle im
+     Repo verwendet, siehe glaubensbekenntnis.astro) rutscht sie per Media
+     Query zurück in die erste. */
   .bar {
     max-width: var(--width-content);
     margin-inline: auto;
     padding: var(--sp-2) var(--sp-3);
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    display: grid;
+    grid-template-columns: auto auto;
     justify-content: space-between;
-    gap: var(--sp-2);
+    align-items: center;
+    row-gap: var(--sp-2);
+    column-gap: var(--sp-3);
+  }
+
+  /* Über beide Spalten der ersten Zeile hinweg, damit sie automatisch in
+     die zweite Zeile fällt. */
+  nav {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 64rem) {
+    .bar {
+      grid-template-columns: auto auto auto;
+    }
+
+    nav {
+      grid-area: 1 / 2;
+    }
+
+    .donate {
+      grid-area: 1 / 3;
+    }
   }
 
   .site-name {
     display: inline-flex;
     line-height: 0;
+    /* Grid-Items sind standardmäßig justify-self: stretch. Die Navigation
+       spannt beide Spalten und ist oft breiter als Logo + Spenden-Knopf
+       zusammen — ohne diese Zeile würden beide Spalten dadurch aufgeblasen
+       und Logo/Button auf die volle Spaltenbreite gedehnt. */
+    justify-self: start;
   }
 
   .site-name img {
@@ -115,6 +149,9 @@ const currentPath = Astro.url.pathname;
   .donate {
     display: inline-flex;
     align-items: center;
+    /* Aus demselben Grund wie .site-name: nicht auf die Spaltenbreite
+       dehnen, die die spannende Navigation vorgibt. */
+    justify-self: end;
     gap: var(--sp-1);
     padding: var(--sp-1) var(--sp-3);
     font-size: var(--fs-xs);
