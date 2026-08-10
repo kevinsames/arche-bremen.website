@@ -101,6 +101,37 @@ oder Hamburg inhaltlich freigegeben (siehe Kommentar im Schema).
 (`transition`/`animation`), kein JavaScript. Alles hinter
 `@media (prefers-reduced-motion: reduce)` abschaltbar.
 
+**Scroll- und Klick-Hinweise (August 2026):** Drei Stellen fehlte ein Signal,
+das v. a. auf Touch-Geräten (70–80 % des erwarteten Traffics, siehe
+CLAUDE.md) auffällt, weil dort kein Hover existiert:
+
+1. Der Hero endete mit dem Button „So findest du uns" ohne Hinweis, dass
+   darunter noch Inhalt folgt. Ergänzt: ein zentrierter Chevron
+   (handgeschriebenes Inline-SVG, gleiches Muster wie Header/Footer-Icons
+   oben) unter dem Button, `color: var(--text-secondary)`. Er blendet beim
+   Scrollen über `animation-timeline: scroll(root block)` innerhalb der
+   ersten 20 vh aus (`@supports`-Fallback: bleibt einfach stehen, kein
+   Fehlerfall — gleiches Prinzip wie das Heading-Reveal oben).
+2. Die Kacheln (Predigten, Glaubensbekenntnis, Älteste) signalisierten
+   Klickbarkeit bisher nur über Hover (Flächenwechsel, Lift, Unterstreichung)
+   — auf Touch unsichtbar. Ergänzt: der gleiche Chevron, jetzt dauerhaft
+   unten rechts in der Kachel, der bei Hover/Fokus zusätzlich 2 px nach
+   rechts wandert.
+3. Die wischbare Predigt-Reihe (`Slider.astro`) hatte keinen Hinweis auf
+   weitere Kacheln außer der angeschnittenen nächsten Kachel. Ergänzt: eine
+   schmale `mask-image`-Ausblendung am rechten Rand (`--sp-3` breit). Nur
+   rechts — links wäre die Kante an Scrollposition 0 falsch. `black` und
+   `transparent` sind hier Alpha-Werte der Maske, keine Markenfarben — die
+   einzige Stelle mit einem Farbliteral im Komponentencode.
+
+Verworfen: ein dauerhaft wippender Chevron (hätte ein drittes Motion-Token
+gebraucht und bewegt sich ohne Nutzeraktion — passt nicht zum sonst sehr
+zurückhaltenden Umgang mit Bewegung) und Textlabels an den Kacheln wie
+„Mehr lesen →" (macht die Kacheln voller und müsste pro Kacheltyp anders
+lauten). Keine neuen Tokens — verwendet werden ausschließlich
+`--text-secondary`, `--sp-3`/`--sp-5`, `--duration-fast`/`--duration-slow`
+und `--ease-out`.
+
 **Layout-Breiten:** `--measure` (62ch) bleibt die Breite für Fließtext.
 Für Raster (Predigt-Kacheln) und Vollbild-Sektionen kam `--width-content:
 72rem` dazu — breiter als eine lesbare Textspalte, aber begrenzt, damit

@@ -57,6 +57,12 @@ const permalink = `/predigten/${sermon.slug}`;
       {dateFormatter.format(new Date(sermon.date))} &middot;{' '}
       {sermon.preacher}
     </p>
+    <span class="chevron" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 6l6 6-6 6" />
+      </svg>
+    </span>
   </a>
   <button
     type="button"
@@ -78,10 +84,11 @@ const permalink = `/predigten/${sermon.slug}`;
   }
 
   .card {
+    position: relative;
     display: block;
     text-decoration: none;
     color: var(--text-primary);
-    padding: var(--sp-4) var(--sp-3);
+    padding: var(--sp-4) var(--sp-3) var(--sp-5);
     border-radius: var(--radius-md) var(--radius-lg) var(--radius-md) var(--radius-md);
     background-color: var(--card-surface);
     transition:
@@ -102,6 +109,22 @@ const permalink = `/predigten/${sermon.slug}`;
   .card-wrap:has(.open:hover) .title,
   .card:focus-visible .title {
     text-decoration: underline;
+  }
+
+  /* Dauerhaft sichtbar (nicht erst bei Hover) — auf Touch gibt es keinen
+     Hover, ohne dieses Icon wäre die Klickbarkeit dort unsichtbar. */
+  .chevron {
+    position: absolute;
+    right: var(--sp-3);
+    bottom: var(--sp-3);
+    width: 1em;
+    color: var(--text-secondary);
+    transition: translate var(--duration-fast) var(--ease-out);
+  }
+
+  .card-wrap:has(.open:hover) .chevron,
+  .card:focus-visible .chevron {
+    translate: 2px 0;
   }
 
   .card:visited {

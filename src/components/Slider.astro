@@ -23,6 +23,11 @@
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-padding-inline: var(--sp-3);
+    /* Blendet die rechte Kante leicht aus — Signal, dass sich weitere
+       Kacheln wischen lassen. Nur rechts: links an Scrollposition 0 wäre
+       eine Kante falsch. black/transparent sind hier Alpha-Werte einer
+       Maske, keine Markenfarben (siehe DESIGN.md, Ausnahme dort notiert). */
+    mask-image: linear-gradient(to right, black calc(100% - var(--sp-3)), transparent);
   }
 
   .slider > :global(*) {

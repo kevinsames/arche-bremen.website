@@ -61,6 +61,17 @@ function formatEventRange(event: Event) {
       {ADDRESS.postalCode} {ADDRESS.city}
     </address>
     <a class="button" href={mapsUrl} target="_blank" rel="noopener">So findest du uns</a>
+
+    <!-- Rein dekorativ: zeigt, dass unter dem Hero weitergeht. Kein Link,
+         kein Sprungziel — der Hinweis ersetzt keine Navigation. Icon-Muster
+         wie Header/Footer (siehe DESIGN.md): handgeschriebenes Inline-SVG,
+         stroke="currentColor", Größe in em, aria-hidden. -->
+    <span class="scroll-hint" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 9l6 6 6-6" />
+      </svg>
+    </span>
   </Section>
 
   <Section tone="dark" width="measure">
@@ -186,6 +197,37 @@ function formatEventRange(event: Event) {
 
   .button {
     margin-top: var(--sp-4);
+  }
+
+  .scroll-hint {
+    display: block;
+    width: 1.5em;
+    margin: var(--sp-5) auto 0;
+    color: var(--text-secondary);
+  }
+
+  /* Blendet den Hinweis aus, sobald zu scrollen begonnen wurde — er soll
+     nur zu Beginn sichtbar sein, nicht dauerhaft im Weg stehen. Gleiches
+     Muster wie das Heading-Reveal in global.css: nur mit
+     Scroll-Timeline-Unterstützung und ohne reduzierte Bewegung, sonst
+     bleibt der Hinweis einfach stehen (kein Fehlerfall). --duration-slow
+     wird vom Browser bei Scroll-Timelines ignoriert (Fortschritt kommt aus
+     der Scrollposition) — hier nur aus Konsistenz mit dem Heading-Reveal
+     notiert. */
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .scroll-hint {
+        animation: hint-fade var(--duration-slow) var(--ease-out) both;
+        animation-timeline: scroll(root block);
+        animation-range: 0 20vh;
+      }
+
+      @keyframes hint-fade {
+        to {
+          opacity: 0;
+        }
+      }
+    }
   }
 
   h3 {
