@@ -51,11 +51,16 @@ npx sanity login              # einmalig
 npm run seed:development
 ```
 
-Importiert `sanity/seed/development.ndjson` (drei Beispielpredigten, zwei
+Importiert `sanity/seed/development.ndjson` (20 Beispielpredigten, acht
 Beispieltermine) fest in das Dataset `development` — das Zielname steht im
 npm-Skript, nicht in `SANITY_DATASET`, damit ein falsch gesetzter Wert nie
 versehentlich `production` überschreibt. `--replace` ersetzt nur Dokumente
 mit gleicher `_id`, leert das Dataset nicht.
+
+Zwei der Beispieltermine liegen absichtlich in der Vergangenheit und
+erscheinen deshalb nicht auf der Startseite (`getEvents()` filtert auf
+`start >= now()`) — sie testen genau diesen Fall. Die künftigen Termine sind
+fest datiert bis Sommer 2027; danach im Seed neue nachtragen.
 
 Free-Datasets sind öffentlich lesbar (siehe CLAUDE.md) — deshalb im Seed keine
 personenbezogenen Daten außer dem Namen, den das Freitextfeld `preacher` bei
@@ -143,25 +148,28 @@ nächsten Nummer anlegen — die Nummern in den bestehenden Dateinamen und
 
 ## Markendateien
 
-`src/assets/brand/` enthält das Logo als Interim-JPEG (Hamburg hat noch keine
-SVG geliefert). Details, Einschränkungen und Ausstiegsbedingung stehen in
-`DESIGN.md`, Abschnitt „Logo (Interim, August 2026)".
+`src/assets/brand/` enthält das offizielle Logo als SVG (seit 10. August 2026,
+siehe `DESIGN.md`, Abschnitt „Logo"):
 
-Trifft die offizielle SVG ein:
+- `arche-logo.svg` — vollständiges Lockup, unverändert wie geliefert.
+  Eingebunden in Header und Hero.
+- `bogen.svg` — nur der Bogen, ein einzelner Pfad aus dem Lockup
+  herausgelöst, viewBox auf ihn zugeschnitten. Eingebunden als Stilelement in
+  der Termine-Sektion.
 
-1. `src/assets/brand/logo-lockup-blue.jpg` und `mark-blue.jpg` durch die SVG
-   ersetzen, Referenzen in `Header.astro` und `index.astro` anpassen.
-2. `mix-blend-mode: multiply`-Regeln in `Header.astro` und `index.astro`
-   entfernen (nur für den JPEG-Interim nötig).
-3. Footer-Textwortmarke (`Footer.astro`) durch das Logo ersetzen — bisher
-   ohne Asset für dunklen Grund ausgelassen.
-4. Favicon aus der SVG neu erzeugen, `public/favicon.png` ersetzen. Das
-   aktuelle Favicon stammt aus einer JPEG-Quelle:
-   ```sh
-   sips -s format png "src/assets/brand/mark-white-on-black.jpg" --out public/favicon.png
-   ```
-5. `DESIGN.md` und `CLAUDE.md` (Design-und-Marke-Regel 8) entsprechend
-   aktualisieren.
+Beide als reiner Asset-Import eingebunden (`import x from '.../datei.svg'`,
+`<img src={x.src} width={x.width} height={x.height} ... />`), nicht über die
+`Image`-Komponente — deren Sharp-Pipeline ist für Rasterbilder gedacht und
+verarbeitet Vektorgrafiken nicht sinnvoll.
+
+Noch offen:
+
+- **Footer** behält die Textwortmarke. Das Lockup ist einfarbig Dunkelblau,
+  auf dem dunklen Footer-Hintergrund unlesbar — unabhängig vom Dateiformat.
+- **Favicon** (`public/favicon.png`) ist noch nicht erneuert, zeigt weiterhin
+  den alten schwarzen Bogen aus der früheren JPEG-Quelle. Eine Neufassung aus
+  `bogen.svg` braucht eine Entscheidung zu Zuschnitt und Innenabstand im
+  quadratischen Format.
 
 ## Offene Punkte
 

@@ -1,13 +1,12 @@
 ---
-import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
 import SermonCard from '../components/SermonCard.astro';
 import Slider from '../components/Slider.astro';
 import Overlay from '../components/Overlay.astro';
 import { SITE, SERVICE, ADDRESS, WEEKLY_EVENTS } from '../consts';
-import logoLockup from '../assets/brand/logo-lockup-blue.jpg';
-import mark from '../assets/brand/mark-blue.jpg';
+import logo from '../assets/brand/arche-logo.svg';
+import mark from '../assets/brand/bogen.svg';
 import { getSermons, getEvents, type Event } from '../lib/sanity';
 import { getCollection } from 'astro:content';
 
@@ -53,7 +52,7 @@ function formatEventRange(event: Event) {
 <BaseLayout title={SITE.name}>
   <Section tone="light">
     <h1 class="hero-title">
-      <Image src={logoLockup} alt={SITE.name} width={512} densities={[1, 2]} format="webp" quality={90} />
+      <img src={logo.src} width={logo.width} height={logo.height} alt={SITE.name} />
     </h1>
     <p class="hero-service">{SERVICE.display}</p>
     <address class="hero-address">
@@ -107,7 +106,7 @@ function formatEventRange(event: Event) {
   </Section>
 
   <Section tone="muted">
-    <Image src={mark} alt="" aria-hidden="true" width={128} densities={[1, 2]} format="webp" quality={90} class="section-mark" />
+    <img src={mark.src} width={mark.width} height={mark.height} alt="" aria-hidden="true" class="section-mark" />
     <h2>Termine</h2>
 
     <h3>Jede Woche</h3>
@@ -165,23 +164,17 @@ function formatEventRange(event: Event) {
     line-height: 0;
   }
 
-  /* Interim-Logo als JPEG ohne Alphakanal — mix-blend-mode macht den
-     weißen Hintergrund transparent (siehe DESIGN.md, Abschnitt Logo,
-     gleiche Begründung wie im Header). */
-  .hero-title :global(img) {
+  .hero-title img {
     width: min(100%, var(--size-logo-hero));
     height: auto;
-    mix-blend-mode: multiply;
   }
 
-  /* Bogen als Stilelement (Brandbook Kapitel 4), rein dekorativ. Gleicher
-     Interim-Hack wie Header/Hero-Logo, siehe DESIGN.md. */
+  /* Bogen als Stilelement (Brandbook Kapitel 4), rein dekorativ. */
   .section-mark {
     display: block;
     width: var(--size-mark);
     height: auto;
     margin: 0 auto var(--sp-4);
-    mix-blend-mode: multiply;
   }
 
   .hero-service {

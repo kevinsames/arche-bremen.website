@@ -77,12 +77,12 @@ Regeln:
 7. **Keine neuen Tokens erfinden.** Fehlt ein Wert, in `DESIGN.md` unter offene
    Fragen ergänzen und fragen — nicht im Komponentencode improvisieren.
 8. Logo als offizielle SVG-Datei einbinden, nie als Text in einem Webfont
-   nachgebaut. **Ausnahme (Interim, August 2026):** Solange Hamburg keine SVG
-   liefert, sind die drei JPEGs unter `src/assets/brand/` im Einsatz
-   (Header, Hero, Termine-Sektion), mit `mix-blend-mode: multiply` gegen den
-   fehlenden Alphakanal. Der Footer behält bewusst die Textwortmarke — kein
-   Asset passt zum dunklen Grund. Ausstiegsbedingung und Details in
-   `DESIGN.md`, Abschnitt „Logo (Interim, August 2026)".
+   nachgebaut. Seit 10. August 2026 umgesetzt: `src/assets/brand/arche-logo.svg`
+   (Header, Hero) und `bogen.svg`, ein daraus herausgelöster Einzelpfad
+   (Termine-Sektion). Der Footer behält weiterhin die Textwortmarke — das
+   Lockup ist einfarbig Dunkelblau und auf dem dunklen Footer-Hintergrund
+   unlesbar, unabhängig vom Dateiformat. Details in `DESIGN.md`, Abschnitt
+   „Logo".
 9. Keine Stock-Fotografie. Brandbook 3.1 verlangt mindestens 70 % Fotos aus der
    lokalen Gemeinde; bis solche existieren, wird typografisch gestaltet.
 
