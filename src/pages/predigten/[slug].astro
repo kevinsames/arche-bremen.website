@@ -1,0 +1,61 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getSermons } from '../../lib/sanity';
+import { formatPassages } from '../../lib/bible';
+
+export async function getStaticPaths() {
+  const sermons = await getSermons();
+  return sermons.map((sermon) => ({
+    params: { slug: sermon.slug },
+    props: { sermon },
+  }));
+}
+
+const { sermon } = Astro.props;
+const preacherProfiles = await getCollection('preachers');
+const profile = preacherProfiles.find((p) => p.id === sermon.preacher.slug);
+
+const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
+---
+
+<BaseLayout title={sermon.title} description={sermon.description}>
+  <p><a href="/predigten">&larr; Alle Predigten</a></p>
+
+  <h1>{sermon.title}</h1>
+
+  <p class="meta">
+    {dateFormatter.format(new Date(sermon.date))} &middot;{' '}
+    {
+      profile ? (
+        <a href={`/prediger/${profile.id}`}>{sermon.preacher.name}</a>
+      ) : (
+        sermon.preacher.name
+      )
+    }
+  </p>
+
+  <p class="passages">{formatPassages(sermon.passages)}</p>
+
+  {sermon.series && <p class="series">Predigtreihe: {sermon.series}</p>}
+
+  {sermon.description && <p>{sermon.description}</p>}
+
+  {
+    (sermon.audioUrl || sermon.audioFile) && (
+      <p>
+        <a href={sermon.audioUrl ?? sermon.audioFile}>Audio anhören</a>
+      </p>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .meta {
+    color: var(--color-text-muted);
+  }
+
+  .passages {
+    font-weight: bold;
+  }
+</style>

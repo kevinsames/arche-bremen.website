@@ -1,0 +1,70 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getSermons } from '../../lib/sanity';
+import { formatPassages } from '../../lib/bible';
+
+// Chronologische Liste, kein Filter-UI (siehe CLAUDE.md — Filter erst ab
+// ca. 50 Einträgen).
+const sermons = await getSermons();
+const preacherProfiles = await getCollection('preachers');
+
+const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
+---
+
+<BaseLayout title="Predigten">
+  <h1>Predigten</h1>
+
+  {
+    sermons.length === 0 ? (
+      <p>Noch keine Predigten veröffentlicht.</p>
+    ) : (
+      <ul class="sermon-list">
+        {sermons.map((sermon) => {
+          const profile = preacherProfiles.find((p) => p.id === sermon.preacher.slug);
+          return (
+            <li>
+              <a href={`/predigten/${sermon.slug}`} class="sermon-title">
+                {sermon.title}
+              </a>
+              <p class="meta">
+                {dateFormatter.format(new Date(sermon.date))} &middot;{' '}
+                {profile ? (
+                  <a href={`/prediger/${profile.id}`}>{sermon.preacher.name}</a>
+                ) : (
+                  sermon.preacher.name
+                )}
+                {' · '}
+                {formatPassages(sermon.passages)}
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .sermon-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .sermon-list li {
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .sermon-title {
+    font-size: var(--font-size-lg);
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .meta {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin: var(--space-xs) 0 0;
+  }
+</style>

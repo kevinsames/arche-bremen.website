@@ -1,0 +1,53 @@
+import { sanityClient } from 'sanity:client';
+import type { Passage } from './bible';
+
+export interface Sermon {
+  _id: string;
+  title: string;
+  slug: string;
+  date: string;
+  preacher: {
+    name: string;
+    // undefined, wenn der preacher kein slug-Feld gesetzt hat.
+    slug?: string;
+  };
+  series?: string;
+  passages: Passage[];
+  audioUrl?: string;
+  audioFile?: string;
+  description?: string;
+}
+
+const sermonProjection = `{
+  _id,
+  title,
+  "slug": slug.current,
+  date,
+  "preacher": preacher->{name, "slug": slug.current},
+  series,
+  passages,
+  audioUrl,
+  "audioFile": audioFile.asset->url,
+  description
+}`;
+
+// Sanity Free-Datasets liefern ohne explizite perspective auch Entwürfe aus.
+// "published" stellt sicher, dass unveröffentlichte Predigten nicht auf der
+// Website erscheinen.
+const fetchOptions = { perspective: 'published' as const };
+
+export async function getSermons(): Promise<Sermon[]> {
+  return sanityClient.fetch(
+    `*[_type == "sermon" && defined(slug.current)] | order(date desc) ${sermonProjection}`,
+    {},
+    fetchOptions,
+  );
+}
+
+export async function getSermon(slug: string): Promise<Sermon | null> {
+  return sanityClient.fetch(
+    `*[_type == "sermon" && slug.current == $slug][0] ${sermonProjection}`,
+    { slug },
+    fetchOptions,
+  );
+}
