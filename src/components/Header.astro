@@ -115,13 +115,23 @@ const currentPath = Astro.url.pathname;
 
   /* Kompaktere Variante der globalen .button-Klasse (global.css) — hier
      im Header genügt weniger Fläche als bei einem Call-to-Action im
-     Seiteninhalt. */
+     Seiteninhalt. Eigene Farbgebung statt der geerbten dunkelblauen
+     Fläche: Gelb als Blickfang für den Spenden-Aufruf, ausschließlich als
+     Fläche (siehe CLAUDE.md — Gelb nie als Textfarbe), Text bleibt in
+     --text-primary für ausreichenden Kontrast auf Gelb. */
   .donate {
     display: inline-flex;
     align-items: center;
     gap: var(--sp-1);
     padding: var(--sp-1) var(--sp-3);
     font-size: var(--fs-xs);
+    background-color: var(--accent-warm);
+    border-color: var(--accent-warm);
+    color: var(--text-primary);
+  }
+
+  .donate:visited {
+    color: var(--text-primary);
   }
 
   .donate .icon {
