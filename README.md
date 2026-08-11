@@ -104,6 +104,28 @@ automatisch dorthin. Gibt es keine Übereinstimmung (z.B. Gastprediger ohne
 Ältestenamt, oder ein Tippfehler), wird nur der Name als Text angezeigt, ohne
 Link und ohne Fehler. Die verknüpften Profile erscheinen unter `/aelteste`.
 
+### Offline-Fallback für Sanity
+
+`src/lib/sanity.ts` fällt zurück auf `sanity/snapshot/content.json`, wenn die
+Sanity-API zur Buildzeit nicht erreichbar ist — sonst würde ein Sanity-Ausfall
+jeden Build hart brechen. Die Datei wird committed und mit
+
+```sh
+npm run snapshot              # Dataset production (Vorgabe)
+npm run snapshot development  # oder ein anderes Dataset
+```
+
+aus `scripts/snapshot.mjs` erzeugt. Nach jeder inhaltlichen Änderung, die
+online bleiben soll, falls Sanity mal nicht erreichbar ist, neu ausführen und
+committen — der Snapshot altert, ein Build während eines Ausfalls
+veröffentlicht genau den Stand von dessen letzter Erzeugung. Ohne die Datei
+bricht der Build wie zuvor hart ab; ein leerer Predigtbereich wäre schlimmer
+als ein roter Build.
+
+Die GROQ-Projektion steht bewusst doppelt — in `scripts/snapshot.mjs` und
+`src/lib/sanity.ts`. Ändert sich eine, die andere nachziehen (beide Dateien
+verweisen aufeinander).
+
 ### Wie ein neuer Dokumenttyp entsteht (Sanity)
 
 1. Neue Datei unter `sanity/schemaTypes/`, `defineType` verwenden (siehe

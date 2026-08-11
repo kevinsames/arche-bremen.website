@@ -11,7 +11,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "seed:development": "sanity dataset import sanity/seed/development.ndjson --dataset development --replace"
+    "seed:development": "sanity dataset import sanity/seed/development.ndjson --dataset development --replace",
+    "snapshot": "node scripts/snapshot.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.0",
