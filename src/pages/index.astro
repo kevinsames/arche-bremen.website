@@ -83,13 +83,17 @@ const homeDescription = `${SITE.description} Erster Gottesdienst geplant für de
   <Section tone="dark" width="measure">
     <h2>Wer wir sind</h2>
     <p>
-      Wir sind eine Stationsgemeinde des „Gemeinde- und Missionswerks Arche"
+      Wir sind eine Stationsgemeinde des{' '}
+      <a href="https://www.arche-gemeinde.de" rel="noopener">
+        „Gemeinde- und Missionswerks Arche"
+      </a>{' '}
       in Hamburg. Wir bauen in Bremen eine Gemeinde auf, die auf dem Wort
       Gottes, der Bibel, und dem Evangelium von Jesus Christus ruht.
     </p>
     <p>
       Dieses Evangelium formt uns, macht uns Jesus ähnlicher und bewegt uns,
-      das Evangelium von Jesus allen Menschen weiterzugeben.
+      das Evangelium von Jesus allen Menschen weiterzugeben. Wofür wir im
+      Einzelnen stehen, steht in unserem <a href="/glaubensbekenntnis">Glaubensbekenntnis</a>.
     </p>
   </Section>
 
@@ -103,6 +107,7 @@ const homeDescription = `${SITE.description} Erster Gottesdienst geplant für de
       {PRAYER_REQUESTS.map((request) => <li>{request}</li>)}
     </ul>
     <p>
+      Wer bei uns predigt und leitet, steht unter <a href="/aelteste">Älteste</a>.
       Willst du mitbeten, mitbauen oder einfach mehr erfahren? Schreib uns:{' '}
       {CONTACT.local}&#64;{CONTACT.domain}
     </p>
