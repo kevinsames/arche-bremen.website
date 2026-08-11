@@ -150,10 +150,13 @@ nachträgliches Verschlagworten von 80 Predigten passiert nie.
 
 ## Inhaltliche Vorgaben
 
-- **Above the fold, mobil, ohne Scrollen: Gottesdienstzeit und Adresse.** Das
-  ist die Information, für die die Mehrheit der Besucher kommt. Hartkodiert im
-  Repo — nicht aus dem CMS geladen, nicht aus Terminen berechnet, nicht per
-  JavaScript nachgerendert.
+- **Above the fold, mobil, ohne Scrollen: die Information, für die die
+  Mehrheit der Besucher kommt.** In der Gründungsphase ist das
+  Gründungsstatus und geplanter erster Gottesdienst (`FOUNDING` in
+  `src/consts.ts`); sobald der Gottesdienst läuft, wird daraus
+  Gottesdienstzeit und Adresse (`SERVICE`, `ADDRESS`). In beiden Fällen
+  hartkodiert im Repo — nicht aus dem CMS geladen, nicht aus Terminen
+  berechnet, nicht per JavaScript nachgerendert.
 - Predigten in v1: **chronologische Liste, kein Filter-UI.** Filter erst ab
   ca. 50 Einträgen.
 - Kontakt über Funktionsadresse (`kontakt@…`), nie personengebunden. WhatsApp

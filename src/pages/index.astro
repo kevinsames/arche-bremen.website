@@ -4,20 +4,17 @@ import Section from '../components/Section.astro';
 import SermonCard from '../components/SermonCard.astro';
 import Slider from '../components/Slider.astro';
 import Overlay from '../components/Overlay.astro';
-import { SITE, SERVICE, ADDRESS, WEEKLY_EVENTS } from '../consts';
+import { SITE, CONTACT, FOUNDING, PRAYER_REQUESTS, WEEKLY_EVENTS } from '../consts';
 import logo from '../assets/brand/arche-logo.svg';
 import mark from '../assets/brand/bogen.svg';
 import { getSermons, getEvents, type Event } from '../lib/sanity';
 import { getCollection } from 'astro:content';
 
-// Above the fold, ohne Scrollen: Gottesdienstzeit und Adresse (siehe
-// CLAUDE.md). Der Hero ist deshalb bewusst inhaltsgroß, nicht
-// bildschirmgroß — keine feste vh-Höhe, die auf kleinen Geräten den Rest
-// unter die Falz drückt.
-const mapsQuery = encodeURIComponent(
-  `${ADDRESS.street}, ${ADDRESS.postalCode} ${ADDRESS.city}`,
-);
-const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
+// Above the fold, ohne Scrollen: in der Gründungsphase Gründungsstatus und
+// geplanter erster Gottesdienst statt Gottesdienstzeit und Adresse (siehe
+// CLAUDE.md — kehrt zum 1. April 2027 um). Der Hero ist deshalb bewusst
+// inhaltsgroß, nicht bildschirmgroß — keine feste vh-Höhe, die auf kleinen
+// Geräten den Rest unter die Falz drückt.
 
 // Gleiche Datenquellen wie /predigten — kein neues Datenmodell.
 const sermons = (await getSermons()).slice(0, 3);
@@ -58,12 +55,12 @@ function formatEventRange(event: Event) {
     <h1 class="hero-title">
       <img src={logo.src} width={logo.width} height={logo.height} alt={SITE.name} />
     </h1>
-    <p class="hero-service">{SERVICE.display}</p>
-    <address class="hero-address">
-      {ADDRESS.street}<br />
-      {ADDRESS.postalCode} {ADDRESS.city}
-    </address>
-    <a class="button" href={mapsUrl} target="_blank" rel="noopener">So findest du uns</a>
+    <p class="hero-claim">{FOUNDING.claim}</p>
+    <p class="hero-milestone">
+      <span class="milestone-label">{FOUNDING.milestoneLabel}</span><br />
+      <span class="milestone-date">{FOUNDING.milestoneDate}</span>
+    </p>
+    <a class="button" href="#kontakt">Schreib uns</a>
 
     <!-- Rein dekorativ: zeigt, dass unter dem Hero weitergeht. Kein Link,
          kein Sprungziel — der Hinweis ersetzt keine Navigation. Icon-Muster
@@ -87,6 +84,21 @@ function formatEventRange(event: Event) {
     <p>
       Dieses Evangelium formt uns, macht uns Jesus ähnlicher und bewegt uns,
       das Evangelium von Jesus allen Menschen weiterzugeben.
+    </p>
+  </Section>
+
+  <Section tone="light" width="measure">
+    <h2 id="kontakt">Bete und bau mit</h2>
+    <p>
+      Wir stehen am Anfang und sind auf Unterstützung angewiesen. Das sind
+      unsere aktuellen Gebetsanliegen:
+    </p>
+    <ul class="prayer-list">
+      {PRAYER_REQUESTS.map((request) => <li>{request}</li>)}
+    </ul>
+    <p>
+      Willst du mitbeten, mitbauen oder einfach mehr erfahren? Schreib uns:{' '}
+      {CONTACT.local}&#64;{CONTACT.domain}
     </p>
   </Section>
 
@@ -133,19 +145,29 @@ function formatEventRange(event: Event) {
       )
     }
 
-    <h3>Jede Woche</h3>
-    <ul class="events">
-      {
-        WEEKLY_EVENTS.map((event) => (
-          <li>
-            <span class="event-title">{event.title}</span>
-            <span class="event-detail">
-              <span class="event-datetime">{event.weekday}, {event.time}</span> &middot; {event.location}
-            </span>
-          </li>
-        ))
-      }
-    </ul>
+    {
+      WEEKLY_EVENTS.length > 0 && (
+        <>
+          <h3>Jede Woche</h3>
+          <ul class="events">
+            {WEEKLY_EVENTS.map((event) => (
+              <li>
+                <span class="event-title">{event.title}</span>
+                <span class="event-detail">
+                  <span class="event-datetime">{event.weekday}, {event.time}</span> &middot; {event.location}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )
+    }
+
+    {
+      WEEKLY_EVENTS.length === 0 && upcomingEvents.length === 0 && (
+        <p>Sobald die ersten öffentlichen Termine feststehen, findest du sie hier.</p>
+      )
+    }
 
     {
       upcomingEvents.length > 0 && (
@@ -201,15 +223,27 @@ function formatEventRange(event: Event) {
     margin: 0 auto var(--sp-4);
   }
 
-  .hero-service {
+  .hero-claim {
     font-size: var(--fs-l);
     margin: var(--sp-4) 0 0;
   }
 
-  .hero-address {
-    font-style: normal;
+  .hero-milestone {
+    margin: var(--sp-4) 0 0;
+  }
+
+  .milestone-label {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+    font-size: var(--fs-xs);
     color: var(--text-secondary);
-    margin: var(--sp-1) 0 0;
+  }
+
+  .milestone-date {
+    font-size: var(--fs-xl);
   }
 
   .button {
@@ -380,5 +414,19 @@ function formatEventRange(event: Event) {
 
   .notice-reason {
     margin: 0;
+  }
+
+  /* Gebetsanliegen — gleiche Fläche wie .notice (Zweitverwendung, siehe
+     DESIGN.md), aber eigene Klasse: eigener Inhalt (schlichte Liste ohne
+     Titel/Detail/Grund-Struktur), keine gemeinsame Abstraktion. */
+  .prayer-list {
+    list-style: none;
+    padding: var(--sp-4);
+    margin: var(--sp-4) 0;
+    background: var(--surface-warm-alt);
+    border-left: 3px solid var(--accent-warm-alt);
+    border-radius: var(--radius-md);
+    display: grid;
+    row-gap: var(--sp-2);
   }
 </style>

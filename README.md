@@ -184,9 +184,19 @@ Noch offen:
 
 Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
 
-- **Platzhalterwerte in `src/consts.ts`:** Gottesdienstzeit und Adresse sind
-  gesetzt. `CONTACT` ist mit `info@bremen.arche-gemeinde.de` eingerichtet.
-  `SITE.domain` bleibt `PLATZHALTER`, bis die Domain feststeht.
+- **Gründungsphase (`src/consts.ts`):** Es gibt noch keinen öffentlichen
+  Gottesdienst — `SERVICE` ist deshalb aktuell entfernt und `WEEKLY_EVENTS`
+  leer. Above the fold stehen stattdessen `FOUNDING.claim` und
+  `FOUNDING.milestoneDate` (aktuell 1. April 2027). `ADDRESS` ist als
+  `PLATZHALTER` markiert (Norderoog 2 ist die voraussichtliche, aber nicht
+  bestätigte Adresse) und wird deshalb nirgends gerendert. `PRAYER_REQUESTS`
+  enthält Gebetsanliegen für die Startseiten-Sektion „Bete und bau mit"; die
+  mit `PLATZHALTER` markierten Einträge sind ein Vorschlag und brauchen
+  inhaltliche Freigabe durch das Team. Sobald der erste Gottesdienst feststeht:
+  `SERVICE`/`ADDRESS` zurück in den Hero und den Footer, `WEEKLY_EVENTS`
+  befüllen, `FOUNDING`/`PRAYER_REQUESTS` aus `index.astro` entfernen.
+- `CONTACT` ist mit `info@bremen.arche-gemeinde.de` eingerichtet. `SITE.domain`
+  bleibt `PLATZHALTER`, bis die Domain feststeht.
 - **Impressum:** `/impressum` ist vorhanden, Angaben 1:1 von arche-gemeinde.de
   übernommen. **Juristisch nicht bestätigt** — nur korrekt, wenn Arche Bremen
   rechtlich Teil des Hamburger Vereins ist. Vor dem ersten Deploy von

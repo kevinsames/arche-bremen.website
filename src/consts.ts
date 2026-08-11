@@ -15,16 +15,36 @@ export const SITE = {
   domain: 'PLATZHALTER: arche-bremen.de',
 };
 
-export const SERVICE = {
-  // Anzeigetext, keine berechnete Uhrzeit.
-  display: 'Sonntags um 11 Uhr',
-};
+// Gründungsphase (siehe FOUNDING unten): Es gibt noch keine feste
+// Gottesdienstzeit. SERVICE kehrt zurück, sobald der erste Gottesdienst
+// stattfindet — dann zusammen mit ADDRESS wieder above the fold im Hero.
 
+// PLATZHALTER: voraussichtliche Adresse, noch nicht bestätigt. Deshalb aktuell
+// nirgends öffentlich gerendert (nicht im Hero, nicht im Footer) — erst wenn
+// sie feststeht.
 export const ADDRESS = {
   street: 'Norderoog 2',
   postalCode: '28259',
   city: 'Bremen',
 };
+
+// Gründungsphase: Es gibt noch keinen öffentlichen Termin. Das Team trifft
+// sich wöchentlich intern zur Vorbereitung; das ist kein Angebot an Besucher
+// und steht deshalb nicht auf der Seite. claim/milestone tragen above the
+// fold, was Gottesdienstzeit + Adresse vorher trugen.
+export const FOUNDING = {
+  claim: 'Wir gründen eine Gemeinde in Bremen.',
+  milestoneLabel: 'Geplanter erster Gottesdienst',
+  milestoneDate: '1. April 2027',
+};
+
+// PLATZHALTER: Die Anliegen unten sind ein erster Vorschlag und müssen vom
+// Team formuliert und freigegeben werden, bevor sie online gehen.
+export const PRAYER_REQUESTS = [
+  'Passende Räumlichkeiten in Bremen',
+  'PLATZHALTER: Mitarbeiter für den Aufbau',
+  'PLATZHALTER: Menschen, die das Evangelium hören und annehmen',
+];
 
 // Funktionsadresse, nie personengebunden (siehe CLAUDE.md). Getrennt in
 // local/domain statt als ein String, damit sich HTML-Entities für die
@@ -37,17 +57,14 @@ export const CONTACT = {
 
 // Reiner Anzeigetext für die wöchentlichen Fixtermine. Keine
 // Wiederholungslogik, kein RRULE — jede Zeile ist unabhängig gepflegt.
-export const WEEKLY_EVENTS = [
-  {
-    title: 'Gottesdienst',
-    weekday: 'Sonntag',
-    time: '11 Uhr',
-    location: 'Norderoog 2',
-  },
-  {
-    title: 'Gebetsstunde',
-    weekday: 'Dienstag',
-    time: '19 Uhr',
-    location: 'Norderoog 2',
-  },
-];
+//
+// Gründungsphase: aktuell leer. Das Team trifft sich zwar wöchentlich, aber
+// intern zur Vorbereitung — kein öffentlicher Termin, also nicht hier
+// eintragen. Erster Eintrag kommt mit dem ersten öffentlichen Gottesdienst
+// oder Treffen.
+export const WEEKLY_EVENTS: {
+  title: string;
+  weekday: string;
+  time: string;
+  location: string;
+}[] = [];

@@ -209,7 +209,19 @@ Termine (`index.astro`, `.notice`) nutzt dieselben Tokens wie die
 Kachelflächen — `--surface-warm-alt` als Fläche, `--accent-warm-alt` als
 Rahmenstreifen. Kein neues Tokenpaar für „Warnung"/„Hinweis": Die Farbwerte
 und ihre Kontrastprüfung oben gelten unverändert, Orange bleibt Fläche und
-Rahmen, nie Text.
+Rahmen, nie Text. Dieselbe Fläche trägt seit August 2026 auch die
+Gebetsanliegen-Liste (`.prayer-list`) — eigene Klasse, gleiche Tokens, aus
+demselben Grund: kein drittes Tokenpaar für einen dritten Anwendungsfall
+derselben Fläche.
+
+**Hero in der Gründungsphase (August 2026):** Above the fold stand ursprünglich
+Gottesdienstzeit und Adresse (`SERVICE`/`ADDRESS`). Es gibt noch keinen
+öffentlichen Gottesdienst — an ihrer Stelle stehen jetzt Gründungsstatus und
+geplanter erster Gottesdienst (`FOUNDING` in `src/consts.ts`), typografisch in
+derselben Struktur (Claim in `--fs-l`, Meilenstein-Datum in `--fs-xl` mit
+Eyebrow-Label im `.event-title`-Stil). Keine neuen Tokens dafür nötig. Der
+Wechsel zurück zu Gottesdienstzeit und Adresse ist in `README.md`, Abschnitt
+„Offene Punkte", vermerkt.
 
 ### 2. Jost statt Futura
 

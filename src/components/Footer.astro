@@ -1,5 +1,5 @@
 ---
-import { SITE, CONTACT, ADDRESS } from '../consts';
+import { SITE, CONTACT } from '../consts';
 
 const currentYear = new Date().getFullYear();
 ---
@@ -8,10 +8,6 @@ const currentYear = new Date().getFullYear();
   <div class="bar">
     <div class="col">
       <p class="site-name">{SITE.name}</p>
-      <address>
-        {ADDRESS.street}<br />
-        {ADDRESS.postalCode} {ADDRESS.city}
-      </address>
     </div>
 
     <div class="col">
@@ -76,10 +72,6 @@ const currentYear = new Date().getFullYear();
     text-transform: uppercase;
     letter-spacing: var(--tracking-display);
     margin: 0 0 var(--sp-2);
-  }
-
-  address {
-    font-style: normal;
   }
 
   .col p {
