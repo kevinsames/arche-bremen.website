@@ -13,6 +13,12 @@ const { SANITY_PROJECT_ID, SANITY_DATASET } = loadEnv(
 
 // https://astro.build/config
 export default defineConfig({
+  // Absolute Adresse der veröffentlichten Seite. Einzige Stelle im Repo, an
+  // der die Domain steht — Canonical-Links, Open-Graph-URLs und sitemap.xml
+  // leiten sich daraus ab (Astro.site / context.site). Ausnahme:
+  // public/robots.txt ist eine statische Datei ohne Template-Schicht und
+  // wiederholt die Domain deshalb (siehe Kommentar dort).
+  site: 'https://bremen.arche-gemeinde.de',
   output: 'static',
   // SANITY_PROJECT_ID/SANITY_DATASET aren't secret (needed client-side by the
   // embedded Studio in sanity.config.ts), so expose them via import.meta.env

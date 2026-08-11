@@ -195,8 +195,13 @@ Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
   inhaltliche Freigabe durch das Team. Sobald der erste Gottesdienst feststeht:
   `SERVICE`/`ADDRESS` zurück in den Hero und den Footer, `WEEKLY_EVENTS`
   befüllen, `FOUNDING`/`PRAYER_REQUESTS` aus `index.astro` entfernen.
-- `CONTACT` ist mit `info@bremen.arche-gemeinde.de` eingerichtet. `SITE.domain`
-  bleibt `PLATZHALTER`, bis die Domain feststeht.
+- `CONTACT` ist mit `info@bremen.arche-gemeinde.de` eingerichtet. Die Domain
+  der veröffentlichten Seite ist `site` in `astro.config.mjs`
+  (`https://bremen.arche-gemeinde.de`) — dort steht sie einmalig, nicht in
+  `consts.ts`. Ändert sich die Domain, muss sie zusätzlich in
+  `public/robots.txt` (`Sitemap:`-Zeile) nachgezogen werden — die einzige
+  Stelle, die sie doppelt hält, weil sie eine statische Datei ohne
+  Template-Schicht ist.
 - **Impressum:** `/impressum` ist vorhanden, Angaben 1:1 von arche-gemeinde.de
   übernommen. **Juristisch nicht bestätigt** — nur korrekt, wenn Arche Bremen
   rechtlich Teil des Hamburger Vereins ist. Vor dem ersten Deploy von

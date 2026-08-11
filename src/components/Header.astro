@@ -9,7 +9,10 @@ const navItems = [
   { href: '/glaubensbekenntnis', label: 'Glaubensbekenntnis' },
 ];
 
-const currentPath = Astro.url.pathname;
+// Gleiche Normalisierung wie in BaseLayout.astro: Astro.url.pathname endet
+// bei build.format 'directory' auf '/', die hrefs oben aber nicht — ohne
+// diese Zeile bekommt keine Unterseite aria-current="page".
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 ---
 
 <header>

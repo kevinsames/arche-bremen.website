@@ -12,7 +12,15 @@ export const SITE = {
   // Nur der Tab-Titel der Startseite. Unterseiten setzt BaseLayout aus dem
   // Seitentitel und `name` zusammen.
   titleHome: 'Arche Bremen — Evangelisch-reformierte Freikirche',
-  domain: 'PLATZHALTER: arche-bremen.de',
+  // Die Domain steht bewusst NICHT hier, sondern als `site` in
+  // astro.config.mjs — dort liest Astro sie für Canonical-Links, Open Graph
+  // und sitemap.xml aus (Astro.site).
+  //
+  // Meta-Description der Startseite. In index.astro um FOUNDING.milestoneDate
+  // ergänzt, damit sie mit dem Hero synchron bleibt.
+  description:
+    'Wir gründen in Bremen eine evangelisch-reformierte Freikirche — als ' +
+    'Stationsgemeinde der Arche Hamburg.',
 };
 
 // Gründungsphase (siehe FOUNDING unten): Es gibt noch keine feste

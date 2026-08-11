@@ -14,6 +14,19 @@ interface Props {
 
 const { title, description, titleSuffix = true } = Astro.props;
 const pageTitle = titleSuffix ? `${title} · ${SITE.name}` : title;
+
+if (!Astro.site) {
+  throw new Error(
+    'astro.config.mjs: `site` fehlt. Canonical- und Open-Graph-URLs brauchen die Domain.',
+  );
+}
+
+// Cloudflare Pages liefert dist/predigten/index.html unter /predigten aus und
+// leitet /predigten/ per 308 dorthin um. Astro.url.pathname endet bei
+// build.format 'directory' aber auf '/'. Ohne diese Zeile zeigt jeder
+// Canonical auf eine Weiterleitung statt auf die Seite selbst.
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const canonical = new URL(path, Astro.site).href;
 ---
 
 <!doctype html>
@@ -23,6 +36,7 @@ const pageTitle = titleSuffix ? `${title} · ${SITE.name}` : title;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" type="image/png" href="/favicon.png" />
     <!-- Above the fold gebraucht, deshalb vorab geladen statt nur per
