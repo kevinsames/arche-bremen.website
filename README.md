@@ -223,3 +223,19 @@ Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
 Noch nicht eingerichtet. Vorgesehen: Cloudflare Pages, Build mit `npm ci` und
 `npm run build`. `SANITY_DATASET=production` als Umgebungsvariable im
 Hosting-Dashboard setzen (nicht im Repo).
+
+`public/_headers` setzt Cache- und Sicherheits-Header für Cloudflare Pages.
+Nach jedem Deploy prüfen, ob Cloudflare die Datei akzeptiert hat (sie wird
+bei einem Formatfehler stillschweigend ignoriert):
+
+```sh
+curl -sI https://bremen.arche-gemeinde.de/_astro/<eine-datei>.css | grep -i cache-control
+curl -sI https://bremen.arche-gemeinde.de/studio | grep -i x-robots-tag
+```
+
+**Achtung bei Schriftdateien:** `/fonts/*` ist ein Jahr lang cachebar, weil
+die Dateinamen (anders als bei `/_astro/*`) keinen Inhalts-Hash tragen. Wer
+eine Schriftdatei austauscht, muss sie umbenennen (z. B. `jost-500-v2.woff2`)
+und Preloads (`BaseLayout.astro`) sowie `@font-face` (`global.css`)
+anpassen — sonst sehen wiederkehrende Besucher bis zu ein Jahr lang die alte
+Datei.

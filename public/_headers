@@ -1,0 +1,38 @@
+# Cloudflare Pages liest diese Datei aus dem Wurzelverzeichnis der
+# Ausgabe. Astro kopiert public/ unverändert nach dist/, deshalb liegt sie
+# hier. Doku: https://developers.cloudflare.com/pages/configuration/headers/
+#
+# WICHTIG: Cache-Control steht bewusst NUR in den spezifischen Blöcken und
+# nie in /* — überlappende Regeln für denselben Header-Namen führen sonst zu
+# schwer nachvollziehbaren Ergebnissen. HTML fehlt hier komplett: Cloudflares
+# Default (max-age=0, must-revalidate + ETag) ist für eine Seite, die bei
+# Inhaltsänderungen neu deployt, genau richtig.
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: frame-ancestors 'self'
+
+# Dateinamen enthalten einen Inhalts-Hash (z.B. Section.wFI_swb8.css). Jede
+# Änderung erzeugt einen neuen Namen, deshalb unbegrenzt cachebar. Hier
+# liegt auch das JavaScript des Sanity Studios — nicht unter /studio/, dort
+# steht nur die HTML-Hülle.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# ACHTUNG: Fontnamen sind NICHT gehasht. Wer eine Schriftdatei austauscht,
+# MUSS sie umbenennen (z.B. jost-500-v2.woff2) und die Preloads in
+# BaseLayout.astro sowie @font-face in src/styles/global.css anpassen. Sonst
+# sehen wiederkehrende Besucher bis zu ein Jahr lang die alte Datei.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Ergänzt robots.txt: greift auch bei Crawlern, die diese ignorieren. Ein
+# Disallow'ter Pfad wird von braven Crawlern nie abgerufen — dieser Header
+# wird also nie gesehen, außer von Crawlern, die robots.txt ignorieren, oder
+# falls die Disallow-Zeile künftig versehentlich entfernt wird.
+/studio
+  X-Robots-Tag: noindex, nofollow
+/studio/*
+  X-Robots-Tag: noindex, nofollow
