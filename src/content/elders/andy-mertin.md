@@ -11,5 +11,3 @@ Finanzbeamter.
 Seine Schwerpunkte sind Jugendarbeit, Glaubensgrundkurse und Medienarbeit. Am
 meisten liegt ihm daran, jungen Menschen das Evangelium von der Gnade Gottes
 weiterzugeben.
-
-ENTWURF — Freigabe ausstehend.

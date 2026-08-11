@@ -46,12 +46,10 @@ export const FOUNDING = {
   milestoneDate: '1. April 2027',
 };
 
-// PLATZHALTER: Die Anliegen unten sind ein erster Vorschlag und müssen vom
-// Team formuliert und freigegeben werden, bevor sie online gehen.
 export const PRAYER_REQUESTS = [
   'Passende Räumlichkeiten in Bremen',
-  'PLATZHALTER: Mitarbeiter für den Aufbau',
-  'PLATZHALTER: Menschen, die das Evangelium hören und annehmen',
+  'Mitarbeiter für den Aufbau',
+  'Menschen, die das Evangelium hören und annehmen',
 ];
 
 // Funktionsadresse, nie personengebunden (siehe CLAUDE.md). Getrennt in

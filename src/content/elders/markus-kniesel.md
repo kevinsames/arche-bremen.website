@@ -9,5 +9,3 @@ Markus Kniesel ist seit März 2010 im pastoralen Dienst und gehört seit Novembe
 
 Seine Schwerpunkte sind theologische Lehre und biblische Beratung. Er leitet das
 Arche Pastors College.
-
-ENTWURF — Freigabe ausstehend.
