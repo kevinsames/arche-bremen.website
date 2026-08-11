@@ -6,8 +6,9 @@ import ElderCard from '../../components/ElderCard.astro';
 import Slider from '../../components/Slider.astro';
 
 const elders = (await getCollection('elders')).sort((a, b) => {
-  if (a.id === 'niklas-meyer') return -1;
-  if (b.id === 'niklas-meyer') return 1;
+  const aIsPastor = a.data.role === 'Pastor';
+  const bIsPastor = b.data.role === 'Pastor';
+  if (aIsPastor !== bIsPastor) return aIsPastor ? -1 : 1;
   return a.data.name.localeCompare(b.data.name, 'de');
 });
 ---
