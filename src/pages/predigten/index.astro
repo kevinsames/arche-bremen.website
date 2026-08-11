@@ -11,7 +11,10 @@ const sermons = await getSermons();
 const preacherProfiles = await getCollection('elders');
 ---
 
-<BaseLayout title="Predigten">
+<BaseLayout
+  title="Predigten"
+  description="Alle Predigten der Arche Bremen in chronologischer Liste — mit Bibelstelle, Datum, Prediger und, wo vorhanden, Audioaufnahme."
+>
   <Section tone="light">
     <h1>Predigten</h1>
 

@@ -48,12 +48,18 @@ function formatEventRange(event: Event) {
       : eventDateLongFormatter.format(end);
   return `${startText} – ${endText}`;
 }
+
+// SITE.description + Meilenstein statt eines zweiten handgeschriebenen
+// Satzes — bleibt automatisch synchron, wenn FOUNDING.milestoneDate sich
+// ändert oder (1. April 2027) ganz entfällt (siehe README "Offene Punkte").
+const homeDescription = `${SITE.description} Erster Gottesdienst geplant für den ${FOUNDING.milestoneDate}.`;
 ---
 
-<BaseLayout title={SITE.titleHome} titleSuffix={false}>
+<BaseLayout title={SITE.titleHome} titleSuffix={false} description={homeDescription}>
   <Section tone="light">
     <h1 class="hero-title">
-      <img src={logo.src} width={logo.width} height={logo.height} alt={SITE.name} />
+      <img src={logo.src} width={logo.width} height={logo.height} alt="" />
+      <span class="visually-hidden">{SITE.titleHome}</span>
     </h1>
     <p class="hero-claim">{FOUNDING.claim}</p>
     <p class="hero-milestone">

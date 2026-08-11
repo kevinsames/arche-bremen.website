@@ -204,3 +204,25 @@ a:visited {
     }
   }
 }
+
+/* Textäquivalent für Inhalte, die auf dem Bildschirm nur als Grafik
+   vorliegen — aktuell genau eine Stelle: die Wortmarke im Hero der
+   Startseite (index.astro). Die Logo-SVG zeichnet "ARCHE" und
+   "Ev.-Reformierte Freikirche" als Vektorpfade; dieses span macht denselben
+   Text für Suchmaschinen und Screenreader lesbar. Kein Zusatztext, der nicht
+   sichtbar ist — eine Transkription.
+
+   Die px-Werte hier sind kein Abstand im Sinne des Designsystems, sondern
+   die Zuschnitt-Mechanik selbst (gleiche Ausnahme-Logik wie
+   black/transparent in Slider.astro, siehe DESIGN.md). */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

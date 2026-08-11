@@ -16,6 +16,11 @@ const { elder } = Astro.props;
 const { Content } = await render(elder);
 ---
 
+<!-- Bewusst keine description: Es gibt kein geeignetes Frontmatter-Feld
+     (der Markdown-Body ist die freie Profil-Prosa, keine Ein-Satz-Kurzform),
+     und eines dafür anzulegen wäre eine Schema-Änderung für marginalen SEO-
+     Gewinn. Google generiert stattdessen selbst einen Snippet aus dem
+     Profiltext. -->
 <BaseLayout title={elder.data.name}>
   <Section tone="light" width="measure">
     {

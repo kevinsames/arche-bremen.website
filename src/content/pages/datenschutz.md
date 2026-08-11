@@ -1,5 +1,6 @@
 ---
 title: Datenschutzerklärung
+description: "Welche Daten beim Besuch dieser Website anfallen, wie lange sie gespeichert werden und welche Rechte Sie als Besucher haben."
 ---
 
 <!--

@@ -1,5 +1,6 @@
 ---
 title: Impressum
+description: "Impressum der Arche Bremen: Anbieterkennzeichnung nach § 5 TMG, inhaltlich Verantwortlicher und Kontaktmöglichkeit."
 ---
 
 <!--

@@ -280,6 +280,14 @@ Icons direkt per `<link rel="icon">` aus `BaseLayout.astro`).
 2. **Kein Ortszusatz.** Das Lockup zeigt „ARCHE", nicht „Arche Bremen" —
    unverändert gegenüber dem Interim-Zustand, siehe offene Frage 1 oben.
    „Bremen" steht weiterhin im Seitentitel, im `alt`-Text und im Footer.
+3. **Hero-h1 (SEO, September 2026):** Das Lockup zeichnet „ARCHE" und
+   „Ev.-Reformierte Freikirche" bereits als Vektorpfade — für Suchmaschinen
+   und Screenreader ist das aber kein Text. `index.astro` ergänzt das `<h1>`
+   deshalb um ein visuell verborgenes `<span class="visually-hidden">`
+   (`global.css`) mit `SITE.titleHome` als Transkription dieses Textes, nicht
+   als zusätzliche Aussage. Optisch keine Änderung. `alt` am Logo-Bild wird
+   dabei auf `""` gesetzt (im Header bleibt `alt={SITE.name}`, dort ist das
+   Logo der Home-Link und braucht einen Accessible Name).
 
 **Favicon, bewusste Abweichung von der Kontrastregel:** Der Favicon-Bogen ist
 Dunkelblau auf transparentem Grund — eine der Ausnahmen, in denen eine

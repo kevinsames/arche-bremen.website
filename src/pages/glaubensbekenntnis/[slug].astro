@@ -23,7 +23,10 @@ const { article } = Astro.props;
 const { Content } = await render(article);
 ---
 
-<BaseLayout title={article.data.title}>
+<BaseLayout
+  title={`${article.data.title} — Glaubensbekenntnis`}
+  description={article.data.summary}
+>
   <Section tone="light" width="measure">
     {article.data.number != null && <p class="number">Artikel {article.data.number}</p>}
     <h1>{article.data.title}</h1>

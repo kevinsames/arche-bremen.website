@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Section from '../../components/Section.astro';
 import SermonDetail from '../../components/SermonDetail.astro';
 import { getSermons } from '../../lib/sanity';
+import { formatPassages } from '../../lib/bible';
 
 export async function getStaticPaths() {
   const sermons = await getSermons();
@@ -18,9 +19,20 @@ const preacherProfiles = await getCollection('elders');
 const profile = preacherProfiles.find(
   (p) => p.data.name.trim().toLowerCase() === sermon.preacher.trim().toLowerCase(),
 );
+
+const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
+
+// Fällt auf die Felder zurück, die jede Predigt ohnehin als Pflichtfeld hat
+// (Datum, Bibelstelle, Prediger), statt die Seite ohne Description
+// auszuliefern, wenn das optionale sermon.description-Feld leer ist. Kein
+// KI- oder Freitext-Zusammenfassen — nur vorhandene Metadaten aneinander.
+const description =
+  sermon.description ??
+  `${sermon.title} — Predigt vom ${dateFormatter.format(new Date(sermon.date))} über ` +
+    `${formatPassages(sermon.passages)}, gehalten von ${sermon.preacher}. Arche Bremen.`;
 ---
 
-<BaseLayout title={sermon.title} description={sermon.description}>
+<BaseLayout title={sermon.title} description={description}>
   <Section tone="dark" width="measure">
     <p><a href="/predigten">&larr; Alle Predigten</a></p>
     <h1>{sermon.title}</h1>
