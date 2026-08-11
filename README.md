@@ -44,6 +44,43 @@ npm run build    # statischer Build nach dist/
 npm run preview  # Vorschau des Builds
 ```
 
+## Architektur
+
+```mermaid
+flowchart TB
+    subgraph repo["Repo — Git-Review als Zugriffskontrolle"]
+        MD["src/content/<br>pages · elders · creed<br>Markdown"]
+        CONST["src/consts.ts<br>FOUNDING · ADDRESS · WEEKLY_EVENTS"]
+    end
+
+    subgraph sanity["Sanity Free Plan — öffentlich lesbar, inkl. Entwürfe"]
+        PROD[("dataset: production")]
+        DEV[("dataset: development")]
+    end
+
+    SNAP["sanity/snapshot/content.json<br>Fallback bei API-Ausfall"]
+
+    BUILD["npm run build<br>Astro, static output"]
+
+    MD --> BUILD
+    CONST --> BUILD
+    PROD -->|"getSermons · getEvents"| BUILD
+    SNAP -.->|"nur wenn API nicht erreichbar"| BUILD
+    BUILD --> DIST["dist/<br>0 KB Client-JS auf Inhaltsseiten"]
+    DIST --> CF["Cloudflare Pages"]
+    CF --> USER["Besucher"]
+
+    STUDIO["/studio<br>eingebettetes Sanity Studio<br>einzige React-Insel"]
+    STUDIO -->|"Redaktion schreibt"| PROD
+    DEV -.->|"lokale Entwicklung"| BUILD
+```
+
+Seltene, heikle Inhalte (Bekenntnis, Profile, Impressum) liegen im Repo und
+laufen über Git-Review. Häufige, unkritische Inhalte (Predigten, Termine)
+liegen in Sanity und sind für Redakteure ohne Git pflegbar. Begründung der
+Grenze: `CLAUDE.md`, Abschnitt „Content-Split — die zentrale
+Architekturentscheidung".
+
 ## Beispieldaten für `development`
 
 ```sh
@@ -197,6 +234,16 @@ Browser) verwendet denselben Bogen-Pfad wie `bogen.svg`, unverändert, nur per
 Kontrastregel (Sichtbarkeit im Dark-Mode-Tab) in `DESIGN.md`, Abschnitt
 „Logo".
 
+`src/assets/brand/og.svg` ist die Quelle für `public/og.png` (Open-Graph-
+Vorschaukarte, 1200×630, siehe `BaseLayout.astro`). Bewusst ohne
+`<text>`-Element — reine Pfade sind mit jedem Konverter identisch
+reproduzierbar, Text hängt an installierten Systemfonts und Jost ist keiner.
+Ändert sich das Bild: `og.svg` bearbeiten, dann verlustfrei auf exakt
+1200×630 nach `public/og.png` rendern (kein neues Paket in
+`package.json` — lokal reicht das bereits im `node_modules`-Baum liegende
+`sharp`, z. B. `node -e "require('sharp')('src/assets/brand/og.svg',{density:96}).resize(1200,630).png().toFile('public/og.png')"`),
+beide Dateien committen.
+
 Noch offen:
 
 - **Footer** behält die Textwortmarke. Das Lockup ist einfarbig Dunkelblau,
@@ -238,10 +285,33 @@ Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
   Sobald ein Dienst mit Speicherzugriff dazukommt (eingebettete Karte,
   Newsletter, Zahlungsformular auf der eigenen Seite), wird ein
   Consent-Banner Pflicht und diese Erklärung muss erweitert werden.
-- **Offline-Fallback für Sanity:** Noch kein `sanity dataset export`-Snapshot
-  als Fallback, falls die API zur Buildzeit nicht erreichbar ist.
+- **og.png:** Reine Lockup-Karte ohne das Wort „Bremen" — bewusste
+  Entscheidung, kein Versehen (Textrendering bräuchte einen Font-Renderer für
+  Jost, siehe Abschnitt „Markendateien"). Der Ortsname steht weiterhin im
+  `og:image:alt`, Seitentitel und Footer.
 - Kalenderansicht, Predigtfilter, Audio-Player, Über-uns- und
-  Gemeindeleben-Seiten, Ältestenprofile, Suche, Deployment, Studio-Deploy.
+  Gemeindeleben-Seiten, Suche, Deployment, Studio-Deploy.
+
+## Änderungen beitragen
+
+- Vor jeder Änderung `CLAUDE.md` lesen — die neun harten Regeln sind
+  entschieden, nicht Diskussionsgrundlage.
+- Branch pro Änderung, kein Direktcommit auf `main`. Merge über Pull Request,
+  damit Cloudflare eine Preview-URL baut und ein zweiter Blick auf
+  personenbezogene Inhalte stattfindet.
+- Commit-Konvention aus der bisherigen Historie: `feat:`, `fix:`, `content:`,
+  `style:`, `refactor:`, `docs:`. Englisch, Imperativ, eine Aussage pro
+  Commit.
+- Vor dem PR muss `npm run build` durchlaufen. Kein Linter, keine Tests —
+  bewusst, siehe Wartbarkeit in `CLAUDE.md`.
+- Keine neue Dependency ohne Absprache. `package-lock.json` gehört zum
+  Commit.
+- Design: Werte nur aus `src/styles/tokens.css`. Fehlt ein Wert, in
+  `DESIGN.md` unter „Offene Fragen" ergänzen statt im Komponentencode
+  improvisieren.
+- Niemals committen: `.env.local`, Tokens, Screenshots mit personenbezogenen
+  Daten. Versehentlich gepusht → Zugangsdaten sofort rotieren, nicht nur den
+  Commit zurücknehmen.
 
 ## Deployment
 

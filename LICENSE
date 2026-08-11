@@ -1,0 +1,17 @@
+Copyright © 2026 Arche Bremen. Alle Rechte vorbehalten.
+
+Dieses Repository ist aus Transparenzgründen öffentlich einsehbar. Das ist
+keine Freigabe zur Weiterverwendung: Ohne schriftliche Zustimmung besteht
+kein Recht, Code oder Inhalte zu kopieren, zu verändern oder weiterzugeben.
+
+Ausgenommen von diesem Vorbehalt — jeweils eigene Rechte:
+
+| Pfad | Inhalt | Rechte |
+|---|---|---|
+| `public/fonts/jost-500.woff2`, `public/fonts/source-serif-400.woff2` | Schriftdateien | SIL Open Font License 1.1, siehe `public/fonts/OFL-Jost.txt` und `OFL-SourceSerif.txt` |
+| `src/content/creed/**` | Glaubensbekenntnis, Text und Quelle | Arche Hamburg (siehe `src/content/creed/99-quelle.md`) |
+| `src/assets/brand/**` | Logo und Markenelemente | Marke der Arche, keine freie Weiterverwendung |
+| `src/content/elders/*.jpg` | Porträtfotos | Rechte bei den abgebildeten Personen |
+
+npm-Abhängigkeiten (`package.json`) stehen unter ihren jeweils eigenen
+Lizenzen und sind von diesem Vorbehalt unberührt.
