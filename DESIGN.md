@@ -262,6 +262,7 @@ Verwendung:
 | `arche-logo.svg` | Vollständiges Lockup, wie geliefert, unverändert | Header, Hero |
 | `bogen.svg` | Nur der Bogen — ein einzelner Pfad aus `arche-logo.svg` herausgelöst, viewBox auf diesen Pfad zugeschnitten (plus Rand), sonst keine Änderung | Stilelement (Termine-Sektion) |
 | `public/favicon.svg` / `public/favicon.png` | Derselbe Pfad wie `bogen.svg`, unverändert übernommen, per `transform` auf `<g>` in ein quadratisches 64×64-Format zentriert (kein Neuzeichnen). Farbe Dunkelblau (`#003a56`, Token `--c-blue-dark`), Hintergrund transparent | Tab-Icon |
+| `og.svg` / `public/og.png` | Vollständiges Lockup, unverändert, zentriert auf `--c-offwhite`-Fläche mit schmalem `--c-blue-dark`-Abschlussbalken, 1200×630. Kein `<text>`-Element (Jost ist kein Systemfont, siehe „Jost statt Futura" oben) | Open-Graph-Vorschaukarte (`BaseLayout.astro`) |
 
 Eingebunden per direktem Astro-Asset-Import (`import logo from
 '.../arche-logo.svg'`, `<img src={logo.src} ...>`), nicht über die

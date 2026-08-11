@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+
+// Astro schreibt diese Seite nach dist/404.html. Cloudflare Pages liefert
+// sie automatisch für jeden unbekannten Pfad aus — keine Konfiguration in
+// public/_headers oder einer _redirects-Datei nötig.
+//
+// Keine description: Die Seite soll nicht als Suchergebnis auftauchen.
+---
+
+<BaseLayout title="Seite nicht gefunden">
+  <Section tone="light" width="measure">
+    <h1>Seite nicht gefunden</h1>
+    <p class="lead">
+      Die aufgerufene Seite gibt es nicht oder nicht mehr. Vielleicht hilft
+      einer dieser Wege weiter:
+    </p>
+    <ul>
+      <li><a href="/">Startseite</a></li>
+      <li><a href="/predigten">Predigten</a></li>
+      <li><a href="/aelteste">Älteste</a></li>
+      <li><a href="/glaubensbekenntnis">Glaubensbekenntnis</a></li>
+    </ul>
+  </Section>
+</BaseLayout>
+
+<style>
+  .lead {
+    color: var(--text-secondary);
+  }
+</style>
