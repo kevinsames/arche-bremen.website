@@ -75,6 +75,7 @@ const permalink = `/predigten/${sermon.slug}`;
 </div>
 
 <Overlay id={overlayId} label={sermon.title}>
+  <h2 class="overlay-title">{sermon.title}</h2>
   <SermonDetail sermon={sermon} profile={preacherProfile} permalink={permalink} />
 </Overlay>
 
@@ -180,5 +181,9 @@ const permalink = `/predigten/${sermon.slug}`;
     .open {
       display: none;
     }
+  }
+
+  .overlay-title {
+    margin: 0;
   }
 </style>
