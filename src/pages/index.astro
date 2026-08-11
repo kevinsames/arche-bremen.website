@@ -53,9 +53,51 @@ function formatEventRange(event: Event) {
 // Satzes — bleibt automatisch synchron, wenn FOUNDING.milestoneDate sich
 // ändert oder (1. April 2027) ganz entfällt (siehe README "Offene Punkte").
 const homeDescription = `${SITE.description} Erster Gottesdienst geplant für den ${FOUNDING.milestoneDate}.`;
+
+// Structured Data, nur WebSite + Organization: Google liest WebSite.name
+// von der Startseite, um den Seitennamen über den Suchergebnissen zu
+// bestimmen — ohne das rät es aus Title und Domain.
+//
+// BEWUSST OHNE address/geo/openingHours (Church-Schema): ADDRESS in
+// consts.ts ist unbestätigt (siehe dort), und die einzige bestätigte
+// Adresse im Repo ist Hamburg (Doerriesweg 7, siehe impressum.md) — die des
+// Rechtsträgers, nicht der Bremer Versammlung. Sie hier einzutragen würde
+// Google mitteilen, die Arche Bremen sitze in Hamburg. Nachtragen, sobald
+// beides feststeht: die Bremer Adresse bestätigt UND der erste Gottesdienst
+// läuft (siehe README "Offene Punkte", Abschnitt Gründungsphase).
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': new URL('/#website', Astro.site).href,
+      url: new URL('/', Astro.site).href,
+      name: SITE.name,
+      inLanguage: 'de-DE',
+      publisher: { '@id': new URL('/#organization', Astro.site).href },
+    },
+    {
+      '@type': 'Organization',
+      '@id': new URL('/#organization', Astro.site).href,
+      name: SITE.name,
+      url: new URL('/', Astro.site).href,
+      description: SITE.description,
+      parentOrganization: {
+        '@type': 'Organization',
+        name: 'Gemeinde und Missionswerk Arche e.V.',
+        url: 'https://www.arche-gemeinde.de',
+      },
+    },
+  ],
+};
 ---
 
-<BaseLayout title={SITE.titleHome} titleSuffix={false} description={homeDescription}>
+<BaseLayout
+  title={SITE.titleHome}
+  titleSuffix={false}
+  description={homeDescription}
+  jsonLd={jsonLd}
+>
   <Section tone="light">
     <h1 class="hero-title">
       <img src={logo.src} width={logo.width} height={logo.height} alt="" />

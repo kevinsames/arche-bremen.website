@@ -194,7 +194,10 @@ Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
   mit `PLATZHALTER` markierten Einträge sind ein Vorschlag und brauchen
   inhaltliche Freigabe durch das Team. Sobald der erste Gottesdienst feststeht:
   `SERVICE`/`ADDRESS` zurück in den Hero und den Footer, `WEEKLY_EVENTS`
-  befüllen, `FOUNDING`/`PRAYER_REQUESTS` aus `index.astro` entfernen.
+  befüllen, `FOUNDING`/`PRAYER_REQUESTS` aus `index.astro` entfernen. Zum
+  selben Zeitpunkt: `index.astro`, JSON-LD um ein `Church`-Objekt
+  (`address`, `geo`, `openingHoursSpecification`) ergänzen — bis dahin bleibt
+  es bei `WebSite`/`Organization` ohne Adresse (siehe Kommentar dort).
 - `CONTACT` ist mit `info@bremen.arche-gemeinde.de` eingerichtet. Die Domain
   der veröffentlichten Seite ist `site` in `astro.config.mjs`
   (`https://bremen.arche-gemeinde.de`) — dort steht sie einmalig, nicht in
