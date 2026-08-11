@@ -5,9 +5,11 @@ import Section from '../../components/Section.astro';
 import ElderCard from '../../components/ElderCard.astro';
 import Slider from '../../components/Slider.astro';
 
-const elders = (await getCollection('elders')).sort((a, b) =>
-  a.data.name.localeCompare(b.data.name, 'de'),
-);
+const elders = (await getCollection('elders')).sort((a, b) => {
+  if (a.id === 'niklas-meyer') return -1;
+  if (b.id === 'niklas-meyer') return 1;
+  return a.data.name.localeCompare(b.data.name, 'de');
+});
 ---
 
 <BaseLayout
