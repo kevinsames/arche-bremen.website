@@ -1,0 +1,10 @@
+# Cloudflare Pages liest diese Datei aus dem Wurzelverzeichnis der Ausgabe.
+# Astro kopiert public/ unverändert nach dist/, deshalb liegt sie hier.
+# Doku: https://developers.cloudflare.com/pages/configuration/redirects/
+#
+# /aelteste hieß bis August 2026 so und ist zu /gemeindeleitung geworden.
+# Beide Zeilen sind nötig: die Splat-Regel greift nicht für den nackten Pfad
+# ohne Schrägstrich.
+
+/aelteste            /gemeindeleitung          301
+/aelteste/*          /gemeindeleitung/:splat   301

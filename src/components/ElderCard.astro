@@ -3,7 +3,7 @@ import { render, type CollectionEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import Overlay from './Overlay.astro';
 
-// Kachel für ein Ältesten-Profil auf /aelteste, gleiche Bauweise wie
+// Kachel für ein Ältesten-Profil auf /gemeindeleitung, gleiche Bauweise wie
 // SermonCard: Anker (Tastatur-Weg zur Detailseite) und deckungsgleicher
 // Button (Maus/Touch, öffnet das Popup mit dem gerenderten Markdown-Body).
 // Details siehe Kommentar in SermonCard.astro. Die Flächenrotation über
@@ -24,7 +24,7 @@ const surfaces = [
 const [surface, surfaceHover] = surfaces[index % surfaces.length];
 
 const overlayId = `elder-${elder.id}`;
-const permalink = `/aelteste/${elder.id}`;
+const permalink = `/gemeindeleitung/${elder.id}`;
 ---
 
 <div class="card-wrap">

@@ -15,7 +15,7 @@ import { getSermons } from '../lib/sanity';
 // zählen, oder `grep -c '<loc>' dist/sitemap.xml` gegen die Anzahl der
 // gebauten Seiten (ohne /studio) vergleichen.
 
-const STATIC_PATHS = ['/', '/predigten', '/aelteste', '/glaubensbekenntnis'];
+const STATIC_PATHS = ['/', '/predigten', '/gemeindeleitung', '/glaubensbekenntnis'];
 
 export const GET: APIRoute = async ({ site }) => {
   if (!site) {
@@ -35,7 +35,7 @@ export const GET: APIRoute = async ({ site }) => {
     ...creed
       .filter((article) => article.data.number != null)
       .map((article) => `/glaubensbekenntnis/${article.id}`),
-    ...elders.map((elder) => `/aelteste/${elder.id}`),
+    ...elders.map((elder) => `/gemeindeleitung/${elder.id}`),
     ...sermons.map((sermon) => `/predigten/${sermon.slug}`),
   ];
 

@@ -14,11 +14,11 @@ const elders = (await getCollection('elders')).sort((a, b) => {
 ---
 
 <BaseLayout
-  title="Älteste"
-  description="Die Ältesten der Arche Bremen: Wer die Gemeindegründung in Bremen leitet und wofür die Gemeindeleitung verantwortlich ist."
+  title="Gemeindeleitung"
+  description="Die Gemeindeleitung der Arche Bremen: Wer die Gemeindegründung in Bremen leitet und wofür sie verantwortlich ist."
 >
   <Section tone="light">
-    <h1>Älteste</h1>
+    <h1>Gemeindeleitung</h1>
 
     {
       elders.length === 0 ? (

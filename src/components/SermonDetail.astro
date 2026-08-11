@@ -29,7 +29,7 @@ const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
   {dateFormatter.format(new Date(sermon.date))} &middot;{' '}
   {
     profile ? (
-      <a href={`/aelteste/${profile.id}`}>{sermon.preacher}</a>
+      <a href={`/gemeindeleitung/${profile.id}`}>{sermon.preacher}</a>
     ) : (
       sermon.preacher
     )
