@@ -10,9 +10,13 @@ interface Props {
   // Startseite setzt SITE.titleHome, das den Namen schon enthält, und
   // schaltet den Zusatz aus. Unterseiten bekommen ihn automatisch.
   titleSuffix?: boolean;
+  // Structured Data als JSON-Objekt. Aktuell nutzt das nur die Startseite
+  // (WebSite + Organization). Wird als <script type="application/ld+json">
+  // in den Head geschrieben.
+  jsonLd?: Record<string, unknown>;
 }
 
-const { title, description, titleSuffix = true } = Astro.props;
+const { title, description, titleSuffix = true, jsonLd } = Astro.props;
 const pageTitle = titleSuffix ? `${title} · ${SITE.name}` : title;
 
 if (!Astro.site) {
@@ -37,6 +41,28 @@ const canonical = new URL(path, Astro.site).href;
     <title>{pageTitle}</title>
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph: steuert die Vorschaukarte beim Teilen in WhatsApp,
+         Signal, Telegram, Facebook. Für eine Gemeindegründung der
+         wichtigste Verbreitungsweg überhaupt. Kein Fremd-Request im
+         Browser — die Karte baut der Messenger server-seitig von unserer
+         eigenen Domain. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:title" content={pageTitle} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/og.png', Astro.site).href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Arche Bremen — Evangelisch-reformierte Freikirche" />
+
+    <!-- Nur diese eine Zeile: X fällt für Titel, Beschreibung und Bild
+         automatisch auf die og:-Angaben oben zurück. Ein zweiter Satz
+         twitter:title/description/image wäre reine Verdopplung. -->
+    <meta name="twitter:card" content="summary_large_image" />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" type="image/png" href="/favicon.png" />
     <!-- Above the fold gebraucht, deshalb vorab geladen statt nur per
@@ -49,6 +75,8 @@ const canonical = new URL(path, Astro.site).href;
       type="font/woff2"
       crossorigin
     />
+
+    {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
     <Header />
