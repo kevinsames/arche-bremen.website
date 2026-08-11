@@ -1,2 +1,8 @@
 User-agent: *
 Disallow: /studio
+
+# Domain hier absolut, weil robots.txt eine statische Datei ohne
+# Template-Schicht ist und Astro.site nicht lesen kann. Einzige Stelle im
+# Repo neben astro.config.mjs (`site`), an der die Domain steht — bei einem
+# Domainwechsel beide Stellen ändern.
+Sitemap: https://bremen.arche-gemeinde.de/sitemap.xml
