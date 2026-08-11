@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import { loadEnv } from 'vite';
 import sanity from '@sanity/astro';
 import react from '@astrojs/react';
+import { satteri } from '@astrojs/markdown-satteri';
 
 // astro.config.mjs runs outside Vite's own env loading, so .env files are
 // read explicitly here. See README.md for the required variables.
@@ -25,6 +26,22 @@ export default defineConfig({
   // alongside Astro's default PUBLIC_ prefix.
   vite: {
     envPrefix: ['PUBLIC_', 'SANITY_'],
+  },
+  markdown: {
+    // Nur zur Lokalisierung der GFM-Fußnoten (Glaubensbekenntnis, siehe
+    // src/content/creed/). satteri() ist bereits Astros Standardprozessor —
+    // dieser Aufruf ändert nur das deutsche Label und den Rücksprung-Text,
+    // keine sonstigen Markdown-Einstellungen.
+    processor: satteri({
+      features: {
+        gfm: {
+          footnotes: {
+            label: 'Bibelstellen',
+            backLabel: 'Zurück zu Verweis {reference}',
+          },
+        },
+      },
+    }),
   },
   integrations: [
     sanity({

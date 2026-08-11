@@ -301,6 +301,41 @@ nicht versehentlich übersehen.
 `--size-logo-hero`, `--size-mark` — reine Layout-Werte, keine
 Auflösungsgrenze mehr (Vektorgrafik).
 
+## Fußnoten
+
+Seit August 2026 stehen die Bibelstellen des Glaubensbekenntnisses (siehe
+`src/content/creed/`) als GFM-Fußnoten unter jedem Artikel statt als
+Klammerverweise im Fließtext — Details und Konvention in `README.md`,
+Abschnitt „Wie ein Artikel des Glaubensbekenntnisses geändert wird".
+
+Gestaltung ausschließlich mit bestehenden Tokens (`.prose .footnotes` in
+`global.css`): Trennlinie (`--border-subtle`) statt eigener Farbe, Text in
+`--fs-xs` / `--text-secondary` — dasselbe Muster wie `.quelle` in
+`glaubensbekenntnis.astro`.
+
+Zwei Eigenheiten des generierten Markups, bewusst hingenommen statt
+umgebaut (CLAUDE.md Regel 2/3 — keine eigene Rendering-Pipeline für einen
+kosmetischen Randfall):
+
+- **Überschrift ist sichtbar, nicht nur für Screenreader.** `satteri()`
+  erzeugt `<h2 class="sr-only">Bibelstellen</h2>`. „sr-only" ist im Projekt
+  nicht definiert (unser Pendant heißt `.visually-hidden`, siehe Abschnitt
+  „Logo"), die Überschrift bleibt deshalb sichtbar. Das passt hier sogar
+  gut — „Bibelstellen" als kleine Überschrift über der Liste ist ohnehin
+  sinnvoll. Wer projektweit `.sr-only` einführt, macht sie unsichtbar; dann
+  bräuchte `.prose .footnotes h2` eine eigene, wieder sichtbare Regel.
+- **`id="footnote-label"` mehrfach im Dokument.** `/glaubensbekenntnis`
+  rendert alle 25 Artikelkörper plus Vorwort auf einer Seite
+  (`CreedCard.astro`-Popover), jeder mit eigenem `<section class="footnotes">`
+  und identischem `id="footnote-label"`. Ein HTML-Validator meldet das als
+  doppelte ID. Folgenlos für Funktion und Screenreader: Alle 26
+  Überschriften tragen denselben Text, `aria-describedby="footnote-label"`
+  löst deshalb inhaltlich immer richtig auf, und die Sprungziele selbst sind
+  über die Fußnotenkennung eindeutig (siehe README, Präfix-Regel). Die
+  Alternative — ein eigenes hast-Plugin, das IDs pro Artikel nachträglich
+  präfigiert — wäre exakt die Art eigener Rendering-Pipeline, die Regel 2/3
+  ausschließt.
+
 ## Bildwelt
 
 Brandbook 3.1 verlangt **mindestens 70 % Fotos aus der lokalen Arche**. Eine

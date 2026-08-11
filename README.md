@@ -177,11 +177,16 @@ verweisen aufeinander).
    `title` (und optional `description`) anlegen.
 2. Fertig — `src/pages/[slug].astro` rendert sie automatisch unter `/<slug>`.
 
-**Achtung bei Bibelstellen:** Beginnt eine Zeile mit `1. ` (etwa
-`1. Korinther 9,22`), liest Markdown das als numerierte Liste und reißt den
-Absatz auf. In solchen Fällen den Punkt maskieren: `1\. Korinther`. Nur die
-Ziffer `1` ist betroffen. Nach dem Neuumbrechen einer Datei mit
-`grep -n '^[0-9]\+\. ' src/content/pages/*.md src/content/creed/*.md` prüfen.
+**Achtung bei Bibelstellen:** Beginnt eine Zeile mit einer Ziffer gefolgt von
+einem Punkt und Leerzeichen (etwa `1. Korinther 9,22` oder `2. Timotheus
+3,16`), liest Markdown das als numerierte Liste und reißt den Absatz auf —
+und zwar bei **jeder** Ziffer, nicht nur bei `1`. In solchen Fällen den Punkt
+maskieren: `1\. Korinther`, `2\. Timotheus`. Das betrifft auch
+Fußnotendefinitionen im Glaubensbekenntnis (siehe unten) — `[^12-4]: 2.
+Timotheus 3,16` rendert sonst als eigene Liste innerhalb der Fußnote statt
+als Text. Nach dem Neuumbrechen einer Datei mit
+`grep -n '^\[\^[^]]*\]: [0-9]\+\. \|^[0-9]\+\. ' src/content/pages/*.md src/content/creed/*.md`
+prüfen — der Befehl muss leer bleiben.
 
 ### Wie ein Foto zu einem Ältesten-Profil hinzukommt
 
@@ -209,6 +214,26 @@ die Kacheln sortiert nach `number`, `/glaubensbekenntnis/<slug>` ist die
 Detailseite dazu. Einen neuen Artikel einfügen heißt: neue Datei mit der
 nächsten Nummer anlegen — die Nummern in den bestehenden Dateinamen und
 `title` bleiben davon unberührt (keine automatische Umnummerierung).
+
+**Bibelstellen sind Fußnoten**, GFM-Syntax `[^kennung]` im Fließtext plus
+Definitionsblock am Dateiende, je eine pro Zeile in Auftretensreihenfolge.
+Astro rendert das ohne zusätzliche Abhängigkeit — `astro.config.mjs` setzt
+nur das deutsche Label über `markdown.processor: satteri({ features: {
+gfm: { footnotes: { … } } } })`. Zwei Regeln:
+
+- **Kennung immer mit Artikelnummer präfigieren**, `[^12-1]`, `[^12-2]`,
+  Vorwort `[^0-1]`. Grund: `/glaubensbekenntnis` rendert alle Artikelkörper
+  auf einer Seite (Popover in `CreedCard.astro`), gleiche Kennungen in
+  verschiedenen Artikeln erzeugten dort doppelte HTML-IDs und ein Popup
+  könnte zur Fußnote eines anderen Artikels springen. Die sichtbare Nummer
+  im Text kommt trotzdem aus der Reihenfolge des Auftretens — `[^12-1]`
+  erscheint als „1", wenn es der erste Marker im Artikel ist.
+- Beginnt eine Definition mit einer Ziffer (`2. Timotheus …`), den Punkt
+  maskieren (`2\. Timotheus`) — siehe „Achtung bei Bibelstellen" oben.
+
+Nicht jede Klammer im Original ist eine reine Bibelstelle — Glossen wie
+„(Charismen)" oder Artikel-Querverweise wie „(siehe „Wiedergeburt und
+wirksame Berufung", Artikel 10)" bleiben im Fließtext stehen.
 
 ## Markendateien
 

@@ -142,6 +142,37 @@ a:visited {
   color: var(--text-secondary);
 }
 
+/* Bibelstellen als Fußnoten (Glaubensbekenntnis, Markdown-Syntax `[^id]`).
+   satteri() erzeugt automatisch <section class="footnotes"> mit einer
+   <h2 class="sr-only">; „sr-only" ist im Projekt nicht definiert (unser
+   Pendant heißt .visually-hidden, siehe unten), die Überschrift bleibt
+   deshalb absichtlich sichtbar — siehe DESIGN.md, Abschnitt „Fußnoten". */
+.prose .footnotes {
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--border-subtle);
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+}
+
+.prose .footnotes h2 {
+  margin: 0 0 var(--sp-3);
+  font-size: var(--fs-s);
+}
+
+/* Größere Tippfläche für die hochgestellte Fußnotenziffer im Fließtext, ohne
+   den Textfluss zu verschieben (negativer Rand gleicht das Extra-Padding
+   wieder aus). Auf Mobil sonst eine sehr kleine Trefferfläche. */
+.prose sup a {
+  padding: 0 var(--sp-1);
+  margin: 0 calc(-1 * var(--sp-1));
+  text-decoration: none;
+}
+
+.prose .data-footnote-backref {
+  text-decoration: none;
+}
+
 /* Gefüllter Link/Button: dunkler Grund, heller Text — unabhängig von der
    Sektion, in der er steht (siehe .section--dark-Ausnahme oben, die den
    Button explizit ausnimmt). Es gibt aktuell keine Stelle mit einem
