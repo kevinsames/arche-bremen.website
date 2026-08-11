@@ -2,6 +2,7 @@
 import type { Sermon } from '../lib/sanity';
 import type { CollectionEntry } from 'astro:content';
 import { formatPassages } from '../lib/bible';
+import { normalizeSearch } from '../lib/search';
 import Overlay from './Overlay.astro';
 import SermonDetail from './SermonDetail.astro';
 
@@ -33,24 +34,54 @@ interface Props {
 
 const { sermon, index, preacherProfile } = Astro.props;
 
-const surfaces = [
-  ['--surface-warm', '--surface-warm-strong'],
-  ['--surface-warm-alt', '--surface-warm-alt-strong'],
-  ['--surface-nature', '--surface-nature-strong'],
-] as const;
-const [surface, surfaceHover] = surfaces[index % surfaces.length];
-
 const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
 const overlayId = `sermon-${sermon.slug}`;
 const permalink = `/predigten/${sermon.slug}`;
+
+// Filterdaten für SermonFilter.astro (siehe dort). Auf Seiten ohne Filter
+// (Startseite, Slider) bleiben diese Attribute schlicht ungenutzt.
+//
+// searchIndex deckt Titel, Prediger, Reihe, Bibelstelle (deutsch und als
+// ASCII-Buchschlüssel, siehe bible.ts) und Beschreibung ab.
+const searchIndex = normalizeSearch(
+  [
+    sermon.title,
+    sermon.preacher,
+    sermon.series,
+    formatPassages(sermon.passages),
+    sermon.passages.map((p) => p.book).join(' '),
+    sermon.description,
+  ]
+    .filter(Boolean)
+    .join(' '),
+);
+
+// Pipe-umschlossen, damit `includes('|roemer|')` exakt trifft statt in
+// einem längeren Buchschlüssel mitzulesen (z.B. "roemer" in einem
+// hypothetischen "1-roemer").
+const bookKeys = `|${[...new Set(sermon.passages.map((p) => p.book))].join('|')}|`;
+const preacherKey = sermon.preacher.trim().toLowerCase();
+const seriesKey = sermon.series?.trim().toLowerCase() ?? '';
+
+// Farbrotation als data-Attribut statt Inline-Style: SermonFilter.astro
+// weist sichtbaren Kacheln beim Filtern neue Werte zu, damit die
+// Dreierfolge nach Positionen in der sichtbaren Auswahl läuft statt nach
+// der ursprünglichen Listenposition (siehe dortiges Skript). Die
+// eigentlichen Token bleiben ausschließlich in den Styles unten.
+//
+// view-transition-name identifiziert die Kachel über einen Filterwechsel
+// hinweg als dasselbe Element (siehe SermonFilter.astro) — der Browser
+// gleitet sie dadurch in ihre neue Rasterposition statt zu springen. Der
+// Slug taugt als Identifier, siehe overlayId oben; "sermon-"-Präfix
+// garantiert einen gültigen CSS-Identifier auch bei ziffernstartendem
+// Slug. Auf der Startseite (Slider) ist der Name inert, da dort keine
+// Transition ausgelöst wird.
 ---
 
-<div class="card-wrap">
-  <a
-    href={permalink}
-    class="card"
-    style={`--card-surface: var(${surface}); --card-surface-hover: var(${surfaceHover})`}
-  >
+<div class="card-wrap" data-sermon data-surface={index % 3} data-search={searchIndex}
+     data-books={bookKeys} data-preacher={preacherKey} data-series={seriesKey}
+     style={`view-transition-name: sermon-${sermon.slug}`}>
+  <a href={permalink} class="card">
     <span class="passage">{formatPassages(sermon.passages)}</span>
     <p class="title">{sermon.title}</p>
     <p class="meta">
@@ -82,6 +113,25 @@ const permalink = `/predigten/${sermon.slug}`;
 <style>
   .card-wrap {
     position: relative;
+  }
+
+  /* Dreierfolge der Kachelflächen, per data-Attribut statt Inline-Style
+     (siehe Skript-Kommentar oben) — so kann SermonFilter.astro beim
+     Filtern die Reihenfolge unter den sichtbaren Kacheln neu vergeben,
+     ohne Tokens im JavaScript zu kennen. */
+  .card-wrap[data-surface='0'] {
+    --card-surface: var(--surface-warm);
+    --card-surface-hover: var(--surface-warm-strong);
+  }
+
+  .card-wrap[data-surface='1'] {
+    --card-surface: var(--surface-warm-alt);
+    --card-surface-hover: var(--surface-warm-alt-strong);
+  }
+
+  .card-wrap[data-surface='2'] {
+    --card-surface: var(--surface-nature);
+    --card-surface-hover: var(--surface-nature-strong);
   }
 
   .card {

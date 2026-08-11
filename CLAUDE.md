@@ -23,8 +23,9 @@ Begründung — stattdessen fragen.
    Generalisierung für hypothetische Zukunftsfälle, keine eigenen Frameworks.
    Doppelter Code ist besser als eine schwer verständliche Abstraktion.
 3. **Keine eigene Caching-, Sync- oder Content-Pipeline.**
-4. **Null Client-JavaScript auf Inhaltsseiten.** Astro-Islands ausschließlich
-   für Predigtfilter (später) und Audio-Player.
+4. **Null Client-JavaScript auf Inhaltsseiten.** Ausnahmen ausschließlich für
+   Predigtfilter (`SermonFilter.astro`, umgesetzt als Vanilla-Skript, kein
+   Astro-Island) und künftig den Audio-Player.
 5. **Keine Third-Party-Requests aus dem Browser.** Fonts selbst hosten. Keine
    iframes, keine Google-Maps-Embeds (statisches Bild + Link), kein Analytics,
    keine CDN-Skripte. Ziel: kein Consent-Banner nötig.
@@ -157,15 +158,27 @@ nachträgliches Verschlagworten von 80 Predigten passiert nie.
   Gottesdienstzeit und Adresse (`SERVICE`, `ADDRESS`). In beiden Fällen
   hartkodiert im Repo — nicht aus dem CMS geladen, nicht aus Terminen
   berechnet, nicht per JavaScript nachgerendert.
-- Predigten in v1: **chronologische Liste, kein Filter-UI.** Filter erst ab
-  ca. 50 Einträgen.
+- Predigten: **chronologische Liste mit Such-/Filterleiste**
+  (`SermonFilter.astro`) über Freitext, Bibelbuch, Prediger und Predigtreihe.
+  Alle Kacheln bleiben server-gerendert im HTML; ein Vanilla-Skript blendet
+  sie per `hidden` ein und aus (siehe Performance-Budget). Ohne JavaScript
+  bleibt die vollständige Liste unverändert sichtbar. **Die Predigtenseite
+  verwendet niemals ein `<select>`-Dropdown** — Bibelbuch, Prediger und
+  Predigtreihe sind Pill-Gruppen aus Radio-Buttons (versteckt gestylt in
+  je einem `<label>`), damit der Bestand ohne Aufklappen sichtbar ist. Gilt
+  auch für künftige Filterdimensionen.
 - Kontakt über Funktionsadresse (`kontakt@…`), nie personengebunden. WhatsApp
   später als `wa.me`-Link mit separater Nummer, nie einer privaten.
 - Pflichtseiten: Impressum, Datenschutzerklärung.
 
 ## Performance-Budget
 
-- Inhaltsseiten: 0 KB Client-JS.
+- Inhaltsseiten: 0 KB Client-JS. **Ausnahme:** `/predigten` — die
+  Such-/Filterleiste (`SermonFilter.astro`) lädt ein Vanilla-Skript von
+  ca. 1,3 KB (minifiziert, inline), inklusive der weichen Übergänge über
+  die View-Transitions-API. Reines Progressive Enhancement: Ohne
+  JavaScript bleibt die vollständige Kachelliste unverändert stehen. Kein
+  Framework, kein Astro-Island — siehe harte Regel 4.
 - Bilder über Astros Image-Komponente, AVIF/WebP.
 - Fonts selbst gehostet, `font-display: swap`, maximal zwei Schnitte.
 

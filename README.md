@@ -141,6 +141,41 @@ automatisch dorthin. Gibt es keine Übereinstimmung (z.B. Gastprediger ohne
 Ältestenamt, oder ein Tippfehler), wird nur der Name als Text angezeigt, ohne
 Link und ohne Fehler. Die verknüpften Profile erscheinen unter `/aelteste`.
 
+### Such-/Filterleiste unter `/predigten`
+
+`SermonFilter.astro` rendert ein Suchfeld sowie Pill-Gruppen für Bibelbuch,
+Prediger und Predigtreihe — bewusst kein `<select>`: Die Predigtenseite
+verwendet keine Dropdowns (siehe CLAUDE.md). Jede Pill ist ein `<label>` um
+ein versteckt gestyltes Radio (`.visually-hidden`), gruppiert in einem
+`<fieldset>` pro Dimension; der Wrapper ist dafür ein `<form>`. Die
+Optionslisten kommen immer aus dem tatsächlichen Bestand, nie aus einer
+festen Liste. Die Filterdaten selbst (Suchindex, Bibelbuch-Schlüssel,
+Prediger, Reihe) stehen als `data-*`-Attribute an jeder Kachel in
+`SermonCard.astro`. Ein kleines Vanilla-Skript (kein Framework, siehe
+CLAUDE.md Regel 4) liest die Radio-Gruppen über
+`form.elements.namedItem(name)` (liefert eine `RadioNodeList`, deren
+`.value` sich wie bei einem `<select>` lesen und setzen lässt) und blendet
+Kacheln beim Filtern per `hidden` ein und aus — alle bleiben dabei
+server-gerendert im HTML.
+
+`src/lib/search.ts` exportiert `normalizeSearch()` (Kleinschreibung +
+Diakritika-Entfernung) und wird sowohl beim Bauen des Suchindex
+(`SermonCard.astro`, Server) als auch im Browser-Skript
+(`SermonFilter.astro`) verwendet — eine Funktion statt zweier Kopien, die
+auseinanderlaufen könnten.
+
+Ohne JavaScript bleibt die Filterleiste unsichtbar (`hidden`-Attribut wird
+nur per Skript entfernt) und die komplette chronologische Liste sichtbar —
+Progressive Enhancement, keine Funktionseinbuße.
+
+Der Übergang beim Filtern läuft weich statt abrupt: das Skript kapselt jede
+Filteränderung in `document.startViewTransition`, jede Kachel trägt dazu
+einen `view-transition-name` (`SermonCard.astro`) — verbleibende Kacheln
+gleiten so in ihre neue Rasterposition statt zu springen. Ohne
+Browser-Unterstützung oder bei `prefers-reduced-motion: reduce` schaltet die
+Liste stattdessen sofort um, wie vor dieser Änderung. Details und
+Abwägungen in `DESIGN.md`, Abschnitt „Bewegung".
+
 ### Offline-Fallback für Sanity
 
 `src/lib/sanity.ts` fällt zurück auf `sanity/snapshot/content.json`, wenn die
@@ -314,8 +349,8 @@ Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
   Entscheidung, kein Versehen (Textrendering bräuchte einen Font-Renderer für
   Jost, siehe Abschnitt „Markendateien"). Der Ortsname steht weiterhin im
   `og:image:alt`, Seitentitel und Footer.
-- Kalenderansicht, Predigtfilter, Audio-Player, Über-uns- und
-  Gemeindeleben-Seiten, Suche, Deployment, Studio-Deploy.
+- Kalenderansicht, Audio-Player, Über-uns- und Gemeindeleben-Seiten,
+  Deployment, Studio-Deploy.
 
 ## Änderungen beitragen
 

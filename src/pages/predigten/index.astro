@@ -3,10 +3,13 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Section from '../../components/Section.astro';
 import SermonCard from '../../components/SermonCard.astro';
+import SermonFilter from '../../components/SermonFilter.astro';
 import { getSermons } from '../../lib/sanity';
 
-// Chronologische Liste, kein Filter-UI (siehe CLAUDE.md — Filter erst ab
-// ca. 50 Einträgen).
+// Chronologische Liste, mit Such-/Filterleiste (SermonFilter.astro). Alle
+// Kacheln bleiben server-gerendert im HTML — die Leiste blendet sie nur per
+// `hidden` ein und aus, siehe dortiges Skript. Ohne JavaScript bleibt die
+// vollständige Liste unverändert sichtbar (Progressive Enhancement).
 const sermons = await getSermons();
 const preacherProfiles = await getCollection('elders');
 ---
@@ -22,19 +25,22 @@ const preacherProfiles = await getCollection('elders');
       sermons.length === 0 ? (
         <p>Noch keine Predigten veröffentlicht.</p>
       ) : (
-        <div class="sermon-grid">
-          {sermons.map((sermon, index) => {
-            // preacher ist Freitext (siehe lib/sanity.ts) — Verlinkung nur
-            // bei exakter Namensübereinstimmung (Groß-/Kleinschreibung und
-            // Leerzeichen egal). Ein Tippfehler ergibt keinen Fehler, nur
-            // keinen Link — dieselbe stille Grenze wie zuvor bei fehlendem
-            // Slug.
-            const profile = preacherProfiles.find(
-              (p) => p.data.name.trim().toLowerCase() === sermon.preacher.trim().toLowerCase(),
-            );
-            return <SermonCard sermon={sermon} index={index} preacherProfile={profile} />;
-          })}
-        </div>
+        <>
+          <SermonFilter sermons={sermons} />
+          <div class="sermon-grid">
+            {sermons.map((sermon, index) => {
+              // preacher ist Freitext (siehe lib/sanity.ts) — Verlinkung nur
+              // bei exakter Namensübereinstimmung (Groß-/Kleinschreibung und
+              // Leerzeichen egal). Ein Tippfehler ergibt keinen Fehler, nur
+              // keinen Link — dieselbe stille Grenze wie zuvor bei fehlendem
+              // Slug.
+              const profile = preacherProfiles.find(
+                (p) => p.data.name.trim().toLowerCase() === sermon.preacher.trim().toLowerCase(),
+              );
+              return <SermonCard sermon={sermon} index={index} preacherProfile={profile} />;
+            })}
+          </div>
+        </>
       )
     }
   </Section>
@@ -46,6 +52,14 @@ const preacherProfiles = await getCollection('elders');
     gap: var(--sp-3);
     grid-template-columns: 1fr;
     margin-top: var(--sp-4);
+  }
+
+  /* Absicherung: [hidden] ist bereits per UA-Stylesheet display: none, aber
+     nur mit niedrigster Spezifität. Falls eine künftige Regel .card-wrap
+     einen eigenen display-Wert gibt, gewinnt sonst diese statt [hidden]
+     (siehe SermonFilter.astro, das dieses Attribut beim Filtern setzt). */
+  .sermon-grid > [hidden] {
+    display: none;
   }
 
   @media (min-width: 40rem) {

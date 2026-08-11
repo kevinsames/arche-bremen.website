@@ -1,0 +1,372 @@
+---
+import type { Sermon } from '../lib/sanity';
+import { bibleBooks } from '../../sanity/bibleBooks';
+
+// Such- und Filterleiste für /predigten. Reines Progressive Enhancement:
+// Der Wrapper startet mit `hidden`, das Skript unten entfernt das Attribut
+// erst, wenn es tatsächlich läuft — ohne JavaScript bleibt also die volle,
+// unveränderte Kachelliste stehen statt einer toten Leiste.
+//
+// Die Kacheln selbst (SermonCard.astro) tragen die eigentlichen
+// Filterdaten als data-Attribute; dieses Skript liest nur, es rendert
+// nichts neu. Damit bleiben alle Predigten weiterhin im HTML-Quelltext,
+// auch gefilterte — sie werden nur per `hidden` ausgeblendet.
+interface Props {
+  sermons: Sermon[];
+}
+
+const { sermons } = Astro.props;
+
+// Optionslisten immer aus dem tatsächlichen Bestand, nie aus der vollen
+// 66er-Liste oder erfundenen Werten — sonst stünden leere Filter zur Wahl.
+const usedBooks = new Set(sermons.flatMap((sermon) => sermon.passages.map((p) => p.book)));
+const books = bibleBooks.filter((book) => usedBooks.has(book.value));
+
+const collator = new Intl.Collator('de');
+
+// preacher/series sind Freitext (siehe lib/sanity.ts) — dieselbe
+// groß-/kleinschreibungsunabhängige Zusammenführung wie beim Verlinken der
+// Ältestenprofile in predigten/index.astro, hier für die Filteroptionen.
+function dedupeNames(names: string[]): { value: string; label: string }[] {
+  const byKey = new Map<string, string>();
+  for (const name of names) {
+    const key = name.trim().toLowerCase();
+    if (key && !byKey.has(key)) {
+      byKey.set(key, name.trim());
+    }
+  }
+  return [...byKey.entries()]
+    .map(([value, label]) => ({ value, label }))
+    .sort((a, b) => collator.compare(a.label, b.label));
+}
+
+const preachers = dedupeNames(sermons.map((sermon) => sermon.preacher));
+const seriesList = dedupeNames(sermons.map((sermon) => sermon.series ?? ''));
+---
+
+<form class="filter" hidden data-sermon-filter>
+  <div class="controls">
+    <p class="field">
+      <label for="sermon-q">Suche</label>
+      <input type="search" id="sermon-q" name="q" autocomplete="off" placeholder="Titel, Prediger, Bibelstelle …" />
+    </p>
+    <button type="button" class="reset" data-sermon-reset>Zurücksetzen</button>
+  </div>
+
+  {/* Pills statt <select> — Vorgabe: die Predigtenseite verwendet keine
+      Dropdowns, siehe CLAUDE.md. Ein verstecktes Radio pro <label> statt
+      id/for-Paaren, das spart 60+ IDs für die Bücherliste. Das erste Radio
+      je Gruppe trägt value="" und checked — dieselbe „kein Filter"-Semantik
+      wie zuvor die leere <option>. */}
+  <fieldset class="group">
+    <legend>Bibelbuch</legend>
+    <div class="pills">
+      <label class="pill">
+        <input class="visually-hidden" type="radio" name="book" value="" checked />Alle Bücher
+      </label>
+      {books.map((book) => (
+        <label class="pill">
+          <input class="visually-hidden" type="radio" name="book" value={book.value} />{book.title}
+        </label>
+      ))}
+    </div>
+  </fieldset>
+
+  <fieldset class="group">
+    <legend>Prediger</legend>
+    <div class="pills">
+      <label class="pill">
+        <input class="visually-hidden" type="radio" name="preacher" value="" checked />Alle Prediger
+      </label>
+      {preachers.map((preacher) => (
+        <label class="pill">
+          <input class="visually-hidden" type="radio" name="preacher" value={preacher.value} />{preacher.label}
+        </label>
+      ))}
+    </div>
+  </fieldset>
+
+  {
+    seriesList.length > 0 && (
+      <fieldset class="group">
+        <legend>Predigtreihe</legend>
+        <div class="pills">
+          <label class="pill">
+            <input class="visually-hidden" type="radio" name="series" value="" checked />Alle Reihen
+          </label>
+          {seriesList.map((series) => (
+            <label class="pill">
+              <input class="visually-hidden" type="radio" name="series" value={series.value} />{series.label}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    )
+  }
+
+  <p class="count" role="status" data-sermon-count></p>
+  <p class="empty" hidden data-sermon-empty>Keine Predigt passt zu dieser Auswahl.</p>
+</form>
+
+<script>
+  import { normalizeSearch } from '../lib/search';
+
+  // TypeScripts DOM-Typen kennen die View-Transitions-API noch nicht (Stand
+  // der gebündelten lib.dom.d.ts) — lokale, minimale Ergänzung statt einer
+  // globalen Deklaration, die andere Dateien mitbeträfe.
+  interface ViewTransition {
+    finished: Promise<void>;
+  }
+  interface DocumentWithViewTransitions extends Document {
+    startViewTransition?(callback: () => void): ViewTransition;
+  }
+
+  const root = document.querySelector<HTMLFormElement>('[data-sermon-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-sermon]');
+
+  // Ohne Kacheln (leere Predigtliste) gibt es nichts zu filtern — die Leiste
+  // bleibt dann ausgeblendet statt einer funktionslosen Suche über nichts.
+  if (root && cards.length > 0) {
+    const q = root.elements.namedItem('q') as HTMLInputElement;
+    // Radio-Gruppen statt <select> (Vorgabe: keine Dropdowns auf dieser
+    // Seite, siehe CLAUDE.md). RadioNodeList.value liest/setzt das
+    // angehakte Radio genauso wie zuvor HTMLSelectElement.value — apply()
+    // unten bleibt deshalb unverändert.
+    const book = root.elements.namedItem('book') as RadioNodeList;
+    const preacher = root.elements.namedItem('preacher') as RadioNodeList;
+    // Nur vorhanden, wenn mindestens eine Predigt eine Reihe trägt (siehe
+    // Markup oben) — entsprechend defensiv behandelt.
+    const series = root.elements.namedItem('series') as RadioNodeList | null;
+    const resetButton = document.querySelector<HTMLButtonElement>('[data-sermon-reset]');
+    const count = document.querySelector<HTMLElement>('[data-sermon-count]');
+    const empty = document.querySelector<HTMLElement>('[data-sermon-empty]');
+
+    function apply(): void {
+      const terms = normalizeSearch(q.value).split(/\s+/).filter(Boolean);
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const data = card.dataset;
+        const matches =
+          terms.every((term) => (data.search ?? '').includes(term)) &&
+          (!book.value || (data.books ?? '').includes(`|${book.value}|`)) &&
+          (!preacher.value || data.preacher === preacher.value) &&
+          (!series || !series.value || data.series === series.value);
+
+        card.hidden = !matches;
+        // Farbrotation nach Position in der sichtbaren Auswahl neu vergeben
+        // (siehe SermonCard.astro) — sonst wäre eine gefilterte Auswahl
+        // einfarbig, weil die ursprüngliche Listenposition erhalten bliebe.
+        if (matches) {
+          card.dataset.surface = String(visible % 3);
+          visible += 1;
+        }
+      });
+
+      if (count) count.textContent = `${visible} von ${cards.length} Predigten`;
+      if (empty) empty.hidden = visible > 0;
+    }
+
+    // Weicher Übergang statt hartem Umschalten: Ein Schnappschuss vorher,
+    // einer nachher — der Browser interpoliert Position und Deckkraft
+    // benannter Elemente (view-transition-name, siehe SermonCard.astro)
+    // selbst. Ohne Unterstützung oder bei reduzierter Bewegung wird sofort
+    // umgeschaltet, wie zuvor. matchMedia wird bei jedem Aufruf frisch
+    // gelesen, damit eine Systemumstellung mitten in der Sitzung greift —
+    // die globale prefers-reduced-motion-Regel in global.css deckt das
+    // nicht ab, ihr `*`-Selektor trifft keine ::view-transition-Pseudo-
+    // elemente.
+    const doc = document as DocumentWithViewTransitions;
+
+    function update(): void {
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!doc.startViewTransition || reducedMotion) {
+        apply();
+        return;
+      }
+      const transition = doc.startViewTransition(apply);
+      // Wird während einer laufenden Animation weitergefiltert, bricht der
+      // Browser sie ab — das ist der Normalfall, kein Fehler. Der catch
+      // verhindert nur Rauschen in der Konsole.
+      transition.finished.catch(() => {});
+    }
+
+    // Nur das Suchfeld entprellt: ohne das würde jeder Tastendruck eine
+    // eigene Transition anstoßen und die vorige abbrechen. Die Pill-Gruppen
+    // und Zurücksetzen sind Einzelereignisse und lösen direkt aus. Ein
+    // einziger delegierter Listener am Formular statt je einem pro
+    // Radio-Gruppe — „change" bubbelt.
+    let searchTimer: number | undefined;
+    q.addEventListener('input', () => {
+      clearTimeout(searchTimer);
+      searchTimer = window.setTimeout(update, 200);
+    });
+    root.addEventListener('change', update);
+
+    // Ohne das lädt Enter im Suchfeld die Seite als GET neu (Radios machen
+    // aus dem div ein <form>, siehe Markup oben) — hier gibt es nichts zu
+    // versenden.
+    root.addEventListener('submit', (event) => event.preventDefault());
+
+    resetButton?.addEventListener('click', () => {
+      q.value = '';
+      book.value = '';
+      preacher.value = '';
+      if (series) series.value = '';
+      update();
+    });
+
+    // Erstaufbau ohne Transition — es gibt noch keinen Vorzustand zu
+    // animieren.
+    apply();
+    // Erst jetzt sichtbar machen: Zähler und Zustand sind bereits korrekt,
+    // kein kurzes Aufblitzen einer Leiste ohne Trefferzahl.
+    root.hidden = false;
+  }
+</script>
+
+<style is:global>
+  /* ::view-transition-* sind Pseudoelemente am Dokumentwurzelknoten und
+     liegen im Top-Layer — Astros Scoped Styles (data-astro-cid-*) erreichen
+     sie nicht, deshalb hier bewusst global statt in global.css: Auslöser
+     (Skript oben) und Dauer sollen in derselben Datei stehen. Ohne diese
+     Regel würde der Browser mit seiner eigenen Vorgabe animieren. Bestehendes
+     Token statt eines neuen Werts (siehe DESIGN.md, Design-Regel 7). */
+  ::view-transition-group(*) {
+    animation-duration: var(--duration-fast);
+  }
+</style>
+
+<style>
+  .filter {
+    margin-top: var(--sp-4);
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: var(--sp-3);
+  }
+
+  .field {
+    display: flex;
+    flex: 1 1 12rem;
+    flex-direction: column;
+    gap: var(--sp-1);
+    margin: 0;
+  }
+
+  .field label,
+  .group legend {
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+  }
+
+  .field input {
+    font: inherit;
+    padding: var(--sp-2) var(--sp-3);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+  }
+
+  /* fieldset/legend zurückgesetzt auf normalen Blockfluss — die
+     UA-Vorgaben (Rahmen, horizontale Einrückung der legend) passen nicht
+     zur Kartenoptik der Seite. */
+  .group {
+    margin: var(--sp-3) 0 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .group legend {
+    padding: 0;
+    margin-bottom: var(--sp-1);
+  }
+
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+  }
+
+  /* Pill-Grundzustand wie ein Formularfeld (Rahmen/Fläche von .field
+     input), das eigentliche Radio bleibt unsichtbar (.visually-hidden,
+     siehe global.css) aber fokussierbar. */
+  .pill {
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+    font-size: var(--fs-xs);
+    padding: var(--sp-2) var(--sp-3);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  .pill:hover:not(:has(input:checked)) {
+    background-color: var(--bg-muted);
+  }
+
+  /* Dunkelblau statt --accent-warm: geprüftes AAA-Paar (siehe tokens.css)
+     und klar von der gelben Zurücksetzen-Fläche unterscheidbar — sonst
+     wäre eine ausgewählte Pill vom Reset-Knopf kaum zu unterscheiden. */
+  .pill:has(input:checked) {
+    background-color: var(--bg-inverted);
+    border-color: var(--bg-inverted);
+    color: var(--text-on-dark);
+  }
+
+  /* Das versteckte Radio kann den globalen :focus-visible-Ring (global.css)
+     nicht sichtbar zeigen — hier am Pill wiederholt, gleiche Werte. */
+  .pill:has(input:focus-visible) {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* Kompaktes Pill in Akzentfläche, analog .donate in Header.astro — dort
+     dieselbe Kombination aus --accent-warm als Fläche und --text-primary
+     als Schrift für ausreichenden Kontrast (Gelb ist nie Textfarbe, siehe
+     CLAUDE.md). */
+  .reset {
+    flex: 0 0 auto;
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+    font-size: var(--fs-xs);
+    padding: var(--sp-2) var(--sp-3);
+    border: 1px solid var(--accent-warm);
+    border-radius: var(--radius-md);
+    background-color: var(--accent-warm);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: opacity var(--duration-fast) var(--ease-out);
+  }
+
+  .reset:hover {
+    opacity: 0.85;
+  }
+
+  .count {
+    margin: var(--sp-3) 0 0;
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+  }
+
+  .empty {
+    margin: var(--sp-3) 0 0;
+  }
+</style>

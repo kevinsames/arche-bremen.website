@@ -48,14 +48,14 @@ Genehmigung, aber damit ein späteres offizielles Web-Kapitel nicht abweicht.
 6,15 : 1 gegen Weiß, siehe Tabelle unten) statt auf einen eigenen Rohfarbwert.
 Kein neues Pantone nötig, und die Farbe ist bereits AA-geprüft.
 
-**Radius:** `--radius-sm: 0.25rem` ist reserviert, aktuell aber ungenutzt —
-die im Zuge des Redesigns geplante Gottesdienstzeit-Box im Hero wurde durch die
-schlichtere Kombination aus `h1`/`p`/`address` ersetzt. Das Brandbook kennt
-keine Eckenradien; der Wert ist frei gewählt, nicht aus Pantone/Print
-abgeleitet.
-Mit dem Redesign auf ein moderneres, an Apple/Netflix orientiertes
-Erscheinungsbild (August 2026) kamen zwei weitere Stufen dazu:
-`--radius-md: 0.75rem` für Predigt-Kacheln, `--radius-lg: 1.25rem` für
+**Radius:** `--radius-sm: 0.25rem` — kleinster Wert der Skala, für kompakte
+Rahmenflächen: den Schließen-Button im Popup (`Overlay.astro`) und das
+Suchfeld der Predigt-Filterleiste (`SermonFilter.astro`, siehe „Formulare"
+unten). Das Brandbook kennt keine Eckenradien; der Wert ist frei gewählt,
+nicht aus Pantone/Print abgeleitet. Mit dem Redesign auf ein moderneres, an
+Apple/Netflix orientiertes Erscheinungsbild (August 2026) kamen zwei weitere
+Stufen dazu: `--radius-md: 0.75rem` für Predigt-Kacheln und, seither
+ebenfalls, die Filter-Pills der Predigtenseite; `--radius-lg: 1.25rem` für
 Hero- und Vollbild-Sektionsflächen. Gleiches Prinzip: frei gewählt, keine
 Print-Herkunft.
 
@@ -97,9 +97,30 @@ oder Hamburg inhaltlich freigegeben (siehe Kommentar im Schema).
 
 **Bewegung:** `--duration-fast: 150ms` für Hover- und Focus-Übergänge,
 `--duration-slow: 400ms` für das Scroll-Reveal der Sektionsüberschriften,
-`--ease-out` als gemeinsame Timing-Funktion. Ausschließlich CSS
-(`transition`/`animation`), kein JavaScript. Alles hinter
-`@media (prefers-reduced-motion: reduce)` abschaltbar.
+`--ease-out` als gemeinsame Timing-Funktion. Größtenteils reines CSS
+(`transition`/`animation`), abschaltbar über die globale
+`@media (prefers-reduced-motion: reduce)`-Regel in `global.css`.
+
+Eine Ausnahme (September 2026): der Predigtfilter unter `/predigten`
+(`SermonFilter.astro`) nutzt `document.startViewTransition`, damit
+verbleibende Kacheln beim Filtern in ihre neuen Rasterplätze gleiten statt zu
+springen — das kann reines CSS nicht, weil es eine Positionsänderung über
+zwei DOM-Zustände hinweg interpolieren muss. Jede Kachel trägt dafür einen
+`view-transition-name` (`SermonCard.astro`). Bewegungsprofil bewusst
+minimal: nur Ein-/Ausblenden, kein zusätzlicher Versatz. Dauer kommt aus
+`--duration-fast`, gesetzt über `::view-transition-group(*)` — dieser
+Selektor ist ein Pseudoelement am Dokumentwurzelknoten und von Astros
+Scoped Styles nicht erreichbar, daher als `<style is:global>` direkt in
+`SermonFilter.astro` statt in `global.css`, damit Auslöser und Dauer
+zusammenstehen.
+
+Die pauschale `prefers-reduced-motion`-Regel in `global.css` greift hier
+**nicht** — ihr `*`-Selektor trifft keine `::view-transition-*`-
+Pseudoelemente. Die Abschaltung liegt deshalb im Skript selbst
+(`window.matchMedia('(prefers-reduced-motion: reduce)')`, bei jedem
+Filteraufruf neu geprüft) und schaltet ohne Unterstützung oder bei
+reduzierter Bewegung auf sofortiges Umschalten zurück — derselbe Effekt wie
+vor dieser Änderung.
 
 **Scroll- und Klick-Hinweise (August 2026):** Drei Stellen fehlte ein Signal,
 das v. a. auf Touch-Geräten (70–80 % des erwarteten Traffics, siehe
@@ -150,6 +171,41 @@ Stapeln.
 **`--fs-display`:** Eine Stufe oberhalb von `--fs-xxl`, ausschließlich für
 den Startseiten-Hero. Kein Ersatz für die bestehende Skala, sondern eine
 Ausnahme für genau eine Stelle.
+
+**Formulare (August 2026):** Die Such-/Filterleiste unter `/predigten`
+(`SermonFilter.astro`) ist die erste Stelle im Repo mit `<input>`,
+`<fieldset>`/`<legend>` und `<label>` — es gab dafür keine bestehenden
+Muster zum Wiederverwenden. Übernommen aus benachbarten Komponenten statt
+neu erfunden: Feldrahmen (`1px solid var(--border-subtle)`, `--radius-sm`,
+`--bg-page`) vom Schließen-Button in `Overlay.astro`; Labels
+(`--font-display`, Versalien, `--fs-xs`, `--tracking-display`) vom Eyebrow
+der Predigt-Kachel (`SermonCard.astro`); der Zurücksetzen-Button als
+kompaktes Pill in `--accent-warm`-Fläche mit `--text-primary`-Schrift vom
+`.donate`-Knopf im Header.
+
+Bibelbuch, Prediger und Predigtreihe verwenden bewusst **kein** `<select>`
+— die Predigtenseite soll niemals Dropdowns benutzen (siehe CLAUDE.md),
+weil eine zugeklappte Optionsliste den Bestand (welche Bücher, welche
+Prediger gibt es) verbirgt statt ihn zu zeigen. Stattdessen: pro Option ein
+`<label class="pill">` um ein per `.visually-hidden` unsichtbares, aber
+weiterhin fokussierbares `<input type="radio">`, gruppiert in einem
+`<fieldset>` mit `<legend>`. Das Pill selbst trägt dieselbe Feldoptik wie
+das Suchfeld (Rahmen, `--bg-page`), nutzt aber `--radius-md` wie die
+Predigt-Kacheln statt `--radius-sm` — die Fläche ist größer als ein
+Texteingabefeld und wirkt mit dem kleineren Radius abgeschnitten.
+
+**Auswahl/Aktiv-Zustand:** Der zuvor als offene Frage geführte Zustand
+(siehe „Was das Brandbook nicht abdeckt" oben) ist mit den Pills entschieden:
+`--bg-inverted` als Fläche, `--text-on-dark` als Schrift (12,07 : 1, AAA
+gegen Dunkelblau, siehe Tabelle unten) — bewusst nicht `--accent-warm`, das
+direkt daneben schon der Zurücksetzen-Button belegt; zwei gelbe Flächen
+nebeneinander wären nicht auseinanderzuhalten. Kein eigener Fokusring für
+Suchfeld oder Pills; die globale `:focus-visible`-Regel in `global.css`
+reicht, wird am Pill aber per `:has(input:focus-visible)` wiederholt, weil
+das eigentliche Radio unsichtbar ist und den Ring sonst nicht zeigen könnte.
+Weiterhin ohne Token, weil noch nirgends gebraucht: ein **Disabled**-Zustand
+für Formularelemente — der Zurücksetzen-Button ist dauerhaft aktiv, ein
+`disabled`-Zustand wäre hier ohne Nutzen.
 
 ## Bewusste Abweichungen
 
