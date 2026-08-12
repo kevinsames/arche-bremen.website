@@ -39,6 +39,16 @@ existiert nicht. Nicht spezifiziert und für diese Website erfunden:
   statt festem Farbwert (funktioniert auf hellem Header und dunklem Footer
   gleichermaßen), Größe in `em` statt `px`, damit sie mit der Schriftgröße
   skalieren. Rein dekorativ, `aria-hidden="true"`.
+- Navigation unter 64rem als Burger-Menü (August 2026): Ab fünf Reitern
+  reicht die Breite nicht mehr für eine ungebrochene Navigationszeile neben
+  Logo und Spenden-Knopf. Das Menü öffnet als vollflächiges Sheet über
+  dieselbe `Overlay.astro`-Komponente wie die Predigt- und
+  Ältesten-Kacheln — native Popover-API, 0 KB JavaScript. Browser ohne
+  Popover-Unterstützung (Safari vor 17, Firefox vor 125) bekommen
+  stattdessen die vollständige, frei umbrechende Navigation im Header
+  zurück (siehe `@supports not selector(:popover-open)` in
+  `Header.astro`) — dort wäre ein Knopf, der nichts öffnen kann, sonst eine
+  Sackgasse.
 
 Diese Entscheidungen stehen in `tokens.css` und sind dort als erfunden
 gekennzeichnet. Sie sollten Hamburg zur Kenntnis gegeben werden — nicht zur

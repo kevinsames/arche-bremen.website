@@ -1,6 +1,7 @@
 ---
 import { SITE } from '../consts';
 import logo from '../assets/brand/arche-logo.svg';
+import Overlay from './Overlay.astro';
 
 const navItems = [
   { href: '/', label: 'Start' },
@@ -21,13 +22,23 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
     <a href="/" class="site-name">
       <img src={logo.src} width={logo.width} height={logo.height} alt={SITE.name} />
     </a>
-    <a class="button donate" href="https://www.arche-gemeinde.de/spenden" target="_blank" rel="noopener">
-      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-        <path d="M12 21s-7.5-4.6-10-9.2C.5 8.2 2 4.5 5.5 4c2-.3 3.8.7 6.5 3 2.7-2.3 4.5-3.3 6.5-3C22 4.5 23.5 8.2 22 11.8 19.5 16.4 12 21 12 21Z" />
+
+    <!-- Sichtbar unter 64rem (siehe @media-Block unten): öffnet das Sheet
+         mit der Navigation als Popup. Ab 64rem ausgeblendet, dann steht
+         .nav-inline an derselben Stelle. -->
+    <button type="button" popovertarget="site-menu" class="menu-toggle" aria-label="Menü">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+        <path d="M3 6h18" />
+        <path d="M3 12h18" />
+        <path d="M3 18h18" />
       </svg>
-      Spenden
-    </a>
-    <nav>
+    </button>
+
+    <!-- Ab 64rem sichtbare Navigation in der Kopfzeile. Dieselben navItems
+         wie im Sheet unten (siehe Kommentar dort) — von den beiden ist
+         durch die Media Queries immer nur eine im Baum sichtbar, nie
+         beide gleichzeitig. -->
+    <nav class="nav-inline" aria-label="Hauptnavigation">
       <ul>
         {
           navItems.map((item) => (
@@ -40,8 +51,35 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
         }
       </ul>
     </nav>
+
+    <a class="button donate" href="https://www.arche-gemeinde.de/spenden" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <path d="M12 21s-7.5-4.6-10-9.2C.5 8.2 2 4.5 5.5 4c2-.3 3.8.7 6.5 3 2.7-2.3 4.5-3.3 6.5-3C22 4.5 23.5 8.2 22 11.8 19.5 16.4 12 21 12 21Z" />
+      </svg>
+      Spenden
+    </a>
   </div>
 </header>
+
+<!-- Popup-Navigation für unter 64rem, exakt dieselben navItems wie oben in
+     .nav-inline. Duplex statt gemeinsame Komponente (CLAUDE.md Regel 2) —
+     die zwei Listen unterscheiden sich in Layout und Linkgröße genug, dass
+     eine Abstraktion mehr Bedingungen bräuchte, als sie Code spart. -->
+<Overlay id="site-menu" label="Menü">
+  <nav class="nav-sheet" aria-label="Hauptnavigation">
+    <ul>
+      {
+        navItems.map((item) => (
+          <li>
+            <a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</Overlay>
 
 <style>
   header {
@@ -62,43 +100,114 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
     }
   }
 
-  /* Zwei feste Zustände statt freiem Umbruch: unter 64rem reicht die Breite
-     nicht für Logo, Navigation und Spenden-Knopf in einer Zeile — mit
-     flex-wrap entscheidet dann der Browser zufällig, welches Element wohin
-     rutscht (sichtbar z.B. bei ca. 530px: alle drei Elemente einzeln
-     untereinander). Das Grid gibt der Navigation stattdessen ausdrücklich
-     eine eigene zweite Zeile; ab 64rem (Breite bereits an anderer Stelle im
-     Repo verwendet, siehe glaubensbekenntnis.astro) rutscht sie per Media
-     Query zurück in die erste. */
+  /* Bei jeder Breite eine Zeile mit drei Feldern: Logo, Mitte, Spenden.
+     In der Mitte steht je nach Breite entweder der Burger-Knopf oder die
+     Navigation — nie beide (siehe .menu-toggle/.nav-inline unten) — bei
+     fünf Menüpunkten reicht die Breite unter 64rem (Grenze bereits an
+     anderer Stelle im Repo verwendet, siehe glaubensbekenntnis.astro)
+     sonst nicht für eine ungebrochene Navigationszeile. */
   .bar {
     max-width: var(--width-content);
     margin-inline: auto;
     padding: var(--sp-2) var(--sp-3);
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto auto auto;
     justify-content: space-between;
     align-items: center;
-    row-gap: var(--sp-2);
     column-gap: var(--sp-3);
   }
 
-  /* Über beide Spalten der ersten Zeile hinweg, damit sie automatisch in
-     die zweite Zeile fällt. */
-  nav {
-    grid-column: 1 / -1;
+  .menu-toggle {
+    justify-self: center;
+    display: inline-flex;
+    padding: var(--sp-1) var(--sp-2);
+    margin: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+
+  .menu-toggle svg {
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  .nav-inline {
+    display: none;
   }
 
   @media (min-width: 64rem) {
-    .bar {
-      grid-template-columns: auto auto auto;
+    .menu-toggle {
+      display: none;
     }
 
-    nav {
-      grid-area: 1 / 2;
+    .nav-inline {
+      display: block;
+      justify-self: center;
+    }
+  }
+
+  /* Browser ohne Popover-Unterstützung blenden [popover] in global.css
+     dauerhaft aus (siehe dortiger Kommentar) — ohne diesen Block wäre die
+     Navigation dort unter 64rem unerreichbar. Deshalb hier derselbe
+     Zweizeiler, den der Header vor dem Burger-Menü hatte: die vollständige
+     Navigation bricht bei Bedarf frei um, statt hinter einem Knopf zu
+     verschwinden, der nichts öffnen kann.
+     Alle drei Felder bekommen hier explizite grid-row/grid-column statt
+     sich auf die Reihenfolge im Markup zu verlassen — im Markup steht
+     .donate inzwischen NACH .nav-inline (wegen der Mitte-Position oben),
+     die automatische Platzierung würde .donate sonst in eine eigene
+     dritte Zeile schieben. */
+  @supports not selector(:popover-open) {
+    .bar {
+      grid-template-columns: auto auto;
+      row-gap: var(--sp-2);
+    }
+
+    .menu-toggle {
+      display: none;
+    }
+
+    .site-name {
+      grid-row: 1;
+      grid-column: 1;
     }
 
     .donate {
-      grid-area: 1 / 3;
+      grid-row: 1;
+      grid-column: 2;
+    }
+
+    .nav-inline {
+      display: block;
+      grid-row: 2;
+      grid-column: 1 / -1;
+    }
+
+    .nav-inline ul {
+      flex-wrap: wrap;
+    }
+
+    @media (min-width: 64rem) {
+      .bar {
+        grid-template-columns: auto auto auto;
+      }
+
+      .site-name {
+        grid-row: 1;
+        grid-column: 1;
+      }
+
+      .nav-inline {
+        grid-row: 1;
+        grid-column: 2;
+      }
+
+      .donate {
+        grid-row: 1;
+        grid-column: 3;
+      }
     }
   }
 
@@ -119,28 +228,61 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 
   nav ul {
     list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-3);
     margin: 0;
     padding: 0;
   }
 
   nav a {
+    display: inline-block;
     text-decoration: none;
-    font-size: var(--fs-xs);
     text-transform: uppercase;
     letter-spacing: var(--tracking-display);
-    padding-bottom: var(--sp-1);
-    border-bottom: 2px solid transparent;
     transition: border-color var(--duration-fast) var(--ease-out);
   }
 
-  nav a:hover {
+  /* Navigation in der Kopfzeile (ab 64rem, siehe @media oben): horizontale
+     Reihe, Aktiv-/Hover-Zustand als Unterstreichung — unverändert das
+     bisherige Aussehen der Navigation vor dem Burger-Menü. */
+  .nav-inline ul {
+    display: flex;
+    gap: var(--sp-3);
+  }
+
+  .nav-inline a {
+    font-size: var(--fs-xs);
+    padding-bottom: var(--sp-1);
+    border-bottom: 2px solid transparent;
+  }
+
+  .nav-inline a:hover {
     border-color: var(--border-subtle);
   }
 
-  nav a[aria-current='page'] {
+  .nav-inline a[aria-current='page'] {
+    border-color: var(--accent-warm);
+  }
+
+  /* Navigation im Popup-Sheet (unter 64rem): senkrechte Liste, größere
+     Schrift und Innenabstand für Trefferflächen von rund 44px auf Touch —
+     kein neues Token, nur --fs-m statt --fs-xs (CLAUDE.md Design-Regel 7).
+     Aktiv-/Hover-Zustand als linker Balken statt Unterstreichung, weil die
+     Links hier die volle Breite einnehmen und untereinanderstehen. */
+  .nav-sheet ul {
+    display: grid;
+    row-gap: var(--sp-1);
+  }
+
+  .nav-sheet a {
+    font-size: var(--fs-m);
+    padding: var(--sp-2) var(--sp-3);
+    border-left: 2px solid transparent;
+  }
+
+  .nav-sheet a:hover {
+    border-color: var(--border-subtle);
+  }
+
+  .nav-sheet a[aria-current='page'] {
     border-color: var(--accent-warm);
   }
 
