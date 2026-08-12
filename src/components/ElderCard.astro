@@ -6,33 +6,20 @@ import Overlay from './Overlay.astro';
 // Kachel für ein Ältesten-Profil auf /gemeindeleitung, gleiche Bauweise wie
 // SermonCard: Anker (Tastatur-Weg zur Detailseite) und deckungsgleicher
 // Button (Maus/Touch, öffnet das Popup mit dem gerenderten Markdown-Body).
-// Details siehe Kommentar in SermonCard.astro. Die Flächenrotation über
-// den Index ist ebenfalls von dort übernommen.
+// Details siehe Kommentar in SermonCard.astro.
 interface Props {
   elder: CollectionEntry<'elders'>;
-  index: number;
 }
 
-const { elder, index } = Astro.props;
+const { elder } = Astro.props;
 const { Content } = await render(elder);
-
-const surfaces = [
-  ['--surface-warm', '--surface-warm-strong'],
-  ['--surface-warm-alt', '--surface-warm-alt-strong'],
-  ['--surface-nature', '--surface-nature-strong'],
-] as const;
-const [surface, surfaceHover] = surfaces[index % surfaces.length];
 
 const overlayId = `elder-${elder.id}`;
 const permalink = `/gemeindeleitung/${elder.id}`;
 ---
 
 <div class="card-wrap">
-  <a
-    href={permalink}
-    class="card"
-    style={`--card-surface: var(${surface}); --card-surface-hover: var(${surfaceHover})`}
-  >
+  <a href={permalink} class="card">
     {elder.data.photo && (
       // alt="": Der Name steht als Text unmittelbar darunter, ein
       // Alt-Text wäre für Screenreader nur eine Dopplung.
@@ -87,8 +74,8 @@ const permalink = `/gemeindeleitung/${elder.id}`;
     color: var(--text-primary);
     padding: 0;
     overflow: hidden;
-    border-radius: var(--radius-md) var(--radius-lg) var(--radius-md) var(--radius-md);
-    background-color: var(--card-surface);
+    border-radius: var(--radius-md);
+    background-color: var(--surface-warm);
     transition:
       translate var(--duration-fast) var(--ease-out),
       background-color var(--duration-fast) var(--ease-out);
@@ -108,7 +95,7 @@ const permalink = `/gemeindeleitung/${elder.id}`;
 
   .card-wrap:has(.open:hover) .card,
   .card:focus-visible {
-    background-color: var(--card-surface-hover);
+    background-color: var(--surface-warm-strong);
     translate: 0 -2px;
   }
 

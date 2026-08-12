@@ -42,6 +42,15 @@
    ignorieren die Zeile und verhalten sich wie bisher, kein Fehlerfall. */
 html {
   scrollbar-gutter: stable;
+
+  /* Sicherheitsnetz für width: 100vw (siehe .bar-bg in SermonFilter.astro):
+     Auf Desktop-Browsern mit klassischer Scrollbar ist 100vw ein paar Pixel
+     breiter als die sichtbare Breite, weil vw die Scrollbar-Spur mitzählt,
+     100%-Breiten aber nicht. Ohne diese Zeile risse das im Zweifel eine
+     horizontale Scrollleiste auf; mit ihr wird der Überstand unsichtbar
+     gekappt. Mobil (Overlay-Scrollbars, kein reservierter Platz) nie
+     relevant. */
+  overflow-x: hidden;
 }
 
 body {

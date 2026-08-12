@@ -9,8 +9,8 @@ import SermonDetail from './SermonDetail.astro';
 // Kachel für eine Predigt, genutzt auf der Startseite und der
 // Predigtübersicht. Ohne Foto (siehe CLAUDE.md — keine Stock-Fotografie,
 // echte Gemeindefotos gibt es noch nicht): die ganze Kachelfläche trägt
-// eine von drei stark verdünnten Akzentfarben (siehe tokens.css,
-// --surface-*), die Bibelstelle steht als Eyebrow über dem Titel.
+// eine stark verdünnte Akzentfarbe (siehe tokens.css, --surface-warm),
+// die Bibelstelle steht als Eyebrow über dem Titel.
 //
 // Ein Klick öffnet den Inhalt als Popup (siehe Overlay.astro) statt einer
 // neuen Seite. Die Kachel bleibt zusätzlich ein echter Link zur
@@ -28,11 +28,10 @@ import SermonDetail from './SermonDetail.astro';
 // (siehe predigten/index.astro für die Verknüpfungslogik).
 interface Props {
   sermon: Sermon;
-  index: number;
   preacherProfile?: CollectionEntry<'elders'>;
 }
 
-const { sermon, index, preacherProfile } = Astro.props;
+const { sermon, preacherProfile } = Astro.props;
 
 const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
 const overlayId = `sermon-${sermon.slug}`;
@@ -63,12 +62,6 @@ const bookKeys = `|${[...new Set(sermon.passages.map((p) => p.book))].join('|')}
 const preacherKey = sermon.preacher.trim().toLowerCase();
 const seriesKey = sermon.series?.trim().toLowerCase() ?? '';
 
-// Farbrotation als data-Attribut statt Inline-Style: SermonFilter.astro
-// weist sichtbaren Kacheln beim Filtern neue Werte zu, damit die
-// Dreierfolge nach Positionen in der sichtbaren Auswahl läuft statt nach
-// der ursprünglichen Listenposition (siehe dortiges Skript). Die
-// eigentlichen Token bleiben ausschließlich in den Styles unten.
-//
 // view-transition-name identifiziert die Kachel über einen Filterwechsel
 // hinweg als dasselbe Element (siehe SermonFilter.astro) — der Browser
 // gleitet sie dadurch in ihre neue Rasterposition statt zu springen. Der
@@ -78,7 +71,7 @@ const seriesKey = sermon.series?.trim().toLowerCase() ?? '';
 // Transition ausgelöst wird.
 ---
 
-<div class="card-wrap" data-sermon data-surface={index % 3} data-search={searchIndex}
+<div class="card-wrap" data-sermon data-search={searchIndex}
      data-books={bookKeys} data-preacher={preacherKey} data-series={seriesKey}
      style={`view-transition-name: sermon-${sermon.slug}`}>
   <a href={permalink} class="card">
@@ -115,33 +108,14 @@ const seriesKey = sermon.series?.trim().toLowerCase() ?? '';
     position: relative;
   }
 
-  /* Dreierfolge der Kachelflächen, per data-Attribut statt Inline-Style
-     (siehe Skript-Kommentar oben) — so kann SermonFilter.astro beim
-     Filtern die Reihenfolge unter den sichtbaren Kacheln neu vergeben,
-     ohne Tokens im JavaScript zu kennen. */
-  .card-wrap[data-surface='0'] {
-    --card-surface: var(--surface-warm);
-    --card-surface-hover: var(--surface-warm-strong);
-  }
-
-  .card-wrap[data-surface='1'] {
-    --card-surface: var(--surface-warm-alt);
-    --card-surface-hover: var(--surface-warm-alt-strong);
-  }
-
-  .card-wrap[data-surface='2'] {
-    --card-surface: var(--surface-nature);
-    --card-surface-hover: var(--surface-nature-strong);
-  }
-
   .card {
     position: relative;
     display: block;
     text-decoration: none;
     color: var(--text-primary);
     padding: var(--sp-4) var(--sp-3) var(--sp-5);
-    border-radius: var(--radius-md) var(--radius-lg) var(--radius-md) var(--radius-md);
-    background-color: var(--card-surface);
+    border-radius: var(--radius-md);
+    background-color: var(--surface-warm);
     transition:
       translate var(--duration-fast) var(--ease-out),
       background-color var(--duration-fast) var(--ease-out);
@@ -153,7 +127,7 @@ const seriesKey = sermon.series?.trim().toLowerCase() ?? '';
      :focus-visible-Regel in global.css. */
   .card-wrap:has(.open:hover) .card,
   .card:focus-visible {
-    background-color: var(--card-surface-hover);
+    background-color: var(--surface-warm-strong);
     translate: 0 -2px;
   }
 

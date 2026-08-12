@@ -30,10 +30,10 @@ existiert nicht. Nicht spezifiziert und für diese Website erfunden:
   (`--fs-display`)
 - Overlay-Darstellung für Popups (`--scrim`, `--blur-overlay`,
   `--shadow-overlay`)
-- Kachelflächen als verdünnte Akzente (`--surface-warm`, `--surface-warm-alt`,
-  `--surface-nature`), je eine kräftigere Hover-Stufe dazu
-  (`--surface-warm-strong`, `--surface-warm-alt-strong`,
-  `--surface-nature-strong`)
+- Kachelflächen als verdünnte Akzente (`--surface-warm`, `--surface-warm-alt`),
+  dazu eine kräftigere Hover-Stufe (`--surface-warm-strong`)
+- Glasflächen für sticky Einzelelemente (`--surface-glass`, `--blur-glass`,
+  September 2026)
 - Icons (Header/Footer, August 2026): keine Icon-Font, keine Sprite-Datei,
   keine neue Dependency — handgeschriebene Inline-SVGs, `stroke="currentColor"`
   statt festem Farbwert (funktioniert auf hellem Header und dunklem Footer
@@ -66,36 +66,62 @@ nicht aus Pantone/Print abgeleitet. Mit dem Redesign auf ein moderneres, an
 Apple/Netflix orientiertes Erscheinungsbild (August 2026) kamen zwei weitere
 Stufen dazu: `--radius-md: 0.75rem` für Predigt-Kacheln und, seither
 ebenfalls, die Filter-Pills der Predigtenseite; `--radius-lg: 1.25rem` für
-Hero- und Vollbild-Sektionsflächen. Gleiches Prinzip: frei gewählt, keine
-Print-Herkunft.
+Hero-, Vollbild-Sektions- und Overlay-Flächen. Gleiches Prinzip: frei
+gewählt, keine Print-Herkunft.
 
 Das Kachel-Muster (Karte + Popup) wiederholt sich mittlerweile ein drittes
 Mal: Predigten, Älteste und seit August 2026 auch die 25 Artikel des
 Glaubensbekenntnisses (`/glaubensbekenntnis`, vorher eine einzige lange
 `.prose`-Seite). Überarbeitet im August 2026 von Rahmen auf Fläche: statt
 eines dünnen Akzentstreifens im Kachelkopf trägt jetzt die ganze Kachel eine
-verdünnte Akzentfläche, ohne Rahmen und ohne Schatten. Radius ist
-asymmetrisch — drei Ecken `--radius-md`, die Ecke oben rechts `--radius-lg`
-— als Anspielung auf das Bogen-Stilelement aus Brandbook Kapitel 4.
-Hover/Fokus heben die Kachel per `translate` an und vertiefen die Fläche auf
-die zugehörige `--surface-*-strong`-Stufe, zusätzlich wird der Titel
-unterstrichen. Ein erster Versuch mit einem innen liegenden `outline` in
-`--c-blue` (statt `border-color`) wurde verworfen: Blau auf einer warmen
-Fläche wirkte als Fremdfarbe, und ein umlaufender Ring direkt an der
-Kachelkante las sich als „ausgewählt", nicht als Hover — im Ergebnis wieder
-der Rahmen-Look, der mit dem Umbau verschwinden sollte. Der Tastatur-Fokus
-bleibt trotzdem sichtbar über die globale, außen liegende
-`:focus-visible`-Regel in `global.css` — die Kachel braucht dafür keinen
-eigenen Ring. Vor dieser Überarbeitung wurde die Kachel per `transform:
-scale()` vergrößert, was Text unscharf zeichnete und in `Slider.astro`
-(`overflow-x: auto`) Scrollweg erzeugte.
+verdünnte Akzentfläche, ohne Rahmen und ohne Schatten. Hover/Fokus heben die
+Kachel per `translate` an und vertiefen die Fläche auf die zugehörige
+`--surface-*-strong`-Stufe, zusätzlich wird der Titel unterstrichen. Ein
+erster Versuch mit einem innen liegenden `outline` in `--c-blue` (statt
+`border-color`) wurde verworfen: Blau auf einer warmen Fläche wirkte als
+Fremdfarbe, und ein umlaufender Ring direkt an der Kachelkante las sich als
+„ausgewählt", nicht als Hover — im Ergebnis wieder der Rahmen-Look, der mit
+dem Umbau verschwinden sollte. Der Tastatur-Fokus bleibt trotzdem sichtbar
+über die globale, außen liegende `:focus-visible`-Regel in `global.css` —
+die Kachel braucht dafür keinen eigenen Ring. Vor dieser Überarbeitung wurde
+die Kachel per `transform: scale()` vergrößert, was Text unscharf zeichnete
+und in `Slider.astro` (`overflow-x: auto`) Scrollweg erzeugte.
 
-Predigten und Älteste rotieren weiterhin über drei Töne
-(`--surface-warm`/`--surface-warm-alt`/`--surface-nature`, nach Index) — bei
-wenigen Kacheln grenzt das sie sinnvoll voneinander ab. Die 25
-Glaubensbekenntnis-Kacheln bekamen im September 2026 stattdessen einen
+Bis August 2026 trug die Kachel dazu einen asymmetrischen Radius — drei
+Ecken `--radius-md`, die Ecke oben rechts `--radius-lg` — als Anspielung auf
+das Bogen-Stilelement aus Brandbook Kapitel 4. Im September 2026 mit der
+Farbrotation (nächster Absatz) zusammen zurückgenommen: Bei 20+ Kacheln im
+Raster (Predigten, Glaubensbekenntnis) las sich die eine abweichende Ecke
+nicht als Anspielung, sondern als Unregelmäßigkeit. Alle vier Kacheltypen
+(`SermonCard`, `ElderCard`, `CreedCard`, `MinistryCard`) sowie das
+Ältesten-Porträt auf der Detailseite (`gemeindeleitung/[slug].astro`)
+nutzen seither einheitlich `--radius-md`. Der Bogen bleibt als eigenes
+Stilelement in Termine-Sektion und Favicon erhalten — als Hintergrundfläche
+hinter dem Predigt-Raster wurde er im September 2026 kurz erprobt und
+wieder verworfen (siehe „Formulare" weiter unten), ohne dass der Radius
+davon betroffen war.
+
+Predigten und Älteste rotierten bis September 2026 über drei Töne
+(`--surface-warm`/`--surface-warm-alt`/`--surface-nature`, nach Index) — in
+der Annahme, das grenze wenige Kacheln sinnvoll voneinander ab. Die 25
+Glaubensbekenntnis-Kacheln bekamen im September 2026 als erste einen
 einzigen Ton (`--surface-warm`): Bei 25 Stück wirkte die Rotation unruhig,
-ohne dass die Farbe etwas bedeutete. Zugleich wurde die Kachel inhaltlich
+ohne dass die Farbe etwas bedeutete. Bei einer Rückfrage zum
+Gesamteindruck der Kacheln stellte sich dieselbe Begründung auch für
+Predigten und Älteste als zutreffend heraus — dort fiel es bei wenigen
+Kacheln nur weniger auf. Alle vier Kacheltypen tragen seither einheitlich
+`--surface-warm`. Nebeneffekt: Die Rotation zwang `SermonFilter.astro`
+dazu, beim Filtern die Flächen der sichtbar bleibenden Kacheln neu zu
+vergeben (`card.dataset.surface`) — reine Folgelogik der Dekoration, mit ihr
+entfernt. `--surface-nature`, `--surface-nature-strong` und
+`--surface-warm-alt-strong` sind seither ungenutzt und aus `tokens.css`
+gestrichen; `--surface-warm-alt` bleibt, `.notice`/`.prayer-list` in
+`index.astro` nutzen es weiterhin. Grün (`--accent-nature`) hat damit keine
+Verwendung mehr auf der Website — die Rohfarbe bleibt trotzdem in
+`tokens.css` stehen, sie ist Markenpalette aus dem Brandbook, nicht an eine
+Anwendung gebunden.
+
+Zugleich wurde die Glaubensbekenntnis-Kachel im September 2026 inhaltlich
 ergänzt — sie zeigt jetzt neben Nummer und Titel auch einen
 zusammenfassenden Satz (`summary`-Feld, siehe `content.config.ts` und
 README), damit sich ein Artikel ohne Klick erschließt. Die Artikelnummer
@@ -204,6 +230,56 @@ das Suchfeld (Rahmen, `--bg-page`), nutzt aber `--radius-md` wie die
 Predigt-Kacheln statt `--radius-sm` — die Fläche ist größer als ein
 Texteingabefeld und wirkt mit dem kleineren Radius abgeschnitten.
 
+**Sticky Glasstreifen (September 2026):** Der obere Teil der Filterleiste —
+Suchfeld, Zurücksetzen-Button, Trefferzähler, zusammen in `.bar` — bleibt
+beim Scrollen unter dem Header stehen (`position: sticky; top:
+var(--header-height)`), mit derselben transluzenten Fläche wie der Header
+selbst (`--surface-glass`, `--blur-glass`, per `@supports`-Block mit
+deckendem Rückfall — exakt das Muster aus `Header.astro`). Grund: Ohne
+Sticky-Verhalten scrollt die Leiste bei wachsendem Predigtbestand weg,
+gerade wenn man mitten in der langen Bücher-Pill-Liste nach unten gescrollt
+hat und den Filter ändern will. Bewusst **nicht** die ganze Leiste sticky —
+nur der kompakte obere Streifen. Bei 60+ Bibelbuch-Pills würde eine
+mitlaufende Vollleiste auf dem Handy den halben Bildschirm einnehmen; die
+Pill-Gruppen scrollen deshalb normal weg wie der Rest der Seite.
+
+`--header-height` hält den Streifen exakt unter dem (ebenfalls sticky)
+Header — der Wert ist aus dem Header-Markup abgeleitet (Logohöhe bei
+`--size-logo-header`, zweimal `--sp-2` Padding, 1px Unterkante) und muss von
+Hand nachgezogen werden, falls sich die Höhe des Headers ändert (siehe
+Kommentar am Token in `tokens.css`). Kein CSS-Mechanismus im Repo berechnet
+das automatisch — ein `ResizeObserver` wäre client-seitiges JavaScript für
+etwas, das sich in der Praxis so gut wie nie ändert.
+
+Der Streifen bekommt außerdem denselben Randabfluss-Trick wie
+`Slider.astro`: `Section.astro` gibt links/rechts `--sp-3` Innenabstand vor,
+per negativem `margin-inline` aufgehoben und als eigenes `padding`
+zurückgegeben. Ohne das reichte die Glasfläche nicht bis an den Rand des
+Containers — direkt unter dem randlos bündigen Header wirkte der schmale,
+unverglaste Streifen links und rechts wie eine offene Kante statt wie eine
+saubere Fortsetzung.
+
+Glassmorphism ist damit auf genau zwei Stellen begrenzt: Header und dieser
+Filterstreifen — beide sticky Einzelelemente mit echtem, scrollendem Inhalt
+dahinter. Bewusst **nicht** eingesetzt für Kacheln, Hero oder
+Sektionsflächen: Dahinter liegt nur `--bg-page`/`--bg-muted`, eine
+transluzente Fläche über reinem Weiß bringt keinen Effekt, den man nicht
+auch durch einen schlichteren, deckenden Ton hätte. Zusätzlich wäre der
+Textkontrast auf den Kacheln nicht mehr durchgehend berechenbar (siehe
+Kontrasttabelle oben — sie setzt eine deckende Fläche voraus), und
+`backdrop-filter` auf 20+ Rasterkacheln ist auf einfacher Mobil-Hardware
+spürbar teuer (70–80 % erwarteter Traffic ist mobil, siehe CLAUDE.md).
+
+Ein Bogen als blasses Hintergrundelement hinter dem Predigt-Raster (Ersatz
+für die entfernte Farbrotation) wurde im September 2026 kurz erprobt und
+wieder verworfen — er wirkte trotz geringer Deckkraft als Fremdkörper hinter
+den Kacheln. Ein Kreuz als Alternative wurde ebenfalls nicht umgesetzt: Das
+Brandbook kennt kein Kreuz als Stilelement, es wäre ein erfundenes
+Markenzeichen (siehe Design-Regel 8) und stünde als zweites Symbol neben
+dem Arche-Bildzeichen. Die Bildlücke auf `/predigten` (siehe „Bildwelt"
+unten) bleibt vorerst offen, statt sie mit einem Stilelement zu füllen, das
+nicht überzeugt.
+
 **Auswahl/Aktiv-Zustand:** Der zuvor als offene Frage geführte Zustand
 (siehe „Was das Brandbook nicht abdeckt" oben) ist mit den Pills entschieden:
 `--bg-inverted` als Fläche, `--text-on-dark` als Schrift (12,07 : 1, AAA
@@ -238,23 +314,25 @@ WCAG-Kontraste gegen Weiß:
 Auf gebrochenem Weiß liegen alle Werte noch etwa 12–14 % darunter.
 
 **Kachelflächen sind keine Ausnahme von dieser Regel, sondern ihre Anwendung:**
-`--surface-warm`/`--surface-warm-alt`/`--surface-nature` (siehe oben) sind die
-Akzente auf 14–16 % gegen Weiß verdünnt — Flächen, kein Text. Beide Textfarben
-bleiben auf ihnen im AA-Bereich:
+`--surface-warm`/`--surface-warm-alt` (siehe oben) sind die Akzente auf 14 %
+gegen Weiß verdünnt — Flächen, kein Text. Beide Textfarben bleiben auf ihnen
+im AA-Bereich:
 
 | Fläche | Hex (ca.) | vs. `--text-secondary` (Braun) | vs. `--text-primary` |
 |---|---|---|---|
 | `--surface-warm` | `#fffbdd` | 5,87 : 1 — AA | ca. 11,4 : 1 — AAA |
 | `--surface-warm-alt` | `#fef4e0` | 5,63 : 1 — AA | ca. 11,0 : 1 — AAA |
-| `--surface-nature` | `#f2f7e4` | 5,62 : 1 — AA | ca. 10,9 : 1 — AAA |
 | `--surface-warm-strong` | `#fff3b8` | 5,51 : 1 — AA | ca. 10,7 : 1 — AAA |
-| `--surface-warm-alt-strong` | `#fde7c1` | 5,11 : 1 — AA | ca. 9,9 : 1 — AAA |
-| `--surface-nature-strong` | `#e4efca` | 5,25 : 1 — AA | ca. 10,2 : 1 — AAA |
 
-Grün ist auf 16 %/32 % statt 14 %/28 % gemischt, weil es bei gleicher
-Verdünnung wie Gelb/Orange farblich fast verschwindet. Die `*-strong`-Stufe
-ist die Hover-/Fokus-Fläche derselben Kacheln (siehe Kachel-Absatz oben) —
-kräftiger gemischt, aber weiterhin klar innerhalb AA.
+`--surface-warm-strong` ist die Hover-/Fokus-Fläche aller vier Kacheltypen
+(siehe Kachel-Absatz oben) — kräftiger gemischt, aber weiterhin klar
+innerhalb AA. Bis September 2026 gab es zusätzlich `--surface-warm-alt` als
+Rotationsfläche sowie `--surface-nature`/`--surface-nature-strong` (Grün,
+16 %/32 % statt 14 %/28 % gemischt, weil Grün bei gleicher Verdünnung wie
+Gelb/Orange farblich fast verschwindet) und `--surface-warm-alt-strong` —
+mit der Farbrotation entfernt, siehe Kachel-Absatz oben. `--surface-glass`
+steht bewusst nicht in dieser Tabelle: Es ist keine Textfläche — der
+Filterstreifen bleibt im Rückfall ohne `backdrop-filter` deckend `--bg-page`.
 
 **Regel:** Gelb, Orange, Grün, Ocker und Braun-Grau sind Flächen-, Rahmen- und
 Stilelementfarben. Textfarben sind ausschließlich Dunkles Blau und Braun, auf
@@ -417,13 +495,18 @@ echte Fotos der Gemeindeleitung, kein Stock — genau die Art Bild, die
 Brandbook 3.1 verlangt. `elders.photo` in `content.config.ts` ist optional;
 ohne hinterlegtes Foto bleibt die Ältesten-Kachel wie bisher rein
 typografisch, es gibt kein Platzhalterbild und keine Silhouette. Zuschnitt
-4:5 (Hochformat), `object-fit: cover`, mit denselben asymmetrischen
-Kachel-Radien wie der Rest des Kachel-Musters (`--radius-md`/`--radius-lg`,
-siehe oben) — kein Kreis-Avatar, das würde die eckige Formensprache des
-Brandbooks brechen. Neuer Token `--size-portrait: 18rem` (Abschnitt
-Bildgrößen), verwendet auf der Kachel (`ElderCard.astro`) und der
-Detailseite (`/aelteste/<slug>`). Das Popup-Overlay der Kachel bleibt
-bewusst textlich — ein zweites, kleineres Foto dort brächte keinen Mehrwert.
+4:5 (Hochformat), `object-fit: cover`, mit demselben Kachel-Radius wie der
+Rest des Kachel-Musters (`--radius-md`, siehe oben) — kein Kreis-Avatar, das
+würde die eckige Formensprache des Brandbooks brechen. Neuer Token
+`--size-portrait: 18rem` (Abschnitt Bildgrößen), verwendet auf der Kachel
+(`ElderCard.astro`) und der Detailseite (`/gemeindeleitung/<slug>`). Das
+Popup-Overlay der Kachel bleibt bewusst textlich — ein zweites, kleineres
+Foto dort brächte keinen Mehrwert.
+
+Für `/predigten` bleibt dieselbe Lücke vorerst offen. Ein Bogen als blasses
+Hintergrundelement wurde im September 2026 als Ersatz für die entfernte
+Farbrotation erprobt und wieder verworfen (siehe „Formulare" oben) — er
+wirkte trotz geringer Deckkraft als Fremdkörper hinter den Kacheln.
 
 ## Offene Fragen an Hamburg
 

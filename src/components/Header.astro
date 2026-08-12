@@ -94,9 +94,9 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
      bleibt es die deckende Fläche oben — kein Fehlerfall. */
   @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
     header {
-      background-color: color-mix(in srgb, var(--bg-page) 85%, transparent);
-      -webkit-backdrop-filter: blur(12px);
-      backdrop-filter: blur(12px);
+      background-color: var(--surface-glass);
+      -webkit-backdrop-filter: blur(var(--blur-glass));
+      backdrop-filter: blur(var(--blur-glass));
     }
   }
 

@@ -66,16 +66,17 @@
      die Akzente selbst bleiben Nicht-Textfarben (siehe oben). Gegen
      --c-white gemischt, nicht gegen --bg-page: Kacheln stehen teils auf
      gebrochenem Weiß (Glaubensbekenntnis, tone="muted") und sollen sich
-     dort abheben. Siehe DESIGN.md für Kontrastwerte. */
+     dort abheben. Siehe DESIGN.md für Kontrastwerte.
+     Bis August 2026 rotierten Predigt- und Ältesten-Kacheln zusätzlich
+     über --surface-warm-alt/--surface-nature nach Listenindex — entfernt,
+     siehe DESIGN.md, Abschnitt „Kachel-Muster". --surface-warm-alt bleibt,
+     .notice/.prayer-list in index.astro nutzen es weiterhin. */
   --surface-warm:      color-mix(in srgb, var(--accent-warm) 14%, var(--c-white));
   --surface-warm-alt:  color-mix(in srgb, var(--accent-warm-alt) 14%, var(--c-white));
-  --surface-nature:    color-mix(in srgb, var(--accent-nature) 16%, var(--c-white));
 
-  /* Hover-Stufe derselben Flächen — kräftiger gemischt, gleiche Regel:
+  /* Hover-Stufe derselben Fläche — kräftiger gemischt, gleiche Regel:
      nur Fläche, nie Text. */
   --surface-warm-strong:      color-mix(in srgb, var(--accent-warm) 28%, var(--c-white));
-  --surface-warm-alt-strong:  color-mix(in srgb, var(--accent-warm-alt) 28%, var(--c-white));
-  --surface-nature-strong:    color-mix(in srgb, var(--accent-nature) 32%, var(--c-white));
 
   /* ---------- Typografie (Brandbook 2.1 / 2.2) ---------- */
   /* Headlines: Brandbook schreibt Futura Bold/Medium vor.
@@ -146,4 +147,18 @@
   --scrim:          color-mix(in srgb, var(--c-blue-dark) 55%, transparent);
   --blur-overlay:   16px;
   --shadow-overlay: 0 1.5rem 3rem color-mix(in srgb, var(--c-blue-dark) 22%, transparent);
+
+  /* ---------- Sticky-Glas (im Brandbook nicht vorhanden, für Web definiert)
+     Für Header.astro und den Filterstreifen in SermonFilter.astro — beide
+     ein einzelnes, sticky positioniertes Element mit echtem Inhalt
+     dahinter. Bewusst nicht für Kacheln oder Sektionsflächen, siehe
+     DESIGN.md, Abschnitt „Kachel-Muster". */
+  --surface-glass: color-mix(in srgb, var(--bg-page) 85%, transparent);
+  --blur-glass:    12px;
+  /* Höhe des Headers: Logo (--size-logo-header, Seitenverhältnis 916:271)
+     plus vertikales Padding (2 × --sp-2) plus 1px Unterkante. Bei
+     Änderungen am Header-Markup hier nachziehen — sonst entsteht am
+     Sticky-Filterstreifen (SermonFilter.astro) eine Lücke oder
+     Überlappung. */
+  --header-height: 3.125rem;
 }

@@ -162,11 +162,11 @@ const jsonLd = {
         <p>Noch keine Predigten veröffentlicht.</p>
       ) : (
         <Slider>
-          {sermons.map((sermon, index) => {
+          {sermons.map((sermon) => {
             const profile = preacherProfiles.find(
               (p) => p.data.name.trim().toLowerCase() === sermon.preacher.trim().toLowerCase(),
             );
-            return <SermonCard sermon={sermon} index={index} preacherProfile={profile} />;
+            return <SermonCard sermon={sermon} preacherProfile={profile} />;
           })}
         </Slider>
       )

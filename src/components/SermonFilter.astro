@@ -45,12 +45,20 @@ const seriesList = dedupeNames(sermons.map((sermon) => sermon.series ?? ''));
 ---
 
 <form class="filter" hidden data-sermon-filter>
-  <div class="controls">
-    <p class="field">
-      <label for="sermon-q">Suche</label>
-      <input type="search" id="sermon-q" name="q" autocomplete="off" placeholder="Titel, Prediger, Bibelstelle …" />
-    </p>
-    <button type="button" class="reset" data-sermon-reset>Zurücksetzen</button>
+  {/* Nur dieser kompakte Streifen bleibt beim Scrollen stehen (siehe
+      .bar unten) — die Pill-Gruppen darunter scrollen normal weg. Eine
+      mitlaufende Vollleiste wäre auf dem Handy bei 60+ Bibelbuch-Pills
+      unbedienbar, sie füllte den halben Bildschirm. */}
+  <div class="bar">
+    <div class="bar-bg" aria-hidden="true"></div>
+    <div class="controls">
+      <p class="field">
+        <label for="sermon-q">Suche</label>
+        <input type="search" id="sermon-q" name="q" autocomplete="off" placeholder="Titel, Prediger, Bibelstelle …" />
+      </p>
+      <button type="button" class="reset" data-sermon-reset>Zurücksetzen</button>
+    </div>
+    <p class="count" role="status" data-sermon-count></p>
   </div>
 
   {/* Pills statt <select> — Vorgabe: die Predigtenseite verwendet keine
@@ -104,7 +112,6 @@ const seriesList = dedupeNames(sermons.map((sermon) => sermon.series ?? ''));
     )
   }
 
-  <p class="count" role="status" data-sermon-count></p>
   <p class="empty" hidden data-sermon-empty>Keine Predigt passt zu dieser Auswahl.</p>
 </form>
 
@@ -154,13 +161,7 @@ const seriesList = dedupeNames(sermons.map((sermon) => sermon.series ?? ''));
           (!series || !series.value || data.series === series.value);
 
         card.hidden = !matches;
-        // Farbrotation nach Position in der sichtbaren Auswahl neu vergeben
-        // (siehe SermonCard.astro) — sonst wäre eine gefilterte Auswahl
-        // einfarbig, weil die ursprüngliche Listenposition erhalten bliebe.
-        if (matches) {
-          card.dataset.surface = String(visible % 3);
-          visible += 1;
-        }
+        if (matches) visible += 1;
       });
 
       if (count) count.textContent = `${visible} von ${cards.length} Predigten`;
@@ -210,9 +211,14 @@ const seriesList = dedupeNames(sermons.map((sermon) => sermon.series ?? ''));
 
     resetButton?.addEventListener('click', () => {
       q.value = '';
-      book.value = '';
-      preacher.value = '';
-      if (series) series.value = '';
+      // .value als Setter auf RadioNodeList wirkt in Safari nicht (per
+      // Konsolentest bestätigt: die Zuweisung ändert die Auswahl nicht,
+      // der alte Wert bleibt stehen). .checked auf dem einzelnen Radio
+      // ist die verlässliche Grundoperation. Erstes Radio je Gruppe ist
+      // per Konvention immer die "Alle …"-Option (siehe Markup oben).
+      (book[0] as HTMLInputElement).checked = true;
+      (preacher[0] as HTMLInputElement).checked = true;
+      if (series) (series[0] as HTMLInputElement).checked = true;
       update();
     });
 
@@ -240,6 +246,59 @@ const seriesList = dedupeNames(sermons.map((sermon) => sermon.series ?? ''));
 <style>
   .filter {
     margin-top: var(--sp-4);
+  }
+
+  /* Sticky Glasstreifen, gleiches Muster wie header in Header.astro:
+     deckende Fläche als Grundzustand, Weichzeichner nur wo unterstützt.
+     top: var(--header-height) hält den Streifen direkt unter dem
+     (ebenfalls sticky) Header — siehe Kommentar am Token in tokens.css.
+     z-index niedriger als der Header (10), aber höher als die Kacheln
+     darunter. .bar selbst bleibt normal breit (wie der übrige Inhalt) —
+     der Full-Bleed-Hintergrund lebt separat in .bar-bg, siehe dort. */
+  .bar {
+    position: sticky;
+    top: var(--header-height);
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    padding: var(--sp-3);
+  }
+
+  /* Rein dekorative Hintergrundfläche, randlos bis zum Bildschirmrand wie
+     <header> in Header.astro — aber bewusst NICHT auf .bar selbst (dem
+     sticky-Element). Die Kombination aus position: sticky und dem
+     100vw-Bleed-Trick auf demselben Element hatte den
+     Zurücksetzen-Knopf unklickbar gemacht. .bar bleibt deshalb ein
+     normal breites, unverändert sicheres sticky-Element; .bar-bg ist
+     eine separate, absolut positionierte Ebene dahinter. sticky zählt
+     als Positionierung, .bar ist also automatisch Containing Block für
+     dieses absolute Kind — kein eigenes position: relative nötig.
+     pointer-events: none schließt aus, dass .bar-bg je einen Klick
+     abfängt, auch wenn sie optisch über den Bildschirmrand hinausragt.
+     Sicherheitsnetz gegen den dabei bekannten Scrollbar-Versatz von
+     100vw: overflow-x: hidden auf html, siehe global.css. */
+  .bar-bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    z-index: -1;
+    pointer-events: none;
+    border-bottom: 1px solid var(--border-subtle);
+    background-color: var(--bg-page);
+  }
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    .bar-bg {
+      background-color: var(--surface-glass);
+      -webkit-backdrop-filter: blur(var(--blur-glass));
+      backdrop-filter: blur(var(--blur-glass));
+    }
   }
 
   .controls {
@@ -360,8 +419,11 @@ const seriesList = dedupeNames(sermons.map((sermon) => sermon.series ?? ''));
     opacity: 0.85;
   }
 
+  /* Sitzt jetzt im sticky .bar neben .controls statt darunter — deshalb
+     kein eigener margin-top mehr. */
   .count {
-    margin: var(--sp-3) 0 0;
+    flex: 0 0 auto;
+    margin: 0;
     font-size: var(--fs-xs);
     color: var(--text-secondary);
   }
