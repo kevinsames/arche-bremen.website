@@ -50,4 +50,25 @@ const elders = defineCollection({
     }),
 });
 
-export const collections = { pages, elders, creed };
+// Geplante Bereiche des Gemeindelebens (Kinder, Jugend, Männer, Frauen,
+// Ranger, Bibelunterricht, ...). Bewusst eine Datei pro Bereich statt einer
+// langen Fließtextseite: /gemeindeleben wird so als Kachelraster überflieg-
+// bar, und ein neuer Bereich entsteht später durch eine zusätzliche Datei,
+// ohne Codeänderung (siehe dortige Seite).
+const ministries = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/ministries' }),
+  schema: z.object({
+    title: z.string(),
+    order: z.number(),
+    // Ein Satz für die Kachel. Pflichtfeld statt optional: Browser ohne
+    // Popover-Unterstützung blenden das Popup mit dem vollen Body-Text aus
+    // (siehe global.css) — dann bleibt nur dieser Satz übrig.
+    summary: z.string(),
+    // Kleines Label auf der Kachel. In der Gründungsphase überall
+    // "geplant"; sobald ein Bereich läuft, hier leeren/streichen — dann
+    // verschwindet das Label, ohne dass Code angefasst wird.
+    status: z.string().optional(),
+  }),
+});
+
+export const collections = { pages, elders, creed, ministries };

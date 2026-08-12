@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import MinistryCard from '../components/MinistryCard.astro';
+
+const ministries = (await getCollection('ministries')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<BaseLayout
+  title="Gemeindeleben"
+  description="Unsere Vision für das Gemeindeleben der Arche Bremen: Kinder, Jugend, Männer, Frauen, Ranger und Bibelunterricht — geplant für die Zeit nach der Gründung."
+>
+  <Section tone="light" width="measure">
+    <h1>Gemeindeleben</h1>
+    <p class="lead">
+      Wir stehen noch vor der Gründung — nichts von dem hier läuft heute
+      schon. Diese Seite zeigt, was wir für das Leben unserer Gemeinde
+      vorhaben, sobald der erste Gottesdienst gefeiert wird.
+    </p>
+  </Section>
+
+  <Section tone="muted">
+    {
+      ministries.length === 0 ? (
+        <p>Noch keine Bereiche hinterlegt.</p>
+      ) : (
+        <div class="ministry-grid">
+          {ministries.map((ministry) => (
+            <MinistryCard ministry={ministry} />
+          ))}
+        </div>
+      )
+    }
+  </Section>
+</BaseLayout>
+
+<style>
+  .lead {
+    color: var(--text-secondary);
+  }
+
+  .ministry-grid {
+    display: grid;
+    gap: var(--sp-3);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 40rem) {
+    .ministry-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .ministry-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>
