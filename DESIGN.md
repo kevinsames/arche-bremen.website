@@ -508,6 +508,29 @@ Hintergrundelement wurde im September 2026 als Ersatz für die entfernte
 Farbrotation erprobt und wieder verworfen (siehe „Formulare" oben) — er
 wirkte trotz geringer Deckkraft als Fremdkörper hinter den Kacheln.
 
+**Ortsbild auf der Startseite** (12. August 2026): Vollbild-Band zwischen
+„Wer wir sind" und „Bete und bau mit", `src/assets/photos/bremen-marktplatz.jpg`
+— Giebelhäuser am Bremer Marktplatz. Bewusste Abweichung von CLAUDE.md
+Regel 9 / Brandbook 3.1: Das Bild ist Stock-Fotografie, keine echte Aufnahme
+aus der Gemeinde. Regel 9 zielt laut dem Absatz oben („Keine Platzhalterfotos
+von lachenden Fremden") auf inszenierte Gemeindeszenen; ein Stadtbild
+behauptet nichts über die Gemeinde selbst und wird deshalb als engere,
+begründete Ausnahme behandelt statt als Regelbruch. Bedingung, unter der
+diese Ausnahme steht: keine erkennbaren Personen im Bild — das vermeidet
+zugleich Persönlichkeitsrechts- und DSGVO-Fragen. Quelle: Pexels-Foto 7018479,
+Fotograf Nikolai Kolosov, `https://www.pexels.com/de-de/foto/wahrzeichen-historisch-touristenattraktion-reiseziel-7018479/`,
+Pexels-Lizenz (frei kommerziell nutzbar, keine Attributionspflicht — deshalb
+keine Bildunterschrift und kein Eintrag im Impressum; die Nennung hier reicht,
+damit spätere Betreiber die Herkunft nachvollziehen können). Technisch:
+`<Image>` mit `widths`/`sizes="100vw"` statt `densities`, weil das Bild mit
+dem Viewport skaliert statt eine feste Layoutbreite zu haben (anders als das
+Ältesten-Porträt oben); Zuschnitt 4:3 mobil, 21:9 ab 48rem. Steht als
+`<figure>` außerhalb von `Section.astro`, weil dessen `.container` das Bild
+auf Inhaltsbreite begrenzen würde — hier soll es Kante zu Kante laufen.
+Dieses Band wird ersetzt, sobald echte Fotos aus der Bremer Gemeinde
+existieren; CLAUDE.md Regel 9 bleibt davon unberührt, sie gilt weiterhin für
+Personen-/Gemeindeaufnahmen.
+
 ## Offene Fragen an Hamburg
 
 Diese sollten in einer Mail gebündelt werden, bevor gestaltet wird:

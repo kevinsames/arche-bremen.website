@@ -4,9 +4,11 @@ import Section from '../components/Section.astro';
 import SermonCard from '../components/SermonCard.astro';
 import Slider from '../components/Slider.astro';
 import Overlay from '../components/Overlay.astro';
+import { Image } from 'astro:assets';
 import { SITE, CONTACT, FOUNDING, PRAYER_REQUESTS, WEEKLY_EVENTS } from '../consts';
 import logo from '../assets/brand/arche-logo.svg';
 import mark from '../assets/brand/bogen.svg';
+import marktplatz from '../assets/photos/bremen-marktplatz.jpg';
 import { getSermons, getEvents, type Event } from '../lib/sanity';
 import { getCollection } from 'astro:content';
 
@@ -138,6 +140,23 @@ const jsonLd = {
       Einzelnen stehen, steht in unserem <a href="/glaubensbekenntnis">Glaubensbekenntnis</a>.
     </p>
   </Section>
+
+  <!-- Vollbild-Band, bewusst außerhalb von Section.astro — dessen
+       .container würde das Bild auf Inhaltsbreite begrenzen. Siehe
+       DESIGN.md, Abschnitt „Bildwelt": Stadtbild statt Gemeindefoto, als
+       bewusste Abweichung von CLAUDE.md Regel 9 dokumentiert. -->
+  <figure class="place-band">
+    <Image
+      src={marktplatz}
+      alt="Historische Giebelhäuser am Bremer Marktplatz unter klarem Himmel"
+      width={1920}
+      widths={[640, 960, 1280, 1600, 1920]}
+      sizes="100vw"
+      format="webp"
+      quality={55}
+      class="place-photo"
+    />
+  </figure>
 
   <Section tone="light" width="measure">
     <h2 id="kontakt">Bete und bau mit</h2>
@@ -481,5 +500,27 @@ const jsonLd = {
     border-radius: var(--radius-md);
     display: grid;
     row-gap: var(--sp-2);
+  }
+
+  /* Ortsbild als Vollbild-Band, siehe DESIGN.md „Bildwelt". Steht bewusst
+     außerhalb von Section.astro — dessen .container würde das Bild auf
+     Inhaltsbreite begrenzen. */
+  .place-band {
+    margin: 0;
+  }
+
+  .place-photo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  /* Auf breiten Displays flacher, sonst frisst das Band den halben
+     Bildschirm und drückt „Bete und bau mit" unnötig weit nach unten. */
+  @media (min-width: 48rem) {
+    .place-photo {
+      aspect-ratio: 21 / 9;
+    }
   }
 </style>
