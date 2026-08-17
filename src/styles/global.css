@@ -9,21 +9,21 @@
  * Basiselement-Stile, die diese Tokens referenzieren.
  */
 
-/* Selbst gehostet, siehe DESIGN.md Abweichung 2 und public/fonts/. Genau
-   ein Schnitt pro Familie — Performance-Budget in CLAUDE.md erlaubt
-   maximal zwei Schnitte insgesamt. */
+/* Selbst gehostet, siehe DESIGN.md Abweichung 2 und public/fonts/. Eine
+   Familie, zwei Schnitte — Performance-Budget in CLAUDE.md erlaubt maximal
+   zwei Schnitte insgesamt. */
 @font-face {
-  font-family: 'Jost';
-  src: url('/fonts/jost-500.woff2') format('woff2');
-  font-weight: 500;
+  font-family: 'Source Serif Pro';
+  src: url('/fonts/source-serif-400-v2.woff2') format('woff2');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Source Serif Pro';
-  src: url('/fonts/source-serif-400.woff2') format('woff2');
-  font-weight: 400;
+  src: url('/fonts/source-serif-600.woff2') format('woff2');
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
@@ -67,11 +67,11 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  /* Nur ein Schnitt (500) geladen — explizit setzen statt der
-     Browser-Vorgabe "bold", sonst synthetisiert der Browser eine
-     Fett-Variante. Hierarchie kommt über Größe, Versalien und
-     Laufweite (Brandbook 2.1), nicht über Schriftgewicht. */
-  font-weight: 500;
+  /* Explizit 600 (Semibold, geladener Schnitt) statt der Browser-Vorgabe
+     "bold" — sonst synthetisiert der Browser eine Fett-Variante. Zusätzliche
+     Hierarchie kommt über Größe, Versalien und Laufweite (Brandbook 2.1),
+     nicht nur über Schriftgewicht. */
+  font-weight: 600;
   line-height: var(--lh-tight);
   text-transform: uppercase;
   letter-spacing: var(--tracking-display);
@@ -190,7 +190,7 @@ a:visited {
 .button {
   display: inline-block;
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: var(--tracking-display);
   text-decoration: none;

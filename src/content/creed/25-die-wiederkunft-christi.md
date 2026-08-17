@@ -1,7 +1,6 @@
 ---
 title: "Die Wiederkunft Christi"
 number: 25
-summary: "Christus wird sichtbar und in Macht wiederkommen, seine Gemeinde vollenden und Gericht über die Welt halten."
 ---
 
 Jesus Christus wird am Ende der Tage in Macht und Herrlichkeit

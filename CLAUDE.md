@@ -72,7 +72,8 @@ Regeln:
    und auf dunklem Grund `--text-on-dark`. `--c-blue` nur für große Schrift und
    UI-Rahmen.
 5. **Fonts selbst hosten**, WOFF2, `font-display: swap`, maximal zwei Familien.
-   Jost für Headlines, Source Serif Pro für Fließtext. Keine Google-Fonts-URL.
+   Eine Familie site-weit: Source Serif Pro, Schnitt 400 für Fließtext,
+   Schnitt 600 für Headlines. Keine Google-Fonts-URL.
 6. Headlines primär in Versalien mit `--tracking-display`, entsprechend
    Brandbook 2.1.
 7. **Keine neuen Tokens erfinden.** Fehlt ein Wert, in `DESIGN.md` unter offene

@@ -1,7 +1,6 @@
 ---
 title: "Gute Werke"
 number: 23
-summary: "Gute Werke retten niemanden, sondern sind Frucht der Wiedergeburt — vom Heiligen Geist aus Dankbarkeit gewirkt."
 ---
 
 Gute Werke, die vor Gott bestehen, sind nicht die, die sich unwiedergeborene

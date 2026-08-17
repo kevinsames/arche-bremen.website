@@ -66,11 +66,19 @@ const canonical = new URL(path, Astro.site).href;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" type="image/png" href="/favicon.png" />
     <!-- Above the fold gebraucht, deshalb vorab geladen statt nur per
-         @font-face in global.css referenziert. -->
-    <link rel="preload" href="/fonts/jost-500.woff2" as="font" type="font/woff2" crossorigin />
+         @font-face in global.css referenziert. Beide Schnitte, weil der
+         Hero above the fold sowohl den Claim (400) als auch die Headline
+         (600) zeigt. -->
     <link
       rel="preload"
-      href="/fonts/source-serif-400.woff2"
+      href="/fonts/source-serif-400-v2.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/source-serif-600.woff2"
       as="font"
       type="font/woff2"
       crossorigin

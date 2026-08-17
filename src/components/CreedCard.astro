@@ -9,8 +9,7 @@ import Overlay from './Overlay.astro';
 //
 // Anders als dort: keine Flächenrotation. Bei 25 Kacheln wirken drei
 // wechselnde Töne unruhig, ohne dass die Farbe etwas bedeutet — ein Ton
-// genügt. Stattdessen trägt die Kachel einen zusammenfassenden Satz
-// (article.data.summary), damit sich der Inhalt ohne Klick erschließt.
+// genügt.
 interface Props {
   article: CollectionEntry<'creed'>;
 }
@@ -26,7 +25,6 @@ const permalink = `/glaubensbekenntnis/${article.id}`;
   <a href={permalink} class="card">
     <span class="number">Artikel {article.data.number}</span>
     <p class="title">{article.data.title}</p>
-    {article.data.summary && <p class="summary">{article.data.summary}</p>}
     <span class="chevron" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
            stroke-linecap="round" stroke-linejoin="round">
@@ -105,7 +103,7 @@ const permalink = `/glaubensbekenntnis/${article.id}`;
   .number {
     display: block;
     font-family: var(--font-display);
-    font-weight: 500;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: var(--tracking-display);
     font-size: var(--fs-xs);
@@ -114,18 +112,11 @@ const permalink = `/glaubensbekenntnis/${article.id}`;
 
   .title {
     font-family: var(--font-display);
-    font-weight: 500;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: var(--tracking-display);
     font-size: var(--fs-m);
     margin: var(--sp-1) 0 0;
-  }
-
-  .summary {
-    font-size: var(--fs-s);
-    line-height: var(--lh-body);
-    color: var(--text-secondary);
-    margin: var(--sp-2) 0 0;
   }
 
   .open {

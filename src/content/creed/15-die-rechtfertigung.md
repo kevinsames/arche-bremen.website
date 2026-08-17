@@ -1,7 +1,6 @@
 ---
 title: "Die Rechtfertigung"
 number: 15
-summary: "Gott spricht Glaubende allein aus Gnade gerecht — nicht aufgrund eigener Werke, sondern durch die Gerechtigkeit Christi."
 ---
 
 Die Gerechtigkeit Gottes offenbart sich sowohl in Seinem Gesetz[^15-1] als

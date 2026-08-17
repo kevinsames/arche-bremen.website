@@ -1,7 +1,6 @@
 ---
 title: "Die Gemeinde"
 number: 22
-summary: "Die Gemeinde ist der weltweite Leib Christi aus allen Zeiten, der sich sichtbar in Ortsgemeinden versammelt."
 ---
 
 Gemeinde heißt im Neuen Testament soviel wie „Herausgerufene" (griechisch

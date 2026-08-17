@@ -1,7 +1,6 @@
 ---
 title: "Das heilige Abendmahl"
 number: 20
-summary: "Im Abendmahl gedenkt die Gemeinde bis zur Wiederkunft Christi seines Leidens und ihrer Gemeinschaft mit ihm."
 ---
 
 Unser Herr Jesus setzte in der Nacht, in der Er verraten wurde, als Zeichen

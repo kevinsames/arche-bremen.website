@@ -121,15 +121,15 @@ Verwendung mehr auf der Website — die Rohfarbe bleibt trotzdem in
 `tokens.css` stehen, sie ist Markenpalette aus dem Brandbook, nicht an eine
 Anwendung gebunden.
 
-Zugleich wurde die Glaubensbekenntnis-Kachel im September 2026 inhaltlich
-ergänzt — sie zeigt jetzt neben Nummer und Titel auch einen
-zusammenfassenden Satz (`summary`-Feld, siehe `content.config.ts` und
-README), damit sich ein Artikel ohne Klick erschließt. Die Artikelnummer
-ist dafür von `--fs-xxl` auf `--fs-xs` geschrumpft und dient nur noch als
-Eyebrow über dem Titel (`--text-secondary`, Versalien) — vorher war sie das
-größte Element der Kachel, obwohl sie die am wenigsten wichtige Information
-trägt. Die 25 `summary`-Sätze sind Entwürfe und noch nicht von der Gemeinde
-oder Hamburg inhaltlich freigegeben (siehe Kommentar im Schema).
+Die Glaubensbekenntnis-Kachel bekam im September 2026 testweise einen
+zusammenfassenden Satz pro Artikel (`summary`-Feld). Die Sätze waren
+Entwürfe und nie von der Gemeinde oder Hamburg inhaltlich freigegeben; sie
+wurden im August 2026 wieder entfernt, das Feld ist aus dem Schema
+gestrichen. Die Kachel zeigt seither wieder nur Nummer und Titel. Die
+Artikelnummer bleibt trotzdem von `--fs-xxl` auf `--fs-xs` geschrumpft und
+dient als Eyebrow über dem Titel (`--text-secondary`, Versalien) — sie ist
+die am wenigsten wichtige Information der Kachel und muss nicht das größte
+Element sein.
 
 **Bewegung:** `--duration-fast: 150ms` für Hover- und Focus-Übergänge,
 `--duration-slow: 400ms` für das Scroll-Reveal der Sektionsüberschriften,
@@ -367,18 +367,26 @@ Eyebrow-Label im `.event-title`-Stil). Keine neuen Tokens dafür nötig. Der
 Wechsel zurück zu Gottesdienstzeit und Adresse ist in `README.md`, Abschnitt
 „Offene Punkte", vermerkt.
 
-### 2. Jost statt Futura
+### 2. Source Serif Pro statt Futura
 
 Brandbook 2.1 schreibt Futura Bold und Medium für Logo und Headlines vor,
 primär in Versalien mit Laufweite 70.
 
 Futura ist kommerziell lizenziert. Eine Desktop-Lizenz deckt Webfont-Einbettung
-nicht ab; Webfont-Lizenzen werden separat vertrieben. Wir nutzen **Jost**
-(SIL Open Font License), eine bewusst an Futura orientierte geometrische
-Groteske. In Versalien mit weiter Laufweite ist der Unterschied gering.
+nicht ab; Webfont-Lizenzen werden separat vertrieben. Statt einer zweiten,
+zu Futura passenden Groteske (bis August 2026: **Jost**, SIL Open Font
+License) steht die Seite seit dem 17. August 2026 komplett in **Source
+Serif Pro** — Fließtext wie Headlines. Eine Familie, zwei Schnitte (400
+Fließtext, 600 Headlines), statt zwei Familien. Grund: einfacher zu warten,
+ein Ladepfad weniger, und die zweifarbige Optik (Groteske für Headlines,
+Serif für Fließtext) war ohnehin nur ein Kompromiss, kein Markenmerkmal.
 
-Der Fließtext bleibt regelkonform: **Source Serif Pro** ist unter SIL OFL frei
-verfügbar und selbst gehostet.
+Beide Schnitte stammen aus demselben Release wie der bisherige Fließtext-Schnitt
+(`adobe-fonts/source-serif`, Tag `3.001R`, SIL OFL), auf das Latin-Subset
+reduziert (`public/fonts/source-serif-400-v2.woff2`,
+`public/fonts/source-serif-600.woff2`). Damit passen Metriken und
+Glyphenumfang exakt zueinander; ein künftiger dritter Schnitt sollte aus
+demselben Release gezogen werden.
 
 Das **Logo** verwendet keinen Webfont, sondern die offizielle SVG-Datei mit
 Vektorkonturen — damit entfällt die Lizenzfrage für die Wortmarke vollständig.
@@ -406,7 +414,7 @@ Verwendung:
 | `arche-logo.svg` | Vollständiges Lockup, wie geliefert, unverändert | Header, Hero |
 | `bogen.svg` | Nur der Bogen — ein einzelner Pfad aus `arche-logo.svg` herausgelöst, viewBox auf diesen Pfad zugeschnitten (plus Rand), sonst keine Änderung | Stilelement (Termine-Sektion) |
 | `public/favicon.svg` / `public/favicon.png` | Derselbe Pfad wie `bogen.svg`, unverändert übernommen, per `transform` auf `<g>` in ein quadratisches 64×64-Format zentriert (kein Neuzeichnen). Farbe Dunkelblau (`#003a56`, Token `--c-blue-dark`), Hintergrund transparent | Tab-Icon |
-| `og.svg` / `public/og.png` | Vollständiges Lockup, unverändert, zentriert auf `--c-offwhite`-Fläche mit schmalem `--c-blue-dark`-Abschlussbalken, 1200×630. Kein `<text>`-Element (Jost ist kein Systemfont, siehe „Jost statt Futura" oben) | Open-Graph-Vorschaukarte (`BaseLayout.astro`) |
+| `og.svg` / `public/og.png` | Vollständiges Lockup, unverändert, zentriert auf `--c-offwhite`-Fläche mit schmalem `--c-blue-dark`-Abschlussbalken, 1200×630. Kein `<text>`-Element (Source Serif Pro ist kein Systemfont, siehe „Source Serif Pro statt Futura" oben) | Open-Graph-Vorschaukarte (`BaseLayout.astro`) |
 
 Eingebunden per direktem Astro-Asset-Import (`import logo from
 '.../arche-logo.svg'`, `<img src={logo.src} ...>`), nicht über die
@@ -419,7 +427,8 @@ Icons direkt per `<link rel="icon">` aus `BaseLayout.astro`).
 
 1. **Footer bekommt kein Logo.** Das Lockup ist einfarbig Dunkelblau; auf dem
    dunklen Footer-Hintergrund (`--bg-inverted`) unlesbar, unabhängig vom
-   Dateiformat. Footer behält die Textwortmarke (`SITE.name` in Jost) — eine
+   Dateiformat. Footer behält die Textwortmarke (`SITE.name` in Source Serif
+   Pro) — eine
    bewusste Abweichung von harter Regel 8, siehe dort. Löst sich erst mit
    einer hellen Logo-Variante für dunklen Grund.
 2. **Kein Ortszusatz.** Das Lockup zeigt „ARCHE", nicht „Arche Bremen" —

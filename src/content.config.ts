@@ -22,13 +22,6 @@ const creed = defineCollection({
   schema: z.object({
     title: z.string(),
     number: z.number().optional(),
-    // Ein Satz für die Kachel auf /glaubensbekenntnis. Bewusst
-    // handgeschrieben statt aus dem Fließtext extrahiert — die Artikel
-    // beginnen mit langen Sätzen samt Klammerverweisen, die sich nicht
-    // sauber kürzen lassen. Die aktuellen Sätze sind Entwürfe und
-    // inhaltlich noch nicht von der Gemeinde freigegeben — beim
-    // Korrigieren einfach überschreiben.
-    summary: z.string().optional(),
   }),
 });
 

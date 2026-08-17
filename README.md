@@ -319,7 +319,8 @@ Kontrastregel (Sichtbarkeit im Dark-Mode-Tab) in `DESIGN.md`, Abschnitt
 `src/assets/brand/og.svg` ist die Quelle für `public/og.png` (Open-Graph-
 Vorschaukarte, 1200×630, siehe `BaseLayout.astro`). Bewusst ohne
 `<text>`-Element — reine Pfade sind mit jedem Konverter identisch
-reproduzierbar, Text hängt an installierten Systemfonts und Jost ist keiner.
+reproduzierbar, Text hängt an installierten Systemfonts und Source Serif Pro
+ist keiner.
 Ändert sich das Bild: `og.svg` bearbeiten, dann verlustfrei auf exakt
 1200×630 nach `public/og.png` rendern (kein neues Paket in
 `package.json` — lokal reicht das bereits im `node_modules`-Baum liegende
@@ -369,7 +370,8 @@ Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
   Consent-Banner Pflicht und diese Erklärung muss erweitert werden.
 - **og.png:** Reine Lockup-Karte ohne das Wort „Bremen" — bewusste
   Entscheidung, kein Versehen (Textrendering bräuchte einen Font-Renderer für
-  Jost, siehe Abschnitt „Markendateien"). Der Ortsname steht weiterhin im
+  Source Serif Pro, siehe Abschnitt „Markendateien"). Der Ortsname steht
+  weiterhin im
   `og:image:alt`, Seitentitel und Footer.
 - Kalenderansicht, Audio-Player, Über-uns- und Gemeindeleben-Seiten,
   Deployment, Studio-Deploy.
@@ -412,7 +414,8 @@ curl -sI https://bremen.arche-gemeinde.de/studio | grep -i x-robots-tag
 
 **Achtung bei Schriftdateien:** `/fonts/*` ist ein Jahr lang cachebar, weil
 die Dateinamen (anders als bei `/_astro/*`) keinen Inhalts-Hash tragen. Wer
-eine Schriftdatei austauscht, muss sie umbenennen (z. B. `jost-500-v2.woff2`)
-und Preloads (`BaseLayout.astro`) sowie `@font-face` (`global.css`)
+eine Schriftdatei austauscht, muss sie umbenennen (z. B.
+`source-serif-400-v3.woff2`) und Preloads (`BaseLayout.astro`) sowie
+`@font-face` (`global.css`)
 anpassen — sonst sehen wiederkehrende Besucher bis zu ein Jahr lang die alte
 Datei.

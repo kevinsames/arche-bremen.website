@@ -2,7 +2,7 @@
 <!--
   Quelle für public/og.png (Open-Graph-Vorschaukarte, 1200×630).
   Bewusst ohne <text>-Element: Textrendering hängt an installierten
-  Systemfonts, Jost ist keiner. Reine Pfade sind mit jedem SVG-Konverter
+  Systemfonts, Source Serif Pro ist keiner. Reine Pfade sind mit jedem SVG-Konverter
   identisch reproduzierbar. Siehe README, Abschnitt „Markendateien", für den
   Export-Weg zu public/og.png, und DESIGN.md, Abschnitt „Logo".
 

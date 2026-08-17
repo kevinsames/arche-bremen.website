@@ -1,7 +1,6 @@
 ---
 title: "Die Heilige Schrift"
 number: 1
-summary: "Die Bibel ist Gottes eingegebenes, unfehlbares Wort — vollständig genug für Glauben und Leben, Maßstab für jede Lehre."
 ---
 
 Der lebendige Gott offenbart sich allen Menschen im Allgemeinen in der

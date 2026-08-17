@@ -1,7 +1,6 @@
 ---
 title: "Die Auserwählung und der Gnadenbund"
 number: 7
-summary: "Aus freier Gnade, nicht aus Verpflichtung, bietet Gott den Menschen in seinem Bund Errettung durch Jesus Christus an."
 ---
 
 Der Abstand zwischen Gott und Mensch ist so unermesslich groß, dass der

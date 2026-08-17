@@ -1,7 +1,6 @@
 ---
 title: "Buße und Bekehrung"
 number: 14
-summary: "Wer geistlich sehend wird, erkennt seine Sünde, bekennt sie und wendet sich lebenslang immer neu Gott zu."
 ---
 
 Wenn einem Menschen durch das Wahrnehmungsvermögen[^14-1] des ihm geschenkten

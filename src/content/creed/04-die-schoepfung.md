@@ -1,7 +1,6 @@
 ---
 title: "Die Schöpfung"
 number: 4
-summary: "Gott schuf Himmel, Erde und den Menschen als Mann und Frau nach seinem Ebenbild, in Gerechtigkeit und ohne Sünde."
 ---
 
 Um sich selbst, Seine ewige Macht, Weisheit, Güte und Ehre zu offenbaren[^4-1],

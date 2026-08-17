@@ -79,10 +79,12 @@
   --surface-warm-strong:      color-mix(in srgb, var(--accent-warm) 28%, var(--c-white));
 
   /* ---------- Typografie (Brandbook 2.1 / 2.2) ---------- */
-  /* Headlines: Brandbook schreibt Futura Bold/Medium vor.
-     Futura ist nicht webfont-lizenziert — Jost ist die
-     SIL-OFL-Ersatzschrift. Siehe DESIGN.md, offene Frage 2. */
-  --font-display: "Jost", "Futura", "Century Gothic", sans-serif;
+  /* Headlines: Brandbook schreibt Futura Bold/Medium vor. Futura ist nicht
+     webfont-lizenziert — die Seite steht deshalb komplett in Source Serif
+     Pro statt in Futura. Siehe DESIGN.md, "Source Serif Pro statt Futura".
+     Zwei Token, eine Familie: die semantische Trennung Display/Body bleibt
+     erhalten, falls sich das einmal wieder auseinanderentwickelt. */
+  --font-display: "Source Serif Pro", Georgia, serif;
   --font-body:    "Source Serif Pro", Georgia, serif;
 
   /* Headlines primär in Versalien mit weiter Laufweite

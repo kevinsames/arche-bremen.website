@@ -1,7 +1,6 @@
 ---
 title: "Die Taufe"
 number: 19
-summary: "Die Taufe bezeugt im Untertauchen, dass ein Mensch mit Christus gestorben und zu neuem Leben auferstanden ist."
 ---
 
 Der Herr Jesus Christus selbst hat in Verbindung mit dem Missionsauftrag die

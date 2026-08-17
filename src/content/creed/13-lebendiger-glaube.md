@@ -1,7 +1,6 @@
 ---
 title: "Lebendiger Glaube"
 number: 13
-summary: "Echter, rettender Glaube ist kein eigenes Werk, sondern eine Gabe Gottes, die der Heilige Geist durch sein Wort wirkt."
 ---
 
 Alle Menschen sind verpflichtet, an den einen Gott, den Schöpfer Himmels und

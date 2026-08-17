@@ -1,7 +1,6 @@
 ---
 title: "Die Vorsehung Gottes"
 number: 5
-summary: "Gott lenkt und erhält alles Geschehene bis ins Kleinste — nichts trifft Gläubige ohne seine weise Fügung."
 ---
 
 Zur Durchführung Seines ewigen Ratschlusses erhält, lenkt und regiert Gott
