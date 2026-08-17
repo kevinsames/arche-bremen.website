@@ -72,16 +72,16 @@ entsprechend ergänzt.
 
 ## Schriftarten
 
-Die verwendeten Schriften (Jost, Source Serif Pro) sind lokal auf unserem
-Server hinterlegt. Es besteht keine Verbindung zu Google Fonts oder einem
+Die verwendete Schrift (Source Serif Pro) ist lokal auf unserem Server
+hinterlegt. Es besteht keine Verbindung zu Google Fonts oder einem
 anderen externen Schriften-Anbieter; beim Laden der Seite werden dadurch keine
 Daten an Dritte übertragen.
 
 ## Links auf externe Angebote
 
 Diese Website verlinkt an einzelnen Stellen auf externe Angebote — etwa einen
-Kartendienst zur Anfahrt, das Online-Spendenformular unserer Muttergemeinde in
-Hamburg oder Audioaufnahmen von Predigten. Diese Links öffnen sich erst nach
+Kartendienst zur Anfahrt, die Website unserer Muttergemeinde in Hamburg oder
+Audioaufnahmen von Predigten. Diese Links öffnen sich erst nach
 bewusstem Klick; erst dann findet eine Verbindung zum jeweiligen Anbieter
 statt. Für die dort verarbeiteten Daten gilt die Datenschutzerklärung des
 jeweiligen Anbieters, nicht diese.

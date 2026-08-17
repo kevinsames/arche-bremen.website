@@ -198,6 +198,28 @@ Die GROQ-Projektion steht bewusst doppelt — in `scripts/snapshot.mjs` und
 `src/lib/sanity.ts`. Ändert sich eine, die andere nachziehen (beide Dateien
 verweisen aufeinander).
 
+### QR-Code neu erzeugen
+
+Die Spendenseite (`src/content/pages/spenden.md`) bindet `public/spenden-qr.svg`
+ein — einen GiroCode (EPC-QR-Code) mit vorausgefüllter Überweisung an Empfänger,
+IBAN und Verwendungszweck „Arche Bremen". Erzeugt und committed, kein Build-Schritt:
+
+```sh
+npm run girocode
+```
+
+Nötig nach jeder Änderung von IBAN, Empfänger oder Verwendungszweck in
+`scripts/girocode.mjs` — dieselben Werte stehen zusätzlich als Text in
+`src/content/pages/spenden.md` und `src/content/pages/impressum.md` und müssen
+von Hand mitgezogen werden (bewusst dupliziert, siehe dortige Kommentare). Der
+vollständige Payload steht zur Kontrolle auch als Kommentar im Kopf der
+erzeugten SVG-Datei.
+
+**Nach jedem Lauf: den neuen Code mit einer echten Banking-App scannen**, bevor
+der Commit rausgeht. Ein stillschweigend falscher Verwendungszweck fällt sonst
+erst auf, wenn eine Spende nicht bei Bremen ankommt. Details und
+Design-Begründung in `DESIGN.md`, Abschnitt „QR-Code (GiroCode)".
+
 ### Wie ein neuer Dokumenttyp entsteht (Sanity)
 
 1. Neue Datei unter `sanity/schemaTypes/`, `defineType` verwenden (siehe

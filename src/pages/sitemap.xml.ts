@@ -22,7 +22,7 @@ export const GET: APIRoute = async ({ site }) => {
     throw new Error('astro.config.mjs: `site` fehlt. Die sitemap.xml braucht absolute URLs.');
   }
 
-  const pages = await getCollection('pages'); //   /impressum, /datenschutz
+  const pages = await getCollection('pages'); //   /impressum, /datenschutz, /spenden
   const creed = await getCollection('creed');
   const elders = await getCollection('elders');
   const sermons = await getSermons();

@@ -20,27 +20,27 @@ description: "Impressum der Arche Bremen: Anbieterkennzeichnung nach § 5 TMG, i
 
 ## Angaben gemäß § 5 TMG
 
-Gemeinde und Missionswerk Arche e.V.
+Gemeinde und Missionswerk Arche e.V.<br>
 Evangelisch-reformierte Freikirche
 
-Doerriesweg 7
+Doerriesweg 7<br>
 22525 Hamburg
 
-Telefon: (040) 54 70 50
-Telefax: (040) 54 70 5 299
+Telefon: (040) 54 70 50<br>
+Telefax: (040) 54 70 5 299<br>
 E-Mail: info (at) arche-gemeinde.de
 
 ## Inhaltlich Verantwortlicher
 
 Verantwortlich nach § 18 Abs. 2 MStV:
 
-Christian Wegert
+Christian Wegert<br>
 Doerriesweg 7, 22525 Hamburg
 
 ## Bankverbindung für Spenden
 
-IBAN: DE98 5206 0410 0007 0707 05
-BIC: GENODEF1EK1
+IBAN: DE98 5206 0410 0007 0707 05<br>
+BIC: GENODEF1EK1<br>
 Evangelische Bank eG
 
 ## Haftungshinweis

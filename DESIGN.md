@@ -445,6 +445,31 @@ nicht versehentlich übersehen.
 `--size-logo-hero`, `--size-mark` — reine Layout-Werte, keine
 Auflösungsgrenze mehr (Vektorgrafik).
 
+## QR-Code (GiroCode)
+
+`public/spenden-qr.svg` (Spendenseite, `src/content/pages/spenden.md`) ist ein
+EPC-QR-Code (EPC069-12) für eine vorausgefüllte Überweisung — Empfänger, IBAN
+und Verwendungszweck „Arche Bremen" stehen im Code, nur der Betrag bleibt
+offen. Erzeugt von `scripts/girocode.mjs` (`npm run girocode`), siehe
+`README.md`, Abschnitt „QR-Code neu erzeugen".
+
+Farbe Dunkelblau (`#003a56`, Token `--c-blue-dark`) auf Weiß statt Markengelb:
+Gelb liegt mit 1,44:1 Kontrast weit unter dem, was Scanner brauchen (üblich
+sind etwa 4:1), Dunkelblau erreicht 12,07:1. Wie beim Logo (siehe oben) steckt
+der Hex-Wert dabei in einem **generierten Asset**, nicht im Komponentencode —
+dieselbe Ausnahme von Design-Regel 1 aus demselben Grund: Es ist keine
+Handentscheidung im Template, sondern ein Parameter eines Erzeugungsskripts.
+
+Größe 180×180 px, per `width`/`height` am `<img>` festgelegt (kein
+Layout-Sprung). Fehlerkorrekturlevel M ist keine Design-, sondern eine
+Format-Vorgabe von EPC069-12 — andere Level lehnen manche Banking-Apps ab.
+
+**Bewusste Einschränkung:** Bei 70–80 % Mobiltraffic (CLAUDE.md) kann die
+Mehrheit der Besucher den Code nicht auf dem eigenen Bildschirm scannen. Der
+Bankdaten-Textblock bleibt deshalb auf der Seite über dem QR-Code die primäre
+Information; der Code ist ein Zusatzangebot für Desktop-Besuch und künftige
+gedruckte Flyer.
+
 ## Fußnoten
 
 Seit August 2026 stehen die Bibelstellen des Glaubensbekenntnisses (siehe
