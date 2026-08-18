@@ -29,4 +29,4 @@ sonst nur der Betrag.
 
 Ab einem Betrag von 10 € stellen wir eine Spendenbescheinigung aus.
 
-Bei Fragen [meld dich gerne bei uns](/#kontakt).
+Bei Fragen [meld dich gerne bei uns](/kontakt).

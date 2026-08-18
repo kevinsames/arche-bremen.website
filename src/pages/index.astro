@@ -5,7 +5,7 @@ import SermonCard from '../components/SermonCard.astro';
 import Slider from '../components/Slider.astro';
 import Overlay from '../components/Overlay.astro';
 import { Image } from 'astro:assets';
-import { SITE, CONTACT, FOUNDING, PRAYER_REQUESTS, WEEKLY_EVENTS } from '../consts';
+import { SITE, FOUNDING, PRAYER_REQUESTS, WEEKLY_EVENTS } from '../consts';
 import logo from '../assets/brand/arche-logo.svg';
 import mark from '../assets/brand/bogen.svg';
 import marktplatz from '../assets/photos/bremen-marktplatz.jpg';
@@ -110,7 +110,7 @@ const jsonLd = {
       <span class="milestone-label">{FOUNDING.milestoneLabel}</span><br />
       <span class="milestone-date">{FOUNDING.milestoneDate}</span>
     </p>
-    <a class="button" href="#kontakt">Schreib uns</a>
+    <a class="button" href="/kontakt">Schreib uns</a>
 
     <!-- Rein dekorativ: zeigt, dass unter dem Hero weitergeht. Kein Link,
          kein Sprungziel — der Hinweis ersetzt keine Navigation. Icon-Muster
@@ -159,7 +159,7 @@ const jsonLd = {
   </figure>
 
   <Section tone="light" width="measure">
-    <h2 id="kontakt">Bete und bau mit</h2>
+    <h2 id="mitbauen">Bete und bau mit</h2>
     <p>
       Wir stehen am Anfang und sind auf Unterstützung angewiesen. Das sind
       unsere aktuellen Gebetsanliegen:
@@ -169,8 +169,8 @@ const jsonLd = {
     </ul>
     <p>
       Wer bei uns predigt und leitet, steht unter <a href="/gemeindeleitung">Gemeindeleitung</a>.
-      Willst du mitbeten, mitbauen oder einfach mehr erfahren? Schreib uns:{' '}
-      {CONTACT.local}&#64;{CONTACT.domain}
+      Willst du mitbeten, mitbauen oder einfach mehr erfahren?{' '}
+      <a href="/kontakt">Schreib uns</a>.
     </p>
   </Section>
 

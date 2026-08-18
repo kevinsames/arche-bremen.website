@@ -116,7 +116,8 @@ vergeben (`card.dataset.surface`) — reine Folgelogik der Dekoration, mit ihr
 entfernt. `--surface-nature`, `--surface-nature-strong` und
 `--surface-warm-alt-strong` sind seither ungenutzt und aus `tokens.css`
 gestrichen; `--surface-warm-alt` bleibt, `.notice`/`.prayer-list` in
-`index.astro` nutzen es weiterhin. Grün (`--accent-nature`) hat damit keine
+`index.astro` und seit der Kontaktseite (September 2026) `.mail` in
+`kontakt.astro` nutzen es weiterhin. Grün (`--accent-nature`) hat damit keine
 Verwendung mehr auf der Website — die Rohfarbe bleibt trotzdem in
 `tokens.css` stehen, sie ist Markenpalette aus dem Brandbook, nicht an eine
 Anwendung gebunden.
@@ -354,9 +355,10 @@ Kachelflächen — `--surface-warm-alt` als Fläche, `--accent-warm-alt` als
 Rahmenstreifen. Kein neues Tokenpaar für „Warnung"/„Hinweis": Die Farbwerte
 und ihre Kontrastprüfung oben gelten unverändert, Orange bleibt Fläche und
 Rahmen, nie Text. Dieselbe Fläche trägt seit August 2026 auch die
-Gebetsanliegen-Liste (`.prayer-list`) — eigene Klasse, gleiche Tokens, aus
-demselben Grund: kein drittes Tokenpaar für einen dritten Anwendungsfall
-derselben Fläche.
+Gebetsanliegen-Liste (`.prayer-list`) und seit September 2026 den
+Adressblock auf `/kontakt` (`.mail`) — jeweils eigene Klasse, gleiche
+Tokens, aus demselben Grund: kein weiteres Tokenpaar für einen weiteren
+Anwendungsfall derselben Fläche.
 
 **Hero in der Gründungsphase (August 2026):** Above the fold stand ursprünglich
 Gottesdienstzeit und Adresse (`SERVICE`/`ADDRESS`). Es gibt noch keinen

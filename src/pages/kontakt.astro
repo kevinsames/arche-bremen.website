@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import { CONTACT } from '../consts';
+
+// Eigene .astro-Route statt Markdown in src/content/pages/ (anders als
+// /impressum, /datenschutz, /spenden): Astros Markdown-Pipeline dekodiert
+// &#64; vor der GFM-Autolink-Erkennung und macht daraus einen mailto:-Link
+// (CLAUDE.md Regel 8 verbietet genau das, siehe Kommentar in
+// content/pages/impressum.md). Hier ist die Adresse der Hauptinhalt und soll
+// normal lesbar bleiben, deshalb das &#64;-Muster aus Footer.astro direkt im
+// Template.
+---
+
+<BaseLayout
+  title="Kontakt"
+  description="So erreichst du Arche Bremen: die Funktions-E-Mail-Adresse des Gründungsteams, wer antwortet und wie lange es dauert."
+>
+  <Section tone="light" width="measure">
+    <h1>Kontakt</h1>
+    <p>
+      Wir bauen in Bremen gerade erst eine Gemeinde auf. Es gibt noch keinen
+      öffentlichen Gottesdienst, zu dem wir dich einladen könnten — aber es
+      gibt uns, und über jede Nachricht freuen wir uns.
+    </p>
+
+    <p class="mail">
+      <span class="mail-label">E-Mail</span>
+      <span class="mail-address">{CONTACT.local}&#64;{CONTACT.domain}</span>
+    </p>
+
+    <p>
+      Schreib einfach, worum es geht: eine Frage zum Glauben, Interesse an der
+      Gemeindegründung, Mitarbeit — oder du bist neu in Bremen und suchst eine
+      Gemeinde. Wir antworten in der Regel innerhalb einer Woche.
+    </p>
+    <p>
+      Hinter der Adresse steht das Gründungsteam, nicht eine einzelne Person.
+      Wer bei uns predigt und leitet, steht unter{' '}
+      <a href="/gemeindeleitung">Gemeindeleitung</a>.
+    </p>
+    <p>Sobald ein Ort für den Gottesdienst feststeht, steht die Anfahrt hier.</p>
+    <p>
+      Mitbeten oder mitbauen? Unsere aktuellen Gebetsanliegen stehen auf der{' '}
+      <a href="/#mitbauen">Startseite</a>. Wer finanziell unterstützen
+      möchte, findet die Angaben unter <a href="/spenden">Spenden</a>.
+    </p>
+    <p>
+      Anschrift und inhaltlich Verantwortlicher stehen im{' '}
+      <a href="/impressum">Impressum</a>.
+    </p>
+  </Section>
+</BaseLayout>
+
+<style>
+  /* Fläche mit linker Akzentkante wie .notice/.prayer-list in index.astro
+     (dritte Verwendung des Musters, siehe DESIGN.md) — Werte 1:1
+     übernommen, eigene Klasse statt gemeinsamer Abstraktion (CLAUDE.md
+     Regel 2: Kachelflächen sind reine Wiederholung, keine Komponente wert). */
+  .mail {
+    display: grid;
+    row-gap: var(--sp-1);
+    background: var(--surface-warm-alt);
+    border-left: 3px solid var(--accent-warm-alt);
+    border-radius: var(--radius-md);
+    padding: var(--sp-4);
+    margin: var(--sp-4) 0;
+  }
+
+  /* Eyebrow-Optik wie .field label in SermonFilter.astro. */
+  .mail-label {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+  }
+
+  .mail-address {
+    font-size: var(--fs-m);
+    color: var(--text-primary);
+  }
+</style>
