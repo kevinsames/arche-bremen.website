@@ -13,9 +13,9 @@ die gehören in den Passwortmanager der Gemeinde.
 
 | Bereich | Hauptverantwortlich | Stellvertretung | Zugang läuft über |
 |---|---|---|---|
-| Domain | | | |
-| DNS | | | |
+| Domain `arche-gemeinde.de` | (gehört der Muttergemeinde Arche Hamburg, nicht uns) | | |
+| DNS `arche-gemeinde.de` | Zone liegt im Microsoft-365-Tenant der Muttergemeinde (Nameserver `*.bdm.microsoftonline.com`), betreut über den Dienstleister Wielis. Wer den `bremen`-CNAME konkret ändern kann, hier eintragen, sobald geklärt. | | |
 | Hosting (Cloudflare Pages) | | | |
 | Sanity (Projekt + Studio-Deploy) | | | |
 | Repo (GitHub) | | | |
-| Postfach `info@bremen.arche-gemeinde.de` | | | |
+| Postfach `info@bremen.arche-gemeinde.de` | (noch nicht eingerichtet — kein MX auf der Subdomain, siehe README.md „Deployment") | | |

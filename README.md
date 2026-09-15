@@ -399,9 +399,47 @@ Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
 
 ## Deployment
 
-Noch nicht eingerichtet. Vorgesehen: Cloudflare Pages, Build mit `npm ci` und
-`npm run build`. `SANITY_DATASET=production` als Umgebungsvariable im
-Hosting-Dashboard setzen (nicht im Repo).
+Cloudflare Pages, Projekt `arche-bremen-website`
+(`arche-bremen-website.pages.dev`). Build mit `npm ci` und `npm run build`,
+Output-Verzeichnis `dist`, Node-Version aus `.nvmrc`. `SANITY_PROJECT_ID` und
+`SANITY_DATASET=production` als Umgebungsvariablen im Hosting-Dashboard
+setzen (nicht im Repo).
+
+### Die Domain liegt in fremder Hand
+
+`bremen.arche-gemeinde.de` (siehe `astro.config.mjs`, `site`) ist eine
+Subdomain von `arche-gemeinde.de` — die gehört der Muttergemeinde Arche
+Hamburg, nicht uns. Die Zone wird im Microsoft-365-Tenant der Muttergemeinde
+verwaltet (Nameserver `*.bdm.microsoftonline.com`), betreut über den
+Dienstleister Wielis. Wir haben dort keinen eigenen Zugriff.
+
+Für uns liegt genau ein DNS-Eintrag in fremder Hand:
+
+```
+CNAME  bremen  →  arche-bremen-website.pages.dev
+```
+
+Dieser Eintrag hat Vorrang vor dem Wildcard `*.arche-gemeinde.de`, den die
+Muttergemeinde für ihre eigenen Zwecke betreibt (er zeigt sonst auf ihren
+eigenen Webserver). Zuständige Person für diesen Eintrag: siehe
+`MAINTAINERS.md`, Zeile „DNS".
+
+**Fehlerbild, wenn der Eintrag fehlt oder entfernt wurde:** `bremen.arche-
+gemeinde.de` zeigt statt unserer Seite die Website oder Beta-Umgebung der
+Arche Hamburg (Apache/TYPO3, `302` auf `beta.arche-gemeinde.de`). Das ist der
+Wildcard der Muttergemeinde, der wieder greift, sobald unser expliziter CNAME
+weg ist — kein Zertifikatsfehler, keine leere Seite, sondern eine
+funktionierende, aber falsche Antwort. `dig +short CNAME
+bremen.arche-gemeinde.de` muss auf `*.pages.dev` zeigen; fehlt das, ist der
+Eintrag weg und muss erneut bei der Muttergemeinde angefragt werden.
+
+Sanity-CORS-Origin (`sanity.io/manage` → Projekt → API → CORS origins) muss
+`https://bremen.arche-gemeinde.de` enthalten, sonst funktioniert `/studio` in
+Produktion nicht.
+
+Postfach `info@bremen.arche-gemeinde.de` existiert **nicht** — die Subdomain
+hat keinen MX-Eintrag. Bis das geklärt ist, ist die im Footer und auf
+`/kontakt` angezeigte Adresse nicht erreichbar.
 
 `public/_headers` setzt Cache- und Sicherheits-Header für Cloudflare Pages.
 Nach jedem Deploy prüfen, ob Cloudflare die Datei akzeptiert hat (sie wird
