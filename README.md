@@ -383,6 +383,10 @@ Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
 - Branch pro Änderung, kein Direktcommit auf `main`. Merge über Pull Request,
   damit Cloudflare eine Preview-URL baut und ein zweiter Blick auf
   personenbezogene Inhalte stattfindet.
+- `main` ist der Arbeits-Branch, nicht die Produktion. Live geht eine Änderung
+  erst, wenn `main` bewusst nach `release` gemerged wird (siehe
+  „Deployment"). Bis dahin sammeln sich fertige, gemergte Änderungen auf
+  `main`, ohne dass die Website sie zeigt.
 - Commit-Konvention aus der bisherigen Historie: `feat:`, `fix:`, `content:`,
   `style:`, `refactor:`, `docs:`. Englisch, Imperativ, eine Aussage pro
   Commit.
@@ -404,6 +408,25 @@ Cloudflare Pages, Projekt `arche-bremen-website`
 Output-Verzeichnis `dist`, Node-Version aus `.nvmrc`. `SANITY_PROJECT_ID` und
 `SANITY_DATASET=production` als Umgebungsvariablen im Hosting-Dashboard
 setzen (nicht im Repo).
+
+**Production-Branch ist `release`, nicht `main`.** So im Cloudflare-Dashboard
+unter *Settings → Builds & deployments → Production branch* eingestellt.
+`main` läuft als normaler Branch mit — jeder Push/Merge dorthin baut eine
+eigene Vorschau-Deployment-URL, aber nur `release` geht live unter
+`bremen.arche-gemeinde.de`.
+
+**Release-Vorgang**, wenn `main` veröffentlicht werden soll:
+
+```sh
+git checkout release
+git merge --ff-only main
+git push
+```
+
+`--ff-only` erzwingt, dass `release` nie vor `main` steht und keine eigene
+Historie aufbaut — schlägt der Merge fehl, ist `release` bereits aktuell oder
+jemand hat direkt auf `release` committet, was nicht vorgesehen ist. Danach
+baut Cloudflare automatisch neu und veröffentlicht.
 
 ### Die Domain liegt in fremder Hand
 
