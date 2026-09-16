@@ -1,5 +1,6 @@
 ---
 import { SITE, CONTACT } from '../consts';
+import logoWhite from '../assets/brand/arche-logo-white.svg';
 
 const currentYear = new Date().getFullYear();
 ---
@@ -7,7 +8,7 @@ const currentYear = new Date().getFullYear();
 <footer>
   <div class="bar">
     <div class="col">
-      <p class="site-name">{SITE.name}</p>
+      <img class="site-name" src={logoWhite.src} width={logoWhite.width} height={logoWhite.height} alt={SITE.name} />
     </div>
 
     <div class="col">
@@ -69,10 +70,9 @@ const currentYear = new Date().getFullYear();
   }
 
   .site-name {
-    font-family: var(--font-display);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-display);
+    display: block;
+    width: var(--size-logo-header);
+    height: auto;
     margin: 0 0 var(--sp-2);
   }
 

@@ -72,8 +72,8 @@ Regeln:
    und auf dunklem Grund `--text-on-dark`. `--c-blue` nur für große Schrift und
    UI-Rahmen.
 5. **Fonts selbst hosten**, WOFF2, `font-display: swap`, maximal zwei Familien.
-   Eine Familie site-weit: Source Serif Pro, Schnitt 400 für Fließtext,
-   Schnitt 600 für Headlines. Keine Google-Fonts-URL.
+   Futura (Schnitte 500/700) für Headlines, Source Serif Pro (Schnitte
+   400/600) für Fließtext. Keine Google-Fonts-URL.
 6. Headlines primär in Versalien mit `--tracking-display`, entsprechend
    Brandbook 2.1.
 7. **Keine neuen Tokens erfinden.** Fehlt ein Wert, in `DESIGN.md` unter offene
@@ -81,10 +81,10 @@ Regeln:
 8. Logo als offizielle SVG-Datei einbinden, nie als Text in einem Webfont
    nachgebaut. Seit 10. August 2026 umgesetzt: `src/assets/brand/arche-logo.svg`
    (Header, Hero) und `bogen.svg`, ein daraus herausgelöster Einzelpfad
-   (Termine-Sektion). Der Footer behält weiterhin die Textwortmarke — das
-   Lockup ist einfarbig Dunkelblau und auf dem dunklen Footer-Hintergrund
-   unlesbar, unabhängig vom Dateiformat. Details in `DESIGN.md`, Abschnitt
-   „Logo".
+   (Termine-Sektion). Seit 16. September 2026 auch der Footer:
+   `arche-logo-white.svg`, dieselbe Datei mit weißer statt dunkelblauer
+   Füllung, für den dunklen Footer-Hintergrund. Details in `DESIGN.md`,
+   Abschnitt „Logo".
 9. Keine Stock-Fotografie. Brandbook 3.1 verlangt mindestens 70 % Fotos aus der
    lokalen Gemeinde; bis solche existieren, wird typografisch gestaltet.
 
@@ -181,7 +181,8 @@ nachträgliches Verschlagworten von 80 Predigten passiert nie.
   JavaScript bleibt die vollständige Kachelliste unverändert stehen. Kein
   Framework, kein Astro-Island — siehe harte Regel 4.
 - Bilder über Astros Image-Komponente, AVIF/WebP.
-- Fonts selbst gehostet, `font-display: swap`, maximal zwei Schnitte.
+- Fonts selbst gehostet, `font-display: swap`, maximal vier Schnitte (zwei
+  Familien: Futura 500/700, Source Serif Pro 400/600).
 
 ## Dokumentation
 

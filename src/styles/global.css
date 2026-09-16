@@ -9,9 +9,25 @@
  * Basiselement-Stile, die diese Tokens referenzieren.
  */
 
-/* Selbst gehostet, siehe DESIGN.md Abweichung 2 und public/fonts/. Eine
-   Familie, zwei Schnitte — Performance-Budget in CLAUDE.md erlaubt maximal
-   zwei Schnitte insgesamt. */
+/* Selbst gehostet, siehe DESIGN.md Abschnitt "Futura für Headlines, Source
+   Serif Pro für Fließtext" und public/fonts/. Zwei Familien, vier Schnitte
+   — Performance-Budget in CLAUDE.md erlaubt genau diese vier. */
+@font-face {
+  font-family: 'Futura';
+  src: url('/fonts/futura-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Futura';
+  src: url('/fonts/futura-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: 'Source Serif Pro';
   src: url('/fonts/source-serif-400-v2.woff2') format('woff2');
@@ -67,11 +83,13 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  /* Explizit 600 (Semibold, geladener Schnitt) statt der Browser-Vorgabe
-     "bold" — sonst synthetisiert der Browser eine Fett-Variante. Zusätzliche
+  /* Explizit 500 (Futura Medium, geladener Schnitt) statt der
+     Browser-Vorgabe "bold" — sonst synthetisiert der Browser eine
+     Fett-Variante oder matcht auf den geladenen 700er-Schnitt (Bold ist
+     für kleine Labels reserviert, siehe .button unten). Zusätzliche
      Hierarchie kommt über Größe, Versalien und Laufweite (Brandbook 2.1),
      nicht nur über Schriftgewicht. */
-  font-weight: 600;
+  font-weight: 500;
   line-height: var(--lh-tight);
   text-transform: uppercase;
   letter-spacing: var(--tracking-display);
@@ -190,7 +208,7 @@ a:visited {
 .button {
   display: inline-block;
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: var(--tracking-display);
   text-decoration: none;

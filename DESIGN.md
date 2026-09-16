@@ -369,34 +369,119 @@ Eyebrow-Label im `.event-title`-Stil). Keine neuen Tokens dafür nötig. Der
 Wechsel zurück zu Gottesdienstzeit und Adresse ist in `README.md`, Abschnitt
 „Offene Punkte", vermerkt.
 
-### 2. Source Serif Pro statt Futura
+### 2. Futura für Headlines, Source Serif Pro für Fließtext
 
 Brandbook 2.1 schreibt Futura Bold und Medium für Logo und Headlines vor,
-primär in Versalien mit Laufweite 70.
+primär in Versalien mit Laufweite 70. Von August bis September 2026 stand die
+Seite komplett in Source Serif Pro, weil keine Web-Nutzungsrechte für Futura
+vorlagen (siehe Git-Historie dieses Abschnitts). Diese Abweichung ist seit dem
+16. September 2026 aufgehoben.
 
-Futura ist kommerziell lizenziert. Eine Desktop-Lizenz deckt Webfont-Einbettung
-nicht ab; Webfont-Lizenzen werden separat vertrieben. Statt einer zweiten,
-zu Futura passenden Groteske (bis August 2026: **Jost**, SIL Open Font
-License) steht die Seite seit dem 17. August 2026 komplett in **Source
-Serif Pro** — Fließtext wie Headlines. Eine Familie, zwei Schnitte (400
-Fließtext, 600 Headlines), statt zwei Familien. Grund: einfacher zu warten,
-ein Ladepfad weniger, und die zweifarbige Optik (Groteske für Headlines,
-Serif für Fließtext) war ohnehin nur ein Kompromiss, kein Markenmerkmal.
+**Freigabe.** Kevin Sames (Repo- und Domain-Zugriff, siehe `MAINTAINERS.md`)
+hat am 16. September 2026 bestätigt, die Schriftdateien aus
+`Church - Arche/Teams & responsibilities/Website/Logos & Corporate
+Design/Schriftarten/futura/` (privater iCloud-Ordner, nicht im Repo) für die
+Website verwenden zu dürfen. Die lizenzrechtliche Bewertung liegt bei ihm, nicht
+bei der Entwicklung. Bei Rückfragen des Lizenzgebers ist er der erste
+Ansprechpartner.
 
-Beide Schnitte stammen aus demselben Release wie der bisherige Fließtext-Schnitt
-(`adobe-fonts/source-serif`, Tag `3.001R`, SIL OFL), auf das Latin-Subset
-reduziert (`public/fonts/source-serif-400-v2.woff2`,
-`public/fonts/source-serif-600.woff2`). Damit passen Metriken und
-Glyphenumfang exakt zueinander; ein künftiger dritter Schnitt sollte aus
-demselben Release gezogen werden.
+**Quelldateien.** Aus demselben Ordner: `Futura Medium.otf` (500) und
+`Futura Bold.otf` (700), Adobe/Neufville-Digitalisierung. Gewählt, weil das
+Brandbook-PDF (`#1 Brandbook_v_1.1.pdf`) exakt diese Digitalisierung
+einbettet — `/BaseFont` nennt `Futura-Medium` und `Futura-Bold`. Verworfene
+Alternativen aus demselben Ordner:
 
-Das **Logo** verwendet keinen Webfont, sondern die offizielle SVG-Datei mit
-Vektorkonturen — damit entfällt die Lizenzfrage für die Wortmarke vollständig.
-Siehe Abschnitt „Logo" unten.
+- `Futura.ttc` (Neufville Digital, 5 Schnitte) — vollständigere
+  Glyphenabdeckung, aber rund 8 % breiter laufende Zeichen (Vergleich der
+  Versal- und Kleinbuchstaben-Laufweiten). Mit `--tracking-display: 0.07em`
+  auf mobilen Versalheadlines zu breit. Zweitbeste Wahl, falls die
+  Adobe-Schnitte optisch nicht überzeugen.
+- `Tilde - Futura TL *.ttf`, `futura-book-bt-22240.ttf` — Bitstream-Linie,
+  andere Zeichnung als das Brandbook-PDF.
+- `Futura Std/Light/SCTOT *` — ausschließlich Light-Schnitte, im Brandbook
+  nicht vorgesehen.
+- `Gloss_And_Bloom.ttf` (anderer Ordner, `Schriftarten/gloss_and_bloom/`) —
+  laut beiliegender `Read Me.rtf` „free for PERSONAL USE ONLY", für die
+  Website nicht nutzbar.
 
-Falls Hamburg eine Futura-Webfont-Lizenz besitzt, die Bremen mitabdeckt, wird
-`--font-display` umgestellt und diese Abweichung entfällt. Lizenzrechtliche
-Bewertung nicht durch uns.
+**Bekannte Lücke:** `Futura Medium.otf` enthält kein €-Zeichen. Im gesamten
+Quelltext kommt € nur einmal vor (`src/content/pages/spenden.md`, Fließtext,
+Source Serif Pro) — Headlines sind nicht betroffen. Falls künftig ein Betrag
+in einer Headline auftaucht, greift der `€`-lose Fallback des Browsers auf den
+nächsten Font in `--font-display`.
+
+**Konvertierung.** `fontTools` (`pyftsubset`) lokal installiert, keine
+Projekt-Dependency — dieselbe Vorgehensweise wie bei den
+`source-serif-*.woff2`-Dateien. Beide Schnitte auf das Latin-Subset reduziert:
+
+```
+pyftsubset "Futura Medium.otf" \
+  --output-file=futura-500.woff2 --flavor=woff2 \
+  --layout-features='' --desubroutinize --name-IDs='*' \
+  --unicodes="U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+```
+
+Gleicher Befehl für `Futura Bold.otf` → `futura-700.woff2`. `--name-IDs='*'`
+ist Absicht: ohne diese Option entfernt `pyftsubset` standardmäßig Copyright-,
+Trademark- und Lizenz-Einträge aus der Name-Tabelle — die sollen in der
+ausgelieferten Datei bleiben.
+
+Zwei Nacharbeiten am Ergebnis:
+
+1. **Vertikalmetriken angeglichen.** Die beiden Adobe-Schnitte haben ab Werk
+   unterschiedliche `hhea`/`OS-2`-Werte (Medium: `ascent` 995, `lineGap` 0;
+   Bold: `ascent` 830, `lineGap` 218 — auf 1000 em normiert). In Zeilen ohne
+   eigene `line-height`, in denen Medium- und Bold-Text nebeneinanderstehen
+   (z. B. Pills in `SermonFilter.astro`), säße Bold sonst sichtbar versetzt
+   zur Grundlinie. `hhea.ascent/descent/lineGap` sowie
+   `OS/2.sTypoAscender/sTypoDescender/usWinAscent/usWinDescent` von
+   `futura-700.woff2` per `fontTools.ttLib` auf die Werte von
+   `futura-500.woff2` gesetzt.
+2. **Interne Familiennamen korrigiert.** Der Windows-Plattform-Eintrag (name
+   ID 1, Plattform 3.1) von `Futura Bold.otf` lautete im Original „Futura
+   Book" statt „Futura" — ein Mislabel in der Quelldatei selbst, nicht
+   relevant für `@font-face`-Matching (das läuft über den in der CSS-Regel
+   deklarierten `font-family`-Wert), aber verwirrend für jeden, der die Datei
+   später mit einem Font-Inspector öffnet. In beiden Dateien auf allen
+   Plattform-Einträgen vereinheitlicht: Familie „Futura", Subfamilie
+   „Medium"/„Bold".
+
+Ergebnis: `public/fonts/futura-500.woff2` (~11 KB), `public/fonts/futura-700.woff2`
+(~11 KB).
+
+**Gewichte im Code.** Zwei Regeln statt Einzelfallentscheidung, nach
+Brandbook (Bold für kleine Bauchbinden/Labels, Medium für große Headlines):
+
+- **500** — große Versalheadlines: `h1`–`h4` (`global.css`), Kachel- und
+  Sektionsüberschriften (`.title`/`.name` in `CreedCard.astro`,
+  `ElderCard.astro`, `MinistryCard.astro`, sowie die `h1`–`h4` auf
+  `SermonCard.astro`/`SermonDetail.astro`/`index.astro`/`kontakt.astro`, die
+  denselben globalen Selektor erben).
+- **700** — kleine Versal-Labels und Buttons: `.button` (`global.css`), Pills
+  und Formularlabels (`SermonFilter.astro`), `.number` (`CreedCard.astro`),
+  `.passages`/`.passage` (`SermonDetail.astro`/`SermonCard.astro`), `.status`
+  (`MinistryCard.astro`), `.mail-label` (`kontakt.astro`),
+  `.milestone-label`/`.event-title` (`index.astro`).
+
+`font-weight: 600` kommt in Zusammenhang mit `--font-display` nicht mehr vor
+— es lag zwischen den beiden geladenen Schnitten und wäre per
+CSS-Font-Matching zufällig auf 700 gefallen. `600` bleibt ausschließlich beim
+`@font-face`-Deskriptor für Source Serif Pro (`<strong>` im Fließtext, z. B.
+`spenden.md`).
+
+**Cap-Height.** Futura hat Cap-Height 754/1000 em, Source Serif Pro 669/1000
+em — bei gleicher `font-size` wirken Versalheadlines in Futura rund 13 %
+größer. `--fs-*` und `--lh-tight` sind unverändert geblieben; falls eine
+künftige Anpassung nötig wird, gehört sie in `tokens.css`, mit Begründung
+hier.
+
+**Fallback.** `--font-display: "Futura", "Source Serif Pro", Georgia, serif`
+— fällt Futura aus (Netzwerkfehler, künftige Lizenzänderung), soll die Seite
+wie vor dieser Änderung aussehen, nicht in eine dritte Optik kippen.
+
+Das **Logo** verwendet weiterhin keinen Webfont, sondern die offizielle
+SVG-Datei mit Vektorkonturen — die Lizenzfrage für die Wortmarke war nie an
+Futura als Webfont gekoppelt. Siehe Abschnitt „Logo" unten.
 
 ## Logo
 
@@ -414,9 +499,10 @@ Verwendung:
 | Datei | Inhalt | Einsatz |
 |---|---|---|
 | `arche-logo.svg` | Vollständiges Lockup, wie geliefert, unverändert | Header, Hero |
+| `arche-logo-white.svg` | Vollständiges Lockup, identisch zu `arche-logo.svg`, einzige Änderung: die drei `fill:#003a57` auf `fill:#ffffff` gesetzt | Footer (dunkler Grund, `--bg-inverted`) |
 | `bogen.svg` | Nur der Bogen — ein einzelner Pfad aus `arche-logo.svg` herausgelöst, viewBox auf diesen Pfad zugeschnitten (plus Rand), sonst keine Änderung | Stilelement (Termine-Sektion) |
 | `public/favicon.svg` / `public/favicon.png` | Derselbe Pfad wie `bogen.svg`, unverändert übernommen, per `transform` auf `<g>` in ein quadratisches 64×64-Format zentriert (kein Neuzeichnen). Farbe Dunkelblau (`#003a56`, Token `--c-blue-dark`), Hintergrund transparent | Tab-Icon |
-| `og.svg` / `public/og.png` | Vollständiges Lockup, unverändert, zentriert auf `--c-offwhite`-Fläche mit schmalem `--c-blue-dark`-Abschlussbalken, 1200×630. Kein `<text>`-Element (Source Serif Pro ist kein Systemfont, siehe „Source Serif Pro statt Futura" oben) | Open-Graph-Vorschaukarte (`BaseLayout.astro`) |
+| `og.svg` / `public/og.png` | Vollständiges Lockup, unverändert, zentriert auf `--c-offwhite`-Fläche mit schmalem `--c-blue-dark`-Abschlussbalken, 1200×630. Kein `<text>`-Element (Source Serif Pro ist kein Systemfont, siehe „Futura für Headlines, Source Serif Pro für Fließtext" oben) | Open-Graph-Vorschaukarte (`BaseLayout.astro`) |
 
 Eingebunden per direktem Astro-Asset-Import (`import logo from
 '.../arche-logo.svg'`, `<img src={logo.src} ...>`), nicht über die
@@ -425,18 +511,19 @@ verarbeitet Vektorgrafiken nicht sinnvoll. Ausnahme `favicon.svg`/`.png`: liegt
 in `public/` und wird unverändert kopiert, kein Asset-Import (Browser laden
 Icons direkt per `<link rel="icon">` aus `BaseLayout.astro`).
 
+**Gelöst (16. September 2026):** Footer trägt jetzt das Logo. `Footer.astro`
+bindet `arche-logo-white.svg` genau wie `Header.astro` das Original einbindet
+(Asset-Import, `<img src={logoWhite.src} width height alt={SITE.name}>`,
+Breite über `--size-logo-header`, kein neues Token). Die vorherige
+Textwortmarke (`.site-name` in Source Serif Pro) entfällt; die bewusste
+Abweichung von harter Regel 8 ist damit aufgehoben.
+
 **Weiterhin offen:**
 
-1. **Footer bekommt kein Logo.** Das Lockup ist einfarbig Dunkelblau; auf dem
-   dunklen Footer-Hintergrund (`--bg-inverted`) unlesbar, unabhängig vom
-   Dateiformat. Footer behält die Textwortmarke (`SITE.name` in Source Serif
-   Pro) — eine
-   bewusste Abweichung von harter Regel 8, siehe dort. Löst sich erst mit
-   einer hellen Logo-Variante für dunklen Grund.
-2. **Kein Ortszusatz.** Das Lockup zeigt „ARCHE", nicht „Arche Bremen" —
+1. **Kein Ortszusatz.** Das Lockup zeigt „ARCHE", nicht „Arche Bremen" —
    unverändert gegenüber dem Interim-Zustand, siehe offene Frage 1 oben.
    „Bremen" steht weiterhin im Seitentitel, im `alt`-Text und im Footer.
-3. **Hero-h1 (SEO, September 2026):** Das Lockup zeichnet „ARCHE" und
+2. **Hero-h1 (SEO, September 2026):** Das Lockup zeichnet „ARCHE" und
    „Ev.-Reformierte Freikirche" bereits als Vektorpfade — für Suchmaschinen
    und Screenreader ist das aber kein Text. `index.astro` ergänzt das `<h1>`
    deshalb um ein visuell verborgenes `<span class="visually-hidden">`
