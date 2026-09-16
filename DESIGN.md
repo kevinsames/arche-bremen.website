@@ -511,6 +511,14 @@ verarbeitet Vektorgrafiken nicht sinnvoll. Ausnahme `favicon.svg`/`.png`: liegt
 in `public/` und wird unverändert kopiert, kein Asset-Import (Browser laden
 Icons direkt per `<link rel="icon">` aus `BaseLayout.astro`).
 
+**Kommentare in diesen SVG-Dateien dürfen kein `--` enthalten.** XML verbietet
+den doppelten Bindestrich im Kommentar; ein `<img src="…svg">` scheitert dann
+stumm am strikten XML-Parser des Browsers und zeigt nur den `alt`-Text — ohne
+Build- oder Konsolenfehler (passiert am 16. September 2026 bei
+`arche-logo-white.svg` durch `--bg-inverted` im Kommentar). CSS-Custom-Property-
+Namen in Kommentaren deshalb ohne führendes `--` schreiben. Prüfen mit
+`xmllint --noout src/assets/brand/*.svg public/*.svg`.
+
 **Gelöst (16. September 2026):** Footer trägt jetzt das Logo. `Footer.astro`
 bindet `arche-logo-white.svg` genau wie `Header.astro` das Original einbindet
 (Asset-Import, `<img src={logoWhite.src} width height alt={SITE.name}>`,

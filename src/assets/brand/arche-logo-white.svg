@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
-  Helle Variante des Lockups für dunklen Grund (Footer, --bg-inverted).
+  Helle Variante des Lockups für dunklen Grund (Footer, Token bg-inverted).
   Unverändert aus arche-logo.svg übernommen, einzige Änderung: die drei
   fill:#003a57 auf fill:#ffffff gesetzt. Siehe DESIGN.md, Abschnitt "Logo".
 -->
