@@ -2,6 +2,7 @@
 name: Niklas Meyer
 role: Pastor
 photo: ./niklas-meyer.jpg
+familyPhoto: ./niklas-meyer-familie.jpg
 ---
 
 Niklas Meyer ist Pastor der Arche Gemeinde in Bremen. Ausgebildet ist er als

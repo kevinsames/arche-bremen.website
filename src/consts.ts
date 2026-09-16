@@ -43,12 +43,12 @@ export const ADDRESS = {
 export const FOUNDING = {
   claim: 'Wir gründen eine Gemeinde in Bremen.',
   milestoneLabel: 'Geplanter erster Gottesdienst',
-  milestoneDate: '1. April 2027',
+  milestoneDate: '2. Mai 2027',
 };
 
 export const PRAYER_REQUESTS = [
   'Passende Räumlichkeiten in Bremen',
-  'Mitarbeiter für den Aufbau',
+  'Weitere Mitarbeiter für den Aufbau',
   'Menschen, die das Evangelium hören und annehmen',
 ];
 

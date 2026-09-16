@@ -626,6 +626,14 @@ würde die eckige Formensprache des Brandbooks brechen. Neuer Token
 Popup-Overlay der Kachel bleibt bewusst textlich — ein zweites, kleineres
 Foto dort brächte keinen Mehrwert.
 
+**Zweites Profilfoto (`familyPhoto`, September 2026):** optionales Feld,
+bisher nur bei Niklas gesetzt (Familienfoto). Steht unter dem Profiltext auf
+der Detailseite, in Spaltenbreite (`--measure`), ohne `aspect-ratio` oder
+`object-fit` — anders als das Porträt oben wird hier nichts beschnitten, das
+Bild bestimmt sein Format selbst. Erscheint bewusst nicht auf der Kachel und
+nicht im Popup-Overlay — der Satz oben („bewusst textlich") gilt dort
+weiterhin unverändert.
+
 Für `/predigten` bleibt dieselbe Lücke vorerst offen. Ein Bogen als blasses
 Hintergrundelement wurde im September 2026 als Ersatz für die entfernte
 Farbrotation erprobt und wieder verworfen (siehe „Formulare" oben) — er

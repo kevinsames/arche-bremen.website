@@ -131,7 +131,7 @@ Freitext im Schema, sonst ist Filterbarkeit dauerhaft zerstört.
 | Collection | Zweck | Beispiel |
 |---|---|---|
 | `pages` | Statische Seiten (Impressum, Datenschutz, später Vision etc.) | `src/content/pages/impressum.md` |
-| `elders` | Profile der Ältesten (Gemeindeleitung), inkl. optionalem Foto (`photo`) | `src/content/elders/niklas-meyer.md` |
+| `elders` | Profile der Ältesten (Gemeindeleitung), inkl. optionalem Foto (`photo`) und optionalem zweiten Foto (`familyPhoto`, nur auf der Detailseite) | `src/content/elders/niklas-meyer.md` |
 | `creed` | Die 25 Artikel des Glaubensbekenntnisses, dazu Vorwort und Quelle — eine Datei pro Artikel, siehe `/glaubensbekenntnis` | `src/content/creed/01-die-heilige-schrift.md` |
 
 Verknüpfung: `sermon.preacher` ist reiner Freitext in Sanity. Stimmt der Name
@@ -257,10 +257,15 @@ typografisch (siehe DESIGN.md, Abschnitt „Bildwelt"). Zum Hinzufügen:
    breit, JPEG. Astro erzeugt daraus beim Build automatisch die WebP-Varianten
    für Kachel und Detailseite.
 
-`niklas-meyer.jpg` unterschreitet diese Vorgabe bewusst (640×960 px, 2:3, keine
-höher aufgelöste Aufnahme vorhanden) — `object-fit: cover` schneidet im Browser
-mittig auf 4:5 zu, ohne die Datei zu bearbeiten. Für künftige Fotos bleibt
-Schritt 3 die Vorgabe.
+### Wie ein zweites Foto (`familyPhoto`) zu einem Profil hinzukommt
+
+Optionales zusätzliches Feld auf `elders`, bisher nur bei Niklas gesetzt.
+Erscheint ausschließlich unter dem Profiltext auf der Detailseite
+`/gemeindeleitung/<slug>` — nicht auf der Kachel, nicht im Popup-Overlay.
+Anders als `photo` gibt es keine Zuschnitt-Vorgabe: Das Bild steht in seinem
+eigenen Seitenverhältnis, unbeschnitten. Einbindung analog zu `photo`: Datei
+neben die Markdown-Datei legen (z. B. `niklas-meyer-familie.jpg`), im
+Frontmatter `familyPhoto: ./niklas-meyer-familie.jpg` ergänzen.
 
 ### Wie ein Artikel des Glaubensbekenntnisses geändert wird
 
@@ -339,11 +344,12 @@ Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
 - **Gründungsphase (`src/consts.ts`):** Es gibt noch keinen öffentlichen
   Gottesdienst — `SERVICE` ist deshalb aktuell entfernt und `WEEKLY_EVENTS`
   leer. Above the fold stehen stattdessen `FOUNDING.claim` und
-  `FOUNDING.milestoneDate` (aktuell 1. April 2027). `ADDRESS` ist als
+  `FOUNDING.milestoneDate` (aktuell 2. Mai 2027). `ADDRESS` ist als
   `PLATZHALTER` markiert (Norderoog 2 ist die voraussichtliche, aber nicht
   bestätigte Adresse) und wird deshalb nirgends gerendert. `PRAYER_REQUESTS`
-  enthält Gebetsanliegen für die Startseiten-Sektion „Bete und bau mit"; die
-  mit `PLATZHALTER` markierten Einträge sind ein Vorschlag und brauchen
+  enthält Gebetsanliegen für die Startseiten-Sektion „Werde Teil unserer
+  Vision"; die mit `PLATZHALTER` markierten Einträge sind ein Vorschlag und
+  brauchen
   inhaltliche Freigabe durch das Team. Sobald der erste Gottesdienst feststeht:
   `SERVICE`/`ADDRESS` zurück in den Hero und den Footer, `WEEKLY_EVENTS`
   befüllen, `FOUNDING`/`PRAYER_REQUESTS` aus `index.astro` entfernen. Zum

@@ -1,6 +1,6 @@
 ---
 title: Kinder
-order: 10
+order: 20
 summary: "Wir wollen Kindern die biblischen Geschichten altersgerecht nahebringen, während der Gottesdienst für die Erwachsenen läuft."
 status: geplant
 ---

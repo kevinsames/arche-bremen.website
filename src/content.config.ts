@@ -40,11 +40,16 @@ const elders = defineCollection({
       // (`photo: ./name.jpg`). Ohne Foto bleibt die Kachel typografisch,
       // kein Platzhalterbild (siehe CLAUDE.md, keine Stock-Fotografie).
       photo: image().optional(),
+      // Zweites, freieres Foto — erscheint ausschließlich unter dem
+      // Profiltext auf /gemeindeleitung/<slug>, nie auf der Kachel und nie
+      // im Popup-Overlay. Optional; bisher nur bei Niklas gesetzt.
+      familyPhoto: image().optional(),
     }),
 });
 
-// Geplante Bereiche des Gemeindelebens (Kinder, Jugend, Männer, Frauen,
-// Ranger, Bibelunterricht, ...). Bewusst eine Datei pro Bereich statt einer
+// Geplante Bereiche des Gemeindelebens (Sonntagsgottesdienste, Kinder,
+// Jugend, Hauskreise, Gebetsstunde, Glaubensgrundkurs, Männer, Frauen, ...).
+// Bewusst eine Datei pro Bereich statt einer
 // langen Fließtextseite: /gemeindeleben wird so als Kachelraster überflieg-
 // bar, und ein neuer Bereich entsteht später durch eine zusätzliche Datei,
 // ohne Codeänderung (siehe dortige Seite).

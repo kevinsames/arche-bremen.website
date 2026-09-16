@@ -50,6 +50,19 @@ const { Content } = await render(elder);
     <div class="prose">
       <Content />
     </div>
+    {
+      elder.data.familyPhoto && (
+        <Image
+          src={elder.data.familyPhoto}
+          alt={`${elder.data.name} mit seiner Familie`}
+          width={640}
+          densities={[1, 2]}
+          format="webp"
+          quality={85}
+          class="family-photo"
+        />
+      )
+    }
   </Section>
 </BaseLayout>
 
@@ -74,6 +87,15 @@ const { Content } = await render(elder);
     height: auto;
     aspect-ratio: 4 / 5;
     object-fit: cover;
+    border-radius: var(--radius-md);
+  }
+
+  /* Kein aspect-ratio/object-fit wie bei .photo: Das Familienfoto steht in
+     seinem eigenen Seitenverhältnis, unbeschnitten. */
+  .family-photo {
+    width: 100%;
+    height: auto;
+    margin-top: var(--sp-5);
     border-radius: var(--radius-md);
   }
 </style>

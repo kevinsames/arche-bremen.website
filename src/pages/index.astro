@@ -14,7 +14,7 @@ import { getCollection } from 'astro:content';
 
 // Above the fold, ohne Scrollen: in der Gründungsphase Gründungsstatus und
 // geplanter erster Gottesdienst statt Gottesdienstzeit und Adresse (siehe
-// CLAUDE.md — kehrt zum 1. April 2027 um). Der Hero ist deshalb bewusst
+// CLAUDE.md — kehrt zum 2. Mai 2027 um). Der Hero ist deshalb bewusst
 // inhaltsgroß, nicht bildschirmgroß — keine feste vh-Höhe, die auf kleinen
 // Geräten den Rest unter die Falz drückt.
 
@@ -53,7 +53,7 @@ function formatEventRange(event: Event) {
 
 // SITE.description + Meilenstein statt eines zweiten handgeschriebenen
 // Satzes — bleibt automatisch synchron, wenn FOUNDING.milestoneDate sich
-// ändert oder (1. April 2027) ganz entfällt (siehe README "Offene Punkte").
+// ändert oder (2. Mai 2027) ganz entfällt (siehe README "Offene Punkte").
 const homeDescription = `${SITE.description} Erster Gottesdienst geplant für den ${FOUNDING.milestoneDate}.`;
 
 // Structured Data, nur WebSite + Organization: Google liest WebSite.name
@@ -132,12 +132,12 @@ const jsonLd = {
         Gemeinde- und Missionswerks Arche
       </a>{' '}
       in Hamburg. Wir bauen in Bremen eine Gemeinde auf, die auf dem Wort
-      Gottes, der Bibel, und dem Evangelium von Jesus Christus ruht.
+      Gottes, der Bibel und dem Evangelium von Jesus Christus ruht.
     </p>
     <p>
       Dieses Evangelium formt uns, macht uns Jesus ähnlicher und bewegt uns,
-      das Evangelium von Jesus allen Menschen weiterzugeben. Wofür wir im
-      Einzelnen stehen, steht in unserem <a href="/glaubensbekenntnis">Glaubensbekenntnis</a>.
+      seine gute Nachricht allen Menschen weiterzugeben. Was wir im Einzelnen
+      glauben, erfährst du in unserem <a href="/glaubensbekenntnis">Glaubensbekenntnis</a>.
     </p>
   </Section>
 
@@ -159,7 +159,7 @@ const jsonLd = {
   </figure>
 
   <Section tone="light" width="measure">
-    <h2 id="mitbauen">Bete und bau mit</h2>
+    <h2 id="mitbauen">Werde Teil unserer Vision</h2>
     <p>
       Wir stehen am Anfang und sind auf Unterstützung angewiesen. Das sind
       unsere aktuellen Gebetsanliegen:
@@ -168,9 +168,13 @@ const jsonLd = {
       {PRAYER_REQUESTS.map((request) => <li>{request}</li>)}
     </ul>
     <p>
-      Wer bei uns predigt und leitet, steht unter <a href="/gemeindeleitung">Gemeindeleitung</a>.
-      Willst du mitbeten, mitbauen oder einfach mehr erfahren?{' '}
-      <a href="/kontakt">Schreib uns</a>.
+      Willst du mitbeten, die entstehende Gemeinde mitaufbauen oder einfach
+      mehr erfahren? <a href="/kontakt">Schreib uns</a> gerne.
+    </p>
+    <p>
+      Mehr über uns und darüber, was wir glauben, erfährst du auch unter den
+      Punkten <a href="/gemeindeleitung">Gemeindeleitung</a> bzw.{' '}
+      <a href="/glaubensbekenntnis">Glaubensbekenntnis</a>.
     </p>
   </Section>
 

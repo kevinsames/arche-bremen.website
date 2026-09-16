@@ -1,7 +1,7 @@
 ---
 title: Frauen
-order: 40
-summary: "Wir wollen Frauen einen regelmäßigen Rahmen geben, sich über Glauben und Alltag auszutauschen."
+order: 80
+summary: "Wir wollen Frauen einen regelmäßigen Rahmen geben, um sich über Glauben und Alltag auszutauschen."
 status: geplant
 ---
 

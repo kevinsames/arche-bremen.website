@@ -11,14 +11,15 @@ const ministries = (await getCollection('ministries')).sort(
 
 <BaseLayout
   title="Gemeindeleben"
-  description="Unsere Vision für das Gemeindeleben der Arche Bremen: Kinder, Jugend, Männer, Frauen, Ranger und Bibelunterricht — geplant für die Zeit nach der Gründung."
+  description="Unsere Vision für das Gemeindeleben der Arche Bremen: Sonntagsgottesdienste, Kinder, Jugend, Hauskreise, Gebetsstunde, Glaubensgrundkurs, Männer und Frauen — geplant für die Zeit nach der Gründung."
 >
   <Section tone="light" width="measure">
     <h1>Gemeindeleben</h1>
     <p class="lead">
       Wir stehen noch vor der Gründung — nichts von dem hier läuft heute
-      schon. Diese Seite zeigt, was wir für das Leben unserer Gemeinde
-      vorhaben, sobald der erste Gottesdienst gefeiert wird.
+      schon. Diese Seite zeigt, was wir für das Leben unserer Gemeinde auf
+      dem Herzen haben und was wir in Zukunft Schritt für Schritt aufbauen
+      möchten.
     </p>
   </Section>
 
@@ -34,12 +35,19 @@ const ministries = (await getCollection('ministries')).sort(
         </div>
       )
     }
+    <p class="more-hint">… und noch vieles mehr.</p>
   </Section>
 </BaseLayout>
 
 <style>
   .lead {
     color: var(--text-secondary);
+  }
+
+  .more-hint {
+    margin-top: var(--sp-4);
+    color: var(--text-secondary);
+    text-align: center;
   }
 
   .ministry-grid {

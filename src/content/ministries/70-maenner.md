@@ -1,7 +1,7 @@
 ---
 title: Männer
-order: 30
-summary: "Wir wollen Männern einen regelmäßigen Rahmen geben, sich über Glauben und Alltag auszutauschen."
+order: 70
+summary: "Wir wollen Männern einen regelmäßigen Rahmen geben, um sich über Glauben und Alltag auszutauschen."
 status: geplant
 ---
 

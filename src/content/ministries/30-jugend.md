@@ -1,7 +1,7 @@
 ---
 title: Jugend
-order: 20
-summary: "Wir wollen Jugendlichen einen Ort geben, an dem sie ihren Glauben mit anderen in ihrem Alter durchdenken und leben."
+order: 30
+summary: "Wir wollen Jugendlichen einen Ort geben, an dem sie ihren Glauben mit anderen in ihrem Alter durchdenken und leben können."
 status: geplant
 ---
 
