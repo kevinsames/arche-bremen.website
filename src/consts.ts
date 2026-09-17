@@ -40,10 +40,33 @@ export const ADDRESS = {
 // sich wöchentlich intern zur Vorbereitung; das ist kein Angebot an Besucher
 // und steht deshalb nicht auf der Seite. claim/milestone tragen above the
 // fold, was Gottesdienstzeit + Adresse vorher trugen.
+//
+// Das Datum steht genau einmal, als ISO-String. Anzeigetext, Wochentag und
+// die Einzelziffern für die Datumsfläche auf der Startseite werden daraus
+// zur Buildzeit abgeleitet — vorher standen Anzeigetext und Ziffern doppelt
+// da und konnten auseinanderlaufen. Zeitzone explizit Europe/Berlin: ein
+// reines Datum ist UTC-Mitternacht, und ein Build in einer westlicheren
+// Zeitzone würde sonst den Vortag anzeigen.
+const MILESTONE_ISO = '2027-05-02';
+const [milestoneYear, milestoneMonth, milestoneDay] = MILESTONE_ISO.split('-');
+const milestoneDateObject = new Date(`${MILESTONE_ISO}T12:00:00Z`);
+const milestoneFormat = (options: Intl.DateTimeFormatOptions) =>
+  new Intl.DateTimeFormat('de-DE', { timeZone: 'Europe/Berlin', ...options }).format(
+    milestoneDateObject,
+  );
+
 export const FOUNDING = {
   claim: 'Wir gründen eine Gemeinde in Bremen.',
   milestoneLabel: 'Geplanter erster Gottesdienst',
-  milestoneDate: '2. Mai 2027',
+  milestoneIso: MILESTONE_ISO,
+  /** "2. Mai 2027" — Fließtext-Schreibweise. */
+  milestoneDate: milestoneFormat({ dateStyle: 'long' }),
+  /** "Sonntag" — steht als Kicker über der Datumsfläche. */
+  milestoneWeekday: milestoneFormat({ weekday: 'long' }),
+  /** "02", "05", "2027" — nur für die Datumsfläche auf der Startseite. */
+  milestoneDay,
+  milestoneMonth,
+  milestoneYear,
 };
 
 export const PRAYER_REQUESTS = [

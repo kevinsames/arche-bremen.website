@@ -65,13 +65,15 @@ const overlayId = `ministry-${ministry.id}`;
     cursor: pointer;
     transition:
       translate var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out),
       background-color var(--duration-fast) var(--ease-out);
   }
 
   .card:hover,
   .card:focus-visible {
     background-color: var(--surface-warm-strong);
-    translate: 0 -2px;
+    translate: 0 -4px;
+    box-shadow: var(--shadow-card);
   }
 
   .card:hover .title,

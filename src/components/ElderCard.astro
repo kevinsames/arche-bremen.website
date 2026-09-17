@@ -78,6 +78,7 @@ const permalink = `/gemeindeleitung/${elder.id}`;
     background-color: var(--surface-warm);
     transition:
       translate var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out),
       background-color var(--duration-fast) var(--ease-out);
   }
 
@@ -96,7 +97,8 @@ const permalink = `/gemeindeleitung/${elder.id}`;
   .card-wrap:has(.open:hover) .card,
   .card:focus-visible {
     background-color: var(--surface-warm-strong);
-    translate: 0 -2px;
+    translate: 0 -4px;
+    box-shadow: var(--shadow-card);
   }
 
   .card-wrap:has(.open:hover) .name,

@@ -26,10 +26,13 @@ existiert nicht. Nicht spezifiziert und für diese Website erfunden:
 - Bewegung/Übergänge (`--duration-fast`, `--duration-slow`, `--ease-out`)
 - Zweite Layout-Breite für Raster und Vollbild-Sektionen
   (`--width-content`), zusätzlich zur Fließtext-Breite `--measure`
-- Eine Schriftgröße oberhalb der bisherigen Skala für den Startseiten-Hero
-  (`--fs-display`)
+- Zwei Schriftgrößen oberhalb der bisherigen Skala für je eine Stelle der
+  Startseite (`--fs-display`, `--fs-numeral`, September 2026)
 - Overlay-Darstellung für Popups (`--scrim`, `--blur-overlay`,
   `--shadow-overlay`)
+- Vollrunder Knopfradius (`--radius-pill`, September 2026)
+- Kachelschatten beim Anheben (`--shadow-card`, September 2026)
+- Abdunkelnder Verlauf über dem Hero-Foto (`--scrim-hero`, September 2026)
 - Kachelflächen als verdünnte Akzente (`--surface-warm`, `--surface-warm-alt`),
   dazu eine kräftigere Hover-Stufe (`--surface-warm-strong`)
 - Glasflächen für sticky Einzelelemente (`--surface-glass`, `--blur-glass`,
@@ -205,9 +208,25 @@ UI. Kein eigenes `--z-*`-Token nötig — die Popups nutzen die
 HTML-Popover-API und damit den Top-Layer des Browsers, kein manuelles
 Stapeln.
 
-**`--fs-display`:** Eine Stufe oberhalb von `--fs-xxl`, ausschließlich für
-den Startseiten-Hero. Kein Ersatz für die bestehende Skala, sondern eine
-Ausnahme für genau eine Stelle.
+**`--fs-display` und `--fs-numeral`:** Zwei Stufen oberhalb von `--fs-xxl`,
+je für genau eine Stelle der Startseite — `--fs-display` für die Überschrift
+des abschließenden Kontaktbands, `--fs-numeral` für die Datumszahlen der
+Meilenstein-Fläche. Kein Ersatz für die bestehende Skala, sondern Ausnahmen
+für zwei benannte Stellen. Bis September 2026 war `--fs-display` für den
+Hero-Titel vorgesehen und dort tatsächlich ungenutzt (der Titel ist die
+Wortmarke als SVG); der Anspruch unter der Wortmarke steht heute bei
+`--fs-xxl` und soll die Marke darüber nicht überbieten.
+
+**`--radius-pill`, `--shadow-card`, `--scrim-hero` (September 2026):** drei
+Werte für die Neugestaltung (siehe eigener Abschnitt weiter unten).
+`--radius-pill: 999rem` ist bewusst ein fester, absurd großer Wert und keine
+Stufe der Radius-Skala: Er soll bei jeder Knopfhöhe eine Halbkreiskante
+ergeben, nicht mitskalieren. `--shadow-card` ist die schwächere zweite Stufe
+desselben Musters wie `--shadow-overlay`, in derselben Farbe (Dunkles Blau
+statt Schwarz). `--scrim-hero` ist vollständig als Gradient-Wert in
+`tokens.css` abgelegt statt im Komponentencode aus `color-mix()`
+zusammengesetzt — die Prozentsätze darin sind Farbwerte und gehören nach
+CLAUDE.md Design-Regel 1 nicht in eine Komponente.
 
 **Formulare (August 2026):** Die Such-/Filterleiste unter `/predigten`
 (`SermonFilter.astro`) ist die erste Stelle im Repo mit `<input>`,
@@ -293,6 +312,126 @@ das eigentliche Radio unsichtbar ist und den Ring sonst nicht zeigen könnte.
 Weiterhin ohne Token, weil noch nirgends gebraucht: ein **Disabled**-Zustand
 für Formularelemente — der Zurücksetzen-Button ist dauerhaft aktiv, ein
 `disabled`-Zustand wäre hier ohne Nutzen.
+
+## Neugestaltung September 2026 („mehr Anspruch")
+
+Auftrag war, die Seite insgesamt hochwertiger wirken zu lassen; als
+Anregung lagen Entwürfe eines eigenständig neu gebauten Seitenkonzepts vor.
+Übernommen wurde daraus die **Gestaltungssprache**, nicht der Code — die
+Entwürfe verletzten mehrere harte Regeln des Projekts (Client-JavaScript auf
+Inhaltsseiten, Klartext-`mailto:`, Hex-Werte im Komponentencode, gemischte
+Groß-/Kleinschreibung mit negativer Laufweite in den Headlines). Was
+übernommen wurde und wie es hier umgesetzt ist:
+
+**Überschriftenskala.** Bis September 2026 setzte `global.css` für `h1`–`h4`
+zwar Schriftfamilie, Versalien und Laufweite, aber **keine Größe** — es
+galten die Browser-Vorgaben (`h1` = 2em, `h2` = 1.5em, `h3` = 1.17em), die
+weder zur Skala in `tokens.css` passten noch eine sichtbare Hierarchie
+ergaben. Das war der größte einzelne Grund, warum die Seite schlicht wirkte.
+Jetzt: `h1` = `--fs-xxl`, `h2` = `--fs-xl`, `h3` = `--fs-l`, `h4` = `--fs-m`,
+dazu einheitliche Außenabstände für `h1`–`h4` und `p`.
+
+**Überschriften und deutsche Komposita.** Mit den Größenstufen kam ein
+Problem hoch, das vorher nur unsichtbar war: „GLAUBENSBEKENNTNIS" braucht in
+Versalien mit `--tracking-display` rund 14 em und passt auf einem
+360-px-Gerät bei keiner vertretbaren Überschriftgröße in eine Zeile — mit der
+alten Browser-Vorgabe (`h1` = 2em) lief es rechts aus dem Bild, und
+`html { overflow-x: hidden }` kappte den Überstand, ohne dass eine
+Scrollleiste darauf hinwies. `h1`–`h4` haben deshalb jetzt
+`hyphens: auto` (`lang="de"` steht in `BaseLayout.astro`) plus
+`overflow-wrap: break-word` als Rückfall für Browser ohne deutsches
+Trennwörterbuch — dort bricht die Silbe hart um, was unschön, aber lesbar
+und im Bild ist. Bewusst **keine** Weichtrennzeichen (U+00AD) in den Titeln:
+unsichtbare Zeichen in Content-Dateien sind für spätere Redakteure eine
+Falle, und Predigttitel kommen ohnehin aus Sanity und lassen sich hier
+nicht annotieren.
+
+**Knöpfe.** `.button` ist von einer Rechteckfläche (`--radius-md`) auf eine
+Pille (`--radius-pill`) umgestellt, hebt beim Überfahren an
+(`translate` + `--shadow-card`) statt nur die Deckkraft zu senken, und hat
+drei Zusatzklassen: `.button--accent` (gelbe Fläche, Text bleibt
+`--text-primary`), `.button--outline` (Umriss für dunkle Flächen) und
+`.button--arrow` (Pfeil ↗ als `::after`). Der Pfeil ist bewusst **nicht**
+Teil von `.button`: Der Spenden-Knopf im Header trägt schon ein Herz-Icon
+und soll keinen zweiten Bildzusatz bekommen.
+
+**Sektionsbreite.** `Section.astro` hatte zwei Container-Breiten, und
+`width="measure"` verengte den Container selbst auf `--measure` und
+zentrierte ihn im Viewport. Unterseiten standen dadurch sichtbar anders als
+die Startseite — der Textblock schwebte in der Bildschirmmitte statt am
+linken Anschlag des Logos. Jetzt ist der Container immer `--width-content`
+breit; `width="measure"` begrenzt nur noch die Zeilenlänge **innerhalb** des
+Containers. Alle Bänder haben damit denselben linken Anschlag wie die
+Kopfzeile. Wo eine Spalte zentriert stehen soll (Kontaktband der
+Startseite), setzt die Seite das selbst mit `margin-inline: auto`.
+
+**Vertikaler Rhythmus.** Der Innenabstand der Bänder wächst zwischen
+`--sp-6` und `--sp-7` mit (`clamp(var(--sp-6), 8vw, var(--sp-7))`) — keine
+neue Abstandsstufe, eine Interpolation zwischen zwei bestehenden.
+
+**Hero der Startseite.** Aus Wortmarke auf Weiß wurde Wortmarke auf dem
+Ortsbild, darüber `--scrim-hero`, Schrift in `--text-on-dark`. Dazu der
+Anspruch (`FOUNDING.claim`) als Versal-Schauzeile in `--fs-xxl` und der
+Meilenstein als Fußzeile des Heros über einer Haarlinie. Die Höhe kommt
+weiterhin aus dem Inhalt (`min-height`, keine `vh`/`svh`-Einheit) — die
+Vorgabe aus CLAUDE.md, dass Gründungsstatus und geplanter erster
+Gottesdienst ohne Scrollen sichtbar sein müssen, gilt unverändert und ist
+mobil geprüft. Die Wortmarke ist `arche-logo-white.svg`, dieselbe Datei wie
+im Fuß.
+
+**Datumsfläche.** Der geplante erste Gottesdienst steht ein zweites Mal als
+gelbes Vollband mit den Zahlen in `--fs-numeral`. Neuer `tone="accent"` in
+`Section.astro`: Gelb ausschließlich als Fläche, Schrift `--text-primary`
+(8,38 : 1). Der Schrägstrich zwischen Tag und Monat ist **kleiner gesetzt**
+statt abgeblendet — eine Deckkraft unter 1 mischt auf Gelb ein Olivgrün ein,
+das wie eine vierte Markenfarbe aussieht. Damit die Zahlen nicht neben dem
+Anzeigetext gepflegt werden müssen, steht das Datum in `consts.ts` nur noch
+einmal als ISO-String; Anzeigetext, Wochentag und Einzelziffern leitet
+`Intl.DateTimeFormat` zur Buildzeit daraus ab (Zeitzone explizit
+`Europe/Berlin` — ein reines Datum ist UTC-Mitternacht und würde in einer
+westlicheren Build-Zeitzone den Vortag ergeben).
+
+**Gebetsanliegen.** Statt einer Aufzählung auf `--surface-warm-alt` jetzt
+drei nummerierte Felder nebeneinander. Gleiche Inhalte aus
+`PRAYER_REQUESTS`, nur als Raster. Bewusst **ohne** Hover-Zustand: Die
+Felder sind Text, keine Kacheln — es gibt nichts zu öffnen.
+
+**Kontaktband.** Neues dunkles Abschlussband über dem (ebenfalls dunklen)
+Fuß, mit `--fs-display` als größter Schrift der Seite. Der Satz darin stammt
+aus `/kontakt` und steht hier bewusst ein zweites Mal; er ist der Einstieg
+in genau diese Seite.
+
+**Fuß.** Dreispaltige Kopfzeile (Wortmarke, Selbstbeschreibung aus
+`SITE.description`, Anschrift), darunter eine Haarlinie und die Rechtszeile
+mit Copyright links und Links rechts. Die Selbstbeschreibung ist dieselbe,
+die als Meta-Description ausgeliefert wird — kein zweiter Satz, der
+auseinanderlaufen kann.
+
+**Was bewusst nicht übernommen wurde:**
+
+- **Gemischte Groß-/Kleinschreibung in den Headlines** mit negativer
+  Laufweite, wie in den Entwürfen. Brandbook 2.1 und CLAUDE.md
+  Design-Regel 6 verlangen Versalien mit `--tracking-display`. Der
+  gehobenere Eindruck kommt hier stattdessen aus Größe, Raster, Kontrast
+  und Rhythmus.
+- **Gelb als Schriftfarbe auf dunklem Grund** (in den Entwürfen die zweite
+  Zeile der Hero-Headline). CLAUDE.md Design-Regel 3 verbietet Gelb als
+  Textfarbe ohne Einschränkung. Auf Dunklem Blau läge der Kontrast bei
+  8,38 : 1 und wäre unbedenklich — die Regel ist aber absolut formuliert,
+  deshalb steht das als offene Frage unten und nicht als stille Ausnahme
+  im Code.
+- **Ein über dem Hero transparent liegender Header.** Er bräuchte einen
+  seitenabhängigen Zustand (helle Schrift nur auf der Startseite) und eine
+  zweite Logo-Variante im Header. Zwei Zustände mehr für einen kleinen
+  Gewinn — der Header bleibt auf jeder Seite gleich.
+- **Scroll-Reveal per JavaScript** (`app.js`/`.motion .reveal` in den
+  Entwürfen). Das bestehende reine CSS-Reveal über
+  `animation-timeline: view()` bleibt und gilt jetzt zusätzlich für
+  Elemente mit `data-reveal`. Wo der Browser das nicht kennt, ist der
+  Inhalt schlicht sofort sichtbar.
+
+Das Client-JS-Budget ist unverändert: 0 KB auf allen Inhaltsseiten, einzige
+Ausnahme weiterhin die Filterleiste unter `/predigten`.
 
 ## Bewusste Abweichungen
 
@@ -647,9 +786,16 @@ Hintergrundelement wurde im September 2026 als Ersatz für die entfernte
 Farbrotation erprobt und wieder verworfen (siehe „Formulare" oben) — er
 wirkte trotz geringer Deckkraft als Fremdkörper hinter den Kacheln.
 
-**Ortsbild auf der Startseite** (12. August 2026): Vollbild-Band zwischen
-„Wer wir sind" und „Bete und bau mit", `src/assets/photos/bremen-marktplatz.jpg`
-— Giebelhäuser am Bremer Marktplatz. Bewusste Abweichung von CLAUDE.md
+**Ortsbild auf der Startseite** (12. August 2026, seit September 2026 im
+Hero): `src/assets/photos/bremen-marktplatz.jpg` — Giebelhäuser am Bremer
+Marktplatz. Bis September 2026 ein Vollbild-Band zwischen „Wer wir sind" und
+„Bete und bau mit"; seither liegt dasselbe Bild hinter dem Hero, mit
+`--scrim-hero` darüber (siehe Abschnitt „Neugestaltung September 2026").
+Das Band in der Seitenmitte ist damit entfallen — ein Foto zweimal auf
+derselben Seite wäre Wiederholung, nicht Bildwelt. Der Zuschnitt ist im Hero
+`object-fit: cover` mit `object-position: 50% 40%`: Das Bild ist ein
+Querformat (etwa 2,5 : 1), im hochformatigen Ausschnitt auf dem Telefon
+bleiben dadurch die Giebel im Bild statt des Pflasters. Bewusste Abweichung von CLAUDE.md
 Regel 9 / Brandbook 3.1: Das Bild ist Stock-Fotografie, keine echte Aufnahme
 aus der Gemeinde. Regel 9 zielt laut dem Absatz oben („Keine Platzhalterfotos
 von lachenden Fremden") auf inszenierte Gemeindeszenen; ein Stadtbild
@@ -686,7 +832,13 @@ Diese sollten in einer Mail gebündelt werden, bevor gestaltet wird:
 4. Existiert inzwischen ein Web-Anhang zum Brandbook oder eine v1.2? Unser Stand
    ist v1.1.
 5. RGB-Wert für „Dunkles Braun" (Pantone 412 C) — im PDF unlesbar extrahiert.
-6. Kapitel 4 beschreibt die Stilelemente „Bogen" und „Abstufung". Der Bogen
+6. Darf Gelb (Pantone 116 C) Schrift auf Dunklem Blau tragen? Die Regel
+   „Sekundärfarben tragen keinen Text" ist aus dem Kontrast **auf Weiß**
+   begründet (1,44 : 1). Auf Dunklem Blau liegt Gelb bei 8,38 : 1 und wäre
+   für große Schrift wie für Fließtext unbedenklich. Die Entwürfe zur
+   Neugestaltung (September 2026) setzen genau das ein. Solange keine
+   Antwort vorliegt, bleibt Gelb hier ausschließlich Fläche.
+7. Kapitel 4 beschreibt die Stilelemente „Bogen" und „Abstufung". Der Bogen
    liegt jetzt als eigene Datei vor (`bogen.svg`, siehe Abschnitt „Logo" oben)
    und ist als dekoratives Element in der Termine-Sektion umgesetzt.
    „Abstufung" bleibt offen, aus der Textebene nicht erschließbar.

@@ -108,9 +108,14 @@
   --lh-body:  1.6;    /* Fließtext */
   --measure:  62ch;   /* max. Zeilenlänge Fließtext */
 
-  /* Nur für den Hero-Titel. Im Brandbook nicht vorhanden, für Web
-     definiert — siehe DESIGN.md. */
+  /* Schaugrößen. Im Brandbook nicht vorhanden, für Web definiert — siehe
+     DESIGN.md. Je eine Stelle auf der Startseite: --fs-display die
+     Überschrift des abschließenden Kontaktbands, --fs-numeral die
+     Datumszahlen der Meilenstein-Fläche (rein typografisches Schaubild,
+     kein Fließtext). Der Anspruch im Hero bleibt bei --fs-xxl — dort
+     steht die Wortmarke darüber und soll nicht überboten werden. */
   --fs-display: clamp(2.5rem, 1.2rem + 5.5vw, 5rem);
+  --fs-numeral: clamp(4rem, 1rem + 15vw, 10rem);
 
   /* ---------- Abstände ---------- */
   --sp-1: 0.25rem;
@@ -131,6 +136,10 @@
   --radius-sm: 0.25rem;
   --radius-md: 0.75rem;  /* Kacheln */
   --radius-lg: 1.25rem;  /* Hero- und Sektionsflächen */
+  /* Vollrund. Für Knöpfe und Pills (siehe .button in global.css). Bewusst
+     ein fester, sehr großer Wert statt einer Stufe der Skala: er soll bei
+     jeder Knopfhöhe eine Halbkreis-Kante ergeben, nicht mitskalieren. */
+  --radius-pill: 999rem;
 
   /* ---------- Bewegung (im Brandbook nicht vorhanden, für Web definiert) */
   --duration-fast: 150ms;  /* Hover, Focus */
@@ -152,6 +161,30 @@
   --scrim:          color-mix(in srgb, var(--c-blue-dark) 55%, transparent);
   --blur-overlay:   16px;
   --shadow-overlay: 0 1.5rem 3rem color-mix(in srgb, var(--c-blue-dark) 22%, transparent);
+
+  /* ---------- Kachel-Schatten (im Brandbook nicht vorhanden, für Web
+     definiert) ---------------------------------------------------------
+     Zweite, schwächere Stufe desselben Musters wie --shadow-overlay: hebt
+     Kacheln beim Überfahren an, ohne dass sie im Ruhezustand schweben.
+     Gleiche Farbe (Dunkles Blau statt Schwarz), damit die Marke auch im
+     Schatten trägt. */
+  --shadow-card:    0 0.75rem 1.5rem color-mix(in srgb, var(--c-blue-dark) 14%, transparent);
+
+  /* ---------- Hero-Verlauf (im Brandbook nicht vorhanden, für Web
+     definiert) ---------------------------------------------------------
+     Legt sich über das Ortsbild im Hero der Startseite, damit weiße
+     Schrift darauf sicher lesbar bleibt (siehe DESIGN.md, Abschnitt
+     „Bildwelt"). Vollständig hier definiert statt im Komponentencode
+     zusammengesetzt — die Prozentwerte sind Farbwerte und gehören nach
+     CLAUDE.md Design-Regel 1 nicht in eine Komponente. Nach unten
+     zunehmend dicht: unten steht der Text, oben soll das Bild sichtbar
+     bleiben. */
+  --scrim-hero: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--c-blue-dark) 50%, transparent) 0%,
+    color-mix(in srgb, var(--c-blue-dark) 72%, transparent) 45%,
+    color-mix(in srgb, var(--c-blue-dark) 93%, transparent) 100%
+  );
 
   /* ---------- Sticky-Glas (im Brandbook nicht vorhanden, für Web definiert)
      Für Header.astro und den Filterstreifen in SermonFilter.astro — beide

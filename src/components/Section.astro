@@ -4,8 +4,17 @@
 //
 // tone steuert Hintergrund- und Textfarbe über die bestehenden semantischen
 // Tokens (siehe tokens.css) — keine neuen Farbwerte.
+//
+// width steuert die Breite der Textspalte INNERHALB des Containers, nicht
+// die Breite des Containers selbst: Der Container ist auf jeder Seite
+// --width-content breit und zentriert, damit alle Bänder denselben linken
+// Anschlag haben wie das Logo in der Kopfzeile. width="measure" begrenzt
+// darin die Zeilenlänge des Fließtexts und lässt rechts Luft, statt die
+// Spalte in der Bildschirmmitte schweben zu lassen (bis September 2026 war
+// der Container selbst nur --measure breit — Unterseiten standen dadurch
+// sichtbar anders als die Startseite).
 interface Props {
-  tone?: 'light' | 'muted' | 'dark';
+  tone?: 'light' | 'muted' | 'dark' | 'accent';
   width?: 'content' | 'measure';
 }
 
@@ -13,8 +22,10 @@ const { tone = 'light', width = 'content' } = Astro.props;
 ---
 
 <section class={`section section--${tone}`}>
-  <div class={`container container--${width}`}>
-    <slot />
+  <div class="container">
+    <div class={`inner inner--${width}`}>
+      <slot />
+    </div>
   </div>
 </section>
 
@@ -32,6 +43,15 @@ const { tone = 'light', width = 'content' } = Astro.props;
     color: var(--text-on-dark);
   }
 
+  /* Gelbe Vollfläche. Gelb ausschließlich als Fläche, der Text darauf
+     bleibt --text-primary (CLAUDE.md Design-Regel 3) — Kontrast Dunkles
+     Blau auf Gelb liegt bei 8.38 : 1. Genutzt für die Datumsfläche der
+     Startseite. */
+  .section--accent {
+    background-color: var(--accent-warm);
+    color: var(--text-primary);
+  }
+
   /* Der globale Link-Stil (var(--link), Dunkles Blau) ist auf dunklem
      Grund unlesbar. Innerhalb einer dunklen Sektion bleiben Links darum
      schlicht die Textfarbe, mit Unterstrich als Erkennungsmerkmal. Der
@@ -45,16 +65,18 @@ const { tone = 'light', width = 'content' } = Astro.props;
     color: inherit;
   }
 
+  /* Vertikaler Rhythmus: mitwachsend zwischen --sp-6 (4rem, mobil) und
+     --sp-7 (6rem, ab etwa 75rem Breite). Kein neuer Abstandswert, sondern
+     eine Interpolation zwischen zwei Stufen der Skala — auf großen
+     Bildschirmen wirkten durchgehend 4 rem zwischen den Bändern gedrängt.
+     Seitlich bleibt es bei --sp-3. */
   .container {
-    margin-inline: auto;
-    padding: var(--sp-6) var(--sp-3);
-  }
-
-  .container--content {
     max-width: var(--width-content);
+    margin-inline: auto;
+    padding: clamp(var(--sp-6), 8vw, var(--sp-7)) var(--sp-3);
   }
 
-  .container--measure {
+  .inner--measure {
     max-width: var(--measure);
   }
 </style>

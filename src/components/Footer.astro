@@ -7,38 +7,41 @@ const currentYear = new Date().getFullYear();
 
 <footer>
   <div class="bar">
-    <div class="col">
+    <!-- Kopfzeile des Fußes: Wortmarke links, Anschrift rechts, dazwischen
+         die Selbstbeschreibung aus consts.ts (dieselbe, die als
+         Meta-Description ausgeliefert wird — kein zweiter Satz, der
+         auseinanderlaufen kann). -->
+    <div class="masthead">
       <img class="site-name" src={logoWhite.src} width={logoWhite.width} height={logoWhite.height} alt={SITE.name} />
-    </div>
-
-    <div class="col">
+      <p class="claim">{SITE.description}</p>
       <p class="contact">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
           <rect x="2" y="4" width="20" height="16" rx="2" />
           <path d="m2 6 10 7 10-7" />
         </svg>
-        Kontakt: {CONTACT.local}&#64;{CONTACT.domain}
+        {CONTACT.local}&#64;{CONTACT.domain}
       </p>
     </div>
 
-    <div class="col">
-      <ul>
-        <li><a href="/kontakt">Kontakt</a></li>
-        <li><a href="/spenden">Spenden</a></li>
-        <li><a href="/impressum">Impressum</a></li>
-        <li><a href="/datenschutz">Datenschutz</a></li>
-      </ul>
+    <div class="legal">
       {/* Unauffälliger Redaktionszugang: gedimmt in der Copyright-Zeile,
           kein Bestandteil der Rechtslinks. rel="nofollow" plus robots.txt
           (public/robots.txt) halten die Login-Seite aus Suchergebnissen. */}
-      <p class="copyright">&copy; {currentYear} &middot; <a href="/studio" rel="nofollow">Redaktion</a></p>
+      <p class="copyright">&copy; {currentYear} {SITE.name} &middot; <a href="/studio" rel="nofollow">Redaktion</a></p>
+      <ul>
+        <li><a href="/kontakt">Kontakt</a></li>
+        <li><a href="/spenden">Spenden</a></li>
+        <li><a href="/gemeindeleitung">Gemeindeleitung</a></li>
+        <li><a href="/glaubensbekenntnis">Glaubensbekenntnis</a></li>
+        <li><a href="/impressum">Impressum</a></li>
+        <li><a href="/datenschutz">Datenschutz</a></li>
+      </ul>
     </div>
   </div>
 </footer>
 
 <style>
   footer {
-    margin-top: var(--sp-6);
     background-color: var(--bg-inverted);
     color: var(--text-on-dark);
   }
@@ -48,6 +51,7 @@ const currentYear = new Date().getFullYear();
   footer :global(a) {
     color: inherit;
     text-decoration: underline;
+    text-underline-offset: 0.25em;
   }
 
   footer :global(a:visited) {
@@ -58,14 +62,20 @@ const currentYear = new Date().getFullYear();
     max-width: var(--width-content);
     margin-inline: auto;
     padding: var(--sp-6) var(--sp-3) var(--sp-4);
-    display: grid;
-    gap: var(--sp-4);
-    font-size: var(--fs-xs);
   }
 
+  .masthead {
+    display: grid;
+    gap: var(--sp-4);
+  }
+
+  /* Ab 48rem drei Felder in einer Zeile, die Selbstbeschreibung in der
+     Mitte als breitestes. Darunter bleibt es gestapelt. */
   @media (min-width: 48rem) {
-    .bar {
-      grid-template-columns: repeat(3, 1fr);
+    .masthead {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: start;
+      gap: var(--sp-5);
     }
   }
 
@@ -73,17 +83,21 @@ const currentYear = new Date().getFullYear();
     display: block;
     width: var(--size-logo-header);
     height: auto;
-    margin: 0 0 var(--sp-2);
   }
 
-  .col p {
+  .claim {
     margin: 0;
+    font-size: var(--fs-m);
+    line-height: var(--lh-tight);
+    max-width: 36ch;
   }
 
   .contact {
     display: flex;
     align-items: center;
     gap: var(--sp-1);
+    margin: 0;
+    font-size: var(--fs-xs);
   }
 
   .contact .icon {
@@ -92,16 +106,42 @@ const currentYear = new Date().getFullYear();
     flex-shrink: 0;
   }
 
+  /* Trennlinie zwischen Kopf und Rechtszeile. --border-subtle (gedämpftes
+     Braun) trägt auf Dunklem Blau mit rund 4.4 : 1 — dieselbe Linienfarbe
+     wie auf hellem Grund, kein zweiter Wert nötig. */
+  .legal {
+    margin-top: clamp(var(--sp-5), 5vw, var(--sp-6));
+    padding-top: var(--sp-4);
+    border-top: 1px solid var(--border-subtle);
+    display: grid;
+    gap: var(--sp-3);
+    font-size: var(--fs-xs);
+  }
+
+  @media (min-width: 48rem) {
+    .legal {
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+    }
+  }
+
+  .copyright {
+    margin: 0;
+    opacity: 0.7;
+  }
+
   ul {
     list-style: none;
     display: flex;
     flex-wrap: wrap;
-    gap: var(--sp-3);
-    margin: 0 0 var(--sp-2);
+    gap: var(--sp-2) var(--sp-4);
+    margin: 0;
     padding: 0;
   }
 
-  .copyright {
-    opacity: 0.8;
+  @media (min-width: 48rem) {
+    ul {
+      justify-content: flex-end;
+    }
   }
 </style>

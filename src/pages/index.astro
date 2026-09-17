@@ -6,7 +6,7 @@ import Slider from '../components/Slider.astro';
 import Overlay from '../components/Overlay.astro';
 import { Image } from 'astro:assets';
 import { SITE, FOUNDING, PRAYER_REQUESTS, WEEKLY_EVENTS } from '../consts';
-import logo from '../assets/brand/arche-logo.svg';
+import logoWhite from '../assets/brand/arche-logo-white.svg';
 import mark from '../assets/brand/bogen.svg';
 import marktplatz from '../assets/photos/bremen-marktplatz.jpg';
 import { getSermons, getEvents, type Event } from '../lib/sanity';
@@ -16,7 +16,10 @@ import { getCollection } from 'astro:content';
 // geplanter erster Gottesdienst statt Gottesdienstzeit und Adresse (siehe
 // CLAUDE.md — kehrt zum 2. Mai 2027 um). Der Hero ist deshalb bewusst
 // inhaltsgroß, nicht bildschirmgroß — keine feste vh-Höhe, die auf kleinen
-// Geräten den Rest unter die Falz drückt.
+// Geräten den Rest unter die Falz drückt. Seit September 2026 steht das
+// Ortsbild hinter dem Hero statt als eigenes Band in der Seitenmitte (siehe
+// DESIGN.md, Abschnitt „Bildwelt"); Anspruch und Meilenstein bleiben
+// unverändert im ersten Bildschirm.
 
 // Gleiche Datenquellen wie /predigten — kein neues Datenmodell.
 const sermons = (await getSermons()).slice(0, 3);
@@ -100,89 +103,127 @@ const jsonLd = {
   description={homeDescription}
   jsonLd={jsonLd}
 >
-  <Section tone="light">
-    <h1 class="hero-title">
-      <img src={logo.src} width={logo.width} height={logo.height} alt="" />
-      <span class="visually-hidden">{SITE.titleHome}</span>
-    </h1>
-    <p class="hero-claim">{FOUNDING.claim}</p>
-    <p class="hero-milestone">
-      <span class="milestone-label">{FOUNDING.milestoneLabel}</span><br />
-      <span class="milestone-date">{FOUNDING.milestoneDate}</span>
-    </p>
-    <a class="button" href="/kontakt">Schreib uns</a>
-
-    <!-- Rein dekorativ: zeigt, dass unter dem Hero weitergeht. Kein Link,
-         kein Sprungziel — der Hinweis ersetzt keine Navigation. Icon-Muster
-         wie Header/Footer (siehe DESIGN.md): handgeschriebenes Inline-SVG,
-         stroke="currentColor", Größe in em, aria-hidden. -->
-    <span class="scroll-hint" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-           stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 9l6 6 6-6" />
-      </svg>
-    </span>
-  </Section>
-
-  <Section tone="dark" width="measure">
-    <h2>Wer wir sind</h2>
-    <p>
-      Wir sind eine Stationsgemeinde des{' '}
-      <a href="https://www.arche-gemeinde.de" rel="noopener">
-        Gemeinde- und Missionswerks Arche
-      </a>{' '}
-      in Hamburg. Wir bauen in Bremen eine Gemeinde auf, die auf dem Wort
-      Gottes, der Bibel und dem Evangelium von Jesus Christus ruht.
-    </p>
-    <p>
-      Dieses Evangelium formt uns, macht uns Jesus ähnlicher und bewegt uns,
-      seine gute Nachricht allen Menschen weiterzugeben. Was wir im Einzelnen
-      glauben, erfährst du in unserem <a href="/glaubensbekenntnis">Glaubensbekenntnis</a>.
-    </p>
-  </Section>
-
-  <!-- Vollbild-Band, bewusst außerhalb von Section.astro — dessen
-       .container würde das Bild auf Inhaltsbreite begrenzen. Siehe
-       DESIGN.md, Abschnitt „Bildwelt": Stadtbild statt Gemeindefoto, als
-       bewusste Abweichung von CLAUDE.md Regel 9 dokumentiert. -->
-  <figure class="place-band">
+  <!-- Hero mit Ortsbild. Steht bewusst außerhalb von Section.astro: dessen
+       .container würde das Bild auf Inhaltsbreite begrenzen, hier läuft es
+       Kante zu Kante. Die Höhe kommt aus dem Inhalt, nicht aus einer
+       Viewport-Einheit (siehe Kommentar im Frontmatter). -->
+  <section class="hero">
     <Image
       src={marktplatz}
-      alt="Historische Giebelhäuser am Bremer Marktplatz unter klarem Himmel"
+      alt=""
       width={1920}
       widths={[640, 960, 1280, 1600, 1920]}
       sizes="100vw"
       format="webp"
       quality={55}
-      class="place-photo"
+      loading="eager"
+      class="hero-photo"
     />
-  </figure>
+    <div class="hero-inner">
+      <h1 class="hero-title">
+        <img src={logoWhite.src} width={logoWhite.width} height={logoWhite.height} alt="" />
+        <span class="visually-hidden">{SITE.titleHome}</span>
+      </h1>
+      <p class="hero-claim">{FOUNDING.claim}</p>
+      <p class="hero-actions">
+        <a class="button button--accent button--arrow" href="/kontakt">Schreib uns</a>
+      </p>
 
-  <Section tone="light" width="measure">
-    <h2 id="mitbauen">Werde Teil unserer Vision</h2>
-    <p>
-      Wir stehen am Anfang und sind auf Unterstützung angewiesen. Das sind
-      unsere aktuellen Gebetsanliegen:
-    </p>
-    <ul class="prayer-list">
-      {PRAYER_REQUESTS.map((request) => <li>{request}</li>)}
-    </ul>
-    <p>
-      Willst du mitbeten, die entstehende Gemeinde mitaufbauen oder einfach
-      mehr erfahren? <a href="/kontakt">Schreib uns</a> gerne.
-    </p>
-    <p>
-      Mehr über uns und darüber, was wir glauben, erfährst du auch unter den
-      Punkten <a href="/gemeindeleitung">Gemeindeleitung</a> bzw.{' '}
-      <a href="/glaubensbekenntnis">Glaubensbekenntnis</a>.
-    </p>
+      <!-- Meilenstein als Fußzeile des Heros: bleibt dadurch im ersten
+           Bildschirm, ohne mit dem Anspruch darüber um Größe zu
+           konkurrieren. -->
+      <p class="hero-milestone">
+        <span class="eyebrow">{FOUNDING.milestoneLabel}</span>
+        <span class="milestone-date">{FOUNDING.milestoneDate}</span>
+      </p>
+    </div>
+  </section>
+
+  <Section tone="dark">
+    <div class="split">
+      <h2>Wer wir sind</h2>
+      <div class="split-body">
+        <p>
+          Wir sind eine Stationsgemeinde des{' '}
+          <a href="https://www.arche-gemeinde.de" rel="noopener">
+            Gemeinde- und Missionswerks Arche
+          </a>{' '}
+          in Hamburg. Wir bauen in Bremen eine Gemeinde auf, die auf dem Wort
+          Gottes, der Bibel und dem Evangelium von Jesus Christus ruht.
+        </p>
+        <p>
+          Dieses Evangelium formt uns, macht uns Jesus ähnlicher und bewegt uns,
+          seine gute Nachricht allen Menschen weiterzugeben. Was wir im Einzelnen
+          glauben, erfährst du in unserem <a href="/glaubensbekenntnis">Glaubensbekenntnis</a>.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Datumsfläche: dieselbe Information wie im Hero, hier als
+       typografisches Schaubild. Gelb trägt ausschließlich die Fläche, die
+       Schrift bleibt Dunkles Blau (siehe Section.astro, tone="accent"). -->
+  <Section tone="accent">
+    <div class="milestone">
+      <p class="milestone-head">
+        <span class="eyebrow">{FOUNDING.milestoneLabel}</span>
+        <span class="milestone-weekday">{FOUNDING.milestoneWeekday}</span>
+      </p>
+      <p class="numeral">
+        <time datetime={FOUNDING.milestoneIso}>
+          {FOUNDING.milestoneDay}<span class="numeral-slash">/</span>{FOUNDING.milestoneMonth}
+        </time>
+      </p>
+      <p class="milestone-foot">
+        <span class="milestone-year">{FOUNDING.milestoneYear}</span>
+        <span class="milestone-note">Ort und Uhrzeit stehen noch nicht fest.</span>
+      </p>
+    </div>
   </Section>
 
   <Section tone="light">
-    <h2>Predigten</h2>
+    <div class="split">
+      <h2 id="mitbauen">Werde Teil unserer Vision</h2>
+      <div class="split-body">
+        <p>
+          Wir stehen am Anfang und sind auf Unterstützung angewiesen. Das sind
+          unsere aktuellen Gebetsanliegen:
+        </p>
+      </div>
+    </div>
+
+    <ol class="prayer-list">
+      {
+        PRAYER_REQUESTS.map((request, index) => (
+          <li data-reveal>
+            <span class="prayer-number">{String(index + 1).padStart(2, '0')}</span>
+            <span class="prayer-text">{request}</span>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="split-body outro">
+      <p>
+        Willst du mitbeten, die entstehende Gemeinde mitaufbauen oder einfach
+        mehr erfahren? <a href="/kontakt">Schreib uns</a> gerne.
+      </p>
+      <p>
+        Mehr über uns und darüber, was wir glauben, erfährst du auch unter den
+        Punkten <a href="/gemeindeleitung">Gemeindeleitung</a> bzw.{' '}
+        <a href="/glaubensbekenntnis">Glaubensbekenntnis</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section tone="light">
+    <div class="section-head">
+      <h2>Predigten</h2>
+      <a class="head-link" href="/predigten">Alle Predigten &rarr;</a>
+    </div>
     {
       sermons.length === 0 ? (
-        <p>Noch keine Predigten veröffentlicht.</p>
+        <p class="empty">Noch keine Predigten veröffentlicht.</p>
       ) : (
         <Slider>
           {sermons.map((sermon) => {
@@ -194,7 +235,6 @@ const jsonLd = {
         </Slider>
       )
     }
-    <p><a href="/predigten">Alle Predigten &rarr;</a></p>
   </Section>
 
   <Section tone="muted">
@@ -241,7 +281,7 @@ const jsonLd = {
 
     {
       WEEKLY_EVENTS.length === 0 && upcomingEvents.length === 0 && (
-        <p>Sobald die ersten öffentlichen Termine feststehen, findest du sie hier.</p>
+        <p class="empty">Sobald die ersten öffentlichen Termine feststehen, findest du sie hier.</p>
       )
     }
 
@@ -278,9 +318,77 @@ const jsonLd = {
       )
     }
   </Section>
+
+  <!-- Abschließender Aufruf. Dunkles Band direkt über dem ebenfalls dunklen
+       Fuß — beide lesen sich als ein zusammenhängender Abschluss der Seite.
+       Der Satz stammt aus /kontakt und steht hier bewusst ein zweites Mal:
+       er ist der Einstieg in genau diese Seite. -->
+  <Section tone="dark">
+    <div class="closing">
+      <span class="eyebrow">Kontakt</span>
+      <h2 class="closing-title">Schreib uns</h2>
+      <p>
+        Es gibt noch keinen öffentlichen Gottesdienst, zu dem wir dich einladen
+        könnten — aber es gibt uns, und über jede Nachricht freuen wir uns.
+      </p>
+      <a class="button button--outline button--arrow" href="/kontakt">Zum Kontakt</a>
+    </div>
+  </Section>
 </BaseLayout>
 
 <style>
+  /* ---------- Hero ----------------------------------------------------
+     Ortsbild, darüber der Verlauf aus tokens.css (--scrim-hero), darauf
+     der Text in --text-on-dark. Die dunkelblaue Grundfarbe liegt
+     zusätzlich unter dem Bild: Solange das Bild lädt oder wenn es
+     ausfällt, steht der Text auf ihr statt auf Weiß. */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    background-color: var(--bg-inverted);
+    color: var(--text-on-dark);
+  }
+
+  .hero-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Das Bild ist ein Querformat (etwa 2.5:1). Im hochformatigen Ausschnitt
+       auf dem Telefon wird es stark beschnitten; 50% 40% hält dabei die
+       Giebel im Bild statt des Pflasters. */
+    object-position: 50% 40%;
+    z-index: -2;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--scrim-hero);
+    z-index: -1;
+  }
+
+  .hero-inner {
+    max-width: var(--width-content);
+    margin-inline: auto;
+    padding: clamp(var(--sp-6), 8vw, var(--sp-7)) var(--sp-3) var(--sp-4);
+    /* Untergrenze, keine Viewport-Höhe: der Hero darf wachsen, wenn der
+       Anspruch umbricht, drückt den Rest der Seite aber auf kleinen
+       Geräten nicht unter die Falz (siehe Frontmatter). */
+    min-height: 26rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+  }
+
+  @media (min-width: 48rem) {
+    .hero-inner {
+      min-height: 34rem;
+    }
+  }
+
   .hero-title {
     margin: 0;
     line-height: 0;
@@ -291,70 +399,246 @@ const jsonLd = {
     height: auto;
   }
 
+  /* Trägt den Anspruch als Schauzeile: Versalien mit weiter Laufweite wie
+     jede Überschrift (Brandbook 2.1), aber als <p> — die h1 der Seite ist
+     die Wortmarke darüber. */
+  .hero-claim {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--fs-xxl);
+    line-height: var(--lh-tight);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+    max-width: 18ch;
+  }
+
+  .hero-actions {
+    margin: 0;
+  }
+
+  /* Schiebt den Meilenstein an die Unterkante des Heros, sobald dieser
+     höher ist als sein Inhalt. */
+  .hero-milestone {
+    margin: auto 0 0;
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--sp-1) var(--sp-4);
+  }
+
+  .milestone-date {
+    font-size: var(--fs-l);
+  }
+
+  /* ---------- Wiederkehrende Bausteine dieser Seite -------------------- */
+
+  /* Kleines Versal-Label über einer Überschrift oder Fläche. Bewusst nur
+     hier definiert und nicht global: dieselbe Optik steht in mehreren
+     Komponenten je einmal lokal (SermonCard .passage, CreedCard .number,
+     kontakt.astro .mail-label) — Wiederholung statt gemeinsamer
+     Abstraktion, siehe CLAUDE.md Regel 2. */
+  .eyebrow {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+    font-size: var(--fs-xs);
+  }
+
+  /* Redaktionelles Zweispalter-Muster: Überschrift links, Fließtext
+     rechts. Unter 64rem gestapelt. */
+  .split {
+    display: grid;
+    gap: var(--sp-3);
+  }
+
+  @media (min-width: 64rem) {
+    .split {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+      gap: var(--sp-6);
+      align-items: start;
+    }
+  }
+
+  .split h2 {
+    margin: 0;
+  }
+
+  .split-body {
+    max-width: var(--measure);
+  }
+
+  .split-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .outro {
+    margin-top: var(--sp-5);
+  }
+
+  /* Überschriftzeile mit Link am rechten Rand (Predigten). */
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-2) var(--sp-4);
+    padding-bottom: var(--sp-3);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .section-head h2 {
+    margin: 0;
+  }
+
+  .head-link {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+    font-size: var(--fs-xs);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .head-link:hover,
+  .head-link:focus-visible {
+    border-color: var(--accent-warm);
+  }
+
+  .empty {
+    margin-top: var(--sp-4);
+    color: var(--text-secondary);
+  }
+
+  /* ---------- Datumsfläche -------------------------------------------- */
+
+  .milestone {
+    display: grid;
+    gap: var(--sp-3);
+  }
+
+  .milestone-head,
+  .milestone-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-1) var(--sp-4);
+    margin: 0;
+  }
+
+  .milestone-head {
+    padding-bottom: var(--sp-3);
+    border-bottom: 1px solid var(--text-primary);
+  }
+
+  .milestone-foot {
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--text-primary);
+  }
+
+  /* Der Wochentag flankiert die Zahlen als kleines Versal-Label —
+     dieselbe Optik wie .eyebrow, nur ohne dessen Blockeigenschaft (er
+     steht in einer Flexzeile). */
+  .milestone-weekday {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+    font-size: var(--fs-xs);
+  }
+
+  /* Der Ortshinweis bleibt Fließtext: ein ganzer Satz in Versalien liest
+     sich als Ausruf. Farbe bleibt --text-primary — --text-secondary
+     (Braun) erreicht auf Gelb nur 4.27 : 1 und verfehlt AA. */
+  .milestone-note {
+    font-size: var(--fs-xs);
+  }
+
+  /* Die Datumszahlen selbst. Einzige Stelle mit --fs-numeral (tokens.css):
+     ein rein typografisches Schaubild, kein Fließtext. */
+  .numeral {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--fs-numeral);
+    line-height: 1;
+    letter-spacing: var(--tracking-display);
+  }
+
+  /* Der Schrägstrich trennt die Zahlen, ohne mit ihnen zu konkurrieren:
+     kleiner gesetzt statt abgeblendet — eine Deckkraft unter 1 mischt auf
+     Gelb ein Olivgrün ein, das nach einer vierten Marken-farbe aussieht. */
+  .numeral-slash {
+    font-size: 0.5em;
+    margin: 0 0.12em;
+    vertical-align: 0.18em;
+  }
+
+  .milestone-year {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--fs-l);
+    letter-spacing: var(--tracking-display);
+  }
+
+  /* ---------- Gebetsanliegen ------------------------------------------ */
+
+  /* Bis September 2026 eine schlichte Liste auf --surface-warm-alt. Jetzt
+     drei nummerierte Felder nebeneinander — gleiche Inhalte aus
+     PRAYER_REQUESTS, nur als Raster statt als Aufzählung. Kein Link und
+     kein Popup, deshalb auch kein Hover-Zustand: Die Felder sind Text,
+     keine Kacheln (siehe DESIGN.md, Abschnitt „Kachel-Muster"). */
+  .prayer-list {
+    list-style: none;
+    margin: var(--sp-5) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--sp-3);
+  }
+
+  @media (min-width: 48rem) {
+    .prayer-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .prayer-list li {
+    display: grid;
+    gap: var(--sp-2);
+    align-content: start;
+    padding: var(--sp-4) var(--sp-3);
+    border-radius: var(--radius-md);
+    background-color: var(--surface-warm);
+  }
+
+  .prayer-number {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: var(--tracking-display);
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+  }
+
+  .prayer-text {
+    font-size: var(--fs-m);
+    line-height: var(--lh-tight);
+  }
+
+  /* ---------- Termine -------------------------------------------------- */
+
   /* Bogen als Stilelement (Brandbook Kapitel 4), rein dekorativ. */
   .section-mark {
     display: block;
     width: var(--size-mark);
     height: auto;
     margin: 0 auto var(--sp-4);
-  }
-
-  .hero-claim {
-    font-size: var(--fs-l);
-    margin: var(--sp-4) 0 0;
-  }
-
-  .hero-milestone {
-    margin: var(--sp-4) 0 0;
-  }
-
-  .milestone-label {
-    display: inline-block;
-    font-family: var(--font-display);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-display);
-    font-size: var(--fs-xs);
-    color: var(--text-secondary);
-  }
-
-  .milestone-date {
-    font-size: var(--fs-xl);
-  }
-
-  .button {
-    margin-top: var(--sp-4);
-  }
-
-  .scroll-hint {
-    display: block;
-    width: 1.5em;
-    margin: var(--sp-5) auto 0;
-    color: var(--text-secondary);
-  }
-
-  /* Blendet den Hinweis aus, sobald zu scrollen begonnen wurde — er soll
-     nur zu Beginn sichtbar sein, nicht dauerhaft im Weg stehen. Gleiches
-     Muster wie das Heading-Reveal in global.css: nur mit
-     Scroll-Timeline-Unterstützung und ohne reduzierte Bewegung, sonst
-     bleibt der Hinweis einfach stehen (kein Fehlerfall). --duration-slow
-     wird vom Browser bei Scroll-Timelines ignoriert (Fortschritt kommt aus
-     der Scrollposition) — hier nur aus Konsistenz mit dem Heading-Reveal
-     notiert. */
-  @supports (animation-timeline: scroll()) {
-    @media (prefers-reduced-motion: no-preference) {
-      .scroll-hint {
-        animation: hint-fade var(--duration-slow) var(--ease-out) both;
-        animation-timeline: scroll(root block);
-        animation-range: 0 20vh;
-      }
-
-      @keyframes hint-fade {
-        to {
-          opacity: 0;
-        }
-      }
-    }
   }
 
   h3 {
@@ -492,39 +776,26 @@ const jsonLd = {
     margin: 0;
   }
 
-  /* Gebetsanliegen — gleiche Fläche wie .notice (Zweitverwendung, siehe
-     DESIGN.md), aber eigene Klasse: eigener Inhalt (schlichte Liste ohne
-     Titel/Detail/Grund-Struktur), keine gemeinsame Abstraktion. */
-  .prayer-list {
-    list-style: none;
-    padding: var(--sp-4);
-    margin: var(--sp-4) 0;
-    background: var(--surface-warm-alt);
-    border-left: 3px solid var(--accent-warm-alt);
-    border-radius: var(--radius-md);
-    display: grid;
-    row-gap: var(--sp-2);
+  /* ---------- Abschließender Aufruf ------------------------------------ */
+
+  .closing {
+    max-width: var(--measure);
+    margin-inline: auto;
+    text-align: center;
   }
 
-  /* Ortsbild als Vollbild-Band, siehe DESIGN.md „Bildwelt". Steht bewusst
-     außerhalb von Section.astro — dessen .container würde das Bild auf
-     Inhaltsbreite begrenzen. */
-  .place-band {
-    margin: 0;
+  /* Einzige Stelle mit --fs-display (tokens.css): die letzte Zeile der
+     Seite darf die größte sein. text-indent gleicht die Laufweite aus —
+     letter-spacing hängt auch hinter dem letzten Zeichen ein Leerfeld an,
+     das eine zentrierte Überschrift sonst sichtbar nach links versetzt. */
+  .closing-title {
+    font-size: var(--fs-display);
+    text-indent: var(--tracking-display);
+    margin: var(--sp-2) 0 var(--sp-4);
   }
 
-  .place-photo {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-  }
-
-  /* Auf breiten Displays flacher, sonst frisst das Band den halben
-     Bildschirm und drückt „Bete und bau mit" unnötig weit nach unten. */
-  @media (min-width: 48rem) {
-    .place-photo {
-      aspect-ratio: 21 / 9;
-    }
+  .closing p {
+    margin: 0 auto var(--sp-5);
+    max-width: 48ch;
   }
 </style>

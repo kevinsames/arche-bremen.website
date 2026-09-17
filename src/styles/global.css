@@ -93,6 +93,59 @@ h4 {
   line-height: var(--lh-tight);
   text-transform: uppercase;
   letter-spacing: var(--tracking-display);
+  /* Deutsche Komposita in Versalien mit weiter Laufweite sind breit:
+     „GLAUBENSBEKENNTNIS" braucht rund 14 em und passt auf einem 360-px-
+     Gerät bei keiner vertretbaren Überschriftgröße in eine Zeile. Vorher
+     (Browser-Vorgabe h1 = 2em) lief es rechts aus dem Bild, ohne dass es
+     auffiel — `html { overflow-x: hidden }` in dieser Datei kappt den
+     Überstand und es gibt nicht einmal eine Scrollleiste als Hinweis.
+     hyphens: auto trennt nach den Regeln von lang="de" (gesetzt in
+     BaseLayout.astro). Wo das Trennwörterbuch fehlt, bricht
+     overflow-wrap die Silbe hart um — unschön, aber lesbar und im Bild,
+     statt wie bisher abgeschnitten. Keine Weichtrennzeichen (U+00AD) in
+     den Titeln: unsichtbare Zeichen in Content-Dateien sind für spätere
+     Redakteure eine Falle. */
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+/* Größenstufen der Überschriften. Bis September 2026 nicht gesetzt — es
+   griffen die Browser-Vorgaben (h1 = 2em, h2 = 1.5em, h3 = 1.17em), die
+   weder zur Skala in tokens.css passten noch eine sichtbare Hierarchie
+   ergaben. Werte ausschließlich aus der Skala, siehe DESIGN.md. */
+h1 {
+  font-size: var(--fs-xxl);
+  margin: 0 0 var(--sp-4);
+}
+
+h2 {
+  font-size: var(--fs-xl);
+  margin: 0 0 var(--sp-3);
+}
+
+h3 {
+  font-size: var(--fs-l);
+  margin: 0 0 var(--sp-2);
+}
+
+h4 {
+  font-size: var(--fs-m);
+  margin: 0 0 var(--sp-2);
+}
+
+p {
+  margin: 0 0 var(--sp-3);
+}
+
+/* Einleitungsabsatz unter einer h1. Bis September 2026 dreimal lokal in
+   Seitenkomponenten definiert (gemeindeleben, glaubensbekenntnis,
+   predigten) — hier zusammengezogen, weil die Stufe jetzt zusätzlich eine
+   Schriftgröße trägt und nicht mehr nur eine Farbe. */
+.lead {
+  font-size: var(--fs-m);
+  color: var(--text-secondary);
+  max-width: var(--measure);
 }
 
 img,
@@ -206,26 +259,83 @@ a:visited {
    Button auf dunklem Grund; taucht die auf, braucht sie eine eigene
    helle Variante — nicht vorab bauen (siehe CLAUDE.md Regel 2). */
 .button {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
   font-family: var(--font-display);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: var(--tracking-display);
+  font-size: var(--fs-xs);
   text-decoration: none;
   padding: var(--sp-2) var(--sp-4);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-pill);
   background-color: var(--bg-inverted);
   color: var(--text-on-dark);
   border: 1px solid var(--bg-inverted);
-  transition: opacity var(--duration-fast) var(--ease-out);
+  transition:
+    translate var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
 }
 
 .button:visited {
   color: var(--text-on-dark);
 }
 
-.button:hover {
-  opacity: 0.85;
+.button:hover,
+.button:focus-visible {
+  translate: 0 -2px;
+  box-shadow: var(--shadow-card);
+}
+
+/* Pfeil als Textzeichen statt Inline-SVG: er sitzt in der Zeile des
+   Knopftextes und soll dessen Farbe und Größe ohne Zusatzregeln erben.
+   Die übrigen Icons im Projekt (Header, Footer, Kacheln) bleiben SVG —
+   die stehen frei und brauchen eigene Maße. Bewusst eine eigene Klasse
+   und nicht Teil von .button: der Spenden-Knopf im Header trägt schon ein
+   Herz-Icon und soll keinen zweiten Bildzusatz bekommen. */
+.button--arrow::after {
+  content: '\2197';
+  font-family: var(--font-body);
+  letter-spacing: normal;
+  transition: translate var(--duration-fast) var(--ease-out);
+}
+
+.button--arrow:hover::after,
+.button--arrow:focus-visible::after {
+  translate: 2px -2px;
+}
+
+/* Gelbe Fläche für den Hauptaufruf. Gelb ausschließlich als Fläche, Text
+   bleibt --text-primary (CLAUDE.md Design-Regel 3). Gleiche Kombination
+   wie der Spenden-Knopf im Header. */
+.button--accent {
+  background-color: var(--accent-warm);
+  border-color: var(--accent-warm);
+  color: var(--text-primary);
+}
+
+.button--accent:visited {
+  color: var(--text-primary);
+}
+
+/* Umrissvariante für dunkle Flächen (Hero, Kontaktband). Ohne sie erbt der
+   Knopf dort die dunkelblaue Fläche und verschwindet im Grund. */
+.button--outline {
+  background-color: transparent;
+  border-color: var(--text-on-dark);
+  color: var(--text-on-dark);
+}
+
+.button--outline:visited {
+  color: var(--text-on-dark);
+}
+
+.button--outline:hover,
+.button--outline:focus-visible {
+  background-color: var(--text-on-dark);
+  color: var(--text-primary);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -244,7 +354,8 @@ a:visited {
    Stand 2026), bleibt der Inhalt schlicht sofort sichtbar. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    section h2 {
+    section h2,
+    [data-reveal] {
       animation: reveal var(--duration-slow) var(--ease-out);
       animation-timeline: view();
       animation-range: entry 0% cover 30%;
