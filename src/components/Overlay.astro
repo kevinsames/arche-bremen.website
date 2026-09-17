@@ -114,11 +114,29 @@ const { id, label, cloud } = Astro.props;
     color: var(--text-on-dark);
   }
 
+  /* Wandert langsam wie auf der Kachel (siehe MinistryCard.astro) —
+     dasselbe Bild, dieselbe Bewegung, damit das Popup als deren
+     Fortsetzung liest. */
   .cloud {
     position: absolute;
-    inset: 0;
+    inset: -12%;
     z-index: -1;
     background-image: var(--cloud);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cloud {
+      animation: cloud-drift 26s var(--ease-out) infinite alternate;
+    }
+
+    @keyframes cloud-drift {
+      from {
+        translate: -3% -2%;
+      }
+      to {
+        translate: 3% 2%;
+      }
+    }
   }
 
   .head-text {

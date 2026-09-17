@@ -39,12 +39,19 @@ const overlayId = `ministry-${ministry.id}`;
 const cloud = (index % 4) + 1;
 ---
 
+<!-- Die Hülle trägt data-reveal, nicht der Knopf: Das Einblenden beim
+     Scrollen hält nach dem Bereichsende dauerhaft seinen Endzustand und
+     würde sonst das `translate` des Hover-Zustands überschreiben (siehe
+     global.css). -->
+<div
+  class="card-wrap"
+  style={`--cloud: var(--cloud-${cloud}); --reveal-offset: ${(index % 3) * 4}%`}
+  data-reveal
+>
 <button
   type="button"
   popovertarget={overlayId}
   class="card"
-  style={`--cloud: var(--cloud-${cloud}); --reveal-offset: ${(index % 3) * 4}%`}
-  data-reveal
   aria-label={`Mehr erfahren: ${ministry.data.title}`}
 >
   <span class="cloud" aria-hidden="true"></span>
@@ -63,6 +70,7 @@ const cloud = (index % 4) + 1;
     </span>
   </span>
 </button>
+</div>
 
 <Overlay id={overlayId} label={ministry.data.title} cloud={cloud}>
   <Fragment slot="head">
@@ -75,6 +83,10 @@ const cloud = (index % 4) + 1;
 </Overlay>
 
 <style>
+  .card-wrap {
+    display: grid;
+  }
+
   .card {
     position: relative;
     display: block;
@@ -106,10 +118,37 @@ const cloud = (index % 4) + 1;
      eine der vier Varianten in tokens.css. */
   .cloud {
     position: absolute;
-    inset: 0;
+    inset: -12%;
     background-image: var(--cloud);
     transition: scale var(--duration-slow) var(--ease-out);
   }
+
+  /* Die Farbwolke wandert sehr langsam, damit die Kachel eine Fläche mit
+     Leben ist und kein Standbild. Bewegt wird `translate` (nicht
+     `background-position`): Das läuft auf dem Compositor und kostet keine
+     Neuzeichnung pro Bild — bei acht Kacheln auf einem Telefon der
+     Unterschied zwischen flüssig und ruckelig. Deshalb ist die Wolke auch
+     größer als die Kachel (inset: -12%), sonst liefe beim Wandern eine
+     Kante ins Bild.
+
+     `scale` bleibt dabei frei für den Hover-Zustand — Animation und
+     Transition fassen verschiedene Eigenschaften an und geraten sich
+     nicht in die Quere. */
+  @media (prefers-reduced-motion: no-preference) {
+    .cloud {
+      animation: cloud-drift 26s var(--ease-out) infinite alternate;
+    }
+
+    @keyframes cloud-drift {
+      from {
+        translate: -3% -2%;
+      }
+      to {
+        translate: 3% 2%;
+      }
+    }
+  }
+
 
   .card:hover .cloud,
   .card:focus-visible .cloud {
@@ -183,6 +222,14 @@ const cloud = (index % 4) + 1;
     rotate: 90deg;
   }
 
+  /* Der Textblock rückt beim Überfahren ein Stück nach oben — dieselbe
+     Richtung wie die Kachel selbst, nur weiter, sodass die Bewegung Tiefe
+     bekommt statt nur zu verschieben. */
+  .card:hover .text,
+  .card:focus-visible .text {
+    translate: 0 -4px;
+  }
+
   /* Auch hier minmax(0, 1fr) statt der impliziten Spalte, aus demselben
      Grund wie bei .body: overflow-wrap: break-word verkleinert die
      min-content-Breite NICHT, ein Grid-Item mit min-width: auto bleibt
@@ -194,6 +241,7 @@ const cloud = (index % 4) + 1;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: var(--sp-2);
+    transition: translate var(--duration-slow) var(--ease-out);
   }
 
   .title {

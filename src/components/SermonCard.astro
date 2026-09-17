@@ -155,10 +155,37 @@ const seriesKey = sermon.series?.trim().toLowerCase() ?? '';
 
   .cloud {
     position: absolute;
-    inset: 0;
+    inset: -12%;
     background-image: var(--cloud);
     transition: scale var(--duration-slow) var(--ease-out);
   }
+
+  /* Die Farbwolke wandert sehr langsam, damit die Kachel eine Fläche mit
+     Leben ist und kein Standbild. Bewegt wird `translate` (nicht
+     `background-position`): Das läuft auf dem Compositor und kostet keine
+     Neuzeichnung pro Bild — bei acht Kacheln auf einem Telefon der
+     Unterschied zwischen flüssig und ruckelig. Deshalb ist die Wolke auch
+     größer als die Kachel (inset: -12%), sonst liefe beim Wandern eine
+     Kante ins Bild.
+
+     `scale` bleibt dabei frei für den Hover-Zustand — Animation und
+     Transition fassen verschiedene Eigenschaften an und geraten sich
+     nicht in die Quere. */
+  @media (prefers-reduced-motion: no-preference) {
+    .cloud {
+      animation: cloud-drift 26s var(--ease-out) infinite alternate;
+    }
+
+    @keyframes cloud-drift {
+      from {
+        translate: -3% -2%;
+      }
+      to {
+        translate: 3% 2%;
+      }
+    }
+  }
+
 
   .card-wrap:has(.open:hover) .cloud,
   .card:focus-visible .cloud {
@@ -229,6 +256,14 @@ const seriesKey = sermon.series?.trim().toLowerCase() ?? '';
     rotate: 90deg;
   }
 
+  /* Der Textblock rückt beim Überfahren ein Stück nach oben — dieselbe
+     Richtung wie die Kachel selbst, nur weiter, sodass die Bewegung Tiefe
+     bekommt statt nur zu verschieben. */
+  .card-wrap:has(.open:hover) .text,
+  .card:focus-visible .text {
+    translate: 0 -4px;
+  }
+
   /* Auch hier minmax(0, 1fr) statt der impliziten Spalte, aus demselben
      Grund wie bei .body: overflow-wrap: break-word verkleinert die
      min-content-Breite NICHT, ein Grid-Item mit min-width: auto bleibt
@@ -240,6 +275,7 @@ const seriesKey = sermon.series?.trim().toLowerCase() ?? '';
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: var(--sp-2);
+    transition: translate var(--duration-slow) var(--ease-out);
   }
 
   .title {

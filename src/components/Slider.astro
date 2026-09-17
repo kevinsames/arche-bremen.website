@@ -12,6 +12,11 @@
 //
 // Für lange Listen (Predigt-Archiv, Glaubensbekenntnis) ungeeignet — dort
 // bleibt ein normales Raster.
+//
+// Die Reihe blendet beim Scrollen als Ganzes ein (data-reveal an der
+// Hülle). Die einzelnen Kacheln darin sind davon ausgenommen (siehe
+// global.css): Ihr nächster Scroll-Container wäre die Reihe selbst, deren
+// Block-Achse nie scrollt — die Timeline bliebe stehen.
 interface Props {
   // Beschriftung für die Pfeil-Knöpfe, z.B. "Gemeindeleben". Ohne label
   // erscheinen keine Knöpfe.
@@ -25,7 +30,7 @@ const { label } = Astro.props;
 const railId = `rail-${(label ?? 'x').toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 ---
 
-<div class="rail-wrap">
+<div class="rail-wrap" data-reveal>
   {
     label && (
       <div class="rail-nav" data-rail-nav hidden>

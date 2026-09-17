@@ -443,16 +443,38 @@ a:visited {
   }
 }
 
-/* Dezentes Einblenden der Sektionsüberschriften beim Scrollen. Reines CSS,
-   kein JavaScript. Wo animation-timeline: view() fehlt (u.a. Firefox,
-   Stand 2026), bleibt der Inhalt schlicht sofort sichtbar. */
+/* Einblenden beim Scrollen. Reines CSS über eine View-Timeline, kein
+   JavaScript. Wo `animation-timeline: view()` fehlt (u.a. Firefox, Stand
+   2026), bleibt der Inhalt schlicht sofort sichtbar.
+
+   `both` als Fill-Mode ist hier keine Feinheit, sondern die Bedingung,
+   unter der das Ganze überhaupt etwas tut: Eine scrollgebundene Animation
+   hat vor dem Beginn ihres Bereichs eine negative Fortschrittszeit, und
+   ohne Fill-Mode zeigt das Element dann seinen ungeanimierten Zustand —
+   also volle Deckkraft. Bis September 2026 stand die Regel ohne `both` im
+   Code und hat sichtbar nichts bewirkt.
+
+   Folge daraus: Die Animation hält nach dem Bereichsende dauerhaft ihren
+   Endzustand. Sie darf deshalb keine Eigenschaft anfassen, die ein
+   Hover-Zustand später ändern will — `translate` an einer Kachel wäre
+   damit blockiert. Deshalb trägt `data-reveal` bei den Kacheln immer die
+   Hülle (`.card-wrap`), nie die Kachel selbst. */
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
+  /* `screen` ist nicht kosmetisch: Mit `both` hält die Animation vor ihrem
+     Bereich die Deckkraft 0, und beim Drucken wird nicht gescrollt — ohne
+     diese Einschränkung käme alles unterhalb der ersten Bildschirmhöhe
+     leer aus dem Drucker. Auf dieser Seite wird gedruckt (Glaubens-
+     bekenntnis, Predigttexte). */
+  @media screen and (prefers-reduced-motion: no-preference) {
     section h2,
     [data-reveal] {
-      animation: reveal var(--duration-slow) var(--ease-out);
+      animation: reveal var(--duration-slow) var(--ease-out) both;
       animation-timeline: view();
-      animation-range: entry 0% cover 30%;
+      /* Fertig, sobald das Element ganz im Bild ist (`entry 100%`), nicht
+         erst später: Eine scrollgebundene Animation läuft rückwärts, wenn
+         man zurückscrollt — endet sie früh, liegt der Rückwärtsgang
+         unten am Bildrand und fällt beim Lesen nicht auf. */
+      animation-range: entry 15% entry 90%;
     }
 
     /* Gestaffelt: Elemente in derselben Reihe sollen nacheinander
@@ -462,13 +484,24 @@ a:visited {
        animation-range, den das Element per --reveal-offset selbst
        verschiebt. */
     [data-reveal] {
-      animation-range: entry calc(0% + var(--reveal-offset, 0%)) cover calc(30% + var(--reveal-offset, 0%));
+      animation-range:
+        entry calc(15% + var(--reveal-offset, 0%))
+        entry calc(90% + var(--reveal-offset, 0%));
+    }
+
+    /* Kacheln in einer waagerecht scrollenden Reihe sind ausgenommen: Ihr
+       nächster Scroll-Container ist die Reihe selbst, und deren
+       Block-Achse scrollt nie — die Timeline bliebe im Zweifel bei 0
+       stehen und die Kachel dauerhaft unsichtbar. Dort blendet die Reihe
+       als Ganzes ein (siehe Slider.astro). */
+    .rail [data-reveal] {
+      animation: none;
     }
 
     @keyframes reveal {
       from {
         opacity: 0;
-        translate: 0 24px;
+        translate: 0 32px;
       }
       to {
         opacity: 1;
@@ -476,26 +509,4 @@ a:visited {
       }
     }
   }
-}
-
-/* Textäquivalent für Inhalte, die auf dem Bildschirm nur als Grafik
-   vorliegen — aktuell genau eine Stelle: die Wortmarke im Hero der
-   Startseite (index.astro). Die Logo-SVG zeichnet "ARCHE" und
-   "Ev.-Reformierte Freikirche" als Vektorpfade; dieses span macht denselben
-   Text für Suchmaschinen und Screenreader lesbar. Kein Zusatztext, der nicht
-   sichtbar ist — eine Transkription.
-
-   Die px-Werte hier sind kein Abstand im Sinne des Designsystems, sondern
-   die Zuschnitt-Mechanik selbst (gleiche Ausnahme-Logik wie
-   black/transparent in Slider.astro, siehe DESIGN.md). */
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  border: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
 }

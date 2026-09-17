@@ -633,6 +633,66 @@ darüber das Logo, und beide sind unterschiedlich hoch — der sticky
 Filterstreifen auf `/predigten` saß dadurch auf einer der beiden Breiten
 falsch.
 
+### Bewegung an den Kacheln (September 2026)
+
+Beim Nachziehen fiel auf, dass das Scroll-Reveal **seit seiner Einführung
+nie etwas bewirkt hat**. Die Regel stand im Code, die Animation war am
+Element angehängt und lief — nur hatte sie keinen Effekt:
+
+Eine scrollgebundene Animation (`animation-timeline: view()`) hat vor dem
+Beginn ihres Bereichs eine negative Fortschrittszeit. Ohne
+`animation-fill-mode` zeigt das Element dann seinen **ungeanimierten**
+Zustand, also volle Deckkraft. Sichtbar wurde davon nur der schmale
+Moment, in dem ein Element gerade im Bereich lag. Mit `both` hält die
+Animation vor dem Bereich ihren Anfangs- und danach ihren Endzustand —
+erst damit blendet überhaupt etwas ein.
+
+Aus `both` folgen drei Dinge, die alle im Code stehen und hier begründet
+sind:
+
+1. **Die Animation hält ihren Endzustand dauerhaft** und überschreibt
+   damit jede Eigenschaft, die ein Hover-Zustand später ändern will.
+   `translate` an einer Kachel wäre dadurch blockiert. `data-reveal`
+   trägt deshalb immer die Hülle (`.card-wrap`), nie die Kachel selbst —
+   `MinistryCard` hat dafür eine bekommen, die anderen drei hatten sie
+   schon.
+2. **`@media screen`.** Vor ihrem Bereich steht die Deckkraft auf 0, und
+   beim Drucken wird nicht gescrollt: Ohne diese Einschränkung käme alles
+   unterhalb der ersten Bildschirmhöhe leer aus dem Drucker. Auf dieser
+   Seite wird gedruckt (Glaubensbekenntnis, Predigttexte).
+3. **Der Bereich endet früh** (`entry 15%` bis `entry 90%`, also fertig,
+   sobald das Element ganz im Bild ist). Eine scrollgebundene Animation
+   läuft rückwärts, wenn man zurückscrollt; endet sie früh, liegt der
+   Rückwärtsgang unten am Bildrand und fällt beim Lesen nicht auf. Das ist
+   der eine Unterschied zur JavaScript-Variante des Entwurfs, die einmal
+   einblendet und danach nie wieder etwas tut.
+
+**Kacheln in einer waagerecht scrollenden Reihe sind ausgenommen.** Ihr
+nächster Scroll-Container ist die Reihe selbst (`overflow-x: auto` macht
+auch die Block-Achse zum Scroll-Container), und deren Block-Achse scrollt
+nie — die Timeline bliebe im Zweifel bei 0 stehen und die Kachel dauerhaft
+unsichtbar. Dort blendet die Reihe als Ganzes ein (`data-reveal` an
+`.rail-wrap`).
+
+**Wandernde Farbwolke.** Die Wolke jeder Kachel bewegt sich sehr langsam
+(26 s, `alternate`), damit die Fläche lebt statt ein Standbild zu sein.
+Bewegt wird `translate`, nicht `background-position`: Das läuft auf dem
+Compositor und kostet keine Neuzeichnung pro Bild — bei acht Kacheln auf
+einem Telefon der Unterschied zwischen flüssig und ruckelig. Die Wolke ist
+dafür größer als die Kachel (`inset: -12%`), sonst liefe beim Wandern eine
+Kante ins Bild. `scale` bleibt frei für den Hover-Zustand: Animation und
+Transition fassen verschiedene Eigenschaften an und geraten sich nicht in
+die Quere. Dasselbe Bild und dieselbe Bewegung trägt der Kopf des Popups,
+damit es als Fortsetzung der Kachel liest.
+
+**Hover-Choreografie.** Kachel hebt an, Wolke zoomt, Plus-Kreis dreht sich
+um 90°, Textblock rückt ein Stück weiter nach oben als die Kachel selbst —
+die unterschiedlichen Wege geben der Bewegung Tiefe, statt alles starr zu
+verschieben.
+
+Bei `prefers-reduced-motion: reduce` entfällt alles davon vollständig
+(geprüft: keine laufende Animation, alle Kacheln sichtbar).
+
 ### Popup, zweite Fassung
 
 Die erste Fassung war eine weiße Fläche, in der ein freigestellter
