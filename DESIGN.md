@@ -633,6 +633,41 @@ darüber das Logo, und beide sind unterschiedlich hoch — der sticky
 Filterstreifen auf `/predigten` saß dadurch auf einer der beiden Breiten
 falsch.
 
+### Popup, zweite Fassung
+
+Die erste Fassung war eine weiße Fläche, in der ein freigestellter
+Schließen-Knopf oben rechts schwebte (`float: right` plus `position:
+sticky`) und über dem Titel eine leere Zeile stehen ließ. Es war nicht zu
+erkennen, von welcher Kachel das Popup kam — der Zusammenhang zwischen
+Antippen und Ergebnis fehlte völlig.
+
+`Overlay.astro` ist seither zweiteilig:
+
+- **Kopf** in der Bildsprache der Kachel: dunkelblaue Fläche, dieselbe
+  Farbwolke (über die neue `cloud`-Prop, die die Kachel aus ihrem
+  Listenindex durchreicht), darüber `--scrim-card`, darauf Versal-Kicker
+  und Titel — genau die Anordnung, die auch die Kachel zeigt. Der
+  Schließen-Knopf sitzt als Glaskreis in der Ecke, passend zum Plus-Kreis
+  der Kachel.
+- **Inhalt** darunter auf hellem Grund.
+
+Der Kopf kommt über einen benannten Slot `head` herein. Mobil bekommt das
+Sheet zusätzlich eine Griffleiste, wie bei einem nativen Bottom Sheet.
+
+Folgeänderung in `SermonDetail.astro`: neue Prop `showPassages` (im Popup
+`false`). Die Bibelstelle steht dort jetzt als Kicker im Kopf und hätte
+sonst zweimal im selben Feld gestanden. Auf der Detailseite gibt es keinen
+Kopf, dort bleibt sie im Fließtext.
+
+### Bogen im Hero
+
+Auf dem Telefon steht der Bogen unten rechts, nicht oben. Der Hero-Inhalt
+ist senkrecht zentriert; oben rechts lag der Bogen auf der Eyebrow-Zeile
+und der ersten Headline-Zeile — auf einem echten Gerät deutlich
+störender als in der Desktop-Vorschau. Unterhalb der Knöpfe ist Platz, und
+die Marke bleibt sichtbar. Auf Desktop bleibt er oben rechts, dort hält
+die Textbreite (`max-width: 16ch`) die Headline links genug frei.
+
 ### Was aus dem Entwurf nicht übernommen wurde
 
 - **WebGL-Hero** und **Parallax-Pinning** — siehe oben.

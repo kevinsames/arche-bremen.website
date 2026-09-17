@@ -373,7 +373,10 @@ const jsonLd = {
                 </button>
 
                 <Overlay id={`event-${event._id}`} label={event.title}>
-                  <h2>{event.title}</h2>
+                  <Fragment slot="head">
+                    <span class="kicker">Termin</span>
+                    <h2>{event.title}</h2>
+                  </Fragment>
                   <p class="overlay-meta">{formatEventRange(event)}</p>
                   {event.location && <p class="overlay-meta">{event.location}</p>}
                   {event.description && <p>{event.description}</p>}
@@ -482,12 +485,17 @@ const jsonLd = {
     }
   }
 
+  /* Auf dem Telefon steht der Bogen unten rechts statt oben: Der
+     Hero-Inhalt ist senkrecht zentriert, oben rechts lag der Bogen genau
+     auf der Eyebrow-Zeile und der ersten Headline-Zeile. Unterhalb der
+     Knöpfe ist Platz, und die Marke bleibt sichtbar. */
   @media (max-width: 48rem) {
     .hero-mark {
-      top: 2%;
-      right: -22%;
-      width: 15rem;
-      opacity: 0.7;
+      top: auto;
+      bottom: -4%;
+      right: -20%;
+      width: 13rem;
+      opacity: 0.55;
     }
   }
 
@@ -873,7 +881,7 @@ const jsonLd = {
 
   .overlay-meta {
     color: var(--text-secondary);
-    margin: var(--sp-2) 0 0;
+    margin: 0 0 var(--sp-2);
   }
 
   /* Hinweisblock für abgesagte Termine — eigene Klassen statt .events,

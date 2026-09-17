@@ -64,9 +64,11 @@ const cloud = (index % 4) + 1;
   </span>
 </button>
 
-<Overlay id={overlayId} label={ministry.data.title}>
-  {ministry.data.status && <p class="overlay-status">{ministry.data.status}</p>}
-  <h2 class="overlay-title">{ministry.data.title}</h2>
+<Overlay id={overlayId} label={ministry.data.title} cloud={cloud}>
+  <Fragment slot="head">
+    {ministry.data.status && <span class="kicker">{ministry.data.status}</span>}
+    <h2>{ministry.data.title}</h2>
+  </Fragment>
   <div class="prose">
     <Content />
   </div>
@@ -212,20 +214,4 @@ const cloud = (index % 4) + 1;
     color: color-mix(in srgb, var(--text-on-dark) 82%, transparent);
   }
 
-  /* Gleiche Optik wie die Status-Pill auf der Kachel, nur ohne Fläche:
-     Der Wert aus dem Schema ist kleingeschrieben („geplant") und stand im
-     Popup sonst als Fließtext-Fragment über der Überschrift. */
-  .overlay-status {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: var(--fs-xs);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--text-secondary);
-    margin: 0 0 var(--sp-2);
-  }
-
-  .overlay-title {
-    margin: var(--sp-1) 0 var(--sp-4);
-  }
 </style>

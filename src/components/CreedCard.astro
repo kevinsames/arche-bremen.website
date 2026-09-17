@@ -49,13 +49,15 @@ const permalink = `/glaubensbekenntnis/${article.id}`;
   </button>
 </div>
 
-<Overlay id={overlayId} label={article.data.title}>
-  <p class="overlay-number">Artikel {article.data.number}</p>
-  <h2 class="overlay-title">{article.data.title}</h2>
+<Overlay id={overlayId} label={article.data.title} cloud={(index % 4) + 1}>
+  <Fragment slot="head">
+    <span class="kicker">Artikel {article.data.number}</span>
+    <h2>{article.data.title}</h2>
+  </Fragment>
   <div class="prose">
     <Content />
   </div>
-  <p><a href={permalink}>Zum Artikel &rarr;</a></p>
+  <p class="overlay-link"><a href={permalink}>Zum Artikel &rarr;</a></p>
 </Overlay>
 
 <style>
@@ -199,17 +201,7 @@ const permalink = `/glaubensbekenntnis/${article.id}`;
     }
   }
 
-  .overlay-number {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: var(--fs-xs);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--text-secondary);
-    margin: 0;
-  }
-
-  .overlay-title {
-    margin: var(--sp-2) 0 var(--sp-4);
+  .overlay-link {
+    margin: var(--sp-4) 0 0;
   }
 </style>

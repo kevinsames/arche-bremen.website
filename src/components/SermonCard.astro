@@ -106,9 +106,12 @@ const seriesKey = sermon.series?.trim().toLowerCase() ?? '';
   </button>
 </div>
 
-<Overlay id={overlayId} label={sermon.title}>
-  <h2 class="overlay-title">{sermon.title}</h2>
-  <SermonDetail sermon={sermon} profile={preacherProfile} permalink={permalink} />
+<Overlay id={overlayId} label={sermon.title} cloud={(index % 4) + 1}>
+  <Fragment slot="head">
+    <span class="kicker">{formatPassages(sermon.passages)}</span>
+    <h2>{sermon.title}</h2>
+  </Fragment>
+  <SermonDetail sermon={sermon} profile={preacherProfile} permalink={permalink} showPassages={false} />
 </Overlay>
 
 <style>
@@ -279,7 +282,4 @@ const seriesKey = sermon.series?.trim().toLowerCase() ?? '';
     }
   }
 
-  .overlay-title {
-    margin: 0 0 var(--sp-4);
-  }
 </style>

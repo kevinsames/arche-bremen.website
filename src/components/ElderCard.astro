@@ -58,13 +58,15 @@ const permalink = `/gemeindeleitung/${elder.id}`;
   </button>
 </div>
 
-<Overlay id={overlayId} label={elder.data.name}>
-  <h2 class="overlay-name">{elder.data.name}</h2>
-  {elder.data.role && <p class="overlay-role">{elder.data.role}</p>}
+<Overlay id={overlayId} label={elder.data.name} cloud={(index % 4) + 1}>
+  <Fragment slot="head">
+    {elder.data.role && <span class="kicker">{elder.data.role}</span>}
+    <h2>{elder.data.name}</h2>
+  </Fragment>
   <div class="prose">
     <Content />
   </div>
-  <p><a href={permalink}>Zum Profil &rarr;</a></p>
+  <p class="overlay-link"><a href={permalink}>Zum Profil &rarr;</a></p>
 </Overlay>
 
 <style>
@@ -187,17 +189,7 @@ const permalink = `/gemeindeleitung/${elder.id}`;
     }
   }
 
-  .overlay-name {
-    margin: 0;
-  }
-
-  .overlay-role {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: var(--fs-xs);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--text-secondary);
-    margin: var(--sp-2) 0 var(--sp-4);
+  .overlay-link {
+    margin: var(--sp-4) 0 0;
   }
 </style>

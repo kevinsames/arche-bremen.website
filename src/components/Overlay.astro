@@ -1,26 +1,53 @@
 ---
-// Popup-Hülle für Predigt- und Ältesten-Kacheln (siehe SermonCard,
-// ElderCard). Baut auf der HTML-Popover-API auf (popover="auto"),
-// nicht auf JavaScript — Öffnen/Schließen per Klick, Escape und Klick
-// daneben erledigt der Browser. Damit bleibt die Seite bei 0 KB
-// Client-JS (siehe CLAUDE.md Regel 4).
+// Popup-Hülle für Kacheln und Termine (siehe SermonCard, ElderCard,
+// CreedCard, MinistryCard, index.astro). Baut auf der HTML-Popover-API auf
+// (popover="auto"), nicht auf JavaScript — Öffnen/Schließen per Klick,
+// Escape und Klick daneben erledigt der Browser. Damit bleibt die Seite
+// bei 0 KB Client-JS (siehe CLAUDE.md Regel 4).
+//
+// Aufbau seit September 2026 zweiteilig: oben ein dunkler Kopf in der
+// Bildsprache der Kachel (Farbwolke, Versal-Kicker, Titel, runder
+// Schließen-Knopf), darunter der Inhalt auf hellem Grund. Vorher war das
+// Popup eine schlichte weiße Fläche, in der ein freigestellter
+// Schließen-Knopf oben rechts schwebte und über dem Titel eine leere Zeile
+// stehen ließ — es war nicht zu erkennen, von welcher Kachel es kam.
+//
+// Der Kopf kommt über den benannten Slot `head` herein; wer ihn leer
+// lässt, bekommt nur den Schließen-Knopf auf dunklem Grund.
 //
 // Unterstützt der Browser die Popover-API nicht (z.B. ältere iOS-Versionen),
 // bleibt dieses Element schlicht ungeöffnet liegen — der auslösende Anker
-// in SermonCard/ElderCard führt dann stattdessen direkt zur Detailseite
-// (siehe dortiger @supports-Block).
+// in den Kacheln führt dann direkt zur Detailseite (siehe dortiger
+// @supports-Block).
 interface Props {
   id: string;
   label: string;
+  // Farbwolke 1–4 (siehe tokens.css). Färbt den Kopf wie die Kachel, von
+  // der das Popup geöffnet wurde. Ohne Angabe bleibt der Kopf einfarbig.
+  cloud?: number;
 }
 
-const { id, label } = Astro.props;
+const { id, label, cloud } = Astro.props;
 ---
 
-<div id={id} popover="auto" aria-label={label} class="overlay">
-  <button type="button" popovertarget={id} popovertargetaction="hide" class="close" aria-label="Schließen">
-    &times;
-  </button>
+<div
+  id={id}
+  popover="auto"
+  aria-label={label}
+  class="overlay"
+  style={cloud ? `--cloud: var(--cloud-${((cloud - 1) % 4) + 1})` : undefined}
+>
+  <div class="head">
+    {cloud && <span class="cloud" aria-hidden="true"></span>}
+    <button type="button" popovertarget={id} popovertargetaction="hide" class="close" aria-label="Schließen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18" />
+      </svg>
+    </button>
+    <div class="head-text">
+      <slot name="head" />
+    </div>
+  </div>
   <div class="content">
     <slot />
   </div>
@@ -40,15 +67,15 @@ const { id, label } = Astro.props;
     box-shadow: var(--shadow-overlay);
     width: min(100% - 2 * var(--sp-3), var(--measure));
     max-height: 85dvh;
-    overflow-y: auto;
+    overflow: clip auto;
 
     opacity: 0;
-    translate: 0 var(--sp-2);
+    translate: 0 var(--sp-3);
     transition:
       opacity var(--duration-fast) var(--ease-out),
-      translate var(--duration-fast) var(--ease-out),
-      overlay var(--duration-fast) var(--ease-out) allow-discrete,
-      display var(--duration-fast) var(--ease-out) allow-discrete;
+      translate var(--duration-slow) var(--ease-out),
+      overlay var(--duration-slow) var(--ease-out) allow-discrete,
+      display var(--duration-slow) var(--ease-out) allow-discrete;
   }
 
   .overlay:popover-open {
@@ -59,7 +86,7 @@ const { id, label } = Astro.props;
   @starting-style {
     .overlay:popover-open {
       opacity: 0;
-      translate: 0 var(--sp-2);
+      translate: 0 var(--sp-3);
     }
   }
 
@@ -69,6 +96,120 @@ const { id, label } = Astro.props;
     backdrop-filter: blur(var(--blur-overlay));
   }
 
+  /* ---------- Kopf ---------- */
+
+  /* Trägt dieselbe Bildsprache wie die Kachel: dunkelblaue Fläche,
+     optional die Farbwolke, darüber der Verlauf, damit Kicker und Titel
+     am Fuß des Kopfes tragen. */
+  .head {
+    position: relative;
+    isolation: isolate;
+    min-height: 9rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: end;
+    padding: var(--sp-5) var(--sp-4) var(--sp-4);
+    background-color: var(--bg-inverted);
+    background-image: var(--scrim-card);
+    color: var(--text-on-dark);
+  }
+
+  .cloud {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--cloud);
+  }
+
+  .head-text {
+    min-width: 0;
+  }
+
+  /* Der Titel kommt über den Slot herein und soll dort einfach als <h2>
+     stehen können — Größe und Abstand setzt deshalb diese Regel, nicht die
+     aufrufende Komponente. */
+  .head-text :global(h2) {
+    margin: 0;
+    font-size: var(--fs-xl);
+    color: inherit;
+  }
+
+  /* Versal-Kicker über dem Titel (Bibelstelle, Artikelnummer, Status,
+     Rolle). Gleiche Optik wie die Pill auf der Kachel, ohne Fläche. */
+  .head-text :global(.kicker) {
+    display: block;
+    margin: 0 0 var(--sp-2);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-label);
+    line-height: 1;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--text-on-dark) 78%, transparent);
+  }
+
+  /* Glaskreis wie der Plus-Kreis auf der Kachel, nur mit Kreuz. Sitzt
+     absolut in der Ecke statt im Textfluss — als float ließ er über dem
+     Titel eine leere Zeile stehen. */
+  .close {
+    position: absolute;
+    top: var(--sp-3);
+    right: var(--sp-3);
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 2.375rem;
+    height: 2.375rem;
+    padding: 0;
+    border: 1px solid color-mix(in srgb, var(--text-on-dark) 28%, transparent);
+    border-radius: var(--radius-pill);
+    background-color: color-mix(in srgb, var(--text-on-dark) 14%, transparent);
+    color: var(--text-on-dark);
+    cursor: pointer;
+    -webkit-backdrop-filter: blur(var(--blur-glass));
+    backdrop-filter: blur(var(--blur-glass));
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  .close svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .close:hover,
+  .close:focus-visible {
+    background-color: var(--text-on-dark);
+    color: var(--text-primary);
+  }
+
+  .content {
+    padding: clamp(var(--sp-4), 4vw, var(--sp-5));
+  }
+
+  /* Überschriften im Inhalt eine Stufe kleiner als im Seitenfluss: Die
+     globale h2-Größe (--fs-xxl, bis 4.5rem) ist für ein Schauband auf
+     voller Seitenbreite gedacht und sprengt eine Karte von --measure
+     Breite. Gilt für alles, was über den Slot hereinkommt. */
+  .content :global(h2) {
+    font-size: var(--fs-xl);
+  }
+
+  .content :global(h3) {
+    font-size: var(--fs-l);
+  }
+
+  /* Der Slot bekommt beliebige Blöcke herein; die tragen ihre eigenen
+     Außenabstände mit und rissen oben eine Lücke unter dem Kopf auf. */
+  .content :global(> :first-child) {
+    margin-top: 0;
+  }
+
+  .content :global(> :last-child) {
+    margin-bottom: 0;
+  }
+
   /* Mobil als von unten angedockte Sheet — die auf Telefonen erwartete
      Geste für Popups, statt einer schwebenden Karte in der Bildschirmmitte. */
   @media (max-width: 40rem) {
@@ -76,7 +217,7 @@ const { id, label } = Astro.props;
       position: fixed;
       inset: auto 0 0 0;
       width: 100%;
-      max-height: 80dvh;
+      max-height: 85dvh;
       border-radius: var(--radius-xl) var(--radius-xl) 0 0;
       translate: 0 100%;
     }
@@ -90,55 +231,19 @@ const { id, label } = Astro.props;
         translate: 0 100%;
       }
     }
-  }
 
-  /* Runder Schließen-Knopf, gleiche Geometrie wie die Icon-Knöpfe der
-     Kachelreihe und des Menü-Sheets (.icon-button in global.css) — hier
-     als eigene Regel, weil der Knopf zusätzlich sticky mitscrollt. */
-  .close {
-    position: sticky;
-    top: var(--sp-3);
-    float: right;
-    margin: var(--sp-3);
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    line-height: 1;
-    border: 1px solid color-mix(in srgb, var(--text-primary) 25%, transparent);
-    border-radius: var(--radius-pill);
-    background-color: var(--bg-page);
-    color: var(--text-primary);
-    font-size: var(--fs-m);
-    cursor: pointer;
-    transition:
-      background-color var(--duration-fast) var(--ease-out),
-      color var(--duration-fast) var(--ease-out),
-      border-color var(--duration-fast) var(--ease-out);
-  }
-
-  .close:hover,
-  .close:focus-visible {
-    background-color: var(--bg-inverted);
-    border-color: var(--bg-inverted);
-    color: var(--text-on-dark);
-  }
-
-  .content {
-    padding: clamp(var(--sp-4), 4vw, var(--sp-5));
-    clear: both;
-  }
-
-  /* Überschriften im Popup eine Stufe kleiner als im Seitenfluss: Die
-     globale h2-Größe (--fs-xxl, bis 4.5rem) ist für ein Schauband auf
-     voller Seitenbreite gedacht und sprengt eine Karte von --measure
-     Breite — „Sonntagsgottesdienste" stand darin über vier Zeilen. Gilt
-     für alles, was über den Slot hereinkommt, deshalb :global. */
-  .content :global(h2) {
-    font-size: var(--fs-xl);
-  }
-
-  .content :global(h3) {
-    font-size: var(--fs-l);
+    /* Griffleiste wie bei einer nativen Sheet — zeigt an, dass das Feld
+       von unten hereingefahren ist. Rein dekorativ. */
+    .head::before {
+      content: '';
+      position: absolute;
+      top: var(--sp-2);
+      left: 50%;
+      translate: -50% 0;
+      width: 2.5rem;
+      height: 0.25rem;
+      border-radius: var(--radius-pill);
+      background-color: color-mix(in srgb, var(--text-on-dark) 35%, transparent);
+    }
   }
 </style>

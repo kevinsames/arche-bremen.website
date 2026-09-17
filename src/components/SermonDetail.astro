@@ -10,6 +10,11 @@
 //
 // permalink: nur im Popup gesetzt, verlinkt von dort auf die Detailseite
 // (für Teilen, Google, Zurück-Button — siehe CLAUDE.md-Plan).
+//
+// showPassages: im Popup false. Dessen Kopf trägt die Bibelstelle seit
+// September 2026 als Kicker über dem Titel (siehe Overlay.astro) — sie
+// stünde sonst zweimal im selben Feld. Auf der Detailseite bleibt sie hier
+// im Fließtext, dort gibt es keinen Kopf.
 import type { Sermon } from '../lib/sanity';
 import type { CollectionEntry } from 'astro:content';
 import { formatPassages } from '../lib/bible';
@@ -18,9 +23,10 @@ interface Props {
   sermon: Sermon;
   profile?: CollectionEntry<'elders'>;
   permalink?: string;
+  showPassages?: boolean;
 }
 
-const { sermon, profile, permalink } = Astro.props;
+const { sermon, profile, permalink, showPassages = true } = Astro.props;
 
 const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
 ---
@@ -35,7 +41,7 @@ const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
     )
   }
 </p>
-<p class="passages">{formatPassages(sermon.passages)}</p>
+{showPassages && <p class="passages">{formatPassages(sermon.passages)}</p>}
 
 {sermon.series && <p class="series">Predigtreihe: {sermon.series}</p>}
 
