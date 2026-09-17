@@ -247,6 +247,23 @@ a:visited {
   margin-top: var(--sp-6);
 }
 
+/* Zwischenüberschriften aus Markdown eine Stufe kleiner als im
+   Seitenfluss: --fs-xxl (bis 4.5rem) ist für Schaubänder über die volle
+   Seitenbreite gedacht. In einer 62ch breiten Textspalte stand
+   „Überweisung oder Dauerauftrag" damit über drei Zeilen und war größer
+   als die Seitenüberschrift im Kopf darüber. */
+.prose h2 {
+  font-size: var(--fs-xl);
+}
+
+.prose h3 {
+  font-size: var(--fs-l);
+}
+
+.prose h4 {
+  font-size: var(--fs-m);
+}
+
 .prose ul,
 .prose ol {
   padding-left: var(--sp-4);

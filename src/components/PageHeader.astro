@@ -1,0 +1,129 @@
+---
+// Kopf einer Unterseite: dunkelblaues Band mit Farbwolke, darauf ein
+// Versal-Kicker, die Überschrift und optional ein Einleitungssatz.
+//
+// Seit September 2026 der gemeinsame Auftakt aller Unterseiten. Vorher
+// begann jede mit einer <h1> auf weißem Grund — nach dem Umbau von Hero,
+// Kacheln und Popups war das der letzte Rest der alten Seite, und er ließ
+// jede Unterseite unfertig aussehen. Dieselbe Bildsprache wie die Kacheln
+// und der Kopf der Popups: Wer von einer Kachel auf eine Detailseite geht,
+// bleibt in derselben Welt.
+//
+// Die Startseite hat ihren eigenen Hero (Ortsbild statt Farbwolke) und
+// benutzt diese Komponente nicht.
+interface Props {
+  title: string;
+  // Kleines Versal-Label über der Überschrift.
+  eyebrow?: string;
+  // Einleitungssatz unter der Überschrift.
+  lead?: string;
+  // Farbwolke 1–4 (siehe tokens.css). Ohne Angabe die erste.
+  cloud?: number;
+  // Rücksprung, z.B. von einer Detailseite zur Übersicht.
+  back?: { href: string; label: string };
+}
+
+const { title, eyebrow, lead, cloud = 1, back } = Astro.props;
+---
+
+<header class="page-head" style={`--cloud: var(--cloud-${((cloud - 1) % 4) + 1})`}>
+  <span class="cloud" aria-hidden="true"></span>
+  <div class="inner">
+    {
+      back && (
+        <p class="back">
+          <a href={back.href}>&larr; {back.label}</a>
+        </p>
+      )
+    }
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1>{title}</h1>
+    {lead && <p class="lead">{lead}</p>}
+  </div>
+</header>
+
+<style>
+  .page-head {
+    position: relative;
+    isolation: isolate;
+    /* Die Farbwolke ist größer als das Band (siehe .cloud) — ohne clip
+       liefe sie in den Inhalt darunter. */
+    overflow: clip;
+    background-color: var(--bg-inverted);
+    background-image: var(--scrim-card);
+    color: var(--text-on-dark);
+  }
+
+  .cloud {
+    position: absolute;
+    inset: -26%;
+    z-index: -1;
+    background-image: var(--cloud);
+  }
+
+  /* Wandert langsam wie auf den Kacheln (siehe MinistryCard.astro). */
+  @media (prefers-reduced-motion: no-preference) {
+    .cloud {
+      animation: cloud-drift 14s var(--ease-in-out) infinite alternate;
+    }
+
+    @keyframes cloud-drift {
+      from {
+        translate: -6% -4%;
+        rotate: -10deg;
+      }
+      to {
+        translate: 6% 4%;
+        rotate: 10deg;
+      }
+    }
+  }
+
+  /* Gleiche Breite und gleicher linker Anschlag wie Section.astro. */
+  .inner {
+    max-width: var(--width-content);
+    margin-inline: auto;
+    padding: clamp(var(--sp-6), 8vw, var(--sp-7)) var(--sp-3);
+  }
+
+  .back {
+    margin: 0 0 var(--sp-4);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .back a {
+    color: inherit;
+    text-decoration: none;
+    padding-bottom: var(--sp-1);
+    border-bottom: 2px solid transparent;
+    transition: border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .back a:visited {
+    color: inherit;
+  }
+
+  .back a:hover,
+  .back a:focus-visible {
+    border-color: var(--accent-warm);
+  }
+
+  .eyebrow {
+    color: var(--text-accent-on-dark);
+  }
+
+  h1 {
+    margin: 0;
+  }
+
+  /* Die globale .lead-Stufe setzt --text-secondary (Braun) — auf dunklem
+     Grund unlesbar. Hier eine leicht gedämpfte Variante von Weiß. */
+  .lead {
+    margin: var(--sp-4) 0 0;
+    color: color-mix(in srgb, var(--text-on-dark) 82%, transparent);
+  }
+</style>

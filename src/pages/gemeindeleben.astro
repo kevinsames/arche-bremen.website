@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
 import Section from '../components/Section.astro';
 import MinistryCard from '../components/MinistryCard.astro';
 import Slider from '../components/Slider.astro';
@@ -14,15 +15,12 @@ const ministries = (await getCollection('ministries')).sort(
   title="Gemeindeleben"
   description="Unsere Vision für das Gemeindeleben der Arche Bremen: Sonntagsgottesdienste, Kinder, Jugend, Hauskreise, Gebetsstunde, Glaubensgrundkurs, Männer und Frauen — geplant für die Zeit nach der Gründung."
 >
-  <Section tone="light" width="measure">
-    <h1>Gemeindeleben</h1>
-    <p class="lead">
-      Wir stehen noch vor der Gründung — nichts von dem hier läuft heute
-      schon. Diese Seite zeigt, was wir für das Leben unserer Gemeinde auf
-      dem Herzen haben und was wir in Zukunft Schritt für Schritt aufbauen
-      möchten.
-    </p>
-  </Section>
+  <PageHeader
+    eyebrow="Gemeinsam Glauben leben"
+    title="Gemeindeleben"
+    cloud={1}
+    lead="Wir stehen noch vor der Gründung — nichts von dem hier läuft heute schon. Diese Seite zeigt, was wir für das Leben unserer Gemeinde auf dem Herzen haben und was wir in Zukunft Schritt für Schritt aufbauen möchten."
+  />
 
   <Section tone="muted">
     {

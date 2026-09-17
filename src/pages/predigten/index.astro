@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
 import Section from '../../components/Section.astro';
 import SermonCard from '../../components/SermonCard.astro';
 import SermonFilter from '../../components/SermonFilter.astro';
@@ -18,9 +19,13 @@ const preacherProfiles = await getCollection('elders');
   title="Predigten"
   description="Alle Predigten der Arche Bremen in chronologischer Liste — mit Bibelstelle, Datum, Prediger und, wo vorhanden, Audioaufnahme."
 >
-  <Section tone="light">
-    <h1>Predigten</h1>
+  <PageHeader
+    eyebrow="Worte, die weitergehen"
+    title="Predigten"
+    cloud={4}
+  />
 
+  <Section tone="light">
     {
       sermons.length === 0 ? (
         <p>Noch keine Predigten veröffentlicht.</p>

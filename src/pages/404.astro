@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
 import Section from '../components/Section.astro';
 
 // Astro schreibt diese Seite nach dist/404.html. Cloudflare Pages liefert
@@ -10,12 +11,14 @@ import Section from '../components/Section.astro';
 ---
 
 <BaseLayout title="Seite nicht gefunden">
+  <PageHeader
+    eyebrow="404"
+    title="Seite nicht gefunden"
+    cloud={4}
+    lead="Die aufgerufene Seite gibt es nicht oder nicht mehr. Vielleicht hilft einer dieser Wege weiter:"
+  />
+
   <Section tone="light" width="measure">
-    <h1>Seite nicht gefunden</h1>
-    <p class="lead">
-      Die aufgerufene Seite gibt es nicht oder nicht mehr. Vielleicht hilft
-      einer dieser Wege weiter:
-    </p>
     <ul>
       <li><a href="/">Startseite</a></li>
       <li><a href="/predigten">Predigten</a></li>

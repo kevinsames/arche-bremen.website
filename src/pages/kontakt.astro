@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
 import Section from '../components/Section.astro';
 import { CONTACT } from '../consts';
 
@@ -16,17 +17,21 @@ import { CONTACT } from '../consts';
   title="Kontakt"
   description="So erreichst du Arche Bremen: die Funktions-E-Mail-Adresse des Gründungsteams, wer antwortet und wie lange es dauert."
 >
+  <PageHeader
+    eyebrow="Sag einfach Hallo"
+    title="Kontakt"
+    cloud={2}
+    lead="Wir bauen in Bremen gerade erst eine Gemeinde auf. Es gibt noch keinen öffentlichen Gottesdienst, zu dem wir dich einladen könnten — aber es gibt uns, und über jede Nachricht freuen wir uns."
+  />
+
   <Section tone="light" width="measure">
-    <h1>Kontakt</h1>
-    <p>
-      Wir bauen in Bremen gerade erst eine Gemeinde auf. Es gibt noch keinen
-      öffentlichen Gottesdienst, zu dem wir dich einladen könnten — aber es
-      gibt uns, und über jede Nachricht freuen wir uns.
-    </p>
 
     <p class="mail">
-      <span class="mail-label">E-Mail</span>
-      <span class="mail-address">{CONTACT.local}&#64;{CONTACT.domain}</span>
+      <span class="cloud" aria-hidden="true"></span>
+      <span class="mail-body">
+        <span class="mail-label">E-Mail</span>
+        <span class="mail-address">{CONTACT.local}&#64;{CONTACT.domain}</span>
+      </span>
     </p>
 
     <p>
@@ -53,32 +58,71 @@ import { CONTACT } from '../consts';
 </BaseLayout>
 
 <style>
-  /* Fläche mit linker Akzentkante wie .notice/.prayer-list in index.astro
-     (dritte Verwendung des Musters, siehe DESIGN.md) — Werte 1:1
-     übernommen, eigene Klasse statt gemeinsamer Abstraktion (CLAUDE.md
-     Regel 2: Kachelflächen sind reine Wiederholung, keine Komponente wert). */
+  /* Die Adresse ist der Inhalt dieser Seite und bekommt deshalb die
+     stärkste Fläche, die das Projekt hat: dieselbe Wolkenkachel wie
+     Gemeindeleben, Predigten und Glaubensbekenntnis (siehe
+     MinistryCard.astro). Bis September 2026 war es die letzte Fläche der
+     alten Bildsprache — blassorange mit linker Akzentkante — und stand
+     nach dem Umbau aller Kacheln sichtbar daneben. */
   .mail {
-    display: grid;
-    row-gap: var(--sp-1);
-    background: var(--surface-warm-alt);
-    border-left: 3px solid var(--accent-warm-alt);
-    border-radius: var(--radius-md);
-    padding: var(--sp-4);
-    margin: var(--sp-4) 0;
+    position: relative;
+    isolation: isolate;
+    display: block;
+    overflow: clip;
+    border-radius: var(--radius-lg);
+    background-color: var(--bg-inverted);
+    background-image: var(--scrim-card);
+    color: var(--text-on-dark);
+    box-shadow: var(--shadow-card);
+    margin: var(--sp-5) 0;
   }
 
-  /* Eyebrow-Optik wie .field label in SermonFilter.astro. */
+  .cloud {
+    position: absolute;
+    inset: -26%;
+    z-index: -1;
+    background-image: var(--cloud-2);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cloud {
+      animation: cloud-drift 14s var(--ease-in-out) infinite alternate;
+    }
+
+    @keyframes cloud-drift {
+      from {
+        translate: -6% -4%;
+        rotate: -10deg;
+      }
+      to {
+        translate: 6% 4%;
+        rotate: 10deg;
+      }
+    }
+  }
+
+  .mail-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--sp-2);
+    padding: var(--sp-5) var(--sp-4);
+  }
+
   .mail-label {
     font-family: var(--font-display);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: var(--tracking-label);
     font-size: var(--fs-xs);
-    color: var(--text-secondary);
+    color: color-mix(in srgb, var(--text-on-dark) 78%, transparent);
   }
 
   .mail-address {
-    font-size: var(--fs-m);
-    color: var(--text-primary);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--fs-l);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-tight);
+    overflow-wrap: anywhere;
   }
 </style>

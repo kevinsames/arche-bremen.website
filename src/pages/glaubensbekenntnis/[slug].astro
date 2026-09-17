@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
 import Section from '../../components/Section.astro';
 
 // Detailseite eines Artikels — Rückfallebene für Browser ohne
@@ -24,18 +25,16 @@ const { Content } = await render(article);
 ---
 
 <BaseLayout title={`${article.data.title} — Glaubensbekenntnis`}>
+  <PageHeader
+    eyebrow={article.data.number != null ? `Artikel ${article.data.number}` : undefined}
+    title={article.data.title}
+    cloud={(article.data.number ?? 0) % 4 + 1}
+    back={{ href: '/glaubensbekenntnis', label: 'Glaubensbekenntnis' }}
+  />
+
   <Section tone="light" width="measure">
-    {article.data.number != null && <p class="number">Artikel {article.data.number}</p>}
-    <h1>{article.data.title}</h1>
     <div class="prose">
       <Content />
     </div>
-    <p><a href="/glaubensbekenntnis">&larr; Zurück zum Glaubensbekenntnis</a></p>
   </Section>
 </BaseLayout>
-
-<style>
-  .number {
-    color: var(--text-secondary);
-  }
-</style>

@@ -737,6 +737,52 @@ Folgeänderung in `SermonDetail.astro`: neue Prop `showPassages` (im Popup
 sonst zweimal im selben Feld gestanden. Auf der Detailseite gibt es keinen
 Kopf, dort bleibt sie im Fließtext.
 
+### Seitenkopf für alle Unterseiten (September 2026)
+
+Nach dem Umbau von Hero, Kacheln und Popups begann jede Unterseite immer
+noch mit einer `<h1>` auf weißem Grund. Das war der letzte Rest der alten
+Seite und ließ jede Unterseite unfertig aussehen, obwohl darunter alles
+neu war.
+
+`PageHeader.astro` ist jetzt der gemeinsame Auftakt: dunkelblaues Band mit
+Farbwolke und Verlauf, darauf Versal-Kicker, Überschrift und optional ein
+Einleitungssatz — dieselbe Bildsprache wie die Kacheln und der Kopf der
+Popups. Wer von einer Kachel auf eine Detailseite geht, bleibt damit in
+derselben Welt. Detailseiten (Artikel, Profile, Predigten) bekommen
+zusätzlich einen Rücksprung als Versal-Label über dem Kicker.
+
+Verwendet auf allen Unterseiten inklusive `/404`. Die Startseite behält
+ihren eigenen Hero — dort trägt das Ortsbild, nicht eine Farbwolke.
+
+Die `cloud`-Prop verteilt die vier Wolkenvarianten über die Seiten, damit
+nicht jede Seite gleich aussieht; Artikelseiten leiten sie aus der
+Artikelnummer ab.
+
+**Zwei Größenkorrekturen, die daraus folgten:**
+
+- `.prose h2` steht jetzt auf `--fs-xl` statt auf der globalen
+  `h2`-Größe (`--fs-xxl`, bis 4.5 rem). Die ist für Schaubänder über die
+  volle Seitenbreite gedacht; in einer 62ch breiten Textspalte stand
+  „Überweisung oder Dauerauftrag" damit über drei Zeilen und war größer
+  als die Seitenüberschrift im Kopf darüber. `h3`/`h4` entsprechend.
+- Das Ältesten-Porträt auf der Detailseite trägt `--radius-lg` und
+  `--shadow-card` wie die Kacheln; mit dem kleineren Radius wirkte es
+  allein auf weißem Grund wie ein Rest der alten Seite.
+
+**Letzte Flächen der alten Bildsprache.** Zwei blassorange Kästen mit
+linker Akzentkante waren übrig:
+
+- Die E-Mail-Adresse auf `/kontakt` ist der Inhalt dieser Seite und
+  bekommt deshalb die stärkste Fläche des Projekts: dieselbe Wolkenkachel
+  wie Gemeindeleben, Predigten und Glaubensbekenntnis.
+- Der Hinweis auf ausgefallene Termine auf der Startseite bleibt bewusst
+  hell und behält die Akzentkante. Er ist eine Warnung und soll sich von
+  den dunklen Kacheln unterscheiden, nicht mit ihnen verschmelzen —
+  angeglichen wurden nur Radius und Innenabstand.
+
+Die Filter-Pills und das Suchfeld auf `/predigten` laufen seither auf
+`--radius-pill` statt `--radius-md`/`--radius-sm`, wie die Knöpfe.
+
 ### Zwei Fehler am Sheet (September 2026)
 
 **Tippen daneben öffnete die nächste Kachel.** Die Popover-API schließt

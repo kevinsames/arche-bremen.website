@@ -904,12 +904,16 @@ const jsonLd = {
   /* Hinweisblock für abgesagte Termine — eigene Klassen statt .events,
      damit der Ausfall optisch nicht wie ein normaler Terminlink wirkt und
      kein Button/Overlay braucht (der Grund muss ohne Klick lesbar sein). */
+  /* Der Hinweis auf ausgefallene Termine bleibt bewusst hell und behält
+     die Akzentkante: Er ist eine Warnung und soll sich von den dunklen
+     Kacheln unterscheiden, nicht mit ihnen verschmelzen. Angeglichen
+     wurden nur Radius und Innenabstand. */
   .notice {
     background: var(--surface-warm-alt);
     border-left: 3px solid var(--accent-warm-alt);
-    border-radius: var(--radius-md);
-    padding: var(--sp-4);
-    margin-top: var(--sp-4);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-5) var(--sp-4);
+    margin-top: var(--sp-5);
   }
 
   .notice h3 {
