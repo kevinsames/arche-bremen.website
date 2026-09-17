@@ -462,6 +462,208 @@ auseinanderlaufen kann.
 Das Client-JS-Budget ist unverändert: 0 KB auf allen Inhaltsseiten, einzige
 Ausnahme weiterhin die Filterleiste unter `/predigten`.
 
+## Neugestaltung, zweiter Durchgang (September 2026)
+
+Nach der ersten Runde (Abschnitt oben) lag ein zweiter, ausführlicherer
+Entwurf vor: eine vollständig neu gebaute Ein-Seiten-Website mit
+WebGL-Hero, Live-Countdown, Kachel-Reihe, Marquee und Detail-Dialogen.
+Auftrag war, sich **wesentlich enger** daran zu orientieren — ausdrücklich
+auch beim Menü und bei den Animationen, und „insbesondere die Kacheln".
+
+Übernommen wurde erneut die Gestaltungssprache, nicht der Code. Zwei
+Grundsatzfragen wurden vorher entschieden und sind unten dokumentiert:
+gemischte Schreibweise für Schauüberschriften (freigegeben) und das
+JavaScript-Budget (auf zwei zusätzliche, benannte Ausnahmen erweitert).
+
+### Gemischte Schreibweise für Schauüberschriften
+
+Brandbook 2.1 verlangt Headlines „**primär** in Versalien" mit weiter
+Laufweite. Bis September 2026 war das im Projekt als „ausschließlich"
+umgesetzt: `h1`–`h4` trugen `text-transform: uppercase` und
+`--tracking-display`. Der Entwurf setzt große Überschriften dagegen in
+Futura Bold, gemischt, mit leicht negativer Laufweite — der deutlichste
+sichtbare Unterschied zwischen beiden Ständen.
+
+Freigegeben im September 2026. Das Wort „primär" trägt eine zweite Stufe;
+sie ist jetzt benannt statt implizit:
+
+| Ebene | Schreibweise | Laufweite | Gewicht |
+|---|---|---|---|
+| `h1`, `h2` (Schaugröße) | gemischt | `--tracking-tight` (−0.02em) | 700 |
+| `h3`, `h4` | gemischt | `--tracking-tight` | 700 |
+| `.eyebrow`, `.button`, Navigation, Kachel-Status | **Versalien** | `--tracking-label` (0.18em) | 700 |
+
+Drei Folgeentscheidungen:
+
+1. **Gewicht 700 statt 500.** Im Versalsatz trug die weite Laufweite die
+   Präsenz der Überschrift. Gemischt gesetzt muss das Gewicht das tun —
+   Futura Medium wirkte in gemischter Schreibweise kraftlos.
+2. **`--tracking-label` = 0.18em liegt über dem Brandbook-Wert.** 0.07em
+   ist für Versalien in Schaugröße gemessen; dieselben Versalien in
+   0.875rem laufen damit sichtbar zu eng. Der Brandbook-Wert
+   `--tracking-display` bleibt in `tokens.css` stehen, wird aber derzeit
+   nirgends verwendet — es gibt keine Versalzeile in Schaugröße mehr.
+3. **`--fs-xxl` von 3.5rem auf 4.5rem angehoben.** Gemischter Satz mit
+   negativer Laufweite baut bei gleicher Punktgröße rund ein Drittel
+   schmaler als Versalsatz und verträgt deshalb einen größeren Grad.
+
+Nebeneffekt, der eine echte Fehlerquelle beseitigt hat: Die Zeilenlängen-
+begrenzung `width="measure"` in `Section.astro` begrenzte bis dahin auch
+die `h1`. „Glaubensbekenntnis" passt in keine 62ch breite Spalte und brach
+mitten im Wort um. `.inner--measure` gibt die Breite jetzt an jedes direkte
+Kind weiter und nimmt `h1`/`h2` davon aus — Schauüberschriften laufen bis
+zur vollen Containerbreite.
+
+### Kachel-Muster, zweite Fassung
+
+Das Leitmuster steht in `MinistryCard.astro`; `SermonCard`, `CreedCard` und
+`ElderCard` wiederholen es bewusst, statt eine gemeinsame Komponente zu
+bilden (CLAUDE.md Regel 2 — die vier unterscheiden sich in Aufbau,
+Seitenverhältnis und Inhalt genug, dass eine Abstraktion mehr Bedingungen
+bräuchte, als sie Code spart).
+
+- **Hochformat 4:5**, `--radius-lg` (im selben Zug von 1.25rem auf 1.5rem
+  angehoben — beim größeren Format wirkte der kleinere Radius
+  abgeschnitten), `overflow: clip`.
+- **Dunkelblaue Fläche mit einer weichen Farbwolke.** Der Entwurf liefert
+  dafür acht generierte JPEGs (je rund 70 KB, erzeugt mit einem
+  Python-Skript, das nicht mitgeliefert wird). Hier stattdessen vier
+  CSS-Verlaufsvarianten in `tokens.css` (`--cloud-1` … `--cloud-4`): keine
+  Binärdateien im Repo, keine Generierungspipeline, die niemand mehr hat,
+  wenn eine neunte Kachel dazukommt, und die Farben kommen zwingend aus
+  der Markenpalette. Die Kachel wählt ihre Variante über den Listenindex
+  (`index % 4`).
+- **Verlauf darüber** (`--scrim-card`), damit die Schrift am Kachelfuß
+  trägt.
+- **Status-Pill oben links, Plus-Kreis oben rechts**, beide als Glasfläche
+  mit `backdrop-filter`. Der Plus-Kreis dreht sich beim Überfahren um 90°.
+- **Hover:** Kachel hebt um 8px an (`--shadow-card` → `--shadow-card-hover`),
+  die Farbwolke zoomt auf 1.06.
+- **Ältesten-Kacheln** tragen statt der Farbwolke das echte Foto und haben
+  Name und Rolle **unter** dem Bild: Ein Verlauf über dem Gesicht würde
+  das Porträt beschädigen. Statt des Plus-Kreises blendet sich unten links
+  ein „Mehr lesen →"-Pill ein.
+- **Glaubensbekenntnis-Kacheln** haben bewusst **kein** 4:5-Format,
+  sondern eine Mindesthöhe: Bei 25 Artikeln ergäbe Hochformat eine Seite
+  von mehreren Bildschirmhöhen.
+
+Eine Falle, die dabei zweimal zugeschnappt ist und deshalb hier steht:
+`overflow-wrap: break-word` verkleinert die **min-content-Breite nicht**.
+Ein Grid-Item mit der Voreinstellung `min-width: auto` bleibt damit so
+breit wie sein längstes Wort und sprengt die Kachel, ohne dass der Umbruch
+je greift — sichtbar als abgeschnittener Titel und verschobener
+Plus-Kreis. Jedes Grid, das Kacheltext hält, braucht deshalb
+`grid-template-columns: minmax(0, 1fr)`.
+
+### Kachel-Reihe
+
+`Slider.astro` ist von Flexbox auf `grid-auto-flow: column` mit
+`grid-auto-columns: min(78vw, 20rem)` umgestellt, ohne sichtbare
+Rollleiste, mit Randabfluss bis zur Containerkante. `/gemeindeleben` nutzt
+seither die Reihe statt eines dreispaltigen Rasters — acht Kacheln im
+Hochformat ergäben sonst eine sehr lange Seite.
+
+Dazu zwei Pfeil-Knöpfe für Zeigegeräte (unter 48rem ausgeblendet, dort
+wird gewischt). Sie sind die zweite benannte Ausnahme von CLAUDE.md
+Regel 4: rund 0,9 KB inline und unminifiziert, ohne Zustandslogik — der Browser kappt den
+Scrollwert an den Rändern selbst, ein deaktivierter Knopf wäre nur mehr
+Code. Ohne JavaScript werden die Knöpfe gar nicht erst eingeblendet.
+
+### Menü-Sheet und Animationen, ohne JavaScript
+
+Der Entwurf schaltet das Menü per Skript (`.sheet.open`). Hier macht das
+die Popover-API: Das Sheet ist ein `[popover]`, das über
+`transition-behavior: allow-discrete` und `@starting-style` von oben
+einfährt. Geschlossen wird über das runde Kreuz im Sheet — genau wie im
+Entwurf; ein Burger, der sich zum Kreuz morpht, bräuchte einen Zustand am
+Knopf, den das Popover nicht zurückmeldet.
+
+Die Menüpunkte laufen gestaffelt ein. Als **Animation**, nicht als
+Transition: Ein Popover wird beim Schließen auf `display: none` gesetzt,
+wodurch die Animation beim nächsten Öffnen von selbst neu startet.
+`animation-delay: calc(120ms + var(--i) * 45ms)` mit `backwards`.
+
+Das Scroll-Reveal (`animation-timeline: view()`) gilt jetzt zusätzlich für
+alles mit `data-reveal`. Der Versatz zwischen nebeneinanderstehenden
+Kacheln entsteht über `--reveal-offset` im `animation-range` — bei einer
+View-Timeline greift `animation-delay` nicht, weil der Fortschritt aus der
+Scrollposition kommt und nicht aus der Zeit.
+
+Bewusst **nicht** übernommen: der WebGL-Wasser-Hero des Entwurfs. Er
+bräuchte eine Shader-Schleife im Browser, kostet auf Mobilgeräten Akku und
+wäre in zehn Jahren der erste Teil der Seite, den niemand mehr warten
+kann. Stattdessen trägt das vorhandene Marktplatz-Foto den Hero, darüber
+der Bogen aus dem Lockup als schwebendes Stilelement.
+
+### Countdown im Hero
+
+Auf ausdrücklichen Wunsch umgesetzt, gegen meine Empfehlung — ein
+Countdown über 226 Tage mit Minutenanzeige ist Effekt, kein Nutzen. Die
+Einwände dagegen sind technisch aber lösbar, und so ist es gebaut:
+
+Die Zahlen stehen **zur Buildzeit gerechnet im HTML**, ein synchrones
+Inline-Skript unmittelbar hinter dem Element korrigiert sie noch vor dem
+ersten Paint auf die Uhr des Besuchers. Damit gibt es weder leere Felder
+im ersten Frame noch einen sichtbaren Sprung. Ohne JavaScript bleibt der
+Buildzeit-Stand stehen — tagesgenau richtig, solange seit dem letzten
+Deploy nicht zu viel Zeit vergangen ist. Dritte benannte Ausnahme von
+CLAUDE.md Regel 4, rund 1,0 KB inline und unminifiziert.
+
+Gemessen am ausgelieferten HTML: Startseite 2,0 KB Inline-JavaScript
+(Countdown plus Kachel-Reihe), `/gemeindeleben` 0,9 KB (nur Kachel-Reihe),
+alle übrigen Inhaltsseiten 0 KB. Kein einziges externes Skript.
+
+`font-variant-numeric: tabular-nums` auf den Ziffern: Ohne das springt die
+Zeile in der Breite, sobald die Minutenzahl von 9 auf 10 wechselt.
+
+### Dunkle Kopfzeile
+
+Der Header ist auf jeder Seite dunkelblau mit weißer Wortmarke (vorher
+hell und transluzent). Auf der Startseite geht er dadurch in den dunklen
+Hero über und liest sich als dessen Oberkante; auf hellen Unterseiten
+rahmt er die Seite oben. Der Entwurf schaltet den Header je nach Sektion
+zwischen hell und dunkel um — das bräuchte einen seitenabhängigen Zustand
+und eine zweite Logo-Variante. Ein Zustand ist billiger zu warten als
+zwei.
+
+`--header-height` ist dabei von einem aus dem Inhalt gerechneten Wert auf
+eine feste Mindesthöhe (3.5rem) umgestellt, die `Header.astro` als
+`min-height` setzt: Unter 64rem gibt der Burger-Knopf die Höhe vor,
+darüber das Logo, und beide sind unterschiedlich hoch — der sticky
+Filterstreifen auf `/predigten` saß dadurch auf einer der beiden Breiten
+falsch.
+
+### Was aus dem Entwurf nicht übernommen wurde
+
+- **WebGL-Hero** und **Parallax-Pinning** — siehe oben.
+- **Blau (`--c-blue`) als Farbe kleiner Labels** (im Entwurf die Rolle
+  unter den Ältesten-Porträts). `--c-blue` erreicht auf Weiß 3,96 : 1 und
+  ist laut `tokens.css` nur für große Schrift und UI-Rahmen zugelassen;
+  ein `--fs-xs`-Label verfehlte damit AA. Hier trägt `--text-secondary`
+  (6,15 : 1).
+- **Ein-Seiten-Struktur.** Der Entwurf legt alles auf eine Seite. Dieses
+  Projekt hat echte Unterseiten mit Content Collections und einem
+  Predigt-Archiv mit Filter; sie zusammenzufalten hieße, Filter, Permalinks
+  und Suchmaschinen-Sichtbarkeit aufzugeben.
+- **Marquee der Artikel-Titel** auf dem Glaubensbekenntnis. Reizvoll, aber
+  eine Endlosschleife, die 25 Titel vorbeischiebt, macht sie schlechter
+  auffindbar als das Kachelraster, das es schon gibt.
+- **Der eigene Dunkelton `#00202f` („Tiefsee")** des Entwurfs. Keine
+  Brandbook-Farbe. Die Tiefe entsteht hier über die Verläufe, nicht über
+  einen zweiten Blauton.
+
+### Bekannte Einschränkung
+
+Kachel- und Seitenüberschriften trennen lange deutsche Komposita über
+`hyphens: auto` (`lang="de"` steht in `BaseLayout.astro`). Browser ohne
+deutsches Trennwörterbuch — dazu gehört unter anderem ein frisch
+installiertes Chromium ohne Sprachpaket — brechen stattdessen hart um
+(`overflow-wrap: break-word`), also „Sonntagsgottesdie/nste" statt
+„Sonntags-/gottesdienste". Lesbar und im Bild, aber unschön. Bewusst keine
+Weichtrennzeichen (U+00AD) in den Titeln: unsichtbare Zeichen in
+Content-Dateien sind für spätere Redakteure eine Falle, und Predigttitel
+kommen ohnehin aus Sanity und lassen sich hier nicht annotieren.
+
 ## Bewusste Abweichungen
 
 ### 1. Sekundärfarben tragen keinen Text

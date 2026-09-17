@@ -2,41 +2,65 @@
 import { render, type CollectionEntry } from 'astro:content';
 import Overlay from './Overlay.astro';
 
-// Kachel für einen Bereich des Gemeindelebens, gleiche Bauweise wie
-// CreedCard/ElderCard/SermonCard (siehe dortiger Kommentar). Ein
-// Unterschied: CreedCard verlinkt zusätzlich zu einer Detailseite (Anker
-// plus deckungsgleicher Button, siehe dort) — für Gemeindeleben gibt es
-// keine Detailseiten, deshalb ist die Kachel hier ein einzelner
-// <button popovertarget>, ohne begleitenden Anker.
+// Kachel für einen Bereich des Gemeindelebens. Seit September 2026 das
+// Leitmuster für alle Kacheltypen im Projekt (siehe DESIGN.md, Abschnitt
+// „Kachel-Muster"): Hochformat 4:5, dunkelblaue Fläche mit einer weichen
+// Farbwolke aus Markenfarben, Status-Pill oben links, Plus-Kreis oben
+// rechts, Titel und Zusammenfassung am Fuß über einem Verlauf. Beim
+// Überfahren hebt die Kachel an und die Wolke zoomt leicht.
+//
+// Die Farbwolke ist CSS (--cloud-1 … --cloud-4 in tokens.css), kein Bild:
+// keine Binärdateien im Repo, keine Generierungspipeline, und eine neue
+// Kachel bekommt ihre Variante automatisch über den Listenindex.
+//
+// Ein Klick öffnet den Inhalt als Popup (Overlay.astro). Anders als
+// CreedCard/ElderCard/SermonCard gibt es für Gemeindeleben keine
+// Detailseite, deshalb ist die Kachel ein einzelner <button popovertarget>
+// ohne begleitenden Anker.
 //
 // Bekannte Einschränkung: Browser ohne Popover-Unterstützung blenden jedes
 // [popover] dauerhaft aus (siehe global.css) — ohne Detailseite als
 // Rückfall bleibt dort nur `summary` sichtbar, nicht der volle Body-Text.
 // Deshalb ist `summary` im Schema (content.config.ts) ein Pflichtfeld.
+//
+// Der Inhalt steht in <span>-Elementen, nicht in <p>: Ein <button> darf
+// laut HTML nur Phrasing Content enthalten.
 interface Props {
   ministry: CollectionEntry<'ministries'>;
+  // Listenindex, nur für die Wahl der Farbwolke. Ohne Angabe nimmt die
+  // Kachel die erste Variante.
+  index?: number;
 }
 
-const { ministry } = Astro.props;
+const { ministry, index = 0 } = Astro.props;
 const { Content } = await render(ministry);
 
 const overlayId = `ministry-${ministry.id}`;
+const cloud = (index % 4) + 1;
 ---
 
 <button
   type="button"
   popovertarget={overlayId}
   class="card"
+  style={`--cloud: var(--cloud-${cloud}); --reveal-offset: ${(index % 3) * 4}%`}
+  data-reveal
   aria-label={`Mehr erfahren: ${ministry.data.title}`}
 >
-  {ministry.data.status && <span class="status">{ministry.data.status}</span>}
-  <p class="title">{ministry.data.title}</p>
-  <p class="summary">{ministry.data.summary}</p>
-  <span class="chevron" aria-hidden="true">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M9 6l6 6-6 6" />
-    </svg>
+  <span class="cloud" aria-hidden="true"></span>
+  <span class="body">
+    <span class="top">
+      {ministry.data.status && <span class="status">{ministry.data.status}</span>}
+      <span class="plus" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+      </span>
+    </span>
+    <span class="text">
+      <span class="title">{ministry.data.title}</span>
+      <span class="summary">{ministry.data.summary}</span>
+    </span>
   </span>
 </button>
 
@@ -53,83 +77,155 @@ const overlayId = `ministry-${ministry.id}`;
     position: relative;
     display: block;
     width: 100%;
-    text-align: left;
-    text-decoration: none;
-    color: var(--text-primary);
-    padding: var(--sp-4) var(--sp-3) var(--sp-5);
+    aspect-ratio: 4 / 5;
+    padding: 0;
     margin: 0;
     border: 0;
-    border-radius: var(--radius-md);
-    background-color: var(--surface-warm);
+    border-radius: var(--radius-lg);
+    overflow: clip;
+    background-color: var(--bg-inverted);
+    color: var(--text-on-dark);
+    box-shadow: var(--shadow-card);
+    text-align: left;
     font: inherit;
     cursor: pointer;
     transition:
-      translate var(--duration-fast) var(--ease-out),
-      box-shadow var(--duration-fast) var(--ease-out),
-      background-color var(--duration-fast) var(--ease-out);
+      translate var(--duration-slow) var(--ease-out),
+      box-shadow var(--duration-slow) var(--ease-out);
   }
 
   .card:hover,
   .card:focus-visible {
-    background-color: var(--surface-warm-strong);
-    translate: 0 -4px;
-    box-shadow: var(--shadow-card);
+    translate: 0 -8px;
+    box-shadow: var(--shadow-card-hover);
   }
 
-  .card:hover .title,
-  .card:focus-visible .title {
-    text-decoration: underline;
+  /* Die Farbwolke. --cloud kommt aus dem style-Attribut oben und zeigt auf
+     eine der vier Varianten in tokens.css. */
+  .cloud {
+    position: absolute;
+    inset: 0;
+    background-image: var(--cloud);
+    transition: scale var(--duration-slow) var(--ease-out);
+  }
+
+  .card:hover .cloud,
+  .card:focus-visible .cloud {
+    scale: 1.06;
+  }
+
+  /* Verlauf über der Wolke, damit die Schrift am Fuß trägt. */
+  .body {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    /* minmax(0, 1fr) statt der impliziten Spalte: Grid-Items haben
+       min-width: auto und wachsen sonst über die Kachel hinaus, sobald ein
+       langes Wort wie „Sonntagsgottesdienste" nicht in die Zeile passt —
+       overflow-wrap greift dann nie, weil es gar keine zu enge Zeile gibt.
+       Sichtbar wurde das als abgeschnittener Titel und verschobenem
+       Plus-Kreis. */
+    grid-template-columns: minmax(0, 1fr);
+    align-content: space-between;
+    gap: var(--sp-3);
+    padding: var(--sp-4);
+    background-image: var(--scrim-card);
+  }
+
+  .top {
+    min-width: 0;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: var(--sp-3);
+  }
+
+  /* Glasfläche für Pill und Plus-Kreis. Ohne backdrop-filter bleibt die
+     halbtransparente Fläche stehen — kein Fehlerfall. */
+  .status,
+  .plus {
+    background-color: color-mix(in srgb, var(--text-on-dark) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--text-on-dark) 28%, transparent);
+    border-radius: var(--radius-pill);
+    -webkit-backdrop-filter: blur(var(--blur-glass));
+    backdrop-filter: blur(var(--blur-glass));
   }
 
   .status {
-    display: block;
     font-family: var(--font-display);
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-display);
     font-size: var(--fs-xs);
-    color: var(--text-secondary);
+    letter-spacing: var(--tracking-label);
+    line-height: 1;
+    text-transform: uppercase;
+    padding: var(--sp-2) var(--sp-3);
+  }
+
+  .plus {
+    flex-shrink: 0;
+    margin-left: auto;
+    display: grid;
+    place-items: center;
+    width: 2.375rem;
+    height: 2.375rem;
+    transition: rotate var(--duration-slow) var(--ease-out);
+  }
+
+  .plus svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .card:hover .plus,
+  .card:focus-visible .plus {
+    rotate: 90deg;
+  }
+
+  /* Auch hier minmax(0, 1fr) statt der impliziten Spalte, aus demselben
+     Grund wie bei .body: overflow-wrap: break-word verkleinert die
+     min-content-Breite NICHT, ein Grid-Item mit min-width: auto bleibt
+     also so breit wie sein längstes Wort und sprengt die Kachel. Erst die
+     Nullspur zwingt die Zeile auf die Kachelbreite, dann greift der
+     Umbruch. */
+  .text {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-2);
   }
 
   .title {
+    display: block;
     font-family: var(--font-display);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-display);
-    font-size: var(--fs-m);
-    margin: var(--sp-1) 0 0;
+    font-weight: 700;
+    font-size: var(--fs-l);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-tight);
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    overflow-wrap: break-word;
   }
 
   .summary {
     font-size: var(--fs-s);
     line-height: var(--lh-body);
-    color: var(--text-secondary);
-    margin: var(--sp-2) 0 0;
+    color: color-mix(in srgb, var(--text-on-dark) 82%, transparent);
   }
 
-  /* Dauerhaft sichtbar (nicht erst bei Hover) — auf Touch gibt es keinen
-     Hover, ohne dieses Icon wäre die Klickbarkeit sonst unsichtbar. */
-  .chevron {
-    position: absolute;
-    right: var(--sp-3);
-    bottom: var(--sp-3);
-    width: 1em;
-    color: var(--text-secondary);
-    transition: translate var(--duration-fast) var(--ease-out);
-  }
-
-  .card:hover .chevron,
-  .card:focus-visible .chevron {
-    translate: 2px 0;
-  }
-
+  /* Gleiche Optik wie die Status-Pill auf der Kachel, nur ohne Fläche:
+     Der Wert aus dem Schema ist kleingeschrieben („geplant") und stand im
+     Popup sonst als Fließtext-Fragment über der Überschrift. */
   .overlay-status {
-    color: var(--text-secondary);
+    font-family: var(--font-display);
+    font-weight: 700;
     font-size: var(--fs-xs);
-    margin: 0;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin: 0 0 var(--sp-2);
   }
 
   .overlay-title {
-    margin: var(--sp-1) 0 0;
+    margin: var(--sp-1) 0 var(--sp-4);
   }
 </style>

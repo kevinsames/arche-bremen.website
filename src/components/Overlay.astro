@@ -36,7 +36,7 @@ const { id, label } = Astro.props;
     margin: auto;
     background-color: var(--bg-page);
     color: var(--text-primary);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     box-shadow: var(--shadow-overlay);
     width: min(100% - 2 * var(--sp-3), var(--measure));
     max-height: 85dvh;
@@ -77,7 +77,7 @@ const { id, label } = Astro.props;
       inset: auto 0 0 0;
       width: 100%;
       max-height: 80dvh;
-      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
       translate: 0 100%;
     }
 
@@ -92,29 +92,53 @@ const { id, label } = Astro.props;
     }
   }
 
+  /* Runder Schließen-Knopf, gleiche Geometrie wie die Icon-Knöpfe der
+     Kachelreihe und des Menü-Sheets (.icon-button in global.css) — hier
+     als eigene Regel, weil der Knopf zusätzlich sticky mitscrollt. */
   .close {
     position: sticky;
-    top: var(--sp-2);
+    top: var(--sp-3);
     float: right;
-    margin: var(--sp-2);
-    width: 2rem;
-    height: 2rem;
+    margin: var(--sp-3);
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
     line-height: 1;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-sm);
+    border: 1px solid color-mix(in srgb, var(--text-primary) 25%, transparent);
+    border-radius: var(--radius-pill);
     background-color: var(--bg-page);
     color: var(--text-primary);
     font-size: var(--fs-m);
     cursor: pointer;
-    transition: border-color var(--duration-fast) var(--ease-out);
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
   }
 
-  .close:hover {
-    border-color: var(--c-blue);
+  .close:hover,
+  .close:focus-visible {
+    background-color: var(--bg-inverted);
+    border-color: var(--bg-inverted);
+    color: var(--text-on-dark);
   }
 
   .content {
-    padding: var(--sp-4);
+    padding: clamp(var(--sp-4), 4vw, var(--sp-5));
     clear: both;
+  }
+
+  /* Überschriften im Popup eine Stufe kleiner als im Seitenfluss: Die
+     globale h2-Größe (--fs-xxl, bis 4.5rem) ist für ein Schauband auf
+     voller Seitenbreite gedacht und sprengt eine Karte von --measure
+     Breite — „Sonntagsgottesdienste" stand darin über vier Zeilen. Gilt
+     für alles, was über den Slot hereinkommt, deshalb :global. */
+  .content :global(h2) {
+    font-size: var(--fs-xl);
+  }
+
+  .content :global(h3) {
+    font-size: var(--fs-l);
   }
 </style>

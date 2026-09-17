@@ -29,9 +29,11 @@ import SermonDetail from './SermonDetail.astro';
 interface Props {
   sermon: Sermon;
   preacherProfile?: CollectionEntry<'elders'>;
+  // Listenindex, nur für die Wahl der Farbwolke (siehe MinistryCard).
+  index?: number;
 }
 
-const { sermon, preacherProfile } = Astro.props;
+const { sermon, preacherProfile, index = 0 } = Astro.props;
 
 const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
 const overlayId = `sermon-${sermon.slug}`;
@@ -73,19 +75,25 @@ const seriesKey = sermon.series?.trim().toLowerCase() ?? '';
 
 <div class="card-wrap" data-sermon data-search={searchIndex}
      data-books={bookKeys} data-preacher={preacherKey} data-series={seriesKey}
-     style={`view-transition-name: sermon-${sermon.slug}`}>
+     style={`view-transition-name: sermon-${sermon.slug}; --cloud: var(--cloud-${(index % 4) + 1}); --reveal-offset: ${(index % 3) * 4}%`}
+     data-reveal>
   <a href={permalink} class="card">
-    <span class="passage">{formatPassages(sermon.passages)}</span>
-    <p class="title">{sermon.title}</p>
-    <p class="meta">
-      {dateFormatter.format(new Date(sermon.date))} &middot;{' '}
-      {sermon.preacher}
-    </p>
-    <span class="chevron" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-           stroke-linecap="round" stroke-linejoin="round">
-        <path d="M9 6l6 6-6 6" />
-      </svg>
+    <span class="cloud" aria-hidden="true"></span>
+    <span class="body">
+      <span class="top">
+        <span class="passage">{formatPassages(sermon.passages)}</span>
+        <span class="plus" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+        </span>
+      </span>
+      <span class="text">
+        <span class="title">{sermon.title}</span>
+        <span class="meta">
+          {dateFormatter.format(new Date(sermon.date))} &middot; {sermon.preacher}
+        </span>
+      </span>
     </span>
   </a>
   <button
@@ -108,89 +116,151 @@ const seriesKey = sermon.series?.trim().toLowerCase() ?? '';
     position: relative;
   }
 
+  /* Gleiches Kachelmuster wie MinistryCard.astro — dort steht die
+     ausführliche Begründung. Bewusst dupliziert statt in eine gemeinsame
+     Komponente gezogen (CLAUDE.md Regel 2): Die vier Kacheltypen
+     unterscheiden sich in Aufbau (Anker + Button vs. einzelner Button),
+     Inhalt und Seitenverhältnis genug, dass eine Abstraktion mehr
+     Bedingungen bräuchte, als sie Code spart. */
   .card {
     position: relative;
     display: block;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-lg);
+    overflow: clip;
+    background-color: var(--bg-inverted);
+    color: var(--text-on-dark);
+    box-shadow: var(--shadow-card);
     text-decoration: none;
-    color: var(--text-primary);
-    padding: var(--sp-4) var(--sp-3) var(--sp-5);
-    border-radius: var(--radius-md);
-    background-color: var(--surface-warm);
     transition:
-      translate var(--duration-fast) var(--ease-out),
-      box-shadow var(--duration-fast) var(--ease-out),
-      background-color var(--duration-fast) var(--ease-out);
+      translate var(--duration-slow) var(--ease-out),
+      box-shadow var(--duration-slow) var(--ease-out);
+  }
+
+  .card:visited {
+    color: var(--text-on-dark);
   }
 
   /* .open liegt im Stapel über .card und fängt den Zeiger zuerst ab —
      card:hover würde nie feuern. Fokus kommt weiterhin über den Anker
-     selbst (Tab-Reihenfolge, siehe oben), dafür reicht die globale
-     :focus-visible-Regel in global.css. */
+     selbst (Tab-Reihenfolge, siehe oben). */
   .card-wrap:has(.open:hover) .card,
   .card:focus-visible {
-    background-color: var(--surface-warm-strong);
-    translate: 0 -4px;
-    box-shadow: var(--shadow-card);
+    translate: 0 -8px;
+    box-shadow: var(--shadow-card-hover);
   }
 
-  .card-wrap:has(.open:hover) .title,
-  .card:focus-visible .title {
-    text-decoration: underline;
-  }
-
-  /* Dauerhaft sichtbar (nicht erst bei Hover) — auf Touch gibt es keinen
-     Hover, ohne dieses Icon wäre die Klickbarkeit dort unsichtbar. */
-  .chevron {
+  .cloud {
     position: absolute;
-    right: var(--sp-3);
-    bottom: var(--sp-3);
-    width: 1em;
-    color: var(--text-secondary);
-    transition: translate var(--duration-fast) var(--ease-out);
+    inset: 0;
+    background-image: var(--cloud);
+    transition: scale var(--duration-slow) var(--ease-out);
   }
 
-  .card-wrap:has(.open:hover) .chevron,
-  .card:focus-visible .chevron {
-    translate: 2px 0;
+  .card-wrap:has(.open:hover) .cloud,
+  .card:focus-visible .cloud {
+    scale: 1.06;
   }
 
-  .card:visited {
-    color: var(--text-primary);
+  .body {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    /* minmax(0, 1fr) statt der impliziten Spalte: Grid-Items haben
+       min-width: auto und wachsen sonst über die Kachel hinaus, sobald ein
+       langes Wort wie „Sonntagsgottesdienste" nicht in die Zeile passt —
+       overflow-wrap greift dann nie, weil es gar keine zu enge Zeile gibt.
+       Sichtbar wurde das als abgeschnittener Titel und verschobenem
+       Plus-Kreis. */
+    grid-template-columns: minmax(0, 1fr);
+    align-content: space-between;
+    gap: var(--sp-3);
+    padding: var(--sp-4);
+    background-image: var(--scrim-card);
+  }
+
+  .top {
+    min-width: 0;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: var(--sp-3);
+  }
+
+  .passage,
+  .plus {
+    background-color: color-mix(in srgb, var(--text-on-dark) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--text-on-dark) 28%, transparent);
+    border-radius: var(--radius-pill);
+    -webkit-backdrop-filter: blur(var(--blur-glass));
+    backdrop-filter: blur(var(--blur-glass));
   }
 
   .passage {
-    display: block;
-    margin-bottom: var(--sp-2);
     font-family: var(--font-display);
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-display);
     font-size: var(--fs-xs);
-    color: var(--text-primary);
+    letter-spacing: var(--tracking-label);
+    line-height: 1;
+    text-transform: uppercase;
+    padding: var(--sp-2) var(--sp-3);
   }
 
-  /* font-weight bleibt bei 400 (Normal) — für den Titel ist nur der
-     Fließtext-Schnitt vorgesehen, "bold" würde sonst der Browser
-     synthetisch nachzeichnen. Abhebung kommt über Größe, nicht Gewicht. */
+  .plus {
+    flex-shrink: 0;
+    margin-left: auto;
+    display: grid;
+    place-items: center;
+    width: 2.375rem;
+    height: 2.375rem;
+    transition: rotate var(--duration-slow) var(--ease-out);
+  }
+
+  .plus svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .card-wrap:has(.open:hover) .plus,
+  .card:focus-visible .plus {
+    rotate: 90deg;
+  }
+
+  /* Auch hier minmax(0, 1fr) statt der impliziten Spalte, aus demselben
+     Grund wie bei .body: overflow-wrap: break-word verkleinert die
+     min-content-Breite NICHT, ein Grid-Item mit min-width: auto bleibt
+     also so breit wie sein längstes Wort und sprengt die Kachel. Erst die
+     Nullspur zwingt die Zeile auf die Kachelbreite, dann greift der
+     Umbruch. */
+  .text {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-2);
+  }
+
   .title {
-    font-size: var(--fs-m);
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--fs-l);
     line-height: var(--lh-tight);
-    margin: 0;
+    letter-spacing: var(--tracking-tight);
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    overflow-wrap: break-word;
   }
 
   .meta {
-    color: var(--text-secondary);
     font-size: var(--fs-xs);
-    margin: var(--sp-1) 0 0;
+    color: color-mix(in srgb, var(--text-on-dark) 78%, transparent);
   }
 
   /* Der Button liegt deckungsgleich über der Kachel und fängt den
      Maus-/Touch-Klick zuerst ab — Öffnen des Popups ist damit die primäre
      Zeigegeräte-Aktion. tabindex="-1" (im Markup) nimmt ihn aus der
-     Tab-Reihenfolge, sonst gäbe es zwei Tab-Stopps pro Kachel.
-     Ohne Popover-Unterstützung wird der Button ausgeblendet und der
-     Klick fällt durch auf den Anker darunter, der ganz normal zur
-     Detailseite führt. */
+     Tab-Reihenfolge. Ohne Popover-Unterstützung wird er ausgeblendet und
+     der Klick fällt durch auf den Anker darunter. */
   .open {
     position: absolute;
     inset: 0;
@@ -210,6 +280,6 @@ const seriesKey = sermon.series?.trim().toLowerCase() ?? '';
   }
 
   .overlay-title {
-    margin: 0;
+    margin: 0 0 var(--sp-4);
   }
 </style>

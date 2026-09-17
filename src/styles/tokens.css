@@ -99,9 +99,33 @@
   --font-display: "Futura", "Source Serif Pro", Georgia, serif;
   --font-body:    "Source Serif Pro", Georgia, serif;
 
-  /* Headlines primär in Versalien mit weiter Laufweite
-     (Brandbook: "Laufweite 70" ≈ 0.07em). */
+  /* Laufweiten. Brandbook: "Laufweite 70" ≈ 0.07em für Versalüberschriften,
+     "min. 7" für Fließtext.
+
+     Seit September 2026 laufen große Schauüberschriften in gemischter
+     Schreibweise (siehe DESIGN.md, Abschnitt „Gemischte Schreibweise für
+     Schauüberschriften"). Gemischter Satz braucht das Gegenteil von
+     Versalsatz: eine leicht negative Laufweite, sonst zerfallen große
+     Grade. Deshalb drei Werte statt einem:
+
+       --tracking-tight    große Überschriften, gemischt (h1–h4)
+       --tracking-label    kleine Versal-Labels (Eyebrow, Button, Nav)
+       --tracking-body     Fließtext
+
+     --tracking-label liegt über dem Brandbook-Wert: 0.07em ist für
+     Versalien in Schaugröße gedacht; dieselben Versalien in 0.75–0.85rem
+     laufen damit sichtbar zu eng. 0.18em ist der Wert, den auch der
+     Entwurf benutzt.
+
+     --tracking-display (der Brandbook-Wert selbst) wird seit dieser
+     Umstellung nirgends mehr verwendet — es gibt keine Versalzeile in
+     Schaugröße mehr. Der Wert bleibt trotzdem stehen, aus demselben Grund
+     wie --c-green: Er ist Brandbook-Vorgabe, nicht an eine Anwendung
+     gebunden, und wird gebraucht, sobald wieder eine Versalüberschrift in
+     Schaugröße entsteht. */
   --tracking-display: 0.07em;
+  --tracking-tight:  -0.02em;
+  --tracking-label:   0.18em;
   --tracking-body:    0.007em;   /* Brandbook: min. 7 */
 
   /* Skala — im Brandbook nicht vorhanden, für Web definiert.
@@ -111,10 +135,16 @@
   --fs-m:    clamp(1.125rem, 1rem + 0.5vw,  1.25rem);
   --fs-l:    clamp(1.375rem, 1.1rem + 1.2vw, 1.75rem);
   --fs-xl:   clamp(1.75rem,  1.3rem + 2vw,   2.5rem);
-  --fs-xxl:  clamp(2.25rem,  1.5rem + 3.5vw, 3.5rem);
+  /* Im September 2026 angehoben (vorher max. 3.5rem): Gemischter Satz mit
+     negativer Laufweite baut bei gleicher Punktgröße deutlich schmaler als
+     Versalsatz mit 0.07em — dieselbe Zeile braucht rund ein Drittel weniger
+     Breite und verträgt deshalb einen größeren Grad. */
+  --fs-xxl:  clamp(2.25rem,  1.4rem + 4.2vw, 4.5rem);
 
-  --lh-tight: 1.15;   /* Headlines */
-  --lh-body:  1.6;    /* Fließtext */
+  --lh-tight:   1.15;  /* h3/h4, Kacheltitel */
+  --lh-display: 1.02;  /* h1/h2 in Schaugröße — große Grade brauchen
+                          weniger Durchschuss, sonst zerfällt der Block */
+  --lh-body:    1.6;   /* Fließtext */
   --measure:  62ch;   /* max. Zeilenlänge Fließtext */
 
   /* Schaugrößen. Im Brandbook nicht vorhanden, für Web definiert — siehe
@@ -123,7 +153,7 @@
      Datumszahlen der Meilenstein-Fläche (rein typografisches Schaubild,
      kein Fließtext). Der Anspruch im Hero bleibt bei --fs-xxl — dort
      steht die Wortmarke darüber und soll nicht überboten werden. */
-  --fs-display: clamp(2.5rem, 1.2rem + 5.5vw, 5rem);
+  --fs-display: clamp(2.75rem, 1.4rem + 6.5vw, 7rem);
   --fs-numeral: clamp(4rem, 1rem + 15vw, 10rem);
 
   /* ---------- Abstände ---------- */
@@ -143,8 +173,12 @@
 
   /* ---------- Radius (im Brandbook nicht vorhanden, für Web definiert) --- */
   --radius-sm: 0.25rem;
-  --radius-md: 0.75rem;  /* Kacheln */
-  --radius-lg: 1.25rem;  /* Hero- und Sektionsflächen */
+  --radius-md: 0.75rem;  /* kleine Flächen, Hinweisblöcke */
+  /* Im September 2026 von 1.25rem auf 1.5rem angehoben und zur
+     Kachelgröße gemacht: Bei den jetzt deutlich größeren Kacheln
+     (Seitenverhältnis 4:5) wirkte der kleinere Radius abgeschnitten. */
+  --radius-lg: 1.5rem;   /* Kacheln, Hero- und Sektionsflächen */
+  --radius-xl: 2.25rem;  /* Popups */
   /* Vollrund. Für Knöpfe und Pills (siehe .button in global.css). Bewusst
      ein fester, sehr großer Wert statt einer Stufe der Skala: er soll bei
      jeder Knopfhöhe eine Halbkreis-Kante ergeben, nicht mitskalieren. */
@@ -177,7 +211,49 @@
      Kacheln beim Überfahren an, ohne dass sie im Ruhezustand schweben.
      Gleiche Farbe (Dunkles Blau statt Schwarz), damit die Marke auch im
      Schatten trägt. */
-  --shadow-card:    0 0.75rem 1.5rem color-mix(in srgb, var(--c-blue-dark) 14%, transparent);
+  --shadow-card:       0 1.5rem 3rem -1.25rem color-mix(in srgb, var(--c-blue-dark) 55%, transparent);
+  --shadow-card-hover: 0 2.5rem 5rem -1.5rem color-mix(in srgb, var(--c-blue-dark) 65%, transparent);
+
+  /* Warmer Schein unter dem gelben Hauptknopf. Reine Fläche, kein Text —
+     die Regel „Gelb trägt keinen Text auf hellem Grund" bleibt unberührt. */
+  --glow-accent:       0 0.9rem 2.5rem -0.7rem color-mix(in srgb, var(--accent-warm) 55%, transparent);
+  --glow-accent-hover: 0 1.3rem 3.2rem -0.7rem color-mix(in srgb, var(--accent-warm) 75%, transparent);
+
+  /* ---------- Farbwolken für Kacheln (September 2026) -----------------
+     Die Kachelbilder des Entwurfs sind acht generierte JPEGs — weiche
+     Farbflecken in Markenfarben auf Dunklem Blau. Hier als CSS-Verläufe
+     nachgebaut statt als Binärdateien im Repo: keine acht Assets, kein
+     Generierungsskript, das niemand mehr hat, wenn eine neunte Kachel
+     dazukommt, und die Farben kommen zwingend aus der Palette.
+     Vier Varianten, damit nebeneinanderstehende Kacheln sich
+     unterscheiden; die Kachel wählt über ihren Listenindex (siehe
+     MinistryCard.astro). Alle liegen auf --bg-inverted und tragen
+     ausschließlich Fläche. */
+  --cloud-1:
+    radial-gradient(58% 42% at 24% 26%, color-mix(in srgb, var(--accent-warm) 55%, transparent), transparent 72%),
+    radial-gradient(50% 38% at 76% 46%, color-mix(in srgb, var(--accent-nature) 45%, transparent), transparent 72%),
+    radial-gradient(54% 40% at 44% 76%, color-mix(in srgb, var(--accent-warm-alt) 50%, transparent), transparent 72%);
+  --cloud-2:
+    radial-gradient(56% 40% at 74% 22%, color-mix(in srgb, var(--accent-warm-alt) 52%, transparent), transparent 72%),
+    radial-gradient(52% 40% at 26% 54%, color-mix(in srgb, var(--c-blue) 62%, transparent), transparent 72%),
+    radial-gradient(50% 38% at 66% 82%, color-mix(in srgb, var(--accent-warm) 45%, transparent), transparent 72%);
+  --cloud-3:
+    radial-gradient(60% 44% at 30% 70%, color-mix(in srgb, var(--accent-nature) 50%, transparent), transparent 72%),
+    radial-gradient(48% 36% at 72% 30%, color-mix(in srgb, var(--accent-mission) 52%, transparent), transparent 72%),
+    radial-gradient(52% 40% at 18% 20%, color-mix(in srgb, var(--c-blue) 55%, transparent), transparent 72%);
+  --cloud-4:
+    radial-gradient(54% 40% at 52% 24%, color-mix(in srgb, var(--accent-warm) 48%, transparent), transparent 72%),
+    radial-gradient(56% 42% at 80% 66%, color-mix(in srgb, var(--accent-warm-alt) 48%, transparent), transparent 72%),
+    radial-gradient(50% 38% at 20% 78%, color-mix(in srgb, var(--c-blue) 60%, transparent), transparent 72%);
+
+  /* Verlauf über der Farbwolke, damit weiße Schrift am Kachelfuß trägt.
+     Gleiche Bauart wie --scrim-hero, nur kürzer. */
+  --scrim-card: linear-gradient(
+    to bottom,
+    transparent 30%,
+    color-mix(in srgb, var(--c-blue-dark) 55%, transparent) 62%,
+    color-mix(in srgb, var(--c-blue-dark) 88%, transparent) 100%
+  );
 
   /* ---------- Hero-Verlauf (im Brandbook nicht vorhanden, für Web
      definiert) ---------------------------------------------------------
@@ -190,9 +266,9 @@
      bleiben. */
   --scrim-hero: linear-gradient(
     to bottom,
-    color-mix(in srgb, var(--c-blue-dark) 50%, transparent) 0%,
-    color-mix(in srgb, var(--c-blue-dark) 72%, transparent) 45%,
-    color-mix(in srgb, var(--c-blue-dark) 93%, transparent) 100%
+    color-mix(in srgb, var(--c-blue-dark) 58%, transparent) 0%,
+    color-mix(in srgb, var(--c-blue-dark) 78%, transparent) 45%,
+    color-mix(in srgb, var(--c-blue-dark) 95%, transparent) 100%
   );
 
   /* ---------- Sticky-Glas (im Brandbook nicht vorhanden, für Web definiert)
@@ -202,10 +278,12 @@
      DESIGN.md, Abschnitt „Kachel-Muster". */
   --surface-glass: color-mix(in srgb, var(--bg-page) 85%, transparent);
   --blur-glass:    12px;
-  /* Höhe des Headers: Logo (--size-logo-header, Seitenverhältnis 916:271)
-     plus vertikales Padding (2 × --sp-2) plus 1px Unterkante. Bei
-     Änderungen am Header-Markup hier nachziehen — sonst entsteht am
+  /* Höhe des Headers. Seit September 2026 eine feste Mindesthöhe, die
+     Header.astro als min-height auf .bar setzt, statt eines aus dem Inhalt
+     gerechneten Werts: Unter 64rem gibt der Burger-Knopf die Höhe vor,
+     darüber das Logo, und beide sind unterschiedlich hoch. Bei Änderungen
+     am Header-Markup hier nachziehen — sonst entsteht am
      Sticky-Filterstreifen (SermonFilter.astro) eine Lücke oder
      Überlappung. */
-  --header-height: 3.125rem;
+  --header-height: 3.5rem;
 }

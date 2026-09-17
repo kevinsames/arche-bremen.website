@@ -37,8 +37,8 @@ const { Content: QuelleContent } = await render(quelle);
 
   <Section tone="muted">
     <div class="creed-grid">
-      {articles.map((article) => (
-        <CreedCard article={article} />
+      {articles.map((article, index) => (
+        <CreedCard article={article} index={index} />
       ))}
     </div>
   </Section>

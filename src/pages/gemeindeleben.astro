@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
 import MinistryCard from '../components/MinistryCard.astro';
+import Slider from '../components/Slider.astro';
 
 const ministries = (await getCollection('ministries')).sort(
   (a, b) => a.data.order - b.data.order,
@@ -28,11 +29,11 @@ const ministries = (await getCollection('ministries')).sort(
       ministries.length === 0 ? (
         <p>Noch keine Bereiche hinterlegt.</p>
       ) : (
-        <div class="ministry-grid">
-          {ministries.map((ministry) => (
-            <MinistryCard ministry={ministry} />
+        <Slider label="Gemeindeleben">
+          {ministries.map((ministry, index) => (
+            <MinistryCard ministry={ministry} index={index} />
           ))}
-        </div>
+        </Slider>
       )
     }
     <p class="more-hint">… und noch vieles mehr.</p>
@@ -41,26 +42,8 @@ const ministries = (await getCollection('ministries')).sort(
 
 <style>
   .more-hint {
-    margin-top: var(--sp-4);
+    margin-top: var(--sp-3);
     color: var(--text-secondary);
-    text-align: center;
-  }
-
-  .ministry-grid {
-    display: grid;
-    gap: var(--sp-3);
-    grid-template-columns: 1fr;
-  }
-
-  @media (min-width: 40rem) {
-    .ministry-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (min-width: 64rem) {
-    .ministry-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
+    font-style: italic;
   }
 </style>

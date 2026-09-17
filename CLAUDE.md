@@ -24,8 +24,12 @@ Begründung — stattdessen fragen.
    Doppelter Code ist besser als eine schwer verständliche Abstraktion.
 3. **Keine eigene Caching-, Sync- oder Content-Pipeline.**
 4. **Null Client-JavaScript auf Inhaltsseiten.** Ausnahmen ausschließlich für
-   Predigtfilter (`SermonFilter.astro`, umgesetzt als Vanilla-Skript, kein
-   Astro-Island) und künftig den Audio-Player.
+   die vier folgenden, benannten Fälle — alle als Vanilla-Skript, inline,
+   kein Astro-Island, jeweils reines Progressive Enhancement:
+   Predigtfilter (`SermonFilter.astro`), Pfeil-Knöpfe der Kachel-Reihe
+   (`Slider.astro`), Countdown im Startseiten-Hero (`index.astro`) und
+   künftig der Audio-Player. Menü, Popups, Hover- und Scroll-Animationen
+   laufen ohne JavaScript.
 5. **Keine Third-Party-Requests aus dem Browser.** Fonts selbst hosten. Keine
    iframes, keine Google-Maps-Embeds (statisches Bild + Link), kein Analytics,
    keine CDN-Skripte. Ziel: kein Consent-Banner nötig.
@@ -81,8 +85,14 @@ Regeln:
 5. **Fonts selbst hosten**, WOFF2, `font-display: swap`, maximal zwei Familien.
    Futura (Schnitte 500/700) für Headlines, Source Serif Pro (Schnitte
    400/600) für Fließtext. Keine Google-Fonts-URL.
-6. Headlines primär in Versalien mit `--tracking-display`, entsprechend
-   Brandbook 2.1.
+6. **Schriftschnitt der Überschriften:** Große Schauüberschriften (`h1`,
+   `h2`) in gemischter Schreibweise, Futura Bold, mit `--tracking-tight`.
+   Kleine Labels — Eyebrow, Button, Navigation, Kachel-Status — in
+   Versalien mit `--tracking-label`. Brandbook 2.1 sagt „Headlines primär
+   in Versalien"; die zweite Stufe für Schaugrößen ist im September 2026
+   bewusst eingeführt worden, siehe DESIGN.md, „Gemischte Schreibweise für
+   Schauüberschriften". `--tracking-display` (der Brandbook-Wert 0.07em)
+   ist derzeit ungenutzt.
 7. **Keine neuen Tokens erfinden.** Fehlt ein Wert, in `DESIGN.md` unter offene
    Fragen ergänzen und fragen — nicht im Komponentencode improvisieren.
 8. Logo als offizielle SVG-Datei einbinden, nie als Text in einem Webfont
@@ -181,12 +191,24 @@ nachträgliches Verschlagworten von 80 Predigten passiert nie.
 
 ## Performance-Budget
 
-- Inhaltsseiten: 0 KB Client-JS. **Ausnahme:** `/predigten` — die
-  Such-/Filterleiste (`SermonFilter.astro`) lädt ein Vanilla-Skript von
-  ca. 1,3 KB (minifiziert, inline), inklusive der weichen Übergänge über
-  die View-Transitions-API. Reines Progressive Enhancement: Ohne
-  JavaScript bleibt die vollständige Kachelliste unverändert stehen. Kein
-  Framework, kein Astro-Island — siehe harte Regel 4.
+- Inhaltsseiten: 0 KB Client-JS. **Drei benannte Ausnahmen** (siehe harte
+  Regel 4), alle inline, alle reines Progressive Enhancement:
+  - `/predigten` — die Such-/Filterleiste (`SermonFilter.astro`), ca. 1,3 KB
+    (minifiziert, inline), inklusive der weichen Übergänge über die
+    View-Transitions-API. Ohne JavaScript bleibt die vollständige
+    Kachelliste unverändert stehen.
+  - Kachel-Reihen (`Slider.astro`, Startseite und `/gemeindeleben`) —
+    ca. 0,9 KB inline und unminifiziert für die beiden Pfeil-Knöpfe. Ohne
+    JavaScript werden die Knöpfe gar nicht erst eingeblendet; gewischt und
+    gescrollt wird unverändert.
+  - Startseiten-Hero — ca. 1,0 KB für den Countdown bis zum ersten
+    Gottesdienst. Die Zahlen stehen zur Buildzeit gerechnet im HTML, das
+    Skript setzt sie synchron vor dem ersten Paint auf die Uhr des
+    Besuchers. Ohne JavaScript bleibt der Buildzeit-Stand stehen.
+
+  Menü-Sheet, Popups, Kachel-Hover und Scroll-Reveal laufen ohne
+  JavaScript (Popover-API, CSS-Transitions, `animation-timeline: view()`).
+  Kein Framework, kein Astro-Island.
 - Bilder über Astros Image-Komponente, AVIF/WebP.
 - Fonts selbst gehostet, `font-display: swap`, maximal vier Schnitte (zwei
   Familien: Futura 500/700, Source Serif Pro 400/600).

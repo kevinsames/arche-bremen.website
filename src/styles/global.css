@@ -82,46 +82,56 @@ h1,
 h2,
 h3,
 h4 {
+  /* Bis September 2026 durchgehend Versalien mit --tracking-display
+     (Brandbook 2.1). Große Schauüberschriften laufen seither in gemischter
+     Schreibweise mit leicht negativer Laufweite — siehe DESIGN.md,
+     Abschnitt „Gemischte Schreibweise für Schauüberschriften". Versalien
+     bleiben für kleine Labels (.eyebrow, .button, Navigation, Kachel-
+     Status), dort trägt --tracking-label.
+
+     font-weight 700 (Futura Bold) statt bisher 500: Im Versalsatz trug die
+     Laufweite die Präsenz, im gemischten Satz muss das Gewicht das tun. */
   font-family: var(--font-display);
-  /* Explizit 500 (Futura Medium, geladener Schnitt) statt der
-     Browser-Vorgabe "bold" — sonst synthetisiert der Browser eine
-     Fett-Variante oder matcht auf den geladenen 700er-Schnitt (Bold ist
-     für kleine Labels reserviert, siehe .button unten). Zusätzliche
-     Hierarchie kommt über Größe, Versalien und Laufweite (Brandbook 2.1),
-     nicht nur über Schriftgewicht. */
-  font-weight: 500;
-  line-height: var(--lh-tight);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-display);
-  /* Deutsche Komposita in Versalien mit weiter Laufweite sind breit:
-     „GLAUBENSBEKENNTNIS" braucht rund 14 em und passt auf einem 360-px-
-     Gerät bei keiner vertretbaren Überschriftgröße in eine Zeile. Vorher
-     (Browser-Vorgabe h1 = 2em) lief es rechts aus dem Bild, ohne dass es
-     auffiel — `html { overflow-x: hidden }` in dieser Datei kappt den
-     Überstand und es gibt nicht einmal eine Scrollleiste als Hinweis.
-     hyphens: auto trennt nach den Regeln von lang="de" (gesetzt in
-     BaseLayout.astro). Wo das Trennwörterbuch fehlt, bricht
-     overflow-wrap die Silbe hart um — unschön, aber lesbar und im Bild,
-     statt wie bisher abgeschnitten. Keine Weichtrennzeichen (U+00AD) in
-     den Titeln: unsichtbare Zeichen in Content-Dateien sind für spätere
-     Redakteure eine Falle. */
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+  /* Deutsche Komposita bleiben lang. Gemischter Satz mit negativer
+     Laufweite baut zwar rund ein Drittel schmaler als Versalsatz, aber
+     „Glaubensbekenntnis" ist auf einem 360-px-Gerät weiterhin knapp.
+     hyphens: auto trennt nach lang="de" (BaseLayout.astro); overflow-wrap
+     ist der Rückfall für Browser ohne deutsches Trennwörterbuch — dort
+     bricht die Silbe hart um, was unschön, aber lesbar und im Bild ist,
+     statt rechts aus dem Bild zu laufen (html hat overflow-x: hidden, es
+     gäbe nicht einmal eine Scrollleiste als Hinweis). Keine
+     Weichtrennzeichen (U+00AD) in den Titeln: unsichtbare Zeichen in
+     Content-Dateien sind für spätere Redakteure eine Falle. */
   -webkit-hyphens: auto;
   hyphens: auto;
   overflow-wrap: break-word;
 }
 
-/* Größenstufen der Überschriften. Bis September 2026 nicht gesetzt — es
-   griffen die Browser-Vorgaben (h1 = 2em, h2 = 1.5em, h3 = 1.17em), die
-   weder zur Skala in tokens.css passten noch eine sichtbare Hierarchie
-   ergaben. Werte ausschließlich aus der Skala, siehe DESIGN.md. */
+h1,
+h2 {
+  line-height: var(--lh-display);
+}
+
+h3,
+h4 {
+  line-height: var(--lh-tight);
+}
+
+/* Größenstufen. Bis September 2026 nicht gesetzt — es griffen die
+   Browser-Vorgaben (h1 = 2em, h2 = 1.5em, h3 = 1.17em), die weder zur
+   Skala in tokens.css passten noch eine sichtbare Hierarchie ergaben.
+   Werte ausschließlich aus der Skala, siehe DESIGN.md. */
 h1 {
   font-size: var(--fs-xxl);
   margin: 0 0 var(--sp-4);
 }
 
 h2 {
-  font-size: var(--fs-xl);
-  margin: 0 0 var(--sp-3);
+  font-size: var(--fs-xxl);
+  margin: 0 0 var(--sp-4);
 }
 
 h3 {
@@ -138,14 +148,45 @@ p {
   margin: 0 0 var(--sp-3);
 }
 
+/* Kleines Versal-Label über einer Überschrift oder Fläche. Bis September
+   2026 stand dieselbe Deklaration acht Mal lokal in Komponenten (siehe
+   Git-Historie) — mit der Typo-Umstellung wurde daraus eine echte,
+   benannte Stufe des Systems und nicht mehr nur eine Wiederholung: Sie
+   ist jetzt der Ort, an dem Versalsatz überhaupt noch stattfindet. */
+.eyebrow {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  line-height: var(--lh-tight);
+  text-transform: uppercase;
+  margin: 0 0 var(--sp-3);
+}
+
+/* Auf dunklem Grund. Gelb trägt hier Schrift (8.38 : 1), siehe
+   --text-accent-on-dark in tokens.css. */
+.eyebrow--accent {
+  color: var(--text-accent-on-dark);
+}
+
+.eyebrow--muted {
+  color: var(--text-secondary);
+}
+
 /* Einleitungsabsatz unter einer h1. Bis September 2026 dreimal lokal in
-   Seitenkomponenten definiert (gemeindeleben, glaubensbekenntnis,
-   predigten) — hier zusammengezogen, weil die Stufe jetzt zusätzlich eine
-   Schriftgröße trägt und nicht mehr nur eine Farbe. */
+   Seitenkomponenten definiert (gemeindeleben, glaubensbekenntnis, 404). */
 .lead {
-  font-size: var(--fs-m);
+  font-size: var(--fs-l);
+  line-height: var(--lh-tight);
   color: var(--text-secondary);
   max-width: var(--measure);
+  text-wrap: pretty;
+}
+
+::selection {
+  background-color: var(--accent-warm);
+  color: var(--text-primary);
 }
 
 img,
@@ -253,30 +294,34 @@ a:visited {
   text-decoration: none;
 }
 
-/* Gefüllter Link/Button: dunkler Grund, heller Text — unabhängig von der
-   Sektion, in der er steht (siehe .section--dark-Ausnahme oben, die den
-   Button explizit ausnimmt). Es gibt aktuell keine Stelle mit einem
-   Button auf dunklem Grund; taucht die auf, braucht sie eine eigene
-   helle Variante — nicht vorab bauen (siehe CLAUDE.md Regel 2). */
+/* Knopf. Vollrund, Versalien mit --tracking-label, hebt beim Überfahren
+   an. Drei Varianten: --accent (gelbe Fläche mit warmem Schein, Text
+   bleibt --text-primary — Gelb trägt hier keine Schrift), --ghost
+   (transluzent für dunkle Flächen und Fotos) und --outline (Umriss auf
+   hellem Grund). */
 .button {
   display: inline-flex;
   align-items: center;
-  gap: var(--sp-3);
+  gap: var(--sp-2);
   font-family: var(--font-display);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: var(--tracking-display);
+  letter-spacing: var(--tracking-label);
   font-size: var(--fs-xs);
+  line-height: 1;
   text-decoration: none;
-  padding: var(--sp-2) var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
   border-radius: var(--radius-pill);
   background-color: var(--bg-inverted);
   color: var(--text-on-dark);
   border: 1px solid var(--bg-inverted);
+  cursor: pointer;
   transition:
     translate var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out),
-    background-color var(--duration-fast) var(--ease-out);
+    box-shadow var(--duration-slow) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
 }
 
 .button:visited {
@@ -289,14 +334,16 @@ a:visited {
   box-shadow: var(--shadow-card);
 }
 
+.button:active {
+  translate: 0 0;
+}
+
 /* Pfeil als Textzeichen statt Inline-SVG: er sitzt in der Zeile des
-   Knopftextes und soll dessen Farbe und Größe ohne Zusatzregeln erben.
-   Die übrigen Icons im Projekt (Header, Footer, Kacheln) bleiben SVG —
-   die stehen frei und brauchen eigene Maße. Bewusst eine eigene Klasse
-   und nicht Teil von .button: der Spenden-Knopf im Header trägt schon ein
-   Herz-Icon und soll keinen zweiten Bildzusatz bekommen. */
+   Knopftextes und erbt Farbe und Größe ohne Zusatzregeln. Eigene Klasse
+   und nicht Teil von .button — der Spenden-Knopf im Header trägt schon
+   ein Herz-Icon und soll keinen zweiten Bildzusatz bekommen. */
 .button--arrow::after {
-  content: '\2197';
+  content: '\2192';
   font-family: var(--font-body);
   letter-spacing: normal;
   transition: translate var(--duration-fast) var(--ease-out);
@@ -304,38 +351,85 @@ a:visited {
 
 .button--arrow:hover::after,
 .button--arrow:focus-visible::after {
-  translate: 2px -2px;
+  translate: 4px 0;
 }
 
-/* Gelbe Fläche für den Hauptaufruf. Gelb ausschließlich als Fläche, Text
-   bleibt --text-primary (CLAUDE.md Design-Regel 3). Gleiche Kombination
-   wie der Spenden-Knopf im Header. */
 .button--accent {
   background-color: var(--accent-warm);
   border-color: var(--accent-warm);
   color: var(--text-primary);
+  box-shadow: var(--glow-accent);
 }
 
 .button--accent:visited {
   color: var(--text-primary);
 }
 
-/* Umrissvariante für dunkle Flächen (Hero, Kontaktband). Ohne sie erbt der
-   Knopf dort die dunkelblaue Fläche und verschwindet im Grund. */
-.button--outline {
-  background-color: transparent;
-  border-color: var(--text-on-dark);
+.button--accent:hover,
+.button--accent:focus-visible {
+  box-shadow: var(--glow-accent-hover);
+}
+
+/* Transluzent, für dunkle Flächen und Fotos. Ohne backdrop-filter bleibt
+   die halbtransparente Fläche stehen — kein Fehlerfall. */
+.button--ghost {
+  background-color: color-mix(in srgb, var(--text-on-dark) 8%, transparent);
+  border-color: color-mix(in srgb, var(--text-on-dark) 35%, transparent);
+  color: var(--text-on-dark);
+  -webkit-backdrop-filter: blur(var(--blur-glass));
+  backdrop-filter: blur(var(--blur-glass));
+}
+
+.button--ghost:visited {
   color: var(--text-on-dark);
 }
 
+.button--ghost:hover,
+.button--ghost:focus-visible {
+  background-color: color-mix(in srgb, var(--text-on-dark) 16%, transparent);
+  border-color: var(--text-on-dark);
+}
+
+/* Umriss auf hellem Grund. */
+.button--outline {
+  background-color: transparent;
+  border-color: color-mix(in srgb, var(--text-primary) 30%, transparent);
+  color: var(--text-primary);
+}
+
 .button--outline:visited {
-  color: var(--text-on-dark);
+  color: var(--text-primary);
 }
 
 .button--outline:hover,
 .button--outline:focus-visible {
-  background-color: var(--text-on-dark);
-  color: var(--text-primary);
+  border-color: var(--text-primary);
+}
+
+/* Runder Icon-Knopf: Kachel-Plus, Schließen-Kreuz, Pfeile der
+   Kachelreihe. Nur Geometrie — Farbe setzt die jeweilige Komponente. */
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border-radius: var(--radius-pill);
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    translate var(--duration-fast) var(--ease-out);
+}
+
+.icon-button svg {
+  width: 1.1em;
+  height: 1.1em;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -361,10 +455,20 @@ a:visited {
       animation-range: entry 0% cover 30%;
     }
 
+    /* Gestaffelt: Elemente in derselben Reihe sollen nacheinander
+       erscheinen, nicht gleichzeitig. Mit einer View-Timeline greift
+       animation-delay nicht (der Fortschritt kommt aus der Scrollposition,
+       nicht aus der Zeit) — der Versatz entsteht deshalb über den
+       animation-range, den das Element per --reveal-offset selbst
+       verschiebt. */
+    [data-reveal] {
+      animation-range: entry calc(0% + var(--reveal-offset, 0%)) cover calc(30% + var(--reveal-offset, 0%));
+    }
+
     @keyframes reveal {
       from {
         opacity: 0;
-        translate: 0 12px;
+        translate: 0 24px;
       }
       to {
         opacity: 1;

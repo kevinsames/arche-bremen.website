@@ -12,24 +12,31 @@ import Overlay from './Overlay.astro';
 // genügt.
 interface Props {
   article: CollectionEntry<'creed'>;
+  index?: number;
 }
 
-const { article } = Astro.props;
+const { article, index = 0 } = Astro.props;
 const { Content } = await render(article);
 
 const overlayId = `creed-${article.id}`;
 const permalink = `/glaubensbekenntnis/${article.id}`;
 ---
 
-<div class="card-wrap">
+<div class="card-wrap"
+     style={`--cloud: var(--cloud-${(index % 4) + 1}); --reveal-offset: ${(index % 3) * 4}%`}
+     data-reveal>
   <a href={permalink} class="card">
-    <span class="number">Artikel {article.data.number}</span>
-    <p class="title">{article.data.title}</p>
-    <span class="chevron" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-           stroke-linecap="round" stroke-linejoin="round">
-        <path d="M9 6l6 6-6 6" />
-      </svg>
+    <span class="cloud" aria-hidden="true"></span>
+    <span class="body">
+      <span class="top">
+        <span class="number">Artikel {article.data.number}</span>
+        <span class="plus" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+        </span>
+      </span>
+      <span class="title">{article.data.title}</span>
     </span>
   </a>
   <button
@@ -56,69 +63,122 @@ const permalink = `/glaubensbekenntnis/${article.id}`;
     position: relative;
   }
 
+  /* Gleiches Kachelmuster wie MinistryCard.astro, aber bewusst OHNE
+     aspect-ratio: 4/5. Bei 25 Artikeln ergäbe das Hochformat eine Seite
+     von mehreren Bildschirmhöhen, durch die niemand scrollt. Stattdessen
+     eine Mindesthöhe — die Kachel bleibt kompakt und wächst nur, wenn ein
+     Titel umbricht. */
   .card {
     position: relative;
     display: block;
+    min-height: 11rem;
+    border-radius: var(--radius-lg);
+    overflow: clip;
+    background-color: var(--bg-inverted);
+    color: var(--text-on-dark);
+    box-shadow: var(--shadow-card);
     text-decoration: none;
-    color: var(--text-primary);
-    padding: var(--sp-4) var(--sp-3) var(--sp-5);
-    border-radius: var(--radius-md);
-    background-color: var(--surface-warm);
     transition:
-      translate var(--duration-fast) var(--ease-out),
-      box-shadow var(--duration-fast) var(--ease-out),
-      background-color var(--duration-fast) var(--ease-out);
+      translate var(--duration-slow) var(--ease-out),
+      box-shadow var(--duration-slow) var(--ease-out);
+  }
+
+  .card:visited {
+    color: var(--text-on-dark);
   }
 
   .card-wrap:has(.open:hover) .card,
   .card:focus-visible {
-    background-color: var(--surface-warm-strong);
-    translate: 0 -4px;
-    box-shadow: var(--shadow-card);
+    translate: 0 -6px;
+    box-shadow: var(--shadow-card-hover);
   }
 
-  .card-wrap:has(.open:hover) .title,
-  .card:focus-visible .title {
-    text-decoration: underline;
-  }
-
-  /* Dauerhaft sichtbar (nicht erst bei Hover) — auf Touch gibt es keinen
-     Hover, ohne dieses Icon wäre die Klickbarkeit dort unsichtbar. */
-  .chevron {
+  .cloud {
     position: absolute;
-    right: var(--sp-3);
-    bottom: var(--sp-3);
-    width: 1em;
-    color: var(--text-secondary);
-    transition: translate var(--duration-fast) var(--ease-out);
+    inset: 0;
+    background-image: var(--cloud);
+    transition: scale var(--duration-slow) var(--ease-out);
   }
 
-  .card-wrap:has(.open:hover) .chevron,
-  .card:focus-visible .chevron {
-    translate: 2px 0;
+  .card-wrap:has(.open:hover) .cloud,
+  .card:focus-visible .cloud {
+    scale: 1.06;
   }
 
-  .card:visited {
-    color: var(--text-primary);
+  .body {
+    position: relative;
+    display: grid;
+    /* minmax(0, 1fr) statt der impliziten Spalte: Grid-Items haben
+       min-width: auto und wachsen sonst über die Kachel hinaus, sobald ein
+       langes Wort wie „Sonntagsgottesdienste" nicht in die Zeile passt —
+       overflow-wrap greift dann nie, weil es gar keine zu enge Zeile gibt.
+       Sichtbar wurde das als abgeschnittener Titel und verschobenem
+       Plus-Kreis. */
+    grid-template-columns: minmax(0, 1fr);
+    align-content: space-between;
+    gap: var(--sp-4);
+    min-height: 11rem;
+    padding: var(--sp-4);
+    background-image: var(--scrim-card);
+  }
+
+  .top {
+    min-width: 0;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: var(--sp-3);
+  }
+
+  .number,
+  .plus {
+    background-color: color-mix(in srgb, var(--text-on-dark) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--text-on-dark) 28%, transparent);
+    border-radius: var(--radius-pill);
+    -webkit-backdrop-filter: blur(var(--blur-glass));
+    backdrop-filter: blur(var(--blur-glass));
   }
 
   .number {
-    display: block;
     font-family: var(--font-display);
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-display);
     font-size: var(--fs-xs);
-    color: var(--text-secondary);
+    letter-spacing: var(--tracking-label);
+    line-height: 1;
+    text-transform: uppercase;
+    padding: var(--sp-2) var(--sp-3);
+  }
+
+  .plus {
+    flex-shrink: 0;
+    margin-left: auto;
+    display: grid;
+    place-items: center;
+    width: 2.375rem;
+    height: 2.375rem;
+    transition: rotate var(--duration-slow) var(--ease-out);
+  }
+
+  .plus svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .card-wrap:has(.open:hover) .plus,
+  .card:focus-visible .plus {
+    rotate: 90deg;
   }
 
   .title {
+    display: block;
     font-family: var(--font-display);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-display);
-    font-size: var(--fs-m);
-    margin: var(--sp-1) 0 0;
+    font-weight: 700;
+    font-size: var(--fs-l);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-tight);
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    overflow-wrap: break-word;
   }
 
   .open {
@@ -140,12 +200,16 @@ const permalink = `/glaubensbekenntnis/${article.id}`;
   }
 
   .overlay-number {
-    color: var(--text-secondary);
+    font-family: var(--font-display);
+    font-weight: 700;
     font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--text-secondary);
     margin: 0;
   }
 
   .overlay-title {
-    margin: var(--sp-1) 0 0;
+    margin: var(--sp-2) 0 var(--sp-4);
   }
 </style>

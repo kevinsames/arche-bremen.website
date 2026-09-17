@@ -1,43 +1,127 @@
 ---
-// Horizontale, wischbare Kachel-Reihe (Apple-Muster) für Startseite und
-// /gemeindeleitung. Reines CSS: scroll-snap für das Wischen, kein JavaScript,
-// keine Pfeil-Buttons. Für lange Listen (z.B. das Predigt-Archiv)
-// ungeeignet, dafür bleibt /predigten ein normales Raster.
+// Horizontale, wischbare Kachel-Reihe für Startseite, /gemeindeleben und
+// /gemeindeleitung. Die Kacheln liegen Kante zu Kante über den Rand der
+// Inhaltsspalte hinaus und rasten beim Wischen ein (scroll-snap).
+//
+// Seit September 2026 optional mit zwei Pfeil-Knöpfen für Zeigegeräte
+// (siehe DESIGN.md). Sie sind die dritte benannte Ausnahme von CLAUDE.md
+// Regel 4 — rund 0,3 KB Vanilla-Skript, inline, kein Framework, kein
+// Astro-Island. Reines Progressive Enhancement: Ohne JavaScript werden die
+// Knöpfe gar nicht erst eingeblendet (die Regel dafür setzt das Skript
+// selbst), gewischt und gescrollt werden kann unverändert.
+//
+// Für lange Listen (Predigt-Archiv, Glaubensbekenntnis) ungeeignet — dort
+// bleibt ein normales Raster.
+interface Props {
+  // Beschriftung für die Pfeil-Knöpfe, z.B. "Gemeindeleben". Ohne label
+  // erscheinen keine Knöpfe.
+  label?: string;
+}
+
+const { label } = Astro.props;
+// Aus dem Label abgeleitet statt zufällig: Ein Zufallswert machte die
+// Build-Ausgabe von Lauf zu Lauf unterschiedlich, ohne dass sich am Inhalt
+// etwas geändert hätte. Pro Seite gibt es höchstens eine Reihe je Label.
+const railId = `rail-${(label ?? 'x').toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 ---
 
-<div class="slider">
-  <slot />
+<div class="rail-wrap">
+  {
+    label && (
+      <div class="rail-nav" data-rail-nav hidden>
+        <button type="button" class="icon-button" data-rail-prev aria-controls={railId} aria-label={`${label}: zurück`}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M15 6l-6 6 6 6" />
+          </svg>
+        </button>
+        <button type="button" class="icon-button" data-rail-next aria-controls={railId} aria-label={`${label}: weiter`}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 6l6 6-6 6" />
+          </svg>
+        </button>
+      </div>
+    )
+  }
+
+  <div class="rail" id={railId} data-rail>
+    <slot />
+  </div>
 </div>
 
+{
+  label && (
+    <script is:inline data-rail-script>
+      // Blendet die Pfeile erst ein, wenn JavaScript läuft, und scrollt die
+      // Reihe um eine Kachelbreite. Bewusst ohne Zustandslogik (aktiv/
+      // inaktiv an den Rändern): Der Browser kappt den Scrollwert selbst,
+      // ein deaktivierter Knopf wäre nur mehr Code.
+      document.querySelectorAll('[data-rail-nav]').forEach((nav) => {
+        const rail = document.getElementById(nav.querySelector('[data-rail-prev]').getAttribute('aria-controls'));
+        if (!rail) return;
+        nav.hidden = false;
+        const step = () => rail.firstElementChild ? rail.firstElementChild.getBoundingClientRect().width + 16 : rail.clientWidth * 0.8;
+        nav.querySelector('[data-rail-prev]').addEventListener('click', () => rail.scrollBy({ left: -step(), behavior: 'smooth' }));
+        nav.querySelector('[data-rail-next]').addEventListener('click', () => rail.scrollBy({ left: step(), behavior: 'smooth' }));
+      });
+    </script>
+  )
+}
+
 <style>
-  /* Randabfluss bis zur Viewport-Kante: Section gibt --sp-3 Innenabstand
-     vor (siehe Section.astro), hier per negativem margin-inline
-     aufgehoben und als padding-inline zurückgegeben — so beginnt die
-     erste Kachel bündig mit der Überschrift und die letzte läuft am
-     Rand aus. scroll-padding-inline hält den Snap-Punkt am selben Rand. */
-  .slider {
+  .rail-wrap {
+    position: relative;
+  }
+
+  .rail-nav {
     display: flex;
+    justify-content: flex-end;
+    gap: var(--sp-2);
+    margin-bottom: var(--sp-3);
+    color: var(--border-subtle);
+  }
+
+  .rail-nav :global(.icon-button:hover),
+  .rail-nav :global(.icon-button:focus-visible) {
+    background-color: var(--bg-inverted);
+    border-color: var(--bg-inverted);
+    color: var(--text-on-dark);
+  }
+
+  /* Unter 48rem stören die Knöpfe mehr, als sie helfen — dort wird
+     gewischt. */
+  @media (max-width: 48rem) {
+    .rail-nav {
+      display: none;
+    }
+  }
+
+  /* Randabfluss bis zur Viewport-Kante: Section gibt --sp-3 Innenabstand
+     vor (siehe Section.astro), hier per negativem margin-inline aufgehoben
+     und als padding-inline zurückgegeben — so beginnt die erste Kachel
+     bündig mit der Überschrift und die letzte läuft am Rand aus.
+     scroll-padding-inline hält den Snap-Punkt am selben Rand. Zusätzliches
+     Polster oben und unten, damit der Schatten der angehobenen Kachel
+     nicht abgeschnitten wird. */
+  .rail {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(78vw, 20rem);
     gap: var(--sp-3);
-    margin: var(--sp-4) calc(var(--sp-3) * -1) 0;
-    padding: 0 var(--sp-3) var(--sp-2);
+    margin: 0 calc(var(--sp-3) * -1);
+    padding: var(--sp-3) var(--sp-3) var(--sp-5);
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-padding-inline: var(--sp-3);
-    /* Blendet die rechte Kante leicht aus — Signal, dass sich weitere
-       Kacheln wischen lassen. Nur rechts: links an Scrollposition 0 wäre
-       eine Kante falsch. black/transparent sind hier Alpha-Werte einer
-       Maske, keine Markenfarben (siehe DESIGN.md, Ausnahme dort notiert). */
-    mask-image: linear-gradient(to right, black calc(100% - var(--sp-3)), transparent);
+    /* Die Rollleiste würde unter den Kacheln als zweite Linie mitlaufen;
+       gewischt oder über die Pfeile bedient wird ohnehin. */
+    scrollbar-width: none;
   }
 
-  .slider > :global(*) {
-    flex: 0 0 16rem;
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .rail > :global(*) {
     scroll-snap-align: start;
-  }
-
-  @media (min-width: 40rem) {
-    .slider > :global(*) {
-      flex: 0 0 18rem;
-    }
   }
 </style>

@@ -1,7 +1,6 @@
 ---
 import { SITE } from '../consts';
-import logo from '../assets/brand/arche-logo.svg';
-import Overlay from './Overlay.astro';
+import logoWhite from '../assets/brand/arche-logo-white.svg';
 
 const navItems = [
   { href: '/', label: 'Start' },
@@ -15,29 +14,28 @@ const navItems = [
 // bei build.format 'directory' auf '/', die hrefs oben aber nicht — ohne
 // diese Zeile bekommt keine Unterseite aria-current="page".
 const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+
+// Menüpunkte im Sheet plus die Ziele, die sonst nur im Fuß stehen — wer
+// das Menü öffnet, sucht eine Seite, nicht eine Teilmenge.
+const sheetItems = [...navItems, { href: '/kontakt', label: 'Kontakt' }, { href: '/spenden', label: 'Spenden' }];
 ---
 
 <header>
   <div class="bar">
     <a href="/" class="site-name">
-      <img src={logo.src} width={logo.width} height={logo.height} alt={SITE.name} />
+      <img src={logoWhite.src} width={logoWhite.width} height={logoWhite.height} alt={SITE.name} />
     </a>
 
     <!-- Sichtbar unter 64rem (siehe @media-Block unten): öffnet das Sheet
          mit der Navigation als Popup. Ab 64rem ausgeblendet, dann steht
          .nav-inline an derselben Stelle. -->
-    <button type="button" popovertarget="site-menu" class="menu-toggle" aria-label="Menü">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
-        <path d="M3 6h18" />
-        <path d="M3 12h18" />
-        <path d="M3 18h18" />
-      </svg>
+    <button type="button" popovertarget="site-menu" class="menu-toggle" aria-label="Menü öffnen">
+      <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
     </button>
 
     <!-- Ab 64rem sichtbare Navigation in der Kopfzeile. Dieselben navItems
-         wie im Sheet unten (siehe Kommentar dort) — von den beiden ist
-         durch die Media Queries immer nur eine im Baum sichtbar, nie
-         beide gleichzeitig. -->
+         wie im Sheet unten — von den beiden ist durch die Media Queries
+         immer nur eine im Baum sichtbar, nie beide gleichzeitig. -->
     <nav class="nav-inline" aria-label="Hauptnavigation">
       <ul>
         {
@@ -52,7 +50,7 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
       </ul>
     </nav>
 
-    <a class="button donate" href="/spenden">
+    <a class="button button--accent donate" href="/spenden">
       <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
         <path d="M12 21s-7.5-4.6-10-9.2C.5 8.2 2 4.5 5.5 4c2-.3 3.8.7 6.5 3 2.7-2.3 4.5-3.3 6.5-3C22 4.5 23.5 8.2 22 11.8 19.5 16.4 12 21 12 21Z" />
       </svg>
@@ -61,16 +59,23 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
   </div>
 </header>
 
-<!-- Popup-Navigation für unter 64rem, exakt dieselben navItems wie oben in
-     .nav-inline. Duplex statt gemeinsame Komponente (CLAUDE.md Regel 2) —
-     die zwei Listen unterscheiden sich in Layout und Linkgröße genug, dass
-     eine Abstraktion mehr Bedingungen bräuchte, als sie Code spart. -->
-<Overlay id="site-menu" label="Menü">
+<!-- Vollflächiges Menü-Sheet für unter 64rem. Eigenes [popover] statt
+     Overlay.astro: Das Sheet ist bildschirmfüllend und fährt von oben ein,
+     Overlay.astro ist eine zentrierte Karte mit Maximalbreite — eine
+     gemeinsame Komponente bräuchte mehr Bedingungen, als sie Code spart
+     (CLAUDE.md Regel 2). Öffnen, Schließen per Escape und Klick daneben
+     erledigt weiterhin der Browser, kein JavaScript. -->
+<div id="site-menu" popover="auto" class="sheet" aria-label="Menü">
+  <button type="button" popovertarget="site-menu" popovertargetaction="hide" class="icon-button sheet-close" aria-label="Menü schließen">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  </button>
   <nav class="nav-sheet" aria-label="Hauptnavigation">
     <ul>
       {
-        navItems.map((item) => (
-          <li>
+        sheetItems.map((item, index) => (
+          <li style={`--i: ${index}`}>
             <a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined}>
               {item.label}
             </a>
@@ -79,36 +84,48 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
       }
     </ul>
   </nav>
-</Overlay>
+</div>
 
 <style>
+  /* Dunkle Kopfzeile auf jeder Seite (September 2026, vorher hell und
+     transluzent). Auf der Startseite geht sie dadurch in den dunklen Hero
+     über und liest sich als dessen Oberkante; auf hellen Unterseiten
+     rahmt sie die Seite oben. Ein Header, der je nach Seite hell oder
+     dunkel ist — wie im Entwurf — bräuchte einen seitenabhängigen Zustand
+     und eine zweite Logo-Variante; ein Zustand ist billiger zu warten als
+     zwei. */
   header {
     position: sticky;
     top: 0;
     z-index: 10;
-    border-bottom: 1px solid var(--border-subtle);
-    background-color: var(--bg-page);
+    background-color: var(--bg-inverted);
+    color: var(--text-on-dark);
   }
 
-  /* Leicht transluzent mit Weichzeichner, wo unterstützt. Ohne Support
-     bleibt es die deckende Fläche oben — kein Fehlerfall. */
+  /* Leicht transluzent mit Weichzeichner, wo unterstützt — darunter
+     liegender Inhalt schimmert beim Scrollen durch. Ohne Support bleibt
+     die deckende Fläche, kein Fehlerfall. */
   @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
     header {
-      background-color: var(--surface-glass);
-      -webkit-backdrop-filter: blur(var(--blur-glass));
-      backdrop-filter: blur(var(--blur-glass));
+      background-color: color-mix(in srgb, var(--bg-inverted) 82%, transparent);
+      -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(1.4);
+      backdrop-filter: blur(var(--blur-glass)) saturate(1.4);
     }
   }
 
   /* Bei jeder Breite eine Zeile mit drei Feldern: Logo, Mitte, Spenden.
      In der Mitte steht je nach Breite entweder der Burger-Knopf oder die
-     Navigation — nie beide (siehe .menu-toggle/.nav-inline unten) — bei
-     fünf Menüpunkten reicht die Breite unter 64rem (Grenze bereits an
-     anderer Stelle im Repo verwendet, siehe glaubensbekenntnis.astro)
-     sonst nicht für eine ungebrochene Navigationszeile. */
+     Navigation — nie beide (siehe .menu-toggle/.nav-inline unten). */
   .bar {
     max-width: var(--width-content);
     margin-inline: auto;
+    /* Feste Mindesthöhe statt inhaltsabhängiger: Unter 64rem gibt der
+       Burger-Knopf die Höhe vor, darüber das Logo — ohne diese Zeile wäre
+       die Kopfzeile auf Mobil höher als auf Desktop, und der sticky
+       Filterstreifen auf /predigten (--header-height) säße auf einer der
+       beiden Breiten falsch. Bei Änderungen hier --header-height in
+       tokens.css nachziehen. */
+    min-height: var(--header-height);
     padding: var(--sp-2) var(--sp-3);
     display: grid;
     grid-template-columns: auto auto auto;
@@ -117,20 +134,58 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
     column-gap: var(--sp-3);
   }
 
+  .site-name {
+    display: inline-flex;
+    line-height: 0;
+    /* Grid-Items sind standardmäßig justify-self: stretch. Die Navigation
+       ist oft breiter als Logo + Spenden-Knopf zusammen — ohne diese Zeile
+       würden beide auf die volle Spaltenbreite gedehnt. */
+    justify-self: start;
+  }
+
+  .site-name img {
+    width: var(--size-logo-header);
+    height: auto;
+  }
+
   .menu-toggle {
     justify-self: center;
-    display: inline-flex;
-    padding: var(--sp-1) var(--sp-2);
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
     margin: 0;
     border: 0;
     background: transparent;
-    color: var(--text-primary);
+    color: inherit;
     cursor: pointer;
   }
 
-  .menu-toggle svg {
-    width: 1.5em;
-    height: 1.5em;
+  .burger {
+    display: grid;
+    gap: 5px;
+    width: 1.375rem;
+  }
+
+  .burger span {
+    display: block;
+    height: 2px;
+    border-radius: 2px;
+    background-color: currentColor;
+    transition: translate var(--duration-fast) var(--ease-out);
+  }
+
+  /* Kleine Reaktion auf den Zeiger: Die äußeren Striche gehen auseinander.
+     Kein Morph zum Kreuz — der bräuchte einen Zustand am Knopf, den das
+     Popover nicht zurückmeldet. Geschlossen wird über das Kreuz im Sheet,
+     genau wie im Entwurf. */
+  .menu-toggle:hover .burger span:first-child {
+    translate: 0 -2px;
+  }
+
+  .menu-toggle:hover .burger span:last-child {
+    translate: 0 2px;
   }
 
   .nav-inline {
@@ -148,17 +203,184 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
     }
   }
 
+  nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-inline ul {
+    display: flex;
+    gap: var(--sp-4);
+  }
+
+  .nav-inline a {
+    position: relative;
+    display: inline-block;
+    padding: var(--sp-1) 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.82;
+    transition: opacity var(--duration-fast) var(--ease-out);
+  }
+
+  .nav-inline a:visited {
+    color: inherit;
+  }
+
+  .nav-inline a:hover {
+    opacity: 1;
+  }
+
+  /* Unterstreichung, die beim Überfahren von links einläuft. */
+  .nav-inline a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--accent-warm);
+    scale: 0 1;
+    transform-origin: left;
+    transition: scale var(--duration-slow) var(--ease-out);
+  }
+
+  .nav-inline a:hover::after,
+  .nav-inline a:focus-visible::after,
+  .nav-inline a[aria-current='page']::after {
+    scale: 1 1;
+  }
+
+  .nav-inline a[aria-current='page'] {
+    opacity: 1;
+  }
+
+  /* Kompakter als der Knopf im Seiteninhalt. */
+  .donate {
+    justify-self: end;
+    gap: var(--sp-1);
+    padding: var(--sp-2) var(--sp-3);
+  }
+
+  .donate .icon {
+    width: 1em;
+    height: 1em;
+  }
+
+  /* ---------- Menü-Sheet ---------- */
+
+  .sheet {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: var(--sp-6) var(--sp-3);
+    border: 0;
+    background-color: var(--bg-inverted);
+    color: var(--text-on-dark);
+    display: grid;
+    place-items: center;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    translate: 0 -100%;
+    transition:
+      translate var(--duration-slow) var(--ease-out),
+      overlay var(--duration-slow) var(--ease-out) allow-discrete,
+      display var(--duration-slow) var(--ease-out) allow-discrete;
+  }
+
+  .sheet:popover-open {
+    translate: 0 0;
+  }
+
+  @starting-style {
+    .sheet:popover-open {
+      translate: 0 -100%;
+    }
+  }
+
+  .sheet::backdrop {
+    background-color: var(--scrim);
+  }
+
+  .sheet-close {
+    position: absolute;
+    top: var(--sp-3);
+    right: var(--sp-3);
+    border-color: color-mix(in srgb, var(--text-on-dark) 30%, transparent);
+  }
+
+  .sheet-close:hover,
+  .sheet-close:focus-visible {
+    background-color: var(--text-on-dark);
+    color: var(--text-primary);
+  }
+
+  .nav-sheet ul {
+    display: grid;
+    gap: var(--sp-3);
+    text-align: center;
+  }
+
+  .nav-sheet a {
+    display: block;
+    padding: var(--sp-1) 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    /* 7vw statt 8vw: „Glaubensbekenntnis" ist der längste Punkt und lief
+       bei 8vw auf einem 360-px-Gerät über den Innenabstand des Sheets
+       hinaus — das Sheet scrollt vertikal und hätte dadurch zusätzlich
+       eine waagerechte Rollleiste bekommen. */
+    font-size: clamp(1.75rem, 7vw, 3.25rem);
+    line-height: 1;
+    letter-spacing: var(--tracking-tight);
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .nav-sheet a:visited {
+    color: inherit;
+  }
+
+  .nav-sheet a:hover,
+  .nav-sheet a[aria-current='page'] {
+    color: var(--text-accent-on-dark);
+  }
+
+  /* Die Punkte laufen nacheinander ein, sobald das Sheet offen ist. Als
+     Animation statt als Transition: Ein Popover wird beim Schließen auf
+     display: none gesetzt, wodurch die Animation beim nächsten Öffnen von
+     selbst neu startet — mit einer Transition bräuchte es dafür einen
+     Zustand, den das Popover nicht zurückmeldet. `backwards` hält den
+     Anfangszustand während der Verzögerung. */
+  .sheet:popover-open .nav-sheet li {
+    animation: sheet-item var(--duration-slow) var(--ease-out) backwards;
+    animation-delay: calc(120ms + var(--i, 0) * 45ms);
+  }
+
+  @keyframes sheet-item {
+    from {
+      opacity: 0;
+      translate: 0 -12px;
+    }
+  }
+
   /* Browser ohne Popover-Unterstützung blenden [popover] in global.css
-     dauerhaft aus (siehe dortiger Kommentar) — ohne diesen Block wäre die
-     Navigation dort unter 64rem unerreichbar. Deshalb hier derselbe
-     Zweizeiler, den der Header vor dem Burger-Menü hatte: die vollständige
-     Navigation bricht bei Bedarf frei um, statt hinter einem Knopf zu
-     verschwinden, der nichts öffnen kann.
-     Alle drei Felder bekommen hier explizite grid-row/grid-column statt
-     sich auf die Reihenfolge im Markup zu verlassen — im Markup steht
-     .donate inzwischen NACH .nav-inline (wegen der Mitte-Position oben),
-     die automatische Platzierung würde .donate sonst in eine eigene
-     dritte Zeile schieben. */
+     dauerhaft aus — ohne diesen Block wäre die Navigation dort unter 64rem
+     unerreichbar. Deshalb derselbe Zweizeiler, den der Header vor dem
+     Burger-Menü hatte: die vollständige Navigation bricht bei Bedarf frei
+     um, statt hinter einem Knopf zu verschwinden, der nichts öffnen kann. */
   @supports not selector(:popover-open) {
     .bar {
       grid-template-columns: auto auto;
@@ -209,109 +431,5 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
         grid-column: 3;
       }
     }
-  }
-
-  .site-name {
-    display: inline-flex;
-    line-height: 0;
-    /* Grid-Items sind standardmäßig justify-self: stretch. Die Navigation
-       spannt beide Spalten und ist oft breiter als Logo + Spenden-Knopf
-       zusammen — ohne diese Zeile würden beide Spalten dadurch aufgeblasen
-       und Logo/Button auf die volle Spaltenbreite gedehnt. */
-    justify-self: start;
-  }
-
-  .site-name img {
-    width: var(--size-logo-header);
-    height: auto;
-  }
-
-  nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  nav a {
-    display: inline-block;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-display);
-    transition: border-color var(--duration-fast) var(--ease-out);
-  }
-
-  /* Navigation in der Kopfzeile (ab 64rem, siehe @media oben): horizontale
-     Reihe, Aktiv-/Hover-Zustand als Unterstreichung — unverändert das
-     bisherige Aussehen der Navigation vor dem Burger-Menü. */
-  .nav-inline ul {
-    display: flex;
-    gap: var(--sp-3);
-  }
-
-  .nav-inline a {
-    font-size: var(--fs-xs);
-    padding-bottom: var(--sp-1);
-    border-bottom: 2px solid transparent;
-  }
-
-  .nav-inline a:hover {
-    border-color: var(--border-subtle);
-  }
-
-  .nav-inline a[aria-current='page'] {
-    border-color: var(--accent-warm);
-  }
-
-  /* Navigation im Popup-Sheet (unter 64rem): senkrechte Liste, größere
-     Schrift und Innenabstand für Trefferflächen von rund 44px auf Touch —
-     kein neues Token, nur --fs-m statt --fs-xs (CLAUDE.md Design-Regel 7).
-     Aktiv-/Hover-Zustand als linker Balken statt Unterstreichung, weil die
-     Links hier die volle Breite einnehmen und untereinanderstehen. */
-  .nav-sheet ul {
-    display: grid;
-    row-gap: var(--sp-1);
-  }
-
-  .nav-sheet a {
-    font-size: var(--fs-m);
-    padding: var(--sp-2) var(--sp-3);
-    border-left: 2px solid transparent;
-  }
-
-  .nav-sheet a:hover {
-    border-color: var(--border-subtle);
-  }
-
-  .nav-sheet a[aria-current='page'] {
-    border-color: var(--accent-warm);
-  }
-
-  /* Kompaktere Variante der globalen .button-Klasse (global.css) — hier
-     im Header genügt weniger Fläche als bei einem Call-to-Action im
-     Seiteninhalt. Eigene Farbgebung statt der geerbten dunkelblauen
-     Fläche: Gelb als Blickfang für den Spenden-Aufruf, ausschließlich als
-     Fläche (siehe CLAUDE.md — Gelb nie als Textfarbe), Text bleibt in
-     --text-primary für ausreichenden Kontrast auf Gelb. */
-  .donate {
-    display: inline-flex;
-    align-items: center;
-    /* Aus demselben Grund wie .site-name: nicht auf die Spaltenbreite
-       dehnen, die die spannende Navigation vorgibt. */
-    justify-self: end;
-    gap: var(--sp-1);
-    padding: var(--sp-1) var(--sp-3);
-    font-size: var(--fs-xs);
-    background-color: var(--accent-warm);
-    border-color: var(--accent-warm);
-    color: var(--text-primary);
-  }
-
-  .donate:visited {
-    color: var(--text-primary);
-  }
-
-  .donate .icon {
-    width: 1em;
-    height: 1em;
   }
 </style>

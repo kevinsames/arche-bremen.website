@@ -59,6 +59,24 @@ function formatEventRange(event: Event) {
 // ändert oder (2. Mai 2027) ganz entfällt (siehe README "Offene Punkte").
 const homeDescription = `${SITE.description} Erster Gottesdienst geplant für den ${FOUNDING.milestoneDate}.`;
 
+// Startwerte für den Countdown im Hero, gerechnet zur Buildzeit. Ein
+// Inline-Skript unmittelbar hinter dem Element korrigiert sie noch vor dem
+// ersten Paint auf die Uhr des Besuchers — ohne diesen serverseitigen
+// Startwert stünden dort beim ersten Frame leere Felder, und ohne das
+// Skript altert die Zahl zwischen zwei Deploys. Zeitpunkt ist Mitternacht
+// Ortszeit (MESZ, +02:00) am Meilensteintag; eine Uhrzeit für den
+// Gottesdienst steht noch nicht fest.
+const milestoneTarget = `${FOUNDING.milestoneIso}T00:00:00+02:00`;
+const minutesUntilMilestone = Math.max(
+  0,
+  Math.floor((new Date(milestoneTarget).getTime() - Date.now()) / 60000),
+);
+const countdown = {
+  days: Math.floor(minutesUntilMilestone / 1440),
+  hours: Math.floor(minutesUntilMilestone / 60) % 24,
+  minutes: minutesUntilMilestone % 60,
+};
+
 // Structured Data, nur WebSite + Organization: Google liest WebSite.name
 // von der Startseite, um den Seitennamen über den Suchergebnissen zu
 // bestimmen — ohne das rät es aus Title und Domain.
@@ -119,31 +137,65 @@ const jsonLd = {
       loading="eager"
       class="hero-photo"
     />
-    <div class="hero-inner">
-      <h1 class="hero-title">
-        <img src={logoWhite.src} width={logoWhite.width} height={logoWhite.height} alt="" />
-        <span class="visually-hidden">{SITE.titleHome}</span>
-      </h1>
-      <p class="hero-claim">
-        {FOUNDING.claim} <span class="accent">{FOUNDING.claimAccent}</span>
-      </p>
-      <p class="hero-actions">
-        <a class="button button--accent button--arrow" href="/kontakt">Schreib uns</a>
-      </p>
 
-      <!-- Meilenstein als Fußzeile des Heros: bleibt dadurch im ersten
-           Bildschirm, ohne mit dem Anspruch darüber um Größe zu
-           konkurrieren. -->
-      <p class="hero-milestone">
+    <!-- Bogen aus dem Lockup (Brandbook Kapitel 4) als großes Stilelement,
+         rein dekorativ. Als CSS-Maske eingebunden statt als <img>: Die
+         Datei trägt die dunkelblaue Füllung des offiziellen Lockups, hier
+         soll die Form aber Gelb sein — eine zweite, eingefärbte SVG-Datei
+         wäre eine Kopie, die bei jeder Logo-Korrektur mitgepflegt werden
+         müsste. -->
+    <span class="hero-mark" style={`--mark: url(${mark.src})`} aria-hidden="true"></span>
+
+    <div class="hero-inner">
+      <p class="eyebrow eyebrow--accent">{SITE.name} &middot; Evangelisch-reformierte Freikirche</p>
+      <h1 class="hero-claim">
+        {FOUNDING.claim} <span class="accent">{FOUNDING.claimAccent}</span>
+      </h1>
+
+      <p class="milestone-label">
         <span class="eyebrow">{FOUNDING.milestoneLabel}</span>
         <span class="milestone-date">{FOUNDING.milestoneDate}</span>
+      </p>
+
+      <p class="countdown" data-countdown={milestoneTarget}>
+        <span class="count"><b data-countdown-days>{countdown.days}</b><span class="unit">Tage</span></span>
+        <span class="count"><b data-countdown-hours>{countdown.hours}</b><span class="unit">Stunden</span></span>
+        <span class="count"><b data-countdown-minutes>{countdown.minutes}</b><span class="unit">Minuten</span></span>
+      </p>
+      <script is:inline>
+        // Setzt den zur Buildzeit gerenderten Countdown auf die Uhr des
+        // Besuchers. Läuft synchron während des Parsens, also noch vor dem
+        // ersten Paint — kein Springen der Zahlen. Ohne JavaScript bleibt
+        // der Buildzeit-Stand stehen; der ist tagesgenau richtig, solange
+        // seit dem letzten Deploy nicht zu viel Zeit vergangen ist.
+        // Zweite benannte Ausnahme von CLAUDE.md Regel 4, siehe dort.
+        (function () {
+          var el = document.currentScript.previousElementSibling;
+          var target = new Date(el.dataset.countdown).getTime();
+          function tick() {
+            var minutes = Math.max(0, Math.floor((target - Date.now()) / 60000));
+            el.querySelector('[data-countdown-days]').textContent = Math.floor(minutes / 1440);
+            el.querySelector('[data-countdown-hours]').textContent = Math.floor(minutes / 60) % 24;
+            el.querySelector('[data-countdown-minutes]').textContent = minutes % 60;
+          }
+          tick();
+          setInterval(tick, 60000);
+        })();
+      </script>
+
+      <p class="hero-actions">
+        <a class="button button--accent button--arrow" href="/kontakt">Schreib uns</a>
+        <a class="button button--ghost button--arrow" href="#wer-wir-sind">Mehr erfahren</a>
       </p>
     </div>
   </section>
 
   <Section tone="dark">
     <div class="split">
-      <h2>Wer wir sind</h2>
+      <div>
+        <p class="eyebrow eyebrow--accent">Wer wir sind</p>
+        <h2 id="wer-wir-sind">Auf festem Grund gebaut.</h2>
+      </div>
       <div class="split-body">
         <p>
           Wir sind eine Stationsgemeinde des{' '}
@@ -162,7 +214,7 @@ const jsonLd = {
     </div>
   </Section>
 
-  <!-- Datumsfläche: dieselbe Information wie im Hero, hier als
+  <!-- Datumsfläche: derselbe Meilenstein wie im Hero, hier als
        typografisches Schaubild. Gelb trägt ausschließlich die Fläche, die
        Schrift bleibt Dunkles Blau (siehe Section.astro, tone="accent"). -->
   <Section tone="accent">
@@ -185,11 +237,14 @@ const jsonLd = {
 
   <Section tone="light">
     <div class="split">
-      <h2 id="mitbauen">Werde Teil unserer Vision</h2>
+      <div>
+        <p class="eyebrow eyebrow--muted">Mitbeten. Mitbauen.</p>
+        <h2 id="mitbauen">Werde Teil unserer Vision.</h2>
+      </div>
       <div class="split-body">
-        <p>
+        <p class="lead">
           Wir stehen am Anfang und sind auf Unterstützung angewiesen. Das sind
-          unsere aktuellen Gebetsanliegen:
+          unsere aktuellen Gebetsanliegen.
         </p>
       </div>
     </div>
@@ -197,9 +252,12 @@ const jsonLd = {
     <ol class="prayer-list">
       {
         PRAYER_REQUESTS.map((request, index) => (
-          <li data-reveal>
-            <span class="prayer-number">{String(index + 1).padStart(2, '0')}</span>
-            <span class="prayer-text">{request}</span>
+          <li style={`--cloud: var(--cloud-${(index % 4) + 1}); --reveal-offset: ${index * 4}%`} data-reveal>
+            <span class="cloud" aria-hidden="true"></span>
+            <span class="prayer-body">
+              <span class="eyebrow">Anliegen {String(index + 1).padStart(2, '0')}</span>
+              <span class="prayer-text">{request}</span>
+            </span>
           </li>
         ))
       }
@@ -220,19 +278,22 @@ const jsonLd = {
 
   <Section tone="light">
     <div class="section-head">
-      <h2>Predigten</h2>
+      <div>
+        <p class="eyebrow eyebrow--muted">Predigten</p>
+        <h2>Worte, die weitergehen.</h2>
+      </div>
       <a class="head-link" href="/predigten">Alle Predigten &rarr;</a>
     </div>
     {
       sermons.length === 0 ? (
         <p class="empty">Noch keine Predigten veröffentlicht.</p>
       ) : (
-        <Slider>
-          {sermons.map((sermon) => {
+        <Slider label="Predigten">
+          {sermons.map((sermon, index) => {
             const profile = preacherProfiles.find(
               (p) => p.data.name.trim().toLowerCase() === sermon.preacher.trim().toLowerCase(),
             );
-            return <SermonCard sermon={sermon} preacherProfile={profile} />;
+            return <SermonCard sermon={sermon} preacherProfile={profile} index={index} />;
           })}
         </Slider>
       )
@@ -240,8 +301,12 @@ const jsonLd = {
   </Section>
 
   <Section tone="muted">
-    <img src={mark.src} width={mark.width} height={mark.height} alt="" aria-hidden="true" class="section-mark" />
-    <h2>Termine</h2>
+    <div class="section-head">
+      <div>
+        <p class="eyebrow eyebrow--muted">Termine</p>
+        <h2>Was als Nächstes ansteht.</h2>
+      </div>
+    </div>
 
     {
       cancelledEvents.length > 0 && (
@@ -327,13 +392,13 @@ const jsonLd = {
        er ist der Einstieg in genau diese Seite. -->
   <Section tone="dark">
     <div class="closing">
-      <span class="eyebrow">Kontakt</span>
-      <h2 class="closing-title">Schreib <span class="accent">uns</span></h2>
+      <p class="eyebrow eyebrow--accent">Kontakt</p>
+      <h2 class="closing-title">Sag einfach <span class="accent">Hallo.</span></h2>
       <p>
         Es gibt noch keinen öffentlichen Gottesdienst, zu dem wir dich einladen
         könnten — aber es gibt uns, und über jede Nachricht freuen wir uns.
       </p>
-      <a class="button button--outline button--arrow" href="/kontakt">Zum Kontakt</a>
+      <a class="button button--accent button--arrow" href="/kontakt">Zum Kontakt</a>
     </div>
   </Section>
 </BaseLayout>
@@ -347,6 +412,9 @@ const jsonLd = {
   .hero {
     position: relative;
     isolation: isolate;
+    /* Der Bogen ragt bewusst über die rechte Kante hinaus (siehe
+       .hero-mark) — ohne diese Zeile schöbe er den Viewport auf. */
+    overflow: clip;
     background-color: var(--bg-inverted);
     color: var(--text-on-dark);
   }
@@ -361,7 +429,7 @@ const jsonLd = {
        auf dem Telefon wird es stark beschnitten; 50% 40% hält dabei die
        Giebel im Bild statt des Pflasters. */
     object-position: 50% 40%;
-    z-index: -2;
+    z-index: -3;
   }
 
   .hero::before {
@@ -372,104 +440,159 @@ const jsonLd = {
     z-index: -1;
   }
 
+  /* Der Bogen als Maske: Form aus bogen.svg, Farbe aus dem Token. Liegt
+     zwischen Foto und Verlauf, damit der Verlauf ihn nach unten hin
+     ausblendet statt ihn als Aufkleber stehen zu lassen. */
+  .hero-mark {
+    position: absolute;
+    /* Über dem Verlauf, nicht darunter: Unter --scrim-hero mischt sich
+       das Gelb mit dem Dunkelblau zu einem stumpfen Oliv. Ohne z-index
+       liegt es trotzdem hinter .hero-inner, weil das im Markup danach
+       kommt. */
+    top: 4%;
+    right: -3%;
+    width: clamp(11rem, 26vw, 24rem);
+    aspect-ratio: 174 / 124;
+    background-color: var(--accent-warm);
+    -webkit-mask-image: var(--mark);
+    mask-image: var(--mark);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    opacity: 0.8;
+  }
+
+  /* Langsames Schweben, wie im Entwurf. Nur mit ausdrücklich erlaubter
+     Bewegung — die globale Regel in global.css schaltet Animationen bei
+     prefers-reduced-motion ohnehin ab, hier zusätzlich explizit, damit
+     die Absicht am Element steht. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-mark {
+      animation: float 12s var(--ease-out) infinite;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        translate: 0 0;
+      }
+      50% {
+        translate: 0 -1.5rem;
+      }
+    }
+  }
+
+  @media (max-width: 48rem) {
+    .hero-mark {
+      top: 2%;
+      right: -22%;
+      width: 15rem;
+      opacity: 0.7;
+    }
+  }
+
   .hero-inner {
     max-width: var(--width-content);
     margin-inline: auto;
-    padding: clamp(var(--sp-6), 8vw, var(--sp-7)) var(--sp-3) var(--sp-4);
+    padding: clamp(var(--sp-6), 9vw, var(--sp-7)) var(--sp-3);
     /* Untergrenze, keine Viewport-Höhe: der Hero darf wachsen, wenn der
        Anspruch umbricht, drückt den Rest der Seite aber auf kleinen
-       Geräten nicht unter die Falz (siehe Frontmatter). */
-    min-height: 26rem;
+       Geräten nicht unter die Falz. */
+    min-height: 30rem;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: var(--sp-4);
   }
 
   @media (min-width: 48rem) {
     .hero-inner {
-      min-height: 34rem;
+      min-height: 38rem;
     }
   }
 
-  .hero-title {
-    margin: 0;
-    line-height: 0;
-  }
-
-  .hero-title img {
-    width: min(100%, var(--size-logo-hero));
-    height: auto;
-  }
-
-  /* Trägt den Anspruch als Schauzeile: Versalien mit weiter Laufweite wie
-     jede Überschrift (Brandbook 2.1), aber als <p> — die h1 der Seite ist
-     die Wortmarke darüber. */
   .hero-claim {
     margin: 0;
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: var(--fs-xxl);
-    line-height: var(--lh-tight);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-display);
-    max-width: 18ch;
+    font-size: var(--fs-display);
+    max-width: 16ch;
   }
 
-  .hero-actions {
-    margin: 0;
-  }
-
-  /* Schiebt den Meilenstein an die Unterkante des Heros, sobald dieser
-     höher ist als sein Inhalt. */
-  .hero-milestone {
-    margin: auto 0 0;
-    padding-top: var(--sp-3);
-    border-top: 1px solid var(--border-subtle);
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--sp-1) var(--sp-4);
-  }
-
-  .milestone-date {
-    font-size: var(--fs-l);
-  }
-
-  /* Gelbe Hervorhebung. Nur innerhalb von .hero und dem dunklen
-     Kontaktband verwendet — beide liegen auf --bg-inverted, wo
-     --text-accent-on-dark mit 8.38 : 1 trägt (siehe tokens.css). Auf
-     hellem Grund darf diese Klasse nicht auftauchen. */
   .accent {
     display: block;
     color: var(--text-accent-on-dark);
   }
 
-  /* ---------- Wiederkehrende Bausteine dieser Seite -------------------- */
+  .milestone-label {
+    margin: 0;
+    display: grid;
+    gap: var(--sp-1);
+  }
 
-  /* Kleines Versal-Label über einer Überschrift oder Fläche. Bewusst nur
-     hier definiert und nicht global: dieselbe Optik steht in mehreren
-     Komponenten je einmal lokal (SermonCard .passage, CreedCard .number,
-     kontakt.astro .mail-label) — Wiederholung statt gemeinsamer
-     Abstraktion, siehe CLAUDE.md Regel 2. */
-  .eyebrow {
-    display: block;
+  .milestone-label .eyebrow {
+    margin: 0;
+    color: color-mix(in srgb, var(--text-on-dark) 70%, transparent);
+  }
+
+  .milestone-date {
     font-family: var(--font-display);
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-display);
-    font-size: var(--fs-xs);
+    font-size: var(--fs-l);
+    letter-spacing: var(--tracking-tight);
   }
+
+  /* Countdown. Die Zahlen setzt ein Inline-Skript auf die Uhr des
+     Besuchers (siehe Markup oben); hier steht nur die Form. */
+  .countdown {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-4);
+  }
+
+  .count {
+    display: grid;
+    gap: var(--sp-1);
+  }
+
+  .count b {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--fs-xl);
+    line-height: 1;
+    letter-spacing: var(--tracking-tight);
+    /* Tabellenziffern: Ohne sie springt die Zeile in der Breite, sobald
+       die Minutenzahl von 9 auf 10 wechselt. */
+    font-variant-numeric: tabular-nums;
+  }
+
+  .unit {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--text-on-dark) 70%, transparent);
+  }
+
+  .hero-actions {
+    margin: var(--sp-2) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+  }
+
+  /* ---------- Wiederkehrende Bausteine dieser Seite -------------------- */
 
   /* Redaktionelles Zweispalter-Muster: Überschrift links, Fließtext
      rechts. Unter 64rem gestapelt. */
   .split {
     display: grid;
-    gap: var(--sp-3);
+    gap: var(--sp-4);
   }
 
   @media (min-width: 64rem) {
     .split {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: var(--sp-6);
       align-items: start;
     }
@@ -488,18 +611,17 @@ const jsonLd = {
   }
 
   .outro {
-    margin-top: var(--sp-5);
+    margin-top: var(--sp-6);
   }
 
-  /* Überschriftzeile mit Link am rechten Rand (Predigten). */
+  /* Überschriftzeile mit Link am rechten Rand. */
   .section-head {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-items: end;
     justify-content: space-between;
-    gap: var(--sp-2) var(--sp-4);
-    padding-bottom: var(--sp-3);
-    border-bottom: 1px solid var(--border-subtle);
+    gap: var(--sp-3) var(--sp-4);
+    margin-bottom: var(--sp-5);
   }
 
   .section-head h2 {
@@ -510,9 +632,10 @@ const jsonLd = {
     font-family: var(--font-display);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: var(--tracking-display);
+    letter-spacing: var(--tracking-label);
     font-size: var(--fs-xs);
     text-decoration: none;
+    padding-bottom: var(--sp-1);
     border-bottom: 2px solid transparent;
     transition: border-color var(--duration-fast) var(--ease-out);
   }
@@ -523,7 +646,6 @@ const jsonLd = {
   }
 
   .empty {
-    margin-top: var(--sp-4);
     color: var(--text-secondary);
   }
 
@@ -544,6 +666,11 @@ const jsonLd = {
     margin: 0;
   }
 
+  .milestone-head .eyebrow,
+  .milestone-foot .eyebrow {
+    margin: 0;
+  }
+
   .milestone-head {
     padding-bottom: var(--sp-3);
     border-bottom: 1px solid var(--text-primary);
@@ -554,14 +681,12 @@ const jsonLd = {
     border-top: 1px solid var(--text-primary);
   }
 
-  /* Der Wochentag flankiert die Zahlen als kleines Versal-Label —
-     dieselbe Optik wie .eyebrow, nur ohne dessen Blockeigenschaft (er
-     steht in einer Flexzeile). */
+  /* Der Wochentag flankiert die Zahlen als kleines Versal-Label. */
   .milestone-weekday {
     font-family: var(--font-display);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: var(--tracking-display);
+    letter-spacing: var(--tracking-label);
     font-size: var(--fs-xs);
   }
 
@@ -577,15 +702,15 @@ const jsonLd = {
   .numeral {
     margin: 0;
     font-family: var(--font-display);
-    font-weight: 500;
+    font-weight: 700;
     font-size: var(--fs-numeral);
     line-height: 1;
-    letter-spacing: var(--tracking-display);
+    letter-spacing: var(--tracking-tight);
   }
 
   /* Der Schrägstrich trennt die Zahlen, ohne mit ihnen zu konkurrieren:
      kleiner gesetzt statt abgeblendet — eine Deckkraft unter 1 mischt auf
-     Gelb ein Olivgrün ein, das nach einer vierten Marken-farbe aussieht. */
+     Gelb ein Olivgrün ein, das nach einer vierten Markenfarbe aussieht. */
   .numeral-slash {
     font-size: 0.5em;
     margin: 0 0.12em;
@@ -594,21 +719,20 @@ const jsonLd = {
 
   .milestone-year {
     font-family: var(--font-display);
-    font-weight: 500;
+    font-weight: 700;
     font-size: var(--fs-l);
-    letter-spacing: var(--tracking-display);
+    letter-spacing: var(--tracking-tight);
   }
 
   /* ---------- Gebetsanliegen ------------------------------------------ */
 
-  /* Bis September 2026 eine schlichte Liste auf --surface-warm-alt. Jetzt
-     drei nummerierte Felder nebeneinander — gleiche Inhalte aus
-     PRAYER_REQUESTS, nur als Raster statt als Aufzählung. Kein Link und
-     kein Popup, deshalb auch kein Hover-Zustand: Die Felder sind Text,
-     keine Kacheln (siehe DESIGN.md, Abschnitt „Kachel-Muster"). */
+  /* Dieselbe Bildsprache wie die Kacheln (Farbwolke auf Dunklem Blau,
+     siehe MinistryCard.astro), aber bewusst ohne Hover-Zustand und ohne
+     Plus-Kreis: Die Felder sind Text, keine Kacheln — es gibt nichts zu
+     öffnen. Deshalb auch kein Hochformat, sondern eine Mindesthöhe. */
   .prayer-list {
     list-style: none;
-    margin: var(--sp-5) 0 0;
+    margin: var(--sp-6) 0 0;
     padding: 0;
     display: grid;
     gap: var(--sp-3);
@@ -621,36 +745,47 @@ const jsonLd = {
   }
 
   .prayer-list li {
-    display: grid;
-    gap: var(--sp-2);
-    align-content: start;
-    padding: var(--sp-4) var(--sp-3);
-    border-radius: var(--radius-md);
-    background-color: var(--surface-warm);
+    position: relative;
+    min-height: 13rem;
+    border-radius: var(--radius-lg);
+    overflow: clip;
+    background-color: var(--bg-inverted);
+    color: var(--text-on-dark);
+    box-shadow: var(--shadow-card);
   }
 
-  .prayer-number {
-    font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: var(--tracking-display);
-    font-size: var(--fs-xs);
-    color: var(--text-secondary);
+  .prayer-list .cloud {
+    position: absolute;
+    inset: 0;
+    background-image: var(--cloud);
+  }
+
+  .prayer-body {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: end;
+    gap: var(--sp-2);
+    min-height: 13rem;
+    padding: var(--sp-4);
+    background-image: var(--scrim-card);
+  }
+
+  .prayer-body .eyebrow {
+    margin: 0;
+    color: color-mix(in srgb, var(--text-on-dark) 72%, transparent);
   }
 
   .prayer-text {
-    font-size: var(--fs-m);
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--fs-l);
     line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-tight);
   }
 
   /* ---------- Termine -------------------------------------------------- */
-
-  /* Bogen als Stilelement (Brandbook Kapitel 4), rein dekorativ. */
-  .section-mark {
-    display: block;
-    width: var(--size-mark);
-    height: auto;
-    margin: 0 auto var(--sp-4);
-  }
 
   h3 {
     margin: var(--sp-6) 0 0;
@@ -668,9 +803,9 @@ const jsonLd = {
   }
 
   /* Fixtermine (WEEKLY_EVENTS) haben kein .event-row — nur reiner Text,
-     kein Button, kein Popup (siehe Plan: keine Zusatzinfos vorhanden). */
+     kein Button, kein Popup. */
   .events li:not(:has(.event-row)) {
-    padding: var(--sp-2) 0;
+    padding: var(--sp-3) 0;
     display: grid;
     grid-template-columns: 1fr;
     row-gap: var(--sp-1);
@@ -681,7 +816,7 @@ const jsonLd = {
     grid-template-columns: 1fr;
     row-gap: var(--sp-1);
     width: 100%;
-    padding: var(--sp-2) 0;
+    padding: var(--sp-3) 0;
     margin: 0;
     border: 0;
     background: transparent;
@@ -692,14 +827,7 @@ const jsonLd = {
   }
 
   /* Ab hier passt die Titelspalte auf eine Zeile neben das Datum. Titel darf
-     weiterhin umbrechen (kein Kürzen), das Datum behält seine Breite und
-     rutscht dabei nicht mehr in die Titelzeile hinein wie noch mit Flex und
-     justify-content: space-between — siehe Plan. column-gap ist bewusst
-     größer als das sonst hier übliche --sp-4: er ist zugleich der
-     Mindestabstand, auf den die Titelspalte schrumpft, bevor sie umbricht
-     (minmax(0, 1fr) gibt ihr keine andere Untergrenze). Mit --sp-4 wirkte
-     der Moment kurz vor dem Umbruch noch eng; --sp-5 bricht früher um und
-     lässt spürbar Luft. */
+     weiterhin umbrechen (kein Kürzen), das Datum behält seine Breite. */
   @media (min-width: 48rem) {
     .events li:not(:has(.event-row)),
     .event-row {
@@ -728,17 +856,17 @@ const jsonLd = {
   .event-title {
     font-family: var(--font-display);
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-display);
-    font-size: var(--fs-xs);
+    font-size: var(--fs-m);
+    letter-spacing: var(--tracking-tight);
   }
 
   .event-detail {
     color: var(--text-secondary);
+    font-size: var(--fs-xs);
   }
 
   /* Datum und Uhrzeit sollen nicht mittendrin umbrechen — der Ortsteil
-     danach bleibt umbrechbar, siehe Plan. */
+     danach bleibt umbrechbar. */
   .event-datetime {
     white-space: nowrap;
   }
@@ -795,14 +923,15 @@ const jsonLd = {
     text-align: center;
   }
 
-  /* Einzige Stelle mit --fs-display (tokens.css): die letzte Zeile der
-     Seite darf die größte sein. text-indent gleicht die Laufweite aus —
-     letter-spacing hängt auch hinter dem letzten Zeichen ein Leerfeld an,
-     das eine zentrierte Überschrift sonst sichtbar nach links versetzt. */
+  .closing .eyebrow {
+    margin-bottom: var(--sp-3);
+  }
+
+  /* Einzige Stelle mit --fs-display neben dem Hero: die letzte Zeile der
+     Seite darf so groß sein wie die erste. */
   .closing-title {
     font-size: var(--fs-display);
-    text-indent: var(--tracking-display);
-    margin: var(--sp-2) 0 var(--sp-4);
+    margin: 0 0 var(--sp-4);
   }
 
   .closing p {

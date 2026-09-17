@@ -76,7 +76,19 @@ const { tone = 'light', width = 'content' } = Astro.props;
     padding: clamp(var(--sp-6), 8vw, var(--sp-7)) var(--sp-3);
   }
 
-  .inner--measure {
+  /* Die Zeilenlängenbegrenzung gilt für Fließtext, NICHT für
+     Schauüberschriften: „Glaubensbekenntnis" passt bei --fs-xxl in keine
+     62ch breite Spalte und bräche sonst mitten im Wort um (ohne deutsches
+     Trennwörterbuch bricht overflow-wrap hart, siehe global.css). Deshalb
+     trägt nicht der Container die Breite, sondern jedes direkte Kind —
+     und h1/h2 sind davon ausgenommen und laufen bis zur vollen
+     Containerbreite. */
+  .inner--measure > :global(*) {
     max-width: var(--measure);
+  }
+
+  .inner--measure > :global(h1),
+  .inner--measure > :global(h2) {
+    max-width: none;
   }
 </style>
