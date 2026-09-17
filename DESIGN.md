@@ -595,26 +595,25 @@ wäre in zehn Jahren der erste Teil der Seite, den niemand mehr warten
 kann. Stattdessen trägt das vorhandene Marktplatz-Foto den Hero, darüber
 der Bogen aus dem Lockup als schwebendes Stilelement.
 
-### Countdown im Hero
+### Countdown im Hero — eingebaut und wieder entfernt
 
-Auf ausdrücklichen Wunsch umgesetzt, gegen meine Empfehlung — ein
-Countdown über 226 Tage mit Minutenanzeige ist Effekt, kein Nutzen. Die
-Einwände dagegen sind technisch aber lösbar, und so ist es gebaut:
+Auf ausdrücklichen Wunsch gebaut, gegen meine Empfehlung: ein Live-Countdown
+bis zum ersten Gottesdienst, Tage/Stunden/Minuten. Die technischen Einwände
+waren lösbar und waren gelöst — die Zahlen standen zur Buildzeit gerechnet
+im HTML, ein synchrones Inline-Skript korrigierte sie vor dem ersten Paint
+auf die Uhr des Besuchers, `font-variant-numeric: tabular-nums` verhinderte
+das Springen der Zeile beim Wechsel von 9 auf 10.
 
-Die Zahlen stehen **zur Buildzeit gerechnet im HTML**, ein synchrones
-Inline-Skript unmittelbar hinter dem Element korrigiert sie noch vor dem
-ersten Paint auf die Uhr des Besuchers. Damit gibt es weder leere Felder
-im ersten Frame noch einen sichtbaren Sprung. Ohne JavaScript bleibt der
-Buildzeit-Stand stehen — tagesgenau richtig, solange seit dem letzten
-Deploy nicht zu viel Zeit vergangen ist. Dritte benannte Ausnahme von
-CLAUDE.md Regel 4, rund 1,0 KB inline und unminifiziert.
+Im selben Monat wieder entfernt, mit der Begründung „zu viel". Das deckt
+sich mit dem ursprünglichen Einwand: Ein Countdown über 226 Tage mit
+Minutenanzeige ist Effekt, kein Nutzen, und er nimmt dem Meilenstein-Datum
+darüber die Ruhe. Der Hero trägt den Termin unverändert als Label plus
+Datum; die große Datumsfläche weiter unten bleibt das Schaubild dazu.
 
-Gemessen am ausgelieferten HTML: Startseite 2,0 KB Inline-JavaScript
-(Countdown plus Kachel-Reihe), `/gemeindeleben` 0,9 KB (nur Kachel-Reihe),
-alle übrigen Inhaltsseiten 0 KB. Kein einziges externes Skript.
-
-`font-variant-numeric: tabular-nums` auf den Ziffern: Ohne das springt die
-Zeile in der Breite, sobald die Minutenzahl von 9 auf 10 wechselt.
+Festgehalten, damit die Frage nicht ein drittes Mal aufkommt: Die Mechanik
+ist in der Git-Historie nachlesbar, falls sie je wieder gebraucht wird.
+`FOUNDING.milestoneIso` bleibt im Repo — die Datumsfläche braucht es für
+`<time datetime>`.
 
 ### Dunkle Kopfzeile
 

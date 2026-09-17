@@ -59,23 +59,6 @@ function formatEventRange(event: Event) {
 // ändert oder (2. Mai 2027) ganz entfällt (siehe README "Offene Punkte").
 const homeDescription = `${SITE.description} Erster Gottesdienst geplant für den ${FOUNDING.milestoneDate}.`;
 
-// Startwerte für den Countdown im Hero, gerechnet zur Buildzeit. Ein
-// Inline-Skript unmittelbar hinter dem Element korrigiert sie noch vor dem
-// ersten Paint auf die Uhr des Besuchers — ohne diesen serverseitigen
-// Startwert stünden dort beim ersten Frame leere Felder, und ohne das
-// Skript altert die Zahl zwischen zwei Deploys. Zeitpunkt ist Mitternacht
-// Ortszeit (MESZ, +02:00) am Meilensteintag; eine Uhrzeit für den
-// Gottesdienst steht noch nicht fest.
-const milestoneTarget = `${FOUNDING.milestoneIso}T00:00:00+02:00`;
-const minutesUntilMilestone = Math.max(
-  0,
-  Math.floor((new Date(milestoneTarget).getTime() - Date.now()) / 60000),
-);
-const countdown = {
-  days: Math.floor(minutesUntilMilestone / 1440),
-  hours: Math.floor(minutesUntilMilestone / 60) % 24,
-  minutes: minutesUntilMilestone % 60,
-};
 
 // Structured Data, nur WebSite + Organization: Google liest WebSite.name
 // von der Startseite, um den Seitennamen über den Suchergebnissen zu
@@ -156,32 +139,6 @@ const jsonLd = {
         <span class="eyebrow">{FOUNDING.milestoneLabel}</span>
         <span class="milestone-date">{FOUNDING.milestoneDate}</span>
       </p>
-
-      <p class="countdown" data-countdown={milestoneTarget}>
-        <span class="count"><b data-countdown-days>{countdown.days}</b><span class="unit">Tage</span></span>
-        <span class="count"><b data-countdown-hours>{countdown.hours}</b><span class="unit">Stunden</span></span>
-        <span class="count"><b data-countdown-minutes>{countdown.minutes}</b><span class="unit">Minuten</span></span>
-      </p>
-      <script is:inline>
-        // Setzt den zur Buildzeit gerenderten Countdown auf die Uhr des
-        // Besuchers. Läuft synchron während des Parsens, also noch vor dem
-        // ersten Paint — kein Springen der Zahlen. Ohne JavaScript bleibt
-        // der Buildzeit-Stand stehen; der ist tagesgenau richtig, solange
-        // seit dem letzten Deploy nicht zu viel Zeit vergangen ist.
-        // Zweite benannte Ausnahme von CLAUDE.md Regel 4, siehe dort.
-        (function () {
-          var el = document.currentScript.previousElementSibling;
-          var target = new Date(el.dataset.countdown).getTime();
-          function tick() {
-            var minutes = Math.max(0, Math.floor((target - Date.now()) / 60000));
-            el.querySelector('[data-countdown-days]').textContent = Math.floor(minutes / 1440);
-            el.querySelector('[data-countdown-hours]').textContent = Math.floor(minutes / 60) % 24;
-            el.querySelector('[data-countdown-minutes]').textContent = minutes % 60;
-          }
-          tick();
-          setInterval(tick, 60000);
-        })();
-      </script>
 
       <p class="hero-actions">
         <a class="button button--accent button--arrow" href="/kontakt">Schreib uns</a>
@@ -546,40 +503,6 @@ const jsonLd = {
     font-weight: 700;
     font-size: var(--fs-l);
     letter-spacing: var(--tracking-tight);
-  }
-
-  /* Countdown. Die Zahlen setzt ein Inline-Skript auf die Uhr des
-     Besuchers (siehe Markup oben); hier steht nur die Form. */
-  .countdown {
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-4);
-  }
-
-  .count {
-    display: grid;
-    gap: var(--sp-1);
-  }
-
-  .count b {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: var(--fs-xl);
-    line-height: 1;
-    letter-spacing: var(--tracking-tight);
-    /* Tabellenziffern: Ohne sie springt die Zeile in der Breite, sobald
-       die Minutenzahl von 9 auf 10 wechselt. */
-    font-variant-numeric: tabular-nums;
-  }
-
-  .unit {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: var(--fs-xs);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: color-mix(in srgb, var(--text-on-dark) 70%, transparent);
   }
 
   .hero-actions {

@@ -24,16 +24,18 @@ Begründung — stattdessen fragen.
    Doppelter Code ist besser als eine schwer verständliche Abstraktion.
 3. **Keine eigene Caching-, Sync- oder Content-Pipeline.**
 4. **Null Client-JavaScript auf Inhaltsseiten.** Ausnahmen ausschließlich für
-   die fünf folgenden, benannten Fälle — alle als Vanilla-Skript, inline,
+   die vier folgenden, benannten Fälle — alle als Vanilla-Skript, inline,
    kein Astro-Island, jeweils reines Progressive Enhancement:
    Predigtfilter (`SermonFilter.astro`), Pfeil-Knöpfe der Kachel-Reihe
-   (`Slider.astro`), Countdown im Startseiten-Hero (`index.astro`),
-   Wischgeste zum Schließen der Sheets (`BaseLayout.astro`) und künftig
-   der Audio-Player. Öffnen und Schließen der Popups selbst, Hover- und
+   (`Slider.astro`), Sheet-Verhalten (`BaseLayout.astro`: Wischgeste zum
+   Schließen, Fokusring nach Zeigerbedienung wegnehmen) und künftig der
+   Audio-Player. Öffnen und Schließen der Popups selbst, Hover- und
    Scroll-Animationen laufen ohne JavaScript.
-   **Achtung:** Die Wischgeste ist die erste Ausnahme, die auf *jeder*
-   Seite liegt — die übrigen sind seitengebunden. Vor einer sechsten
+   **Achtung:** Das Sheet-Skript ist die einzige Ausnahme, die auf *jeder*
+   Seite liegt — die übrigen sind seitengebunden. Vor einer weiteren
    Ausnahme in derselben Lage: fragen.
+   Ein Live-Countdown im Hero war im September 2026 kurzzeitig eine fünfte
+   Ausnahme und ist auf Wunsch wieder entfernt worden („zu viel").
 5. **Keine Third-Party-Requests aus dem Browser.** Fonts selbst hosten. Keine
    iframes, keine Google-Maps-Embeds (statisches Bild + Link), kein Analytics,
    keine CDN-Skripte. Ziel: kein Consent-Banner nötig.
@@ -205,19 +207,15 @@ nachträgliches Verschlagworten von 80 Predigten passiert nie.
     ca. 0,9 KB inline und unminifiziert für die beiden Pfeil-Knöpfe. Ohne
     JavaScript werden die Knöpfe gar nicht erst eingeblendet; gewischt und
     gescrollt wird unverändert.
-  - Startseiten-Hero — ca. 1,0 KB für den Countdown bis zum ersten
-    Gottesdienst. Die Zahlen stehen zur Buildzeit gerechnet im HTML, das
-    Skript setzt sie synchron vor dem ersten Paint auf die Uhr des
-    Besuchers. Ohne JavaScript bleibt der Buildzeit-Stand stehen.
   - **Jede Seite** — ca. 3,8 KB (inline, unminifiziert, mit Kommentaren)
     für zwei Kleinigkeiten an den Sheets: die Wischgeste zum Schließen,
     und das Wegnehmen des Fokusrings, wenn ein Popup per Zeiger statt per
     Tastatur geschlossen wurde. Ohne JavaScript bleiben Kreuz, Tippen auf
     den Verdunkler und Escape; der Ring steht dann wie zuvor.
 
-  Gemessen am ausgelieferten HTML: Startseite 4,9 KB, `/gemeindeleben`
-  4,8 KB, alle übrigen Inhaltsseiten 3,8 KB. Kein einziges externes
-  Skript.
+  Gemessen am ausgelieferten HTML: `/gemeindeleben` und Startseite je
+  ca. 4,8 KB, alle übrigen Inhaltsseiten ca. 3,8 KB. Kein einziges
+  externes Skript.
 
   Öffnen und Schließen der Popups selbst, Kachel-Hover und Scroll-Reveal
   laufen ohne JavaScript (Popover-API, CSS-Transitions,
