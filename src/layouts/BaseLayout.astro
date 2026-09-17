@@ -105,5 +105,62 @@ const canonical = new URL(path, Astro.site).href;
       <slot />
     </main>
     <Footer />
+
+    <script is:inline>
+      // Sheets per Wischgeste schließen. Auf dem Telefon ist das die
+      // erwartete Geste — die Griffleiste am Kopf verspricht sie, also
+      // muss sie auch funktionieren. Vierte benannte Ausnahme von
+      // CLAUDE.md Regel 4 (siehe dort); reines Progressive Enhancement:
+      // Ohne JavaScript bleiben Kreuz, Tippen auf den Verdunkler und
+      // Escape.
+      //
+      // Warum touch- und nicht pointer-Ereignisse: Die Gebärde muss dem
+      // Browser weggenommen werden, solange gewischt wird, sonst scrollt
+      // er stattdessen die Karte. Das geht nur mit preventDefault auf
+      // einem nicht-passiven touchmove.
+      //
+      // Ein Element je Seite, nicht je Popup: Auf /glaubensbekenntnis
+      // gibt es 25 davon.
+      (function () {
+        var THRESHOLD = 90; // px, ab hier gilt die Geste als „schließen"
+        document.querySelectorAll('[popover][data-swipe]').forEach(function (sheet) {
+          var panel = sheet.querySelector('[data-swipe-panel]') || sheet;
+          // 1 = nach unten wegwischen, -1 = nach oben
+          var dir = sheet.dataset.swipe === 'up' ? -1 : 1;
+          var startY = null;
+          var travel = 0;
+
+          panel.addEventListener('touchstart', function (event) {
+            if (event.touches.length !== 1) return;
+            // Erst wischen, wenn der Inhalt am Anfang steht — sonst wäre
+            // die Geste dem Scrollen im Popup im Weg.
+            var atEdge = dir === 1 ? panel.scrollTop <= 0 : panel.scrollTop >= panel.scrollHeight - panel.clientHeight;
+            if (!atEdge) return;
+            startY = event.touches[0].clientY;
+            travel = 0;
+            panel.style.transition = 'none';
+          }, { passive: true });
+
+          panel.addEventListener('touchmove', function (event) {
+            if (startY === null) return;
+            travel = (event.touches[0].clientY - startY) * dir;
+            if (travel <= 0) return;
+            event.preventDefault();
+            panel.style.translate = '0 ' + travel * dir + 'px';
+          }, { passive: false });
+
+          function release() {
+            if (startY === null) return;
+            startY = null;
+            panel.style.transition = '';
+            panel.style.translate = '';
+            if (travel > THRESHOLD) sheet.hidePopover();
+          }
+
+          panel.addEventListener('touchend', release);
+          panel.addEventListener('touchcancel', release);
+        });
+      })();
+    </script>
   </body>
 </html>

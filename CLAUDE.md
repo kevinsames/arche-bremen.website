@@ -24,12 +24,16 @@ Begründung — stattdessen fragen.
    Doppelter Code ist besser als eine schwer verständliche Abstraktion.
 3. **Keine eigene Caching-, Sync- oder Content-Pipeline.**
 4. **Null Client-JavaScript auf Inhaltsseiten.** Ausnahmen ausschließlich für
-   die vier folgenden, benannten Fälle — alle als Vanilla-Skript, inline,
+   die fünf folgenden, benannten Fälle — alle als Vanilla-Skript, inline,
    kein Astro-Island, jeweils reines Progressive Enhancement:
    Predigtfilter (`SermonFilter.astro`), Pfeil-Knöpfe der Kachel-Reihe
-   (`Slider.astro`), Countdown im Startseiten-Hero (`index.astro`) und
-   künftig der Audio-Player. Menü, Popups, Hover- und Scroll-Animationen
-   laufen ohne JavaScript.
+   (`Slider.astro`), Countdown im Startseiten-Hero (`index.astro`),
+   Wischgeste zum Schließen der Sheets (`BaseLayout.astro`) und künftig
+   der Audio-Player. Öffnen und Schließen der Popups selbst, Hover- und
+   Scroll-Animationen laufen ohne JavaScript.
+   **Achtung:** Die Wischgeste ist die erste Ausnahme, die auf *jeder*
+   Seite liegt — die übrigen sind seitengebunden. Vor einer sechsten
+   Ausnahme in derselben Lage: fragen.
 5. **Keine Third-Party-Requests aus dem Browser.** Fonts selbst hosten. Keine
    iframes, keine Google-Maps-Embeds (statisches Bild + Link), kein Analytics,
    keine CDN-Skripte. Ziel: kein Consent-Banner nötig.
@@ -205,10 +209,18 @@ nachträgliches Verschlagworten von 80 Predigten passiert nie.
     Gottesdienst. Die Zahlen stehen zur Buildzeit gerechnet im HTML, das
     Skript setzt sie synchron vor dem ersten Paint auf die Uhr des
     Besuchers. Ohne JavaScript bleibt der Buildzeit-Stand stehen.
+  - **Jede Seite** — ca. 2,4 KB (inline, unminifiziert, mit Kommentaren)
+    für die Wischgeste, mit der sich Menü- und Kachel-Sheets auf dem
+    Telefon wegwischen lassen. Ohne JavaScript bleiben Kreuz, Tippen auf
+    den Verdunkler und Escape.
 
-  Menü-Sheet, Popups, Kachel-Hover und Scroll-Reveal laufen ohne
-  JavaScript (Popover-API, CSS-Transitions, `animation-timeline: view()`).
-  Kein Framework, kein Astro-Island.
+  Gemessen am ausgelieferten HTML: Startseite 3,5 KB, `/gemeindeleben`
+  3,4 KB, alle übrigen Inhaltsseiten 2,4 KB. Kein einziges externes
+  Skript.
+
+  Öffnen und Schließen der Popups selbst, Kachel-Hover und Scroll-Reveal
+  laufen ohne JavaScript (Popover-API, CSS-Transitions,
+  `animation-timeline: view()`). Kein Framework, kein Astro-Island.
 - Bilder über Astros Image-Komponente, AVIF/WebP.
 - Fonts selbst gehostet, `font-display: swap`, maximal vier Schnitte (zwei
   Familien: Futura 500/700, Source Serif Pro 400/600).

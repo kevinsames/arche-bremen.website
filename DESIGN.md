@@ -737,6 +737,51 @@ Folgeänderung in `SermonDetail.astro`: neue Prop `showPassages` (im Popup
 sonst zweimal im selben Feld gestanden. Auf der Detailseite gibt es keinen
 Kopf, dort bleibt sie im Fließtext.
 
+### Zwei Fehler am Sheet (September 2026)
+
+**Tippen daneben öffnete die nächste Kachel.** Die Popover-API schließt
+beim Klick daneben („light dismiss"), aber das darauf folgende
+`click`-Ereignis erreicht trotzdem das Element darunter. Auf einer
+Kachelseite hieß das: Ein Tipp neben das Popup schloss es und öffnete im
+selben Moment die Kachel, die darunter lag.
+
+Behoben ohne JavaScript, durch einen Umbau von `Overlay.astro`: Das
+Popover ist jetzt die bildschirmfüllende Hülle, darin liegen ein
+Verdunkler-Knopf (`popovertargetaction="hide"`) und die eigentliche Karte.
+Damit ist ein Tipp auf den Verdunkler „innerhalb" des Popovers — es gibt
+kein Light Dismiss, der Knopf schließt selbst, und das Ereignis kommt
+nirgends sonst an. Das `::backdrop`-Pseudoelement wird dafür nicht mehr
+gebraucht; es ist nicht trefferempfindlich und konnte den Klick deshalb
+nie abfangen.
+
+Nebenbei aufgefallen und mitbehoben: Die Farbwolke im Kopf ist deutlich
+größer als der Kopf (`inset: -26%`) und leuchtete ohne `overflow: clip`
+unten in den hellen Inhalt und seitlich über die Karte hinaus.
+
+**Die Griffleiste versprach eine Geste, die es nicht gab.** Das Sheet sah
+aus wie ein natives Bottom Sheet, ließ sich aber nicht wegwischen. Dafür
+gibt es jetzt ein Skript in `BaseLayout.astro` — vierte benannte Ausnahme
+von CLAUDE.md Regel 4 und die erste, die auf *jeder* Seite liegt (die
+übrigen sind seitengebunden). Rund 2,4 KB inline und unminifiziert.
+
+Zwei Entscheidungen darin:
+
+- **`touch`- statt `pointer`-Ereignisse.** Die Geste muss dem Browser
+  weggenommen werden, solange gewischt wird, sonst scrollt er stattdessen
+  die Karte. Das geht nur mit `preventDefault()` auf einem nicht-passiven
+  `touchmove` — `pointermove` kann das nicht, weil `touch-action` schon
+  bei Gestenbeginn feststeht.
+- **Ein Skript je Seite, nicht je Popup.** Auf `/glaubensbekenntnis` gibt
+  es 25 Popups; ein Skript pro Komponente wäre 25-mal im HTML gelandet.
+  Das Skript sucht sich `[popover][data-swipe]` selbst zusammen;
+  `data-swipe="down"` für die Kachel-Sheets, `up` für das Menü, das von
+  oben einfährt.
+
+Die Geste greift erst, wenn der Inhalt am Anfang steht (`scrollTop <= 0`)
+— sonst wäre sie dem Scrollen im Popup im Weg. Ohne JavaScript bleiben
+Kreuz, Verdunkler und Escape; die Griffleiste ist dann wieder nur
+Dekoration, aber nichts ist kaputt.
+
 ### Bogen im Hero
 
 Auf dem Telefon steht der Bogen unten rechts, nicht oben. Der Hero-Inhalt

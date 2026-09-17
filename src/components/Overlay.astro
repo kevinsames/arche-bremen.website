@@ -15,6 +15,16 @@
 // Der Kopf kommt über den benannten Slot `head` herein; wer ihn leer
 // lässt, bekommt nur den Schließen-Knopf auf dunklem Grund.
 //
+// Der Verdunkler ist ein eigener, bildschirmfüllender Knopf INNERHALB des
+// Popovers — nicht das ::backdrop-Pseudoelement. Grund: Die
+// Popover-API schließt zwar beim Klick daneben („light dismiss"), das
+// darauf folgende click-Ereignis erreicht aber trotzdem das Element
+// darunter. Auf einer Kachelseite hieß das: Ein Tipp neben das Popup
+// schloss es und öffnete im selben Moment die Kachel darunter. Liegt der
+// Verdunkler im Popover, ist der Tipp „innerhalb", es gibt kein Light
+// Dismiss, der Knopf schließt selbst, und das Ereignis kommt nirgends
+// sonst an.
+//
 // Unterstützt der Browser die Popover-API nicht (z.B. ältere iOS-Versionen),
 // bleibt dieses Element schlicht ungeöffnet liegen — der auslösende Anker
 // in den Kacheln führt dann direkt zur Detailseite (siehe dortiger
@@ -35,8 +45,19 @@ const { id, label, cloud } = Astro.props;
   popover="auto"
   aria-label={label}
   class="overlay"
+  data-swipe="down"
   style={cloud ? `--cloud: var(--cloud-${((cloud - 1) % 4) + 1})` : undefined}
 >
+  <button
+    type="button"
+    popovertarget={id}
+    popovertargetaction="hide"
+    class="scrim"
+    tabindex="-1"
+    aria-hidden="true"
+  ></button>
+
+  <div class="panel" data-swipe-panel>
   <div class="head">
     {cloud && <span class="cloud" aria-hidden="true"></span>}
     <button type="button" popovertarget={id} popovertargetaction="hide" class="close" aria-label="Schließen">
@@ -51,49 +72,95 @@ const { id, label, cloud } = Astro.props;
   <div class="content">
     <slot />
   </div>
+  </div>
 </div>
 
 <style>
-  /* border/padding auf 0 zurückgesetzt — der Browser gibt [popover]
-     sonst eine UA-Rahmen/Abstand-Vorgabe mit, die die Tokens überschreiben
-     müssten. */
+  /* Das Popover selbst ist nur noch die bildschirmfüllende Hülle: Verdunkler
+     und Panel liegen darin. border/padding/background auf 0 bzw.
+     transparent zurückgesetzt — der Browser gibt [popover] sonst eine
+     UA-Vorgabe mit. */
   .overlay {
-    border: 0;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
     padding: 0;
-    margin: auto;
-    background-color: var(--bg-page);
-    color: var(--text-primary);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-overlay);
-    width: min(100% - 2 * var(--sp-3), var(--measure));
-    max-height: 85dvh;
-    overflow: clip auto;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+    display: grid;
+    place-items: center;
 
     opacity: 0;
-    translate: 0 var(--sp-3);
     transition:
       opacity var(--duration-fast) var(--ease-out),
-      translate var(--duration-slow) var(--ease-out),
       overlay var(--duration-slow) var(--ease-out) allow-discrete,
       display var(--duration-slow) var(--ease-out) allow-discrete;
   }
 
+  /* Ohne diese Zeile stünde das Popover immer offen: Die UA-Regel, die
+     ein geschlossenes [popover] auf display: none setzt, wird von der
+     display-Angabe oben überstimmt. */
+  .overlay:not(:popover-open) {
+    display: none;
+  }
+
   .overlay:popover-open {
     opacity: 1;
-    translate: 0 0;
   }
 
   @starting-style {
     .overlay:popover-open {
       opacity: 0;
-      translate: 0 var(--sp-3);
     }
   }
 
-  .overlay::backdrop {
+  /* Der Verdunkler. Als Knopf im Popover statt als ::backdrop — siehe
+     Kommentar im Frontmatter. cursor bleibt der Standardzeiger: Eine
+     bildschirmfüllende Zeigefläche würde suggerieren, dass es dort etwas
+     zu treffen gibt. */
+  .scrim {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
     background-color: var(--scrim);
+    cursor: default;
     -webkit-backdrop-filter: blur(var(--blur-overlay));
     backdrop-filter: blur(var(--blur-overlay));
+  }
+
+  /* Die eigentliche Karte. */
+  .panel {
+    position: relative;
+    width: min(100% - 2 * var(--sp-3), var(--measure));
+    max-height: 85dvh;
+    overflow: clip auto;
+    overscroll-behavior: contain;
+    border-radius: var(--radius-xl);
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-overlay);
+
+    translate: 0 var(--sp-3);
+    transition: translate var(--duration-slow) var(--ease-out);
+  }
+
+  .overlay:popover-open .panel {
+    translate: 0 0;
+  }
+
+  @starting-style {
+    .overlay:popover-open .panel {
+      translate: 0 var(--sp-3);
+    }
   }
 
   /* ---------- Kopf ---------- */
@@ -104,6 +171,10 @@ const { id, label, cloud } = Astro.props;
   .head {
     position: relative;
     isolation: isolate;
+    /* Die Farbwolke ist deutlich größer als der Kopf (inset: -26%, damit
+       Weg und Drehung keine Kante ins Bild holen) — ohne clip leuchtete
+       sie unten in den hellen Inhalt und seitlich über die Karte hinaus. */
+    overflow: clip;
     min-height: 9rem;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -231,29 +302,30 @@ const { id, label, cloud } = Astro.props;
   }
 
   /* Mobil als von unten angedockte Sheet — die auf Telefonen erwartete
-     Geste für Popups, statt einer schwebenden Karte in der Bildschirmmitte. */
+     Geste für Popups, statt einer schwebenden Karte in der
+     Bildschirmmitte. Zum Schließen: Griffleiste nach unten wischen (siehe
+     BaseLayout.astro), Kreuz, Tippen auf den Verdunkler oder Escape. */
   @media (max-width: 40rem) {
     .overlay {
-      position: fixed;
-      inset: auto 0 0 0;
+      align-items: end;
+    }
+
+    .panel {
       width: 100%;
       max-height: 85dvh;
       border-radius: var(--radius-xl) var(--radius-xl) 0 0;
       translate: 0 100%;
     }
 
-    .overlay:popover-open {
-      translate: 0 0;
-    }
-
     @starting-style {
-      .overlay:popover-open {
+      .overlay:popover-open .panel {
         translate: 0 100%;
       }
     }
 
-    /* Griffleiste wie bei einer nativen Sheet — zeigt an, dass das Feld
-       von unten hereingefahren ist. Rein dekorativ. */
+    /* Griffleiste wie bei einer nativen Sheet. Anders als bisher ist sie
+       keine reine Dekoration mehr — das Sheet lässt sich hier tatsächlich
+       nach unten wegwischen. */
     .head::before {
       content: '';
       position: absolute;

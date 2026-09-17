@@ -64,8 +64,9 @@ const sheetItems = [...navItems, { href: '/kontakt', label: 'Kontakt' }, { href:
      Overlay.astro ist eine zentrierte Karte mit Maximalbreite — eine
      gemeinsame Komponente bräuchte mehr Bedingungen, als sie Code spart
      (CLAUDE.md Regel 2). Öffnen, Schließen per Escape und Klick daneben
-     erledigt weiterhin der Browser, kein JavaScript. -->
-<div id="site-menu" popover="auto" class="sheet" aria-label="Menü">
+     erledigt weiterhin der Browser. Zusätzlich lässt es sich nach oben
+     wegwischen (data-swipe, siehe BaseLayout.astro). -->
+<div id="site-menu" popover="auto" class="sheet" aria-label="Menü" data-swipe="up">
   <button type="button" popovertarget="site-menu" popovertargetaction="hide" class="icon-button sheet-close" aria-label="Menü schließen">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
       <path d="M6 6l12 12M18 6L6 18" />
