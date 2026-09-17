@@ -209,13 +209,14 @@ nachträgliches Verschlagworten von 80 Predigten passiert nie.
     Gottesdienst. Die Zahlen stehen zur Buildzeit gerechnet im HTML, das
     Skript setzt sie synchron vor dem ersten Paint auf die Uhr des
     Besuchers. Ohne JavaScript bleibt der Buildzeit-Stand stehen.
-  - **Jede Seite** — ca. 2,4 KB (inline, unminifiziert, mit Kommentaren)
-    für die Wischgeste, mit der sich Menü- und Kachel-Sheets auf dem
-    Telefon wegwischen lassen. Ohne JavaScript bleiben Kreuz, Tippen auf
-    den Verdunkler und Escape.
+  - **Jede Seite** — ca. 3,8 KB (inline, unminifiziert, mit Kommentaren)
+    für zwei Kleinigkeiten an den Sheets: die Wischgeste zum Schließen,
+    und das Wegnehmen des Fokusrings, wenn ein Popup per Zeiger statt per
+    Tastatur geschlossen wurde. Ohne JavaScript bleiben Kreuz, Tippen auf
+    den Verdunkler und Escape; der Ring steht dann wie zuvor.
 
-  Gemessen am ausgelieferten HTML: Startseite 3,5 KB, `/gemeindeleben`
-  3,4 KB, alle übrigen Inhaltsseiten 2,4 KB. Kein einziges externes
+  Gemessen am ausgelieferten HTML: Startseite 4,9 KB, `/gemeindeleben`
+  4,8 KB, alle übrigen Inhaltsseiten 3,8 KB. Kein einziges externes
   Skript.
 
   Öffnen und Schließen der Popups selbst, Kachel-Hover und Scroll-Reveal

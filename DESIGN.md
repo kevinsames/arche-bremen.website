@@ -787,11 +787,24 @@ wertet den zurückgesetzten Fokus nicht als „sichtbar", Safaris schon.
 `.open` ist über `tabindex="-1"` aus der Tab-Reihenfolge genommen; ein Ring
 kann dort also nie aus der Tastaturnavigation stammen, sondern nur aus
 dieser Rücksetzung. Er ist deshalb abgeschaltet — an `:focus` **und**
-`:focus-visible`, weil Safari ihn teils schon am ersten hängt. Der
-Tastaturweg führt unverändert über den Anker darunter, der seinen Ring
-behält (2 px, mit dem Kachelradius abgerundet). Bei Gemeindeleben-Kacheln
-ist der Auslöser die Kachel selbst — dort bleibt der Ring, er ist rund und
-gehört zum Tastaturweg.
+`:focus-visible`, weil Safari ihn teils schon am ersten hängt.
+
+Bei Gemeindeleben-Kacheln ist der Auslöser dagegen die Kachel selbst, ein
+echter, tabbarer Knopf. Dort wäre dasselbe Vorgehen falsch: Der Ring ist
+die einzige Anzeige, wo eine Tastaturnutzerin gerade steht, und ihn zu
+löschen hieße, sie blind zu machen. Das eigentliche Ärgernis ist auch
+nicht der Ring, sondern **wann** er erscheint — nach einem Tipp, nicht
+nach dem Tabben.
+
+Genau das trennt ein kurzer Zusatz im Skript in `BaseLayout.astro`: Er
+merkt sich, ob zuletzt gezeigt oder getastet wurde
+(`pointerdown` / `keydown` in der Capture-Phase), und nimmt beim
+`toggle`-Ereignis eines Popovers den Fokus nur weg, wenn zuletzt gezeigt
+wurde. Geprüft: Nach Maus- oder Tippbedienung liegt der Fokus danach auf
+`body` und es ist kein Ring zu sehen; nach Enter zum Öffnen und Escape zum
+Schließen steht er wieder auf der Kachel, mit dem 2-px-Ring, abgerundet
+auf den Kachelradius. Ohne JavaScript verhält es sich wie vorher — der
+Ring bleibt stehen, nichts ist kaputt.
 
 Die Geste greift erst, wenn der Inhalt am Anfang steht (`scrollTop <= 0`)
 — sonst wäre sie dem Scrollen im Popup im Weg. Ohne JavaScript bleiben

@@ -122,6 +122,31 @@ const canonical = new URL(path, Astro.site).href;
       // Ein Element je Seite, nicht je Popup: Auf /glaubensbekenntnis
       // gibt es 25 davon.
       (function () {
+        // ---- Fokusring nach einem Tipp nicht stehen lassen ----------------
+        // Beim Schließen setzt der Browser den Fokus auf den Auslöser
+        // zurück. Für die Tastatur ist das genau richtig — man steht wieder
+        // an der Kachel, von der man kam. Nach einem Tipp oder Klick ist es
+        // dagegen nur ein Rechteck, das niemand angefordert hat; iOS Safari
+        // zeigt es dort, Chromium nicht (deren Heuristik, wann ein Fokus
+        // „sichtbar" ist, unterscheidet sich).
+        //
+        // Deshalb nicht den Ring abschaffen, sondern den Fall trennen: Wir
+        // merken uns, ob zuletzt gezeigt oder getastet wurde, und nehmen den
+        // Fokus nur nach einem Zeigerereignis weg. Escape und Tabben bleiben
+        // unberührt.
+        var pointerLast = false;
+        addEventListener('pointerdown', function () { pointerLast = true; }, true);
+        addEventListener('keydown', function () { pointerLast = false; }, true);
+
+        document.querySelectorAll('[popover]').forEach(function (popover) {
+          popover.addEventListener('toggle', function (event) {
+            if (event.newState !== 'closed' || !pointerLast) return;
+            var focused = document.activeElement;
+            if (focused && focused.blur) focused.blur();
+          });
+        });
+
+        // ---- Sheets per Wischgeste schließen -----------------------------
         var THRESHOLD = 90; // px, ab hier gilt die Geste als „schließen"
         document.querySelectorAll('[popover][data-swipe]').forEach(function (sheet) {
           var panel = sheet.querySelector('[data-swipe-panel]') || sheet;
