@@ -56,7 +56,13 @@ const milestoneFormat = (options: Intl.DateTimeFormatOptions) =>
   );
 
 export const FOUNDING = {
-  claim: 'Wir gründen eine Gemeinde in Bremen.',
+  // Anspruch above the fold, in zwei Teile getrennt: Der Hero setzt den
+  // zweiten Teil in --text-accent-on-dark ab. Zwei Felder statt eines
+  // Strings, den das Template per Zeichenkettensuche zerlegen müsste —
+  // eine Textänderung bräche das sonst still. Die Teile werden mit einem
+  // Leerzeichen aneinandergesetzt gelesen.
+  claim: 'Wir gründen eine Gemeinde',
+  claimAccent: 'in Bremen.',
   milestoneLabel: 'Geplanter erster Gottesdienst',
   milestoneIso: MILESTONE_ISO,
   /** "2. Mai 2027" — Fließtext-Schreibweise. */

@@ -343,7 +343,9 @@ Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
 
 - **Gründungsphase (`src/consts.ts`):** Es gibt noch keinen öffentlichen
   Gottesdienst — `SERVICE` ist deshalb aktuell entfernt und `WEEKLY_EVENTS`
-  leer. Above the fold stehen stattdessen `FOUNDING.claim` und
+  leer. Above the fold stehen stattdessen `FOUNDING.claim` +
+  `FOUNDING.claimAccent` (zwei Felder, weil der Hero den zweiten Teil
+  farblich absetzt — beim Ändern beide anfassen) und
   `FOUNDING.milestoneDate` (aktuell 2. Mai 2027). Das Datum wird in
   `FOUNDING` nur einmal als ISO-String gepflegt (`MILESTONE_ISO`);
   Anzeigetext (`milestoneDate`), Wochentag (`milestoneWeekday`) und die

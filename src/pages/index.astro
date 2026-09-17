@@ -124,7 +124,9 @@ const jsonLd = {
         <img src={logoWhite.src} width={logoWhite.width} height={logoWhite.height} alt="" />
         <span class="visually-hidden">{SITE.titleHome}</span>
       </h1>
-      <p class="hero-claim">{FOUNDING.claim}</p>
+      <p class="hero-claim">
+        {FOUNDING.claim} <span class="accent">{FOUNDING.claimAccent}</span>
+      </p>
       <p class="hero-actions">
         <a class="button button--accent button--arrow" href="/kontakt">Schreib uns</a>
       </p>
@@ -326,7 +328,7 @@ const jsonLd = {
   <Section tone="dark">
     <div class="closing">
       <span class="eyebrow">Kontakt</span>
-      <h2 class="closing-title">Schreib uns</h2>
+      <h2 class="closing-title">Schreib <span class="accent">uns</span></h2>
       <p>
         Es gibt noch keinen öffentlichen Gottesdienst, zu dem wir dich einladen
         könnten — aber es gibt uns, und über jede Nachricht freuen wir uns.
@@ -431,6 +433,15 @@ const jsonLd = {
 
   .milestone-date {
     font-size: var(--fs-l);
+  }
+
+  /* Gelbe Hervorhebung. Nur innerhalb von .hero und dem dunklen
+     Kontaktband verwendet — beide liegen auf --bg-inverted, wo
+     --text-accent-on-dark mit 8.38 : 1 trägt (siehe tokens.css). Auf
+     hellem Grund darf diese Klasse nicht auftauchen. */
+  .accent {
+    display: block;
+    color: var(--text-accent-on-dark);
   }
 
   /* ---------- Wiederkehrende Bausteine dieser Seite -------------------- */

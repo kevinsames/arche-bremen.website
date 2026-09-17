@@ -65,12 +65,19 @@ Regeln:
 2. **Nur semantische Tokens verwenden** (`--text-primary`, `--accent-warm`),
    nie die Rohfarben (`--c-yellow`). Die semantische Ebene trägt die
    Kontrastregeln; wer sie umgeht, produziert unlesbaren Text.
-3. **Gelb, Orange, Grün, Ocker und Braun-Grau sind niemals Textfarben.**
-   Kontrast auf Weiß liegt zwischen 1,44 : 1 und 2,90 : 1 und verfehlt WCAG AA
-   auch für große Schrift. Nur Flächen, Rahmen, Stilelemente.
+3. **Gelb, Orange, Grün, Ocker und Braun-Grau sind auf hellem Grund niemals
+   Textfarben.** Kontrast auf Weiß liegt zwischen 1,44 : 1 und 2,90 : 1 und
+   verfehlt WCAG AA auch für große Schrift. Dort nur Flächen, Rahmen,
+   Stilelemente. **Einzige Ausnahme, September 2026 freigegeben:** Gelb auf
+   Dunklem Blau (8,38 : 1) über das Token `--text-accent-on-dark`,
+   ausschließlich auf `--bg-inverted`. Nie über `--accent-warm` oder
+   `--c-yellow` direkt — der Tokenname trägt die Bedingung. Für die
+   übrigen Sekundärfarben und für jeden hellen Grund gilt die Regel
+   unverändert. Siehe DESIGN.md, „Gelbe Schrift auf Dunklem Blau".
 4. Textfarben sind `--text-primary` (Dunkles Blau), `--text-secondary` (Braun)
-   und auf dunklem Grund `--text-on-dark`. `--c-blue` nur für große Schrift und
-   UI-Rahmen.
+   und auf dunklem Grund `--text-on-dark`, als Hervorhebung dort zusätzlich
+   `--text-accent-on-dark` (siehe Regel 3). `--c-blue` nur für große Schrift
+   und UI-Rahmen.
 5. **Fonts selbst hosten**, WOFF2, `font-display: swap`, maximal zwei Familien.
    Futura (Schnitte 500/700) für Headlines, Source Serif Pro (Schnitte
    400/600) für Fließtext. Keine Google-Fonts-URL.

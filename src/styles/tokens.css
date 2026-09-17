@@ -37,6 +37,15 @@
   --text-secondary:    var(--c-brown);       /*  6.15 : 1  — AA  */
   --text-on-dark:      var(--c-white);       /* 12.07 : 1  — AAA */
 
+  /* AUSSCHLIESSLICH auf --bg-inverted (Dunkles Blau). Freigabe September
+     2026, siehe DESIGN.md, Abschnitt „Gelbe Schrift auf Dunklem Blau".
+     Gegen Dunkles Blau: 8.38 : 1 — AAA für große, AA für normale Schrift.
+     Gegen --bg-page (Weiß): 1.44 : 1 — unlesbar. Deshalb ein eigenes Token
+     mit „on-dark" im Namen und NICHT --accent-warm direkt: Wer die
+     Rohfarbe nimmt, umgeht die Bindung an den Hintergrund. Auf hellem
+     Grund bleibt Gelb Fläche (--accent-warm), niemals Schrift. */
+  --text-accent-on-dark: var(--c-yellow);    /*  8.38 : 1 auf --bg-inverted */
+
   /* Flächen */
   --bg-page:           var(--c-white);
   --bg-muted:          var(--c-offwhite);

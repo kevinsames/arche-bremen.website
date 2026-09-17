@@ -401,6 +401,41 @@ Fuß, mit `--fs-display` als größter Schrift der Seite. Der Satz darin stammt
 aus `/kontakt` und steht hier bewusst ein zweites Mal; er ist der Einstieg
 in genau diese Seite.
 
+### Gelbe Schrift auf Dunklem Blau (freigegeben September 2026)
+
+CLAUDE.md Design-Regel 3 und der Abschnitt „Sekundärfarben tragen keinen
+Text" weiter unten verbieten Gelb als Schriftfarbe ohne Einschränkung. Diese
+Regel ist aus dem Kontrast **auf Weiß** begründet: Gelb auf Weiß liegt bei
+1,44 : 1 und verfehlt AA auch für große Schrift deutlich. Auf **Dunklem
+Blau** liegt dasselbe Gelb bei **8,38 : 1** — AAA für große, AA für normale
+Schrift. Die Regel war also nicht zu weit gedacht, sondern zu weit
+formuliert.
+
+Zunächst als offene Frage notiert, im September 2026 vom Projektverantwortlichen
+ausdrücklich freigegeben. Umgesetzt als eigenes semantisches Token, nicht als
+Griff zur Rohfarbe:
+
+```css
+--text-accent-on-dark: var(--c-yellow);   /* 8.38 : 1 auf --bg-inverted */
+```
+
+Der Name trägt die Bedingung. Wer stattdessen `--accent-warm` oder
+`--c-yellow` als `color` benutzt, umgeht die Bindung an den Hintergrund und
+landet früher oder später bei gelber Schrift auf Weiß — genau dem Fall, den
+Regel 3 verhindern soll. **Auf hellem Grund bleibt Gelb ausnahmslos Fläche.**
+
+Eingesetzt an genau zwei Stellen, beide auf `--bg-inverted`: der zweite Teil
+des Anspruchs im Hero (`FOUNDING.claimAccent`) und das zweite Wort der
+Überschrift im Kontaktband. Beide über `.accent` mit `display: block`, damit
+die Hervorhebung immer eine eigene Zeile bekommt — sonst hängt sie je nach
+Viewport-Breite als Wortrest am Ende der Vorzeile und liest sich wie ein
+Zufall, nicht wie Gestaltung. Mehr Stellen wären keine Hervorhebung mehr.
+
+Dass der Anspruch dafür in `consts.ts` in zwei Felder (`claim`,
+`claimAccent`) zerfällt, ist der Preis: Ein einzelner String ließe sich nur
+per Zeichenkettensuche zerlegen, und eine spätere Textänderung bräche das
+still. Zwei benannte Felder sind sichtbar.
+
 **Fuß.** Dreispaltige Kopfzeile (Wortmarke, Selbstbeschreibung aus
 `SITE.description`, Anschrift), darunter eine Haarlinie und die Rechtszeile
 mit Copyright links und Links rechts. Die Selbstbeschreibung ist dieselbe,
@@ -414,12 +449,6 @@ auseinanderlaufen kann.
   Design-Regel 6 verlangen Versalien mit `--tracking-display`. Der
   gehobenere Eindruck kommt hier stattdessen aus Größe, Raster, Kontrast
   und Rhythmus.
-- **Gelb als Schriftfarbe auf dunklem Grund** (in den Entwürfen die zweite
-  Zeile der Hero-Headline). CLAUDE.md Design-Regel 3 verbietet Gelb als
-  Textfarbe ohne Einschränkung. Auf Dunklem Blau läge der Kontrast bei
-  8,38 : 1 und wäre unbedenklich — die Regel ist aber absolut formuliert,
-  deshalb steht das als offene Frage unten und nicht als stille Ausnahme
-  im Code.
 - **Ein über dem Hero transparent liegender Header.** Er bräuchte einen
   seitenabhängigen Zustand (helle Schrift nur auf der Startseite) und eine
   zweite Logo-Variante im Header. Zwei Zustände mehr für einen kleinen
@@ -477,6 +506,15 @@ Filterstreifen bleibt im Rückfall ohne `backdrop-filter` deckend `--bg-page`.
 **Regel:** Gelb, Orange, Grün, Ocker und Braun-Grau sind Flächen-, Rahmen- und
 Stilelementfarben. Textfarben sind ausschließlich Dunkles Blau und Braun, auf
 dunklem Grund Weiß. `--c-blue` nur für große Schrift und UI-Rahmen.
+
+**Eine Ausnahme, seit September 2026 freigegeben:** Die Tabelle oben misst
+gegen **Weiß**. Auf Dunklem Blau (`--bg-inverted`) liegt Gelb bei
+**8,38 : 1** und trägt dort Schrift ohne Einschränkung. Dafür gibt es das
+Token `--text-accent-on-dark`, dessen Name die Bedingung mitträgt — es ist
+ausschließlich auf `--bg-inverted` zulässig, an aktuell zwei Stellen der
+Startseite. Für alle anderen Sekundärfarben und für jeden hellen Grund gilt
+die Regel oben unverändert. Details und Begründung im Abschnitt „Gelbe
+Schrift auf Dunklem Blau" weiter oben.
 
 Praktische Folge: Die Marke lebt im Web über Flächen, Weißraum und Typografie,
 nicht über farbigen Text. Das ist eine gestalterische Einschränkung, kein
@@ -832,13 +870,7 @@ Diese sollten in einer Mail gebündelt werden, bevor gestaltet wird:
 4. Existiert inzwischen ein Web-Anhang zum Brandbook oder eine v1.2? Unser Stand
    ist v1.1.
 5. RGB-Wert für „Dunkles Braun" (Pantone 412 C) — im PDF unlesbar extrahiert.
-6. Darf Gelb (Pantone 116 C) Schrift auf Dunklem Blau tragen? Die Regel
-   „Sekundärfarben tragen keinen Text" ist aus dem Kontrast **auf Weiß**
-   begründet (1,44 : 1). Auf Dunklem Blau liegt Gelb bei 8,38 : 1 und wäre
-   für große Schrift wie für Fließtext unbedenklich. Die Entwürfe zur
-   Neugestaltung (September 2026) setzen genau das ein. Solange keine
-   Antwort vorliegt, bleibt Gelb hier ausschließlich Fläche.
-7. Kapitel 4 beschreibt die Stilelemente „Bogen" und „Abstufung". Der Bogen
+6. Kapitel 4 beschreibt die Stilelemente „Bogen" und „Abstufung". Der Bogen
    liegt jetzt als eigene Datei vor (`bogen.svg`, siehe Abschnitt „Logo" oben)
    und ist als dekoratives Element in der Termine-Sektion umgesetzt.
    „Abstufung" bleibt offen, aus der Textebene nicht erschließbar.
