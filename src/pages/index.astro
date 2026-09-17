@@ -472,15 +472,15 @@ const jsonLd = {
      die Absicht am Element steht. */
   @media (prefers-reduced-motion: no-preference) {
     .hero-mark {
-      animation: float 12s var(--ease-out) infinite;
+      animation: float 9s var(--ease-in-out) infinite alternate;
     }
 
     @keyframes float {
-      0%, 100% {
-        translate: 0 0;
+      from {
+        translate: 0 0.75rem;
       }
-      50% {
-        translate: 0 -1.5rem;
+      to {
+        translate: 0 -0.75rem;
       }
     }
   }
@@ -764,21 +764,23 @@ const jsonLd = {
 
   .prayer-list .cloud {
     position: absolute;
-    inset: -12%;
+    inset: -26%;
     background-image: var(--cloud);
   }
 
   @media (prefers-reduced-motion: no-preference) {
     .prayer-list .cloud {
-      animation: cloud-drift 26s var(--ease-out) infinite alternate;
+      animation: cloud-drift 14s var(--ease-in-out) infinite alternate;
     }
 
     @keyframes cloud-drift {
       from {
-        translate: -3% -2%;
+        translate: -6% -4%;
+        rotate: -10deg;
       }
       to {
-        translate: 3% 2%;
+        translate: 6% 4%;
+        rotate: 10deg;
       }
     }
   }

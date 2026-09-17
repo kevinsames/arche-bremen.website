@@ -119,22 +119,24 @@ const { id, label, cloud } = Astro.props;
      Fortsetzung liest. */
   .cloud {
     position: absolute;
-    inset: -12%;
+    inset: -26%;
     z-index: -1;
     background-image: var(--cloud);
   }
 
   @media (prefers-reduced-motion: no-preference) {
     .cloud {
-      animation: cloud-drift 26s var(--ease-out) infinite alternate;
+      animation: cloud-drift 14s var(--ease-in-out) infinite alternate;
     }
 
     @keyframes cloud-drift {
       from {
-        translate: -3% -2%;
+        translate: -6% -4%;
+        rotate: -10deg;
       }
       to {
-        translate: 3% 2%;
+        translate: 6% 4%;
+        rotate: 10deg;
       }
     }
   }

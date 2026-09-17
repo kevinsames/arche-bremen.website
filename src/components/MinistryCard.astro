@@ -118,7 +118,9 @@ const cloud = (index % 4) + 1;
      eine der vier Varianten in tokens.css. */
   .cloud {
     position: absolute;
-    inset: -12%;
+    /* Deutlich größer als die Kachel: Weg (6 %) und Drehung (4°) dürfen
+       keine Kante ins Bild holen. */
+    inset: -26%;
     background-image: var(--cloud);
     transition: scale var(--duration-slow) var(--ease-out);
   }
@@ -136,15 +138,22 @@ const cloud = (index % 4) + 1;
      nicht in die Quere. */
   @media (prefers-reduced-motion: no-preference) {
     .cloud {
-      animation: cloud-drift 26s var(--ease-out) infinite alternate;
+      animation: cloud-drift 14s var(--ease-in-out) infinite alternate;
     }
 
+    /* Verschieben UND drehen. Nur zu verschieben reicht nicht: Die
+       Farbflecken bewegen sich dabei alle gleich, das Auge liest es als
+       Stillstand. Mit der Drehung wandern sie gegeneinander, und die
+       Fläche wirkt in Bewegung. `scale` bleibt bewusst unangetastet —
+       das gehört dem Hover-Zustand. */
     @keyframes cloud-drift {
       from {
-        translate: -3% -2%;
+        translate: -6% -4%;
+        rotate: -10deg;
       }
       to {
-        translate: 3% 2%;
+        translate: 6% 4%;
+        rotate: 10deg;
       }
     }
   }

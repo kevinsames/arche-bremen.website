@@ -674,16 +674,34 @@ nie — die Timeline bliebe im Zweifel bei 0 stehen und die Kachel dauerhaft
 unsichtbar. Dort blendet die Reihe als Ganzes ein (`data-reveal` an
 `.rail-wrap`).
 
-**Wandernde Farbwolke.** Die Wolke jeder Kachel bewegt sich sehr langsam
-(26 s, `alternate`), damit die Fläche lebt statt ein Standbild zu sein.
-Bewegt wird `translate`, nicht `background-position`: Das läuft auf dem
-Compositor und kostet keine Neuzeichnung pro Bild — bei acht Kacheln auf
-einem Telefon der Unterschied zwischen flüssig und ruckelig. Die Wolke ist
-dafür größer als die Kachel (`inset: -12%`), sonst liefe beim Wandern eine
-Kante ins Bild. `scale` bleibt frei für den Hover-Zustand: Animation und
-Transition fassen verschiedene Eigenschaften an und geraten sich nicht in
-die Quere. Dasselbe Bild und dieselbe Bewegung trägt der Kopf des Popups,
-damit es als Fortsetzung der Kachel liest.
+**Wandernde Farbwolke.** Die Wolke jeder Kachel bewegt sich langsam hin
+und her (14 s, `alternate`), damit die Fläche lebt statt ein Standbild zu
+sein.
+
+Der erste Anlauf war unbrauchbar und ist als Warnung festgehalten: ±3 %
+Weg über 26 Sekunden mit `--ease-out` ergaben rund **einen Pixel pro
+Sekunde**, und die Kurve legt 85 % der Bewegung in das erste Fünftel — die
+Fläche stand die meiste Zeit scheinbar still. Zwei Lehren daraus:
+
+1. **Dauerschleifen brauchen `--ease-in-out`**, nicht `--ease-out`. Das
+   Token ist dafür im September 2026 ergänzt worden; `--ease-out` bleibt
+   für Hover und Übergänge.
+2. **Verschieben allein reicht nicht.** Die Farbflecken bewegen sich dabei
+   alle gleich, und das Auge liest gleichförmige Verschiebung einer
+   unscharfen Fläche als Stillstand. Erst die Drehung (±10°) lässt sie
+   gegeneinander wandern. Ein Fleck legt damit etwa 6 px pro Sekunde
+   zurück — sichtbar, ohne zu zappeln.
+
+Bewegt werden `translate` und `rotate`, nicht `background-position`: Das
+läuft auf dem Compositor und kostet keine Neuzeichnung pro Bild — bei acht
+Kacheln auf einem Telefon der Unterschied zwischen flüssig und ruckelig.
+Die Wolke ist dafür deutlich größer als die Kachel (`inset: -26%`), sonst
+holten Weg und Drehung eine Kante ins Bild. `scale` bleibt unangetastet
+und gehört dem Hover-Zustand: Animation und Transition fassen verschiedene
+Eigenschaften an und geraten sich nicht in die Quere. Dasselbe Bild und
+dieselbe Bewegung trägt der Kopf des Popups, damit es als Fortsetzung der
+Kachel liest. Der schwebende Bogen im Hero hatte dasselbe Kurvenproblem
+und ist mit umgestellt worden.
 
 **Hover-Choreografie.** Kachel hebt an, Wolke zoomt, Plus-Kreis dreht sich
 um 90°, Textblock rückt ein Stück weiter nach oben als die Kachel selbst —

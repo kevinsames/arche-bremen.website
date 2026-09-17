@@ -188,6 +188,12 @@
   --duration-fast: 150ms;  /* Hover, Focus */
   --duration-slow: 400ms;  /* Scroll-Reveal */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Für Dauerschleifen, die hin und her laufen (Farbwolken der Kacheln,
+     schwebender Bogen). --ease-out taugt dafür nicht: Es legt rund 85 %
+     der Bewegung in das erste Fünftel und kriecht danach — in einer
+     26-Sekunden-Schleife steht die Fläche damit die meiste Zeit
+     scheinbar still. */
+  --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
 
   /* ---------- Bildgrößen (im Brandbook nicht vorhanden, für Web definiert) ---
      Logo ist Vektorgrafik (arche-logo.svg), keine Auflösungsgrenze. Werte
