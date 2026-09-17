@@ -242,6 +242,21 @@ const permalink = `/glaubensbekenntnis/${article.id}`;
     }
   }
 
+  /* Nach dem Schließen setzt der Browser den Fokus auf den Auslöser
+     zurück — das ist dieser Knopf. Ein Ring kann hier nie aus der
+     Tastaturnavigation stammen: tabindex="-1" (siehe Markup) nimmt ihn
+     aus der Tab-Reihenfolge, der Tastaturweg führt über den Anker
+     darunter, der seinen Ring behält. Sichtbar war der Ring nur auf
+     iOS Safari, dessen Heuristik den zurückgesetzten Fokus als
+     „sichtbar" wertet — und zwar als eckiges Rechteck um die runde
+     Kachel. Beide Zustände abgedeckt, weil Safari den Ring teils schon
+     an :focus hängt, nicht erst an :focus-visible. */
+  .open:focus,
+  .open:focus-visible {
+    outline: none;
+  }
+
+
   .overlay-link {
     margin: var(--sp-4) 0 0;
   }

@@ -777,6 +777,22 @@ Zwei Entscheidungen darin:
   `data-swipe="down"` für die Kachel-Sheets, `up` für das Menü, das von
   oben einfährt.
 
+**Nachtrag: eckiges Rechteck nach dem Schließen.** Beim Schließen setzt
+der Browser den Fokus auf den Auslöser zurück — bei Predigt-, Artikel- und
+Ältesten-Kacheln ist das der unsichtbare, deckungsgleiche Knopf `.open`.
+Der hat keinen Eckenradius, also zeichnete iOS Safari dort ein eckiges
+Rechteck um die runde Kachel. Chromium zeigt es nicht: Dessen Heuristik
+wertet den zurückgesetzten Fokus nicht als „sichtbar", Safaris schon.
+
+`.open` ist über `tabindex="-1"` aus der Tab-Reihenfolge genommen; ein Ring
+kann dort also nie aus der Tastaturnavigation stammen, sondern nur aus
+dieser Rücksetzung. Er ist deshalb abgeschaltet — an `:focus` **und**
+`:focus-visible`, weil Safari ihn teils schon am ersten hängt. Der
+Tastaturweg führt unverändert über den Anker darunter, der seinen Ring
+behält (2 px, mit dem Kachelradius abgerundet). Bei Gemeindeleben-Kacheln
+ist der Auslöser die Kachel selbst — dort bleibt der Ring, er ist rund und
+gehört zum Tastaturweg.
+
 Die Geste greift erst, wenn der Inhalt am Anfang steht (`scrollTop <= 0`)
 — sonst wäre sie dem Scrollen im Popup im Weg. Ohne JavaScript bleiben
 Kreuz, Verdunkler und Escape; die Griffleiste ist dann wieder nur
