@@ -21,7 +21,7 @@ import { CONTACT } from '../consts';
     eyebrow="Sag einfach Hallo"
     title="Kontakt"
     cloud={2}
-    lead="Wir bauen in Bremen gerade erst eine Gemeinde auf. Es gibt noch keinen öffentlichen Gottesdienst, zu dem wir dich einladen könnten — aber es gibt uns, und über jede Nachricht freuen wir uns."
+    lead="Wir freuen uns darauf, dich schon bald zu unserem ersten Gottesdienst vor Ort in Bremen begrüßen zu dürfen. Bis es so weit ist: Melde dich gerne bei uns, wenn du Interesse oder Fragen hast — oder einfach mal Hallo sagen willst."
   />
 
   <Section tone="light" width="measure">
@@ -34,26 +34,44 @@ import { CONTACT } from '../consts';
       </span>
     </p>
 
-    <p>
-      Schreib einfach, worum es geht: eine Frage zum Glauben, Interesse an der
-      Gemeindegründung, Mitarbeit — oder du bist neu in Bremen und suchst eine
-      Gemeinde. Wir antworten in der Regel innerhalb einer Woche.
-    </p>
-    <p>
-      Hinter der Adresse steht das Gründungsteam, nicht eine einzelne Person.
-      Wer bei uns predigt und leitet, steht unter{' '}
-      <a href="/gemeindeleitung">Gemeindeleitung</a>.
-    </p>
-    <p>Sobald ein Ort für den Gottesdienst feststeht, steht die Anfahrt hier.</p>
-    <p>
-      Mitbeten oder mitbauen? Unsere aktuellen Gebetsanliegen stehen auf der{' '}
-      <a href="/#mitbauen">Startseite</a>. Wer finanziell unterstützen
-      möchte, findet die Angaben unter <a href="/spenden">Spenden</a>.
-    </p>
-    <p>
-      Anschrift und inhaltlich Verantwortlicher stehen im{' '}
-      <a href="/impressum">Impressum</a>.
-    </p>
+    {/* .prose statt nackter <p>: Der Text hat seit September 2026 eine
+        Liste, und Listen sind im Projekt ausschließlich dort gestaltet
+        (global.css). Ohne die Klasse stünde hier die Browser-Voreinstellung
+        mit ihrem 40px-Einzug — ein Abstandswert, den das Designsystem nicht
+        kennt. Nebeneffekt, erwünscht: Der Fließtext bekommt damit auch
+        Silbentrennung und `text-wrap: pretty` wie jede andere Textseite. */}
+    <div class="prose">
+      <p>
+        Schreib uns einfach, was dich bewegt: Hast du Fragen zum Glauben,
+        Interesse an der Gemeindegründung, möchtest du mitarbeiten — oder bist
+        du neu in Bremen und suchst eine Gemeinde? Wir antworten dir in der
+        Regel innerhalb einer Woche.
+      </p>
+      <p>
+        Deine Nachricht landet direkt bei unserem Mitarbeiterteam. Wenn du
+        wissen möchtest, wer bei uns die Verantwortung für die Lehre und das
+        Leben der Gemeinde hat, schau gerne unter{' '}
+        <a href="/gemeindeleitung">Gemeindeleitung</a> vorbei.
+      </p>
+      <p>Weitere Infos für dich:</p>
+      <ul>
+        <li>
+          <strong>Gottesdienste:</strong> Sobald wir einen festen Ort in Bremen
+          haben, findest du die genaue Anfahrt hier.
+        </li>
+        <li>
+          <strong>Mitbeten &amp; Mitbauen:</strong> Unsere aktuellen
+          Gebetsanliegen teilen wir direkt auf der{' '}
+          <a href="/#mitbauen">Startseite</a>. Wenn du uns finanziell
+          unterstützen möchtest, findest du alle Angaben unter{' '}
+          <a href="/spenden">Spenden</a>.
+        </li>
+      </ul>
+      <p>
+        Anschrift und inhaltlich Verantwortlicher stehen im{' '}
+        <a href="/impressum">Impressum</a>.
+      </p>
+    </div>
   </Section>
 </BaseLayout>
 

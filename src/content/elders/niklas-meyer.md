@@ -6,9 +6,9 @@ familyPhoto: ./niklas-meyer-familie.jpg
 ---
 
 Niklas Meyer ist Pastor der Arche Gemeinde in Bremen. Ausgebildet ist er als
-Arzt; den Wunsch, Gott zu dienen, trug er jedoch schon lange im Herzen. Heute
-gilt seine Sorge nicht mehr den physischen, sondern den geistlichen Herzen der
-Menschen. Lange Jahre war er Mitglied der Arche Gemeinde in Hamburg; seine
+Arzt, doch den Wunsch, Gott zu dienen, trug er schon lange im Herzen. Heute
+gilt seine Fürsorge nicht mehr den physischen, sondern den geistlichen Herzen
+der Menschen. Lange Jahre war er Mitglied der Arche Gemeinde in Hamburg. Seine
 theologische und pastorale Ausbildung schloss er 2024 am Arche Pastoren Kolleg
 ab.
 

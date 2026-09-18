@@ -219,7 +219,11 @@ const jsonLd = {
           <li style={`--cloud: var(--cloud-${(index % 4) + 1}); --reveal-offset: ${index * 4}%`} data-reveal>
             <span class="cloud" aria-hidden="true"></span>
             <span class="prayer-body">
-              <span class="eyebrow">Anliegen {String(index + 1).padStart(2, '0')}</span>
+              {/* Nur die Ziffer, ohne das Wort "Anliegen" davor. Damit ist
+                  sie rein dekorativ: Die Zählung steht bereits in der
+                  <ol>-Semantik, Screenreader sagen "1 von 6" ohnehin an.
+                  Ein zusätzlich vorgelesenes "01" wäre Doppelung. */}
+              <span class="eyebrow" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
               <span class="prayer-text">{request}</span>
             </span>
           </li>
@@ -244,7 +248,7 @@ const jsonLd = {
     <div class="section-head">
       <div>
         <p class="eyebrow eyebrow--muted">Predigten</p>
-        <h2>Worte, die weitergehen.</h2>
+        <h2>Worte, die prägen.</h2>
       </div>
       <a class="head-link" href="/predigten">Alle Predigten &rarr;</a>
     </div>
@@ -356,14 +360,17 @@ const jsonLd = {
   <!-- Abschließender Aufruf. Dunkles Band direkt über dem ebenfalls dunklen
        Fuß — beide lesen sich als ein zusammenhängender Abschluss der Seite.
        Der Satz stammt aus /kontakt und steht hier bewusst ein zweites Mal:
-       er ist der Einstieg in genau diese Seite. -->
+       er ist der Einstieg in genau diese Seite. Wer ihn hier ändert, ändert
+       ihn dort mit (PageHeader-`lead` in kontakt.astro). -->
   <Section tone="dark">
     <div class="closing">
       <p class="eyebrow eyebrow--accent">Kontakt</p>
       <h2 class="closing-title">Sag einfach <span class="accent">Hallo.</span></h2>
       <p>
-        Es gibt noch keinen öffentlichen Gottesdienst, zu dem wir dich einladen
-        könnten — aber es gibt uns, und über jede Nachricht freuen wir uns.
+        Wir freuen uns darauf, dich schon bald zu unserem ersten Gottesdienst
+        vor Ort in Bremen begrüßen zu dürfen. Bis es so weit ist: Melde dich
+        gerne bei uns, wenn du Interesse oder Fragen hast — oder einfach mal
+        Hallo sagen willst.
       </p>
       <a class="button button--accent button--arrow" href="/kontakt">Zum Kontakt</a>
     </div>

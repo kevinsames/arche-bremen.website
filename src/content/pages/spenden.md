@@ -4,8 +4,8 @@ description: Wie du die Gemeindegründung in Bremen unterstützen kannst — und
 ---
 
 Arche Bremen ist eine Stationsgemeinde der Arche Hamburg und hat noch kein
-eigenes Konto. Spenden für die Gemeindegründung in Bremen laufen deshalb
-über das Konto der Muttergemeinde.
+eigenes Konto. Spenden für die Arche Bremen laufen deshalb über das
+Konto der Muttergemeinde.
 
 > Bitte gib als Verwendungszweck **Arche Bremen - Spende - Dein Name** an.
 > Ohne den Vermerk „Arche Bremen" bleibt die Spende im allgemeinen Haushalt
