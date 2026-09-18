@@ -484,6 +484,19 @@ const jsonLd = {
     gap: var(--sp-4);
   }
 
+  .hero-claim {
+      margin-bottom: var(--sp-3);
+    }
+
+    .milestone-label {
+      margin-bottom: var(--sp-2);
+    }
+
+    .hero-actions {
+      margin-top: var(--sp-3);
+    }
+  }
+
   @media (min-width: 48rem) {
     .hero-inner {
       min-height: 38rem;
@@ -509,17 +522,17 @@ const jsonLd = {
      "Der Hero war zu gedrungen". */
   .hero-claim {
     margin: 0;
-    font-size: var(--fs-xxl);
+    font-size: var(--fs-display);
     line-height: var(--lh-tight);
     max-width: 16ch;
   }
 
-  /* Ab Tablet trägt die Zeile den größeren Grad wieder: Dort steht sie neben
-     dem Bild statt darüber, bricht auf zwei Zeilen und hat den Durchschuss
-     der Schaustufe nötig, damit der Block nicht auseinanderfällt. */
+  /* Ab Tablet der Durchschuss der Schaustufe: Dort trägt die Zeile über
+     100 px, und 1.15 risse den Block auseinander. Auf dem Telefon wäre
+     derselbe Wert eine geschlossene Fläche — das war der Befund vom
+     18. September nachmittags und er gilt unverändert. */
   @media (min-width: 48rem) {
     .hero-claim {
-      font-size: var(--fs-display);
       line-height: var(--lh-display);
     }
   }
@@ -552,6 +565,49 @@ const jsonLd = {
     display: flex;
     flex-wrap: wrap;
     gap: var(--sp-3);
+  }
+
+  /* Gruppierung auf dem Telefon. Gemessen stand hier 40 px zwischen
+     Eyebrow und Überschrift, 24 px zwischen Überschrift und Terminlabel,
+     32 px vor den Knöpfen — der größte Abstand also ausgerechnet zwischen
+     der Eyebrow und der Zeile, zu der sie gehört, der kleinste zwischen
+     zwei Blöcken, die nichts miteinander zu tun haben. Die Eyebrow stand
+     dadurch als eigene erste Stufe frei, während Überschrift und Termin
+     zu einer Masse verklebten.
+
+     Die 40 px entstehen nicht durch eine Absicht, sondern durch Addition:
+     der `gap` des Flex-Containers plus das globale `margin-bottom` von
+     `.eyebrow` aus global.css. Beim Meilenstein-Label ist dieses Margin
+     längst auf 0 überschrieben, oben war es vergessen.
+
+     Jetzt aufsteigend: 8 / 24 / 32. Die Eyebrow sitzt als Dachzeile eng
+     an der Überschrift, der Terminblock steht ab, die Knöpfe stehen
+     weiter ab. Nur Abstands-Tokens, kein neuer Wert.
+
+     Nur unter 48rem: Auf dem Desktop besteht dieselbe Inversion, fällt
+     dort aber neben einer über 300 px hohen Überschrift nicht ins
+     Gewicht — und die Desktop-Fassung ist ausdrücklich gelobt worden.
+     Siehe DESIGN.md, „Der umgekehrte Rhythmus im Hero". */
+  @media (max-width: 47.99rem) {
+    .hero-inner {
+      gap: var(--sp-2);
+    }
+
+    .hero-inner > .eyebrow {
+      margin-bottom: 0;
+    }
+
+    .hero-claim {
+      margin-bottom: var(--sp-3);
+    }
+
+    .milestone-label {
+      margin-bottom: var(--sp-2);
+    }
+
+    .hero-actions {
+      margin-top: var(--sp-3);
+    }
   }
 
   /* ---------- Wiederkehrende Bausteine dieser Seite -------------------- */

@@ -153,12 +153,15 @@
      Datumszahlen der Meilenstein-Fläche (rein typografisches Schaubild,
      kein Fließtext).
 
-     Auf dem Telefon bleibt der Hero-Anspruch bei --fs-xxl: Dort steht die
-     Wortmarke direkt darüber und soll nicht überboten werden. Diese Regel
-     stand hier seit August, die Neugestaltung im September hat sie im
-     Komponentencode überschrieben und den Satz stehen lassen — beides ist
-     am 18. September wieder in Deckung gebracht (siehe DESIGN.md, "Der
-     Hero war zu gedrungen"). */
+     Der Anspruch im Hero trägt --fs-display auf allen Breiten. Hier stand
+     bis zum 18. September, er bleibe auf dem Telefon bei --fs-xxl, "dort
+     steht die Wortmarke darüber und soll nicht überboten werden". Diese
+     Regel ist an diesem Tag zweimal geprüft und dann aufgegeben worden:
+     Mit --fs-xxl verliert die Zeile auf dem Telefon die Führung gegenüber
+     der kleinen Versalzeile darüber, und die Gemeinde hat das als Erstes
+     bemängelt. Die Wortmarke im Kopf misst rund 20 px — überboten wird sie
+     ohnehin in jeder Variante. Siehe DESIGN.md, "Der umgekehrte Rhythmus
+     im Hero". */
   --fs-display: clamp(2.75rem, 1.4rem + 6.5vw, 7rem);
   --fs-numeral: clamp(4rem, 1rem + 15vw, 10rem);
 

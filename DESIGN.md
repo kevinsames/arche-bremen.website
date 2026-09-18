@@ -1526,6 +1526,110 @@ Logo-Lockup steht. Auf „Arche Bremen" gekürzt wäre sie einzeilig (spart
 weitere 16 px) und stünde nicht mehr in Konkurrenz zur Überschrift. Das
 ist eine Textentscheidung und liegt bei der Gemeinde, nicht im Design.
 
+**Nachtrag vom selben Abend: Die Verkleinerung war falsch.** Siehe den
+folgenden Abschnitt. Der Durchschuss war die richtige Hälfte der
+Diagnose, der Schriftgrad die falsche.
+
+## Der umgekehrte Rhythmus im Hero
+
+**18. September 2026, abends.** Zweite Rückmeldung vom Telefon am selben
+Tag, per Sprachnachricht, sinngemäß: Der Desktop sei „wirklich top" — dort
+lese man zuerst die Überschrift, „dann liest du entspannt: ah okay,
+evangelisch-reformierte Freikirche, da oben in weiß, und geplanter
+Gottesdienst, und das ist so richtig clean". Auf dem Telefon dagegen sei
+die Schrift „jetzt so klein", alles sei „so ähnlich", man wisse nicht,
+wohin man schauen solle. Zwei Vorschläge: die kleine Zeile in Gelb, oder
+die Überschrift wieder größer.
+
+Das war die unmittelbare Antwort auf die Änderung vom Nachmittag. Die
+erste Meldung („gedrungen") hatte zur Verkleinerung von 47,8 auf 38,8 px
+geführt; die zweite ist die Gegenrückmeldung dazu. Beide Male stimmte die
+Beobachtung, beide Male war die vorgeschlagene Ursache eine andere als die
+tatsächliche.
+
+### Der eigentliche Fehler: die Gruppierung stand auf dem Kopf
+
+Gemessen im ausgelieferten HTML, senkrechte Abstände im Hero:
+
+| von → nach | vorher |
+| --- | --- |
+| kleine Versalzeile → Überschrift | **40 px** |
+| Überschrift → Terminlabel | 24 px |
+| Terminlabel → Knöpfe | 32 px |
+
+Der größte Abstand saß zwischen der Dachzeile und der Überschrift, zu der
+sie gehört; der kleinste zwischen zwei Blöcken, die nichts miteinander zu
+tun haben. Die Folge ist genau der beschriebene Eindruck: Die kleine Zeile
+steht als eigene erste Stufe frei („es fängt oben an"), Überschrift und
+Termin verkleben zu einer Masse („dann ist es erschlagend").
+
+Die 40 px waren keine Entscheidung, sondern eine Addition: der `gap` des
+Flex-Containers plus das globale `margin-bottom` von `.eyebrow` aus
+`global.css`. Beim Meilenstein-Label ist dieses Margin längst auf `0`
+überschrieben — oben war es vergessen worden. Der Fehler steckt seit dem
+Umbau im September drin und ist auf dem Desktop unsichtbar, weil dort
+16 px neben einer über 300 px hohen Überschrift nicht ins Gewicht fallen.
+
+Jetzt aufsteigend, **nur unter 48rem**: 8 / 24 / 32. Die Dachzeile sitzt
+eng an der Überschrift, der Terminblock steht ab, die Knöpfe stehen weiter
+ab. Nur vorhandene Abstands-Tokens. Auf dem Desktop bleibt alles, wie es
+ist — die Fassung ist ausdrücklich gelobt worden, und dieselbe Inversion
+richtet dort keinen Schaden an. Dass sie dort formal weiterbesteht, ist
+bewusst hingenommen und hier vermerkt.
+
+### Der Schriftgrad geht zurück auf --fs-display
+
+Die Verkleinerung vom Nachmittag wird zurückgenommen, der Durchschuss
+(`--lh-tight` statt `--lh-display`) bleibt. Damit ist der Befund vom
+Nachmittag zur Hälfte bestätigt und zur Hälfte korrigiert: Die geschlossene
+Fläche kam vom Durchschuss, nicht vom Grad.
+
+Gemessen im Verhältnis Überschrift zu Dachzeile — auf dem gelobten Desktop
+liegt es bei 7,5:
+
+| | Verhältnis |
+| --- | --- |
+| Telefon, vor dem Nachmittag | 3,43 |
+| Telefon, nach dem Nachmittag | 2,77 |
+| Telefon, jetzt | 3,41 |
+
+Der Preis: Bei 375 und 390 px Breite steht „eine" allein auf einer Zeile.
+Bei 430 px nicht — deshalb hat es auf dem meldenden Gerät nie jemand
+gesehen. Gemessen bricht „eine Gemeinde" ab 43,5 px Schriftgrad um;
+`--fs-display` liefert dort 46,8 px. Ein Zwischenwert wäre ein neuer
+Token und damit nach Regel 7 nichts, was im Komponentencode entsteht —
+er steht unten unter den offenen Fragen.
+
+### Was geprüft und verworfen wurde
+
+Alle Varianten wurden bei 375, 390 und 430 px gerendert und am echten
+Bildpunkt gemessen, Kontraste gegen den hellsten Hintergrundpixel:
+
+- **Gelbe Dachzeile.** Der ausdrückliche Wunsch aus der Sprachnachricht.
+  Gelb erreicht an dieser Stelle 3,18 : 1 und verfehlt AA deutlich; die
+  Zeile ist 14 px und zählt nicht als große Schrift. Auf die Schwelle
+  käme sie erst, wenn der erste Stop von `--scrim-hero` von 58 auf 75 %
+  ginge — dann verliert das Marktplatzfoto ein Drittel seiner Helligkeit,
+  und 4,55 : 1 wäre ein Wert, der an den Bildpunkten genau dieses Fotos
+  hängt. Das Foto wird ersetzt, sobald echte Aufnahmen aus Bremen
+  existieren; wer es tauscht, sähe nicht, dass er eine Schwelle reißt.
+  Dazu kommt der harte Grund: `--text-accent-on-dark` ist nach CLAUDE.md
+  Regel 3 an `--bg-inverted` gebunden, und der Hero ist Foto plus Verlauf.
+  Genau diese Zeile war im September gelb und ist mit 3,44 : 1 deshalb auf
+  Weiß gestellt worden. Die Erinnerung stimmt — sie erinnert einen
+  behobenen Zugänglichkeitsfehler.
+- **Dachzeile dämpfen** auf 75 % Weiß, wie das Meilenstein-Label es trägt:
+  3,42 : 1 gegen den hellsten Bildpunkt. Durchgefallen.
+- **Bewusster ungleicher Umbruch** der Dachzeile („Arche Bremen ·" /
+  „Evangelisch-reformierte Freikirche"): ergibt drei Zeilen statt zwei und
+  einen um 16 px höheren Hero. Schlechter als der automatische Umbruch.
+- **Dachzeile auf „Arche Bremen" kürzen:** typografisch die stärkste
+  Lösung — einzeilig, Verhältnis 8,38, also der Desktop-Wert, ohne
+  dunkleres Foto und ohne Kontrastrisiko. Wird nicht umgesetzt: Es ist
+  eine Inhaltsänderung, und sie nimmt ausgerechnet die Zeile vom ersten
+  mobilen Bildschirm, die in der Sprachnachricht namentlich gelobt wurde.
+  Bleibt als Angebot bei der Gemeinde.
+
 ## Offene Fragen an Hamburg
 
 Diese sollten in einer Mail gebündelt werden, bevor gestaltet wird:
@@ -1542,7 +1646,14 @@ Diese sollten in einer Mail gebündelt werden, bevor gestaltet wird:
 4. Existiert inzwischen ein Web-Anhang zum Brandbook oder eine v1.2? Unser Stand
    ist v1.1.
 5. RGB-Wert für „Dunkles Braun" (Pantone 412 C) — im PDF unlesbar extrahiert.
-6. Kapitel 4 beschreibt die Stilelemente „Bogen" und „Abstufung". Der Bogen
+6. Eine Schaustufe zwischen `--fs-xxl` und `--fs-display` fehlt. Auf dem
+   Telefon liefert `--fs-xxl` 38,1 px und `--fs-display` 46,8 px; der
+   Umbruchpunkt von „eine Gemeinde" liegt gemessen bei 43,5 px. Ein Wert
+   dazwischen (etwa `clamp(2.6rem, 1.4rem + 5.2vw, 5.5rem)`) gäbe der
+   Hero-Zeile die Führung ohne die Waisenzeile. Nach CLAUDE.md Regel 7
+   wird ein solcher Token nicht im Komponentencode erfunden — hier als
+   Antrag notiert. Siehe „Der umgekehrte Rhythmus im Hero".
+7. Kapitel 4 beschreibt die Stilelemente „Bogen" und „Abstufung". Der Bogen
    liegt jetzt als eigene Datei vor (`bogen.svg`, siehe Abschnitt „Logo" oben)
    und ist als dekoratives Element in der Termine-Sektion umgesetzt.
    „Abstufung" bleibt offen, aus der Textebene nicht erschließbar.
