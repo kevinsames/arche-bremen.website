@@ -896,6 +896,111 @@ Weichtrennzeichen (U+00AD) in den Titeln: unsichtbare Zeichen in
 Content-Dateien sind für spätere Redakteure eine Falle, und Predigttitel
 kommen ohnehin aus Sanity und lassen sich hier nicht annotieren.
 
+## Typografische Durchsicht (September 2026)
+
+Auftrag war, die komplette Seite typografisch zu prüfen und anzupassen. Der
+Makro-Satz — Skala, Schreibweise, Laufweiten, Gewichte — war nach dem zweiten
+Durchgang stimmig; gefunden wurden vor allem Lücken zwischen dem, was die
+Tokens und diese Datei behaupten, und dem, was tatsächlich ausgeliefert wird.
+
+### Geändert
+
+1. **`--tracking-body` wurde nirgends angewandt.** Der Token stand seit
+   September 2026 in `tokens.css`, beschrieben als „Fließtext", und trug den
+   Brandbook-Wert („min. 7"). Kein Selektor hat ihn je gesetzt — Fließtext lief
+   mit der Voreinstellung 0. Jetzt einmal auf `body` in `global.css`, von dort
+   geerbt. Überschriften (`--tracking-tight`) und Versal-Labels
+   (`--tracking-label`) überschreiben ihn ohnehin, der Effekt ist also auf
+   Fließtext begrenzt und mit 0.007em bewusst winzig.
+
+2. **`.lead` lief mit Überschriften-Durchschuss.** `--lh-tight` (1.15) ist die
+   Stufe für `h3`/`h4` und Kacheltitel, also für ein bis zwei Zeilen. Der
+   Vorspann ist Fließtext und läuft regelmäßig über drei (`/glaubensbekenntnis`,
+   `/gemeindeleben`). Bei 1.15 stoßen im deutschen Satz die Umlautpunkte der
+   einen Zeile an die Unterlängen der vorigen — Ü, Ä und Ö setzen ihre Punkte
+   über die Versalhöhe. Jetzt `--lh-body`. Siehe offene Frage unten.
+
+3. **Trennung und Absatzumbruch für Fließtext.** `hyphens: auto` lag nur auf
+   `h1`–`h4` und den Kacheltiteln. In der schmalen Spalte auf dem Telefon reißen
+   deutsche Komposita („Datenschutz-Aufsichtsbehörde") im Flattersatz Löcher
+   von einem Drittel Zeilenbreite. Jetzt zusätzlich auf `.prose` und `.lead`,
+   dort zusammen mit `text-wrap: pretty` gegen Schusterjungen. Beides fällt
+   ohne Unterstützung auf das bisherige Verhalten zurück, und weiterhin ohne
+   Weichtrennzeichen in den Inhaltsdateien (siehe „Bekannte Einschränkung").
+
+4. **Futura 500 wurde geladen, aber nie gesetzt.** Seit der Umstellung auf
+   gemischten Satz mit Gewicht 700 setzt keine Regel mehr Gewicht 500 — der
+   `rel="preload"` in `BaseLayout.astro` holte trotzdem auf jeder Seite rund
+   11 KB, die nichts rendert. Vorabruf entfernt, `@font-face` behalten. Details
+   im Abschnitt „Gewichte im Code".
+
+5. **Bibelstellen: Bindestrich statt Halbgeviertstrich.** `formatPassage()` in
+   `src/lib/bible.ts` setzt Versbereiche aus Sanity seit jeher mit `–`
+   („Römer 8,1–4"), die 266 Fußnoten des Glaubensbekenntnisses standen dagegen
+   mit `-` („Römer 8,1-4"). Dieselbe Angabe in zwei Schreibweisen auf derselben
+   Seite. 114 Bereiche in 23 Dateien unter `src/content/creed/` auf `–`
+   umgestellt; die Fußnoten-IDs (`[^4-1]`) sind Bezeichner und ausdrücklich
+   **nicht** angefasst worden. Duden (Bis-Strich) und die bereits vorhandene
+   Stelle „Art. 15–21 DSGVO" in `datenschutz.md` sprechen für `–`.
+
+6. **`datenschutz.md`, drei Funde.** Der Anschriftenblock des
+   Verantwortlichen hatte keine `<br>` wie das Impressum — Markdown zog
+   „Gemeinde und Missionswerk Arche e.V." und „Evangelisch-reformierte
+   Freikirche" zu einer Zeile zusammen. „z.B." zweimal ohne Spatium (Duden
+   D 13). Und der Abschnitt „Schriftarten" nannte nur Source Serif Pro,
+   obwohl seit dem 16. September 2026 auch Futura selbst gehostet
+   ausgeliefert wird — in einem Text, der gerade die Aussage trägt, dass
+   keine Schrift von Dritten geladen wird.
+
+### Geprüft und bewusst nicht geändert
+
+- **Verwendungszweck in `spenden.md`** („Arche Bremen - Spende - Dein Name").
+  Typografisch wäre hier ein Halbgeviertstrich richtig. Der String ist aber
+  keine Prosa, sondern eine Eingabe für ein Bankformular, und derselbe String
+  steckt im GiroCode (`public/spenden-qr.svg`). Der eingeschränkte
+  SEPA-Zeichensatz kennt `–` nicht; eine Änderung könnte die Überweisung
+  scheitern lassen und würde Text und QR-Code auseinanderlaufen lassen.
+  Bindestrich bleibt.
+
+- **Geschützte Leerzeichen.** Typografisch gehören sie in „z. B.", „§ 5 TMG",
+  „Art. 6 Abs. 1", „10 €" und in die IBAN, damit dort keine Zeile umbricht.
+  Nicht gesetzt: U+00A0 ist in einer Markdown-Datei genauso unsichtbar wie das
+  Weichtrennzeichen, das an anderer Stelle aus genau diesem Grund abgelehnt
+  wurde (siehe „Bekannte Einschränkung"). Wenn das kommen soll, dann als
+  bewusste Entscheidung für alle Inhaltsdateien, nicht nebenbei.
+
+- **`h1` und `h2` sind beide `--fs-xxl`.** Im selben Textfluss stehen sie nie
+  nebeneinander: Die `h1` liegt im dunklen Seitenkopf (`PageHeader.astro`),
+  die `h2` in den hellen Bändern darunter, und in `.prose` und im Popup sind
+  beide ohnehin eine Stufe kleiner gesetzt. Die Trennung leistet hier der
+  Hintergrund, nicht der Grad. Unverändert gelassen — aber es ist die Stelle,
+  an der eine künftige Seite mit `h1` und `h2` im selben weißen Band auffallen
+  würde.
+
+- **`--tracking-display` (0.07em) bleibt ungenutzt.** Begründung steht
+  unverändert in `tokens.css`: Brandbook-Vorgabe, nicht an eine Anwendung
+  gebunden.
+
+- **`.nav-sheet a` in `Header.astro`** trägt mit
+  `font-size: clamp(1.75rem, 7vw, 3.25rem)` den einzigen fest verdrahteten
+  Schriftgrad im Komponentencode und weicht damit von CLAUDE.md Design-Regel 1
+  ab. Der Wert ist begründet (bei 8vw lief „Glaubensbekenntnis" auf einem
+  360-px-Gerät über den Innenabstand des Sheets) und ließ sich mit keiner
+  vorhandenen Stufe ersetzen. Siehe offene Frage unten.
+
+### Offene Fragen aus dieser Durchsicht
+
+1. **Eine Durchschuss-Stufe zwischen 1.15 und 1.6 fehlt.** Der Vorspann
+   (`.lead`, `--fs-l`) läuft mit `--lh-body` (1.6) jetzt eine Spur großzügig;
+   richtig wären etwa 1.35. Nach CLAUDE.md Design-Regel 7 wird ein fehlender
+   Wert hier eingetragen und nicht im Code erfunden — also: soll `tokens.css`
+   ein `--lh-snug: 1.35` bekommen?
+2. **Eigene Stufe für die Sheet-Navigation?** Der Grad oben ist der einzige
+   im Komponentencode. Entweder bekommt `tokens.css` eine Schaustufe dafür,
+   oder die Abweichung bleibt dokumentiert stehen — beides ist vertretbar,
+   entschieden ist es nicht.
+3. **Geschützte Leerzeichen in Inhaltsdateien: ja oder nein?** Siehe oben.
+
 ## Bewusste Abweichungen
 
 ### 1. Sekundärfarben tragen keinen Text
@@ -1060,19 +1165,35 @@ Zwei Nacharbeiten am Ergebnis:
 Ergebnis: `public/fonts/futura-500.woff2` (~11 KB), `public/fonts/futura-700.woff2`
 (~11 KB).
 
-**Gewichte im Code.** Zwei Regeln statt Einzelfallentscheidung, nach
-Brandbook (Bold für kleine Bauchbinden/Labels, Medium für große Headlines):
+**Gewichte im Code.** Der Absatz beschrieb bis zur typografischen Durchsicht
+(September 2026) eine Zweiteilung — 500 für große Versalheadlines, 700 für
+kleine Labels. Diese Zweiteilung gibt es seit der Umstellung auf gemischte
+Schreibweise nicht mehr; der Text war schlicht nicht nachgezogen worden. Sie
+ist mit Absicht aufgegeben worden, nicht vergessen: Im Versalsatz trug die
+weite Laufweite die Präsenz der Überschrift, im gemischten Satz muss das
+Gewicht sie tragen (siehe Abschnitt „Gemischte Schreibweise für
+Schauüberschriften", Folgeentscheidung 1).
 
-- **500** — große Versalheadlines: `h1`–`h4` (`global.css`), Kachel- und
-  Sektionsüberschriften (`.title`/`.name` in `CreedCard.astro`,
-  `ElderCard.astro`, `MinistryCard.astro`, sowie die `h1`–`h4` auf
-  `SermonCard.astro`/`SermonDetail.astro`/`index.astro`/`kontakt.astro`, die
-  denselben globalen Selektor erben).
-- **700** — kleine Versal-Labels und Buttons: `.button` (`global.css`), Pills
-  und Formularlabels (`SermonFilter.astro`), `.number` (`CreedCard.astro`),
-  `.passages`/`.passage` (`SermonDetail.astro`/`SermonCard.astro`), `.status`
+Tatsächlicher Stand — **eine** Regel:
+
+- **700 (Futura Bold)** — alles, was `--font-display` benutzt: `h1`–`h4`
+  (`global.css`), `.eyebrow`, `.button`, Kachel- und Sektionsüberschriften
+  (`.title`/`.name` in `CreedCard.astro`, `ElderCard.astro`,
+  `MinistryCard.astro`), Pills und Formularlabels (`SermonFilter.astro`),
+  `.number` (`CreedCard.astro`), `.passages`/`.passage`
+  (`SermonDetail.astro`/`SermonCard.astro`), `.status`
   (`MinistryCard.astro`), `.mail-label` (`kontakt.astro`),
-  `.milestone-label`/`.event-title` (`index.astro`).
+  `.milestone-label`/`.event-title`/`.numeral` (`index.astro`).
+- **500 (Futura Medium)** — derzeit **keine einzige Regel**. Der Schnitt
+  bleibt als `@font-face` in `global.css` deklariert (Brandbook-Schnitt,
+  CLAUDE.md Design-Regel 5), wird aber nicht mehr vorab geladen: Ein
+  `rel="preload"` in `BaseLayout.astro` holte ihn bis zur Durchsicht auf
+  jeder Seite, obwohl ihn nichts rendert. Ohne Vorabruf lädt der Browser die
+  Datei erst, wenn wieder eine Regel Gewicht 500 verlangt — der Schnitt
+  bleibt also verfügbar, kostet aber nichts.
+
+Damit sind von den vier geladenen Schnitten (Performance-Budget in CLAUDE.md)
+drei tatsächlich in Gebrauch: Futura 700, Source Serif Pro 400 und 600.
 
 `font-weight: 600` kommt in Zusammenhang mit `--font-display` nicht mehr vor
 — es lag zwischen den beiden geladenen Schnitten und wäre per
@@ -1334,8 +1455,10 @@ Umbauphase:
   `scroll-padding-top: var(--header-height)`.
 - **Die Gemeindeleitungsseite gab ihrer Kachel-Reihe kein `label`.**
   Die Reihe hatte damit keine zugängliche Benennung.
-- **`futura-500.woff2` wurde vorgeladen, aber nirgends benutzt.** Der
-  Preload stand noch aus einer früheren Schriftauswahl im Layout.
+- **`futura-500.woff2` wurde vorgeladen, aber nirgends benutzt.** Am selben
+  Tag unabhängig auch von der typografischen Durchsicht gefunden; beim
+  Zusammenführen ist deren ausführlichere Fassung stehen geblieben, siehe
+  Abschnitt „Typografische Durchsicht", Punkt 4.
 - **`ElderCard.astro` brach ohne Foto.** Jetzt fällt die Kachel auf die
   Wolkenfläche zurück, wie die übrigen Kachelarten auch.
 - **Das Eyebrow im Hero trug Gelb auf hellem Grund.** Gemessen 3,44 : 1,

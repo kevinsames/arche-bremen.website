@@ -81,6 +81,14 @@ body {
   font-family: var(--font-body);
   font-size: var(--fs-s);
   line-height: var(--lh-body);
+  /* Brandbook 2.2: Laufweite "min. 7" für Fließtext. Der Wert stand seit
+     September 2026 als --tracking-body in tokens.css, war dort auch so
+     beschrieben ("Fließtext"), wurde aber nirgends angewandt — Fließtext
+     lief bis zur typografischen Durchsicht mit der Voreinstellung 0. Hier
+     an genau einer Stelle gesetzt und von allem geerbt, was keine eigene
+     Laufweite trägt; Überschriften (--tracking-tight) und Versal-Labels
+     (--tracking-label) überschreiben ihn ohnehin. */
+  letter-spacing: var(--tracking-body);
   color: var(--text-primary);
   background-color: var(--bg-page);
 }
@@ -185,10 +193,22 @@ p {
    Seitenkomponenten definiert (gemeindeleben, glaubensbekenntnis, 404). */
 .lead {
   font-size: var(--fs-l);
-  line-height: var(--lh-tight);
+  /* --lh-tight (1.15) ist die Überschriftenstufe und stand hier bis zur
+     typografischen Durchsicht: Ein Vorspann ist aber Fließtext und läuft
+     regelmäßig über drei Zeilen (siehe /glaubensbekenntnis). Bei 1.15
+     stoßen in deutschem Satz die Umlautpunkte der einen Zeile an die
+     Unterlängen der vorigen — Ü, Ä und Ö setzen ihre Punkte über die
+     Versalhöhe. Deshalb die Fließtextstufe. Sie ist für --fs-l eine Spur
+     großzügig; eine eigene Zwischenstufe (~1.35) steht als offene Frage
+     in DESIGN.md, erfunden wird sie hier nicht (CLAUDE.md Design-Regel 7). */
+  line-height: var(--lh-body);
   color: var(--text-secondary);
   max-width: var(--measure);
   text-wrap: pretty;
+  /* Gleicher Grund wie bei h1–h4: „Gemeindegründung" in großem Grad
+     sprengt auf dem Telefon sonst die Spalte. */
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }
 
 ::selection {
@@ -243,6 +263,20 @@ a:visited {
    Glaubensbekenntnis-Artikel, Prediger-Profile, Impressum etc. */
 .prose {
   max-width: var(--measure);
+  /* Deutscher Fließtext im Flattersatz: Ohne Trennung reißen Komposita
+     („Glaubensbekenntnis", „Gemeindegründung", „Datenschutz-Aufsichts-
+     behörde") in der schmalen Spalte auf dem Telefon Löcher von einem
+     Drittel Zeilenbreite. Trennung nach lang="de" (BaseLayout.astro).
+     Browser ohne deutsches Trennwörterbuch ignorieren die Zeile und
+     setzen wie bisher — kein Fehlerfall, keine Weichtrennzeichen in den
+     Inhaltsdateien (siehe Kommentar bei h1–h4). */
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  /* Verhindert Schusterjungen: ein einzelnes Wort als letzte Zeile eines
+     Absatzes. Wo `pretty` fehlt (Stand 2026 u.a. Firefox), bricht der
+     Absatz wie bisher. Die Überschriften darin behalten `balance` aus der
+     h1–h4-Regel oben — eine direkte Deklaration schlägt die Vererbung. */
+  text-wrap: pretty;
 }
 
 .prose > * + * {

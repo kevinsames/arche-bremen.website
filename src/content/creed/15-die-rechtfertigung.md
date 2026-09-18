@@ -35,11 +35,11 @@ praktischer Gerechtigkeit zu streben.
 [^15-5]: Römer 3,20; Galater 2,16
 [^15-6]: Römer 3,24; 5,9; 1\. Johannes 1,7
 [^15-7]: Jesaja 53,9; Matthäus 5,17; Johannes 8,46; Hebräer 4,15; 1\. Johannes 3,5
-[^15-8]: Römer 5,19; 1\. Korinther 1,30-31
-[^15-9]: 1\. Johannes 1,8-10
+[^15-8]: Römer 5,19; 1\. Korinther 1,30–31
+[^15-9]: 1\. Johannes 1,8–10
 [^15-10]: Römer 8,1; Römer 8,33; 1\. Korinther 6,11
 [^15-11]: Römer 4,5; 8,33
 [^15-12]: Römer 1,17; 3,22; Galater 2,16; 3,6; Philipper 3,9; Hebräer 10,38
 [^15-13]: Römer 3,24
-[^15-14]: Johannes 6,29; Epheser 2,8-9
-[^15-15]: Römer 3,8; Galater 2,17-18
+[^15-14]: Johannes 6,29; Epheser 2,8–9
+[^15-15]: Römer 3,8; Galater 2,17–18

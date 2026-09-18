@@ -34,13 +34,13 @@ belebt zur rechten Zeit ihre Heilsgewissheit wieder neu, sodass sie das
 Glück ihrer Erlösung wieder voll genießen können[^17-12].
 
 [^17-1]: 1\. Johannes 3,1
-[^17-2]: 2\. Korinther 1,20; Hebräer 6,17-19
-[^17-3]: Hebräer 11,1-2
-[^17-4]: Hiob 19,25; Römer 8,38-39; 1\. Korinther 2,12; 2\. Korinther 5,1
+[^17-2]: 2\. Korinther 1,20; Hebräer 6,17–19
+[^17-3]: Hebräer 11,1–2
+[^17-4]: Hiob 19,25; Römer 8,38–39; 1\. Korinther 2,12; 2\. Korinther 5,1
 [^17-5]: Römer 8,16
 [^17-6]: Matthäus 7,20; Lukas 6,44; 1\. Johannes 3,9+14; Johannes 5,4+18
 [^17-7]: Psalm 13,2; Psalm 30,8
-[^17-8]: Psalm 32,3-5
+[^17-8]: Psalm 32,3–5
 [^17-9]: Johannes 10,28
 [^17-10]: 1\. Petrus 1,23
 [^17-11]: Lukas 22,32

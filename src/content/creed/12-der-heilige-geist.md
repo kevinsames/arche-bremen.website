@@ -62,9 +62,9 @@ nach ihnen streben[^12-29] und unter Beachtung biblischer Ordnung[^12-30]
 diese auch anwenden. Der Heilige Geist jedoch ist es, der die Charismen nach
 Seinem Willen austeilt[^12-31].
 
-[^12-1]: Apostelgeschichte 5,3-4; siehe auch „Der dreieinige Gott", Artikel 2
+[^12-1]: Apostelgeschichte 5,3–4; siehe auch „Der dreieinige Gott", Artikel 2
 [^12-2]: Johannes 16,7
-[^12-3]: Johannes 16,8-13
+[^12-3]: Johannes 16,8–13
 [^12-4]: Epheser 2,1; 2,5
 [^12-5]: 1\. Korinther 2,14
 [^12-6]: Römer 5,5; Matthäus 3,11
@@ -72,7 +72,7 @@ Seinem Willen austeilt[^12-31].
 [^12-8]: Matthäus 3,11; Lukas 3,16
 [^12-9]: 1\. Korinther 12,13
 [^12-10]: 1\. Korinther 12,18
-[^12-11]: Lukas 3,22; Lukas 4,1; Apostelgeschichte 1,8; 4,8; 7,55; 8,17; 9,17; 13,3-4; 19,6; Römer 15,19
+[^12-11]: Lukas 3,22; Lukas 4,1; Apostelgeschichte 1,8; 4,8; 7,55; 8,17; 9,17; 13,3–4; 19,6; Römer 15,19
 [^12-12]: Epheser 5,18
 [^12-13]: Johannes 14,17
 [^12-14]: 2\. Korinther 3,18
@@ -81,15 +81,15 @@ Seinem Willen austeilt[^12-31].
 [^12-17]: Hebräer 12,14
 [^12-18]: 1\. Korinther 12,27
 [^12-19]: 1\. Korinther 12,18
-[^12-20]: Römer 12,4-8; 1\. Korinther 12,4-11+28-30; Epheser 4,7-12
+[^12-20]: Römer 12,4–8; 1\. Korinther 12,4–11+28–30; Epheser 4,7–12
 [^12-21]: Römer 12,8; 1\. Korinther 12,28
-[^12-22]: Römer 12,7-8; 1\. Korinther 12,8
+[^12-22]: Römer 12,7–8; 1\. Korinther 12,8
 [^12-23]: 1\. Korinther 12,10
 [^12-24]: 1\. Korinther 14,19
-[^12-25]: 1\. Korinther 14,27-28
-[^12-26]: Matthäus 7,20-23
-[^12-27]: 1\. Korinther 13,1-3
+[^12-25]: 1\. Korinther 14,27–28
+[^12-26]: Matthäus 7,20–23
+[^12-27]: 1\. Korinther 13,1–3
 [^12-28]: 1\. Korinther 12,7; 14,26
 [^12-29]: 1\. Korinther 14,12
-[^12-30]: 1\. Korinther 14,32-33
+[^12-30]: 1\. Korinther 14,32–33
 [^12-31]: 1\. Korinther 12,11

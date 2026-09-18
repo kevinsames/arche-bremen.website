@@ -24,10 +24,10 @@ description: "Welche Daten beim Besuch dieser Website anfallen, wie lange sie ge
 
 ## Verantwortlicher
 
-Gemeinde und Missionswerk Arche e.V.
+Gemeinde und Missionswerk Arche e.V.<br>
 Evangelisch-reformierte Freikirche
 
-Doerriesweg 7
+Doerriesweg 7<br>
 22525 Hamburg
 
 E-Mail: info (at) bremen.arche-gemeinde.de
@@ -56,7 +56,7 @@ einwilligungsfrei.
 Diese Website verzichtet bewusst auf alles, was über den technisch notwendigen
 Betrieb hinausgeht:
 
-- Kein Analyse- oder Reichweitenmessungs-Werkzeug (z.B. Google Analytics,
+- Kein Analyse- oder Reichweitenmessungs-Werkzeug (z. B. Google Analytics,
   Matomo).
 - Keine Profilbildung, kein Werbe-Tracking.
 - Keine eingebetteten Karten, Videos oder Social-Media-Elemente, die im
@@ -72,10 +72,10 @@ entsprechend ergänzt.
 
 ## Schriftarten
 
-Die verwendete Schrift (Source Serif Pro) ist lokal auf unserem Server
-hinterlegt. Es besteht keine Verbindung zu Google Fonts oder einem
-anderen externen Schriften-Anbieter; beim Laden der Seite werden dadurch keine
-Daten an Dritte übertragen.
+Die verwendeten Schriften (Futura und Source Serif Pro) sind lokal auf
+unserem Server hinterlegt. Es besteht keine Verbindung zu Google Fonts oder
+einem anderen externen Schriften-Anbieter; beim Laden der Seite werden dadurch
+keine Daten an Dritte übertragen.
 
 ## Links auf externe Angebote
 
@@ -111,5 +111,5 @@ Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch gegen die
 Verarbeitung. Wenden Sie sich dazu an die oben genannte E-Mail-Adresse.
 
 Sie haben außerdem das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu
-beschweren, z.B. beim Hamburgischen Beauftragten für Datenschutz und
+beschweren, z. B. beim Hamburgischen Beauftragten für Datenschutz und
 Informationsfreiheit (HmbBfDI).

@@ -20,5 +20,5 @@ wachsen zu dem hin, der das Haupt ist[^22-4].
 
 [^22-1]: Hebräer 12,23
 [^22-2]: Apostelgeschichte 2,42
-[^22-3]: Johannes 17,21-22
+[^22-3]: Johannes 17,21–22
 [^22-4]: Epheser 4,15

@@ -18,7 +18,7 @@ ist, ist Sündenerkenntnis, Buße und Umkehr von der Sünde jedoch ein Leben
 lang immer wieder vonnöten[^14-6].
 
 [^14-1]: Hebräer 11,1
-[^14-2]: 1\. Korinther 2,14-15; Epheser 1,18
+[^14-2]: 1\. Korinther 2,14–15; Epheser 1,18
 [^14-3]: Apostelgeschichte 5,31; 11,18; Römer 2,4; 2\. Timotheus 2,25; Hebräer 12,17
 [^14-4]: Apostelgeschichte 2,38; 17,30
 [^14-5]: 1\. Petrus 1,23

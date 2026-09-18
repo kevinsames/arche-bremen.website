@@ -27,7 +27,7 @@ Zeitpunkt, an dem die volle Zahl[^21-3] derer erreicht ist, die gerettet
 werden sollen. Bis dahin sollen wir Seelen gewinnen[^21-4] und besonders für
 die beten, die wegen ihres Bekenntnisses verfolgt und sogar getötet werden.
 
-[^21-1]: Matthäus 28,18-20; Markus 16,15-16; Lukas 24,47-48; Apostelgeschichte 1,8
+[^21-1]: Matthäus 28,18–20; Markus 16,15–16; Lukas 24,47–48; Apostelgeschichte 1,8
 [^21-2]: Apostelgeschichte 5,29
 [^21-3]: Römer 11,25
 [^21-4]: Johannes 9,4; 1\. Korinther 9,22
