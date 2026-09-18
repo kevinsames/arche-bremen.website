@@ -148,11 +148,17 @@
   --measure:  62ch;   /* max. Zeilenlänge Fließtext */
 
   /* Schaugrößen. Im Brandbook nicht vorhanden, für Web definiert — siehe
-     DESIGN.md. Je eine Stelle auf der Startseite: --fs-display die
-     Überschrift des abschließenden Kontaktbands, --fs-numeral die
+     DESIGN.md. --fs-display trägt die Überschrift des abschließenden
+     Kontaktbands und, erst ab 48rem, den Anspruch im Hero; --fs-numeral die
      Datumszahlen der Meilenstein-Fläche (rein typografisches Schaubild,
-     kein Fließtext). Der Anspruch im Hero bleibt bei --fs-xxl — dort
-     steht die Wortmarke darüber und soll nicht überboten werden. */
+     kein Fließtext).
+
+     Auf dem Telefon bleibt der Hero-Anspruch bei --fs-xxl: Dort steht die
+     Wortmarke direkt darüber und soll nicht überboten werden. Diese Regel
+     stand hier seit August, die Neugestaltung im September hat sie im
+     Komponentencode überschrieben und den Satz stehen lassen — beides ist
+     am 18. September wieder in Deckung gebracht (siehe DESIGN.md, "Der
+     Hero war zu gedrungen"). */
   --fs-display: clamp(2.75rem, 1.4rem + 6.5vw, 7rem);
   --fs-numeral: clamp(4rem, 1rem + 15vw, 10rem);
 

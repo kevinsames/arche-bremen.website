@@ -490,10 +490,38 @@ const jsonLd = {
     }
   }
 
+  /* Mobil first (CLAUDE.md Regel 6), und zugleich die Rückkehr zu dem, was
+     tokens.css seit August über diese eine Zeile sagt: "Der Anspruch im Hero
+     bleibt bei --fs-xxl — dort steht die Wortmarke darüber und soll nicht
+     überboten werden." Die Neugestaltung im September hatte --fs-display
+     daraus gemacht, ohne den Kommentar anzufassen.
+
+     Auf dem Telefon kostete das doppelt: 48 statt 39 px, und bei 390 px
+     Breite zerfiel "Wir gründen eine Gemeinde" in drei Zeilen, von denen
+     eine nur "eine" trug. Mit --fs-xxl stehen dort wieder zwei.
+
+     --lh-tight statt des geerbten --lh-display: 1.02 lässt bei diesem Grad
+     rund einen Pixel zwischen Unterlänge und Versalhöhe der nächsten Zeile.
+     Das ist für ein- bis zweizeilige Schauzeilen gedacht; drei Zeilen daraus
+     lesen sich als geschlossene Fläche. 1.15 ergibt sechs Pixel Luft. Der
+     Token ist mit "h3/h4, Kacheltitel" beschrieben — hier trägt er
+     zusätzlich die Hero-Zeile auf schmalen Schirmen, siehe DESIGN.md,
+     "Der Hero war zu gedrungen". */
   .hero-claim {
     margin: 0;
-    font-size: var(--fs-display);
+    font-size: var(--fs-xxl);
+    line-height: var(--lh-tight);
     max-width: 16ch;
+  }
+
+  /* Ab Tablet trägt die Zeile den größeren Grad wieder: Dort steht sie neben
+     dem Bild statt darüber, bricht auf zwei Zeilen und hat den Durchschuss
+     der Schaustufe nötig, damit der Block nicht auseinanderfällt. */
+  @media (min-width: 48rem) {
+    .hero-claim {
+      font-size: var(--fs-display);
+      line-height: var(--lh-display);
+    }
   }
 
   .accent {

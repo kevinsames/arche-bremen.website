@@ -1466,6 +1466,66 @@ Umbauphase:
   ausschließlich auf `--bg-inverted`, und der Hero ist ein helles Foto.
   Jetzt Weiß, gemessen 5,00 : 1.
 
+## Der Hero war zu gedrungen
+
+**18. September 2026.** Rückmeldung vom Telefon: Der Hero wirke „sehr
+gedrungen". Vorschlag war, die Eyebrow („Arche Bremen ·
+Evangelisch-reformierte Freikirche") kleiner zu setzen. Gemessen wurde
+etwas anderes.
+
+Die Eyebrow ist 32 von 619 Pixeln Hero-Höhe, also fünf Prozent. Auf
+0.75rem verkleinert spart sie sieben Pixel — und bricht weiterhin auf zwei
+Zeilen, weil die Zeile mit `--tracking-label` (0.18em) rund 580 px breit
+ist und ein Telefon 343 px Textspalte hat. Der Grad ist dort nicht das
+Problem.
+
+Das Problem war die Überschrift, an zwei Stellen:
+
+1. **Der Grad widersprach der eigenen Dokumentation.** In `tokens.css`
+   steht seit August: „Der Anspruch im Hero bleibt bei `--fs-xxl` — dort
+   steht die Wortmarke darüber und soll nicht überboten werden." Die
+   Neugestaltung im September hat `.hero-claim` auf `--fs-display` gesetzt
+   und den Satz stehen lassen. Auf 390 px sind das 48 statt 39 px.
+2. **Der Durchschuss war für diese Zeilenzahl zu knapp.** `--lh-display`
+   (1.02) lässt bei 48 px genau einen Pixel zwischen der Unterlänge der
+   einen und der Versalhöhe der nächsten Zeile. Für ein- bis zweizeilige
+   Schauzeilen ist das die Absicht des Tokens; drei Zeilen daraus lesen
+   sich als geschlossene Fläche. Genau das beschreibt „gedrungen".
+
+Dazu kam ein Bruch, der auf dem Gerät des Melders nicht auftrat: Bei
+390 px Breite — iPhone ohne „Pro Max", der häufigste Fall — zerfiel „Wir
+gründen eine Gemeinde" in drei Zeilen, von denen eine nur „eine" trug.
+`text-wrap: balance` kann daran nichts ändern, weil „Gemeinde" allein
+schon fast die volle Spalte füllt.
+
+Umgesetzt, mobil zuerst (CLAUDE.md Regel 6): `.hero-claim` steht auf
+`--fs-xxl` mit `--lh-tight` und wechselt erst ab 48rem auf `--fs-display`
+mit `--lh-display`. Kein neuer Token, keine neue Ausnahme.
+
+Gemessen, jeweils Hero-Höhe und Luft zwischen zwei Überschriftzeilen:
+
+| Breite | vorher | nachher |
+| --- | --- | --- |
+| 375 px | 614 px / 1 px | 555 px / 6 px |
+| 390 px | 619 px / 1 px | 558 px / 6 px |
+| 430 px | 579 px / 1 px | 564 px / 6 px |
+| ab 768 px | unverändert | unverändert |
+
+Der Meilenstein („Geplanter erster Gottesdienst / 2. Mai 2027") endet auch
+auf dem kleinsten geprüften Gerät bei 403 px und bleibt damit über der
+Falz — die inhaltliche Vorgabe aus CLAUDE.md ist eingehalten.
+
+`--lh-tight` ist in `tokens.css` mit „h3/h4, Kacheltitel" beschrieben und
+trägt jetzt zusätzlich die Hero-Zeile auf schmalen Schirmen. Das ist eine
+Ausweitung der Beschreibung, kein neuer Wert; 1.15 ergibt bei 39 px sechs
+Pixel Luft, was für drei Zeilen die richtige Größenordnung ist.
+
+**Offen, inhaltlich:** Die Eyebrow wiederholt mit
+„Evangelisch-reformierte Freikirche" wörtlich, was 200 px darüber im
+Logo-Lockup steht. Auf „Arche Bremen" gekürzt wäre sie einzeilig (spart
+weitere 16 px) und stünde nicht mehr in Konkurrenz zur Überschrift. Das
+ist eine Textentscheidung und liegt bei der Gemeinde, nicht im Design.
+
 ## Offene Fragen an Hamburg
 
 Diese sollten in einer Mail gebündelt werden, bevor gestaltet wird:
