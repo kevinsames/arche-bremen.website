@@ -78,12 +78,19 @@ Regeln:
 3. **Gelb, Orange, Grün, Ocker und Braun-Grau sind auf hellem Grund niemals
    Textfarben.** Kontrast auf Weiß liegt zwischen 1,44 : 1 und 2,90 : 1 und
    verfehlt WCAG AA auch für große Schrift. Dort nur Flächen, Rahmen,
-   Stilelemente. **Einzige Ausnahme, September 2026 freigegeben:** Gelb auf
-   Dunklem Blau (8,38 : 1) über das Token `--text-accent-on-dark`,
-   ausschließlich auf `--bg-inverted`. Nie über `--accent-warm` oder
-   `--c-yellow` direkt — der Tokenname trägt die Bedingung. Für die
-   übrigen Sekundärfarben und für jeden hellen Grund gilt die Regel
-   unverändert. Siehe DESIGN.md, „Gelbe Schrift auf Dunklem Blau".
+   Stilelemente. **Zwei benannte Ausnahmen, beide über das Token
+   `--text-accent-on-dark`, nie über `--accent-warm` oder `--c-yellow`
+   direkt:**
+   - September 2026: Gelb auf `--bg-inverted` (8,38 : 1).
+   - September 2026, zweite Stufe: die Dachzeile im Hero auf dem Telefon,
+     4,92 bis 5,00 : 1 am hellsten Hintergrundpixel gemessen. Der Grund
+     ist dort kein Volltonfeld, sondern 80 % desselben Dunkelblaus über
+     dem Marktplatzfoto. Bedingung: Das Foto bleibt — es wird nicht gegen
+     ein anderes getauscht. Wer es doch tauscht, misst neu.
+
+   Für die übrigen Sekundärfarben und für jeden hellen Grund gilt die
+   Regel unverändert. Siehe DESIGN.md, „Gelbe Schrift auf Dunklem Blau"
+   und „Gelbe Dachzeile im Hero".
 4. Textfarben sind `--text-primary` (Dunkles Blau), `--text-secondary` (Braun)
    und auf dunklem Grund `--text-on-dark`, als Hervorhebung dort zusätzlich
    `--text-accent-on-dark` (siehe Regel 3). `--c-blue` nur für große Schrift
@@ -108,8 +115,14 @@ Regeln:
    `arche-logo-white.svg`, dieselbe Datei mit weißer statt dunkelblauer
    Füllung, für den dunklen Footer-Hintergrund. Details in `DESIGN.md`,
    Abschnitt „Logo".
-9. Keine Stock-Fotografie. Brandbook 3.1 verlangt mindestens 70 % Fotos aus der
-   lokalen Gemeinde; bis solche existieren, wird typografisch gestaltet.
+9. Keine Stock-Fotografie von Menschen. Brandbook 3.1 verlangt mindestens
+   70 % Fotos aus der lokalen Gemeinde; solange solche fehlen, wird
+   typografisch gestaltet. **Eine Ausnahme, dauerhaft:** das Stadtbild des
+   Bremer Marktplatzes im Hero. Es zeigt keine erkennbaren Personen und
+   behauptet nichts über die Gemeinde. Es ist am 18. September 2026
+   ausdrücklich als Dauerzustand bestätigt worden — es wird nicht gegen
+   eine Gemeindeaufnahme getauscht. Davon hängt die Kontrastzusage der
+   gelben Dachzeile ab (Regel 3).
 
 
 ## Content-Split — die zentrale Architekturentscheidung

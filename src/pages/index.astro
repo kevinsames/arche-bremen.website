@@ -130,13 +130,10 @@ const jsonLd = {
     <span class="hero-mark" style={`--mark: url(${mark.src})`} aria-hidden="true"></span>
 
     <div class="hero-inner">
-      {/* Bewusst NICHT eyebrow--accent: Gelb erreicht an dieser Stelle nur
-          3,44 : 1 (gemessen am Pixel) und verfehlt AA. Die Zeile sitzt im
-          obersten Bereich des Heros, wo --scrim-hero am dünnsten ist und
-          der helle Himmel durchkommt. Weiß liegt dort bei 4,95 : 1. Gelb
-          trägt im Hero weiterhin „in Bremen.", den Knopf und den Bogen —
-          auf dem soliden Dunkelblau der übrigen Bänder bleibt die gelbe
-          Eyebrow unverändert. */}
+      {/* Diese Zeile steht auf dem Telefon in Gelb, auf dem Desktop in
+          Weiß. Die Farbe kommt aus der Medienabfrage im Stilblock unten,
+          nicht aus einer Klasse hier. Begründung und Messungen in
+          DESIGN.md, „Gelbe Dachzeile im Hero". */}
       <p class="eyebrow">{SITE.name} &middot; Evangelisch-reformierte Freikirche</p>
       <h1 class="hero-claim">
         {FOUNDING.claim} <span class="accent">{FOUNDING.claimAccent}</span>
@@ -484,19 +481,6 @@ const jsonLd = {
     gap: var(--sp-4);
   }
 
-  .hero-claim {
-      margin-bottom: var(--sp-3);
-    }
-
-    .milestone-label {
-      margin-bottom: var(--sp-2);
-    }
-
-    .hero-actions {
-      margin-top: var(--sp-3);
-    }
-  }
-
   @media (min-width: 48rem) {
     .hero-inner {
       min-height: 38rem;
@@ -607,6 +591,41 @@ const jsonLd = {
 
     .hero-actions {
       margin-top: var(--sp-3);
+    }
+
+    /* Gelbe Dachzeile — nur auf dem Telefon. Dort bricht die Zeile auf
+       zwei Zeilen um und stünde in Weiß als zweiter Block neben der
+       Überschrift; auf dem Desktop ist sie einzeilig und bleibt weiß, so
+       ist sie ausdrücklich gewünscht.
+
+       Dafür wird der oberste Stop von --scrim-hero von 58 auf 80 %
+       verstärkt, und ausdrücklich NUR der oberste. Der Stop bei 45 %
+       bleibt bei 78 %: Dort liegen die Giebel, und ein dunklerer Verlauf
+       an dieser Stelle nimmt dem Foto die Farbe, ohne dem Text zu helfen.
+       Gemessen bleibt die Bildhelligkeit auf Giebelhöhe bei 8–9, im
+       obersten Streifen fällt sie von 25 auf 18 — dort ist fast nur
+       Himmel.
+
+       Kontrast am hellsten Hintergrundpixel, alle drei Telefonbreiten:
+       Gelb 4,84 bis 4,92 : 1, über der AA-Schwelle von 4,5 : 1 für
+       14-px-Versalien. Ohne die Verstärkung 3,22 bis 3,24 : 1.
+
+       Das ist eine benannte Erweiterung von CLAUDE.md Regel 3: Der Token
+       --text-accent-on-dark war bisher an --bg-inverted gebunden, hier
+       steht er auf 80 % desselben Dunkelblaus über einem Foto. Siehe
+       DESIGN.md, „Gelbe Dachzeile im Hero". Wer die Zeile wieder weiß
+       will, löscht diese beiden Regeln. */
+    .hero {
+      --scrim-hero: linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--c-blue-dark) 80%, transparent) 0%,
+        color-mix(in srgb, var(--c-blue-dark) 78%, transparent) 45%,
+        color-mix(in srgb, var(--c-blue-dark) 95%, transparent) 100%
+      );
+    }
+
+    .hero-inner > .eyebrow {
+      color: var(--text-accent-on-dark);
     }
   }
 

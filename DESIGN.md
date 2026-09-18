@@ -1405,9 +1405,15 @@ dem Viewport skaliert statt eine feste Layoutbreite zu haben (anders als das
 Ältesten-Porträt oben); Zuschnitt 4:3 mobil, 21:9 ab 48rem. Steht als
 `<figure>` außerhalb von `Section.astro`, weil dessen `.container` das Bild
 auf Inhaltsbreite begrenzen würde — hier soll es Kante zu Kante laufen.
-Dieses Band wird ersetzt, sobald echte Fotos aus der Bremer Gemeinde
-existieren; CLAUDE.md Regel 9 bleibt davon unberührt, sie gilt weiterhin für
-Personen-/Gemeindeaufnahmen.
+**18. September 2026:** Dieses Bild bleibt. Es wird nicht gegen eine
+Gemeindeaufnahme getauscht — ausdrücklich bestätigt. Vorher stand hier, es
+werde ersetzt, sobald echte Fotos aus Bremen existieren; das gilt nicht mehr.
+Die Festlegung ist keine Formalie: Von ihr hängt die Kontrastzusage der
+gelben Dachzeile im Hero ab (siehe „Gelbe Dachzeile im Hero"), denn deren
+Wert ist an den Bildpunkten genau dieses Fotos gemessen. Wer das Bild doch
+einmal tauscht, misst die Dachzeile neu oder stellt sie auf Weiß zurück.
+CLAUDE.md Regel 9 bleibt im Übrigen unberührt, sie gilt weiterhin für
+Personen- und Gemeindeaufnahmen.
 
 ## Verlorene Utility
 
@@ -1605,19 +1611,9 @@ er steht unten unter den offenen Fragen.
 Alle Varianten wurden bei 375, 390 und 430 px gerendert und am echten
 Bildpunkt gemessen, Kontraste gegen den hellsten Hintergrundpixel:
 
-- **Gelbe Dachzeile.** Der ausdrückliche Wunsch aus der Sprachnachricht.
-  Gelb erreicht an dieser Stelle 3,18 : 1 und verfehlt AA deutlich; die
-  Zeile ist 14 px und zählt nicht als große Schrift. Auf die Schwelle
-  käme sie erst, wenn der erste Stop von `--scrim-hero` von 58 auf 75 %
-  ginge — dann verliert das Marktplatzfoto ein Drittel seiner Helligkeit,
-  und 4,55 : 1 wäre ein Wert, der an den Bildpunkten genau dieses Fotos
-  hängt. Das Foto wird ersetzt, sobald echte Aufnahmen aus Bremen
-  existieren; wer es tauscht, sähe nicht, dass er eine Schwelle reißt.
-  Dazu kommt der harte Grund: `--text-accent-on-dark` ist nach CLAUDE.md
-  Regel 3 an `--bg-inverted` gebunden, und der Hero ist Foto plus Verlauf.
-  Genau diese Zeile war im September gelb und ist mit 3,44 : 1 deshalb auf
-  Weiß gestellt worden. Die Erinnerung stimmt — sie erinnert einen
-  behobenen Zugänglichkeitsfehler.
+- **Gelbe Dachzeile.** Zunächst abgelehnt, dann doch umgesetzt — siehe
+  den eigenen Abschnitt „Gelbe Dachzeile im Hero" weiter unten. Die
+  Ablehnung stützte sich auf zwei Gründe, von denen einer nicht trug.
 - **Dachzeile dämpfen** auf 75 % Weiß, wie das Meilenstein-Label es trägt:
   3,42 : 1 gegen den hellsten Bildpunkt. Durchgefallen.
 - **Bewusster ungleicher Umbruch** der Dachzeile („Arche Bremen ·" /
@@ -1629,6 +1625,72 @@ Bildpunkt gemessen, Kontraste gegen den hellsten Hintergrundpixel:
   eine Inhaltsänderung, und sie nimmt ausgerechnet die Zeile vom ersten
   mobilen Bildschirm, die in der Sprachnachricht namentlich gelobt wurde.
   Bleibt als Angebot bei der Gemeinde.
+
+## Gelbe Dachzeile im Hero
+
+**18. September 2026, später am Abend.** Der Wunsch aus der Sprachnachricht
+— die kleine Zeile über der Überschrift in Gelb statt in Weiß — war zuerst
+mit zwei Gründen abgelehnt worden:
+
+1. Gelb erreicht dort 3,22 bis 3,24 : 1 und verfehlt AA deutlich. Die Zeile
+   ist 14 px und zählt nicht als große Schrift, es gilt 4,5 : 1.
+2. Auf die Schwelle käme sie nur mit einem dunkleren Verlauf, und der
+   gemessene Wert hinge dann an den Bildpunkten genau dieses Fotos — das
+   laut damaliger Dokumentation ersetzt werden sollte. Wer es tauscht,
+   sähe nicht, dass er eine Zugänglichkeitsschwelle reißt.
+
+**Grund 2 ist hinfällig:** Das Bild bleibt, es wird nicht getauscht (siehe
+„Bildwelt"). Damit war die Ablehnung neu zu prüfen — und Grund 1 ließ sich
+billiger auflösen als zunächst gemessen.
+
+### Der Fehler in der ersten Messung
+
+Die ersten Varianten hatten den Verlauf als Ganzes verstärkt, also den Stop
+bei 0 % **und** den bei 45 %. Der bei 45 % liegt auf Giebelhöhe. Ihn
+mitzuverdunkeln kostete ein Drittel der Bildhelligkeit, ohne der Zeile zu
+helfen — die steht 400 px weiter oben. Verstärkt man **nur den obersten
+Stop**, bleibt das Bild, wo es zählt:
+
+| oberster Stop | Gelb, hellster Bildpunkt | Foto oben | Foto auf Giebelhöhe |
+| --- | --- | --- | --- |
+| 58 % (vorher) | 3,22 – 3,24 | 25 | 9 |
+| 70 % | 4,04 – 4,05 | 21 | 8 – 9 |
+| 75 % | 4,42 – 4,44 | 19 | 8 – 9 |
+| **80 %** | **4,84 – 4,92** | 18 | 8 – 9 |
+| 85 % | 5,31 – 5,38 | 17 | 8 |
+
+Gewählt: 80 %, nur unter 48rem. Im obersten Streifen ist ohnehin fast nur
+Himmel; die Giebel behalten ihre Farbe. Im ausgelieferten Zustand misst die
+Zeile 4,92 bis 5,00 : 1 über alle drei Telefonbreiten.
+
+### Warum nur auf dem Telefon
+
+Auf dem Desktop bleibt die Zeile weiß. Sie ist dort einzeilig, steht neben
+einer über 300 px hohen Überschrift und braucht keine eigene Farbebene —
+und in der Sprachnachricht ist genau dieser Zustand benannt und gelobt
+worden („da oben in weiß … das ist so richtig clean"). Eine Farbe, die sich
+mit der Bildschirmbreite ändert, ist erklärungsbedürftig; deshalb steht sie
+hier und im Komponentenkommentar begründet.
+
+### Was das für Regel 3 bedeutet
+
+CLAUDE.md Regel 3 band `--text-accent-on-dark` bisher ausschließlich an
+`--bg-inverted`, also an ein Volltonfeld. Hier steht der Token auf 80 %
+desselben Dunkelblaus über einem Foto. Das ist eine Erweiterung, keine
+Umgehung: Der Tonwert liegt nah am Volltonfeld, der Kontrast ist am
+ungünstigsten Bildpunkt gemessen statt am Mittelwert, und die Regel nennt
+die Bedingung jetzt ausdrücklich — das Foto bleibt. Wird es doch getauscht,
+ist neu zu messen oder die Zeile auf Weiß zurückzustellen; beides sind zwei
+Regeln in `index.astro`.
+
+### Was daran lehrreich ist
+
+Die erste Ablehnung war nicht falsch gerechnet, sondern zu grob modelliert.
+„Verlauf verstärken" wurde als eine Entscheidung behandelt, obwohl der
+Verlauf drei Stützstellen hat und nur eine davon dem Text dient. Aus einer
+Messung, die eine Option zu teuer erscheinen ließ, wurde ein „geht nicht".
+Wer hier etwas ablehnt, weil eine Messung dagegen spricht, prüfe zuerst, ob
+die Messung die billigste Fassung der Option abbildet.
 
 ## Offene Fragen an Hamburg
 
