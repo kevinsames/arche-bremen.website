@@ -67,21 +67,22 @@ const canonical = new URL(path, Astro.site).href;
     <link rel="alternate icon" type="image/png" href="/favicon.png" />
     <!-- Above the fold gebraucht, deshalb vorab geladen statt nur per
          @font-face in global.css referenziert — auf jeder Seite, nicht nur
-         der Startseite: Futura 500 trägt jede h1–h4-Überschrift, Futura 700
-         den Spenden-Knopf im Header (sticky, auf jeder Seite sichtbar), und
-         Source Serif 400 den Fließtext-Anfang. Source Serif 600
+         der Startseite: Futura 700 trägt seit der Umstellung auf gemischte
+         Schreibweise jede Überschrift UND alle Versal-Labels, Source Serif
+         400 den Fließtext-Anfang.
+
+         Futura 500 wurde hier bis September 2026 mit vorgeladen und war zu
+         dem Zeitpunkt längst unbenutzt — der Schnitt kommt seit der
+         Umstellung auf Futura Bold in keiner Regel mehr vor, nur noch im
+         @font-face. Das waren rund 11 KB Fehlladung bei jedem Seitenaufruf.
+         Die @font-face-Deklaration bleibt stehen: Sie kostet nichts,
+         solange kein font-weight: 500 sie anfordert, und hält den Schnitt
+         verfügbar. Source Serif 600
          (<strong>/Markdown-Bold) ist dagegen seiten- und
          inhaltsabhängig — kein verlässlicher Above-the-fold-Fall mehr,
          seit die Headlines von Source Serif 600 auf Futura 500 gewechselt
          sind (siehe DESIGN.md, "Futura für Headlines, Source Serif Pro für
          Fließtext") — deshalb hier nicht mehr vorab geladen. -->
-    <link
-      rel="preload"
-      href="/fonts/futura-500.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
     <link
       rel="preload"
       href="/fonts/futura-700.woff2"

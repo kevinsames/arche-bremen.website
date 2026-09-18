@@ -300,6 +300,16 @@ const sheetItems = [...navItems, { href: '/kontakt', label: 'Kontakt' }, { href:
       display var(--duration-slow) var(--ease-out) allow-discrete;
   }
 
+  /* Ohne diese Zeile bleibt das geschlossene Sheet display: grid und damit
+     im Baum: Es war auf JEDER Seite in der Tab-Reihenfolge (gemessen: neun
+     Stopps — Schließen-Kreuz plus acht Links — noch vor dem Seiteninhalt)
+     und wurde von Screenreadern vorgelesen. Sichtbar war es nur deshalb
+     nicht, weil translate es aus dem Bild schiebt. Overlay.astro hat
+     dieselbe Regel; im Header fehlte sie. */
+  .sheet:not(:popover-open) {
+    display: none;
+  }
+
   .sheet:popover-open {
     translate: 0 0;
   }

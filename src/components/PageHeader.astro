@@ -50,14 +50,28 @@ const { title, eyebrow, lead, cloud = 1, back } = Astro.props;
        liefe sie in den Inhalt darunter. */
     overflow: clip;
     background-color: var(--bg-inverted);
-    background-image: var(--scrim-card);
     color: var(--text-on-dark);
+  }
+
+  /* Der Verlauf lag bis September 2026 als background-image am Band selbst.
+     Das wirkte nicht: Ein Kind mit negativem z-index malt ÜBER den
+     Hintergrund seines Elternelements, die Wolke lag also über dem
+     Verlauf statt darunter, und die Schrift stand ungeschützt auf den
+     hellen Stellen der Wolke. Gemessen wurde die gelbe Eyebrow dadurch mit
+     5,45 : 1 statt der dokumentierten 8,38 : 1. Jetzt eine eigene Ebene
+     zwischen Wolke (−2) und Schrift, auf Bandhöhe statt auf Wolkenhöhe. */
+  .page-head::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--scrim-card);
   }
 
   .cloud {
     position: absolute;
     inset: -26%;
-    z-index: -1;
+    z-index: -2;
     background-image: var(--cloud);
   }
 

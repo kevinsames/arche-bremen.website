@@ -63,7 +63,15 @@ const railId = `rail-${(label ?? 'x').toLowerCase().replace(/[^a-z0-9]+/g, '-')}
       document.querySelectorAll('[data-rail-nav]').forEach((nav) => {
         const rail = document.getElementById(nav.querySelector('[data-rail-prev]').getAttribute('aria-controls'));
         if (!rail) return;
-        nav.hidden = false;
+        // Nur einblenden, wenn die Reihe überhaupt über den sichtbaren
+        // Bereich hinausragt. Vorher erschienen die Knöpfe immer — auf der
+        // Startseite standen sie auf breiten Bildschirmen über drei
+        // Predigtkacheln, die vollständig passten, und taten nichts.
+        const scrollbar = () => {
+          nav.hidden = rail.scrollWidth <= rail.clientWidth + 4;
+        };
+        scrollbar();
+        addEventListener('resize', scrollbar);
         const step = () => rail.firstElementChild ? rail.firstElementChild.getBoundingClientRect().width + 16 : rail.clientWidth * 0.8;
         nav.querySelector('[data-rail-prev]').addEventListener('click', () => rail.scrollBy({ left: -step(), behavior: 'smooth' }));
         nav.querySelector('[data-rail-next]').addEventListener('click', () => rail.scrollBy({ left: step(), behavior: 'smooth' }));

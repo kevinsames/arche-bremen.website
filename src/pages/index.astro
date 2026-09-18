@@ -130,7 +130,14 @@ const jsonLd = {
     <span class="hero-mark" style={`--mark: url(${mark.src})`} aria-hidden="true"></span>
 
     <div class="hero-inner">
-      <p class="eyebrow eyebrow--accent">{SITE.name} &middot; Evangelisch-reformierte Freikirche</p>
+      {/* Bewusst NICHT eyebrow--accent: Gelb erreicht an dieser Stelle nur
+          3,44 : 1 (gemessen am Pixel) und verfehlt AA. Die Zeile sitzt im
+          obersten Bereich des Heros, wo --scrim-hero am dünnsten ist und
+          der helle Himmel durchkommt. Weiß liegt dort bei 4,95 : 1. Gelb
+          trägt im Hero weiterhin „in Bremen.", den Knopf und den Bogen —
+          auf dem soliden Dunkelblau der übrigen Bänder bleibt die gelbe
+          Eyebrow unverändert. */}
+      <p class="eyebrow">{SITE.name} &middot; Evangelisch-reformierte Freikirche</p>
       <h1 class="hero-claim">
         {FOUNDING.claim} <span class="accent">{FOUNDING.claimAccent}</span>
       </h1>

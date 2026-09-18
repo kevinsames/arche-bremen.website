@@ -181,8 +181,18 @@ const { id, label, cloud } = Astro.props;
     align-content: end;
     padding: var(--sp-5) var(--sp-4) var(--sp-4);
     background-color: var(--bg-inverted);
-    background-image: var(--scrim-card);
     color: var(--text-on-dark);
+  }
+
+  /* Eigene Ebene zwischen Wolke (−2) und Schrift — siehe die ausführliche
+     Begründung in PageHeader.astro: Als background-image am Kopf selbst lag
+     der Verlauf UNTER der Wolke und schützte die Schrift nicht. */
+  .head::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--scrim-card);
   }
 
   /* Wandert langsam wie auf der Kachel (siehe MinistryCard.astro) —
@@ -191,7 +201,7 @@ const { id, label, cloud } = Astro.props;
   .cloud {
     position: absolute;
     inset: -26%;
-    z-index: -1;
+    z-index: -2;
     background-image: var(--cloud);
   }
 

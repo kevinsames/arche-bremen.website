@@ -1206,7 +1206,7 @@ kosmetischen Randfall):
 - **Überschrift ist sichtbar, nicht nur für Screenreader.** `satteri()`
   erzeugt `<h2 class="sr-only">Bibelstellen</h2>`. „sr-only" ist im Projekt
   nicht definiert (unser Pendant heißt `.visually-hidden`, siehe Abschnitt
-  „Logo"), die Überschrift bleibt deshalb sichtbar. Das passt hier sogar
+  „Verlorene Utility" unten), die Überschrift bleibt deshalb sichtbar. Das passt hier sogar
   gut — „Bibelstellen" als kleine Überschrift über der Liste ist ohnehin
   sinnvoll. Wer projektweit `.sr-only` einführt, macht sie unsichtbar; dann
   bräuchte `.prose .footnotes h2` eine eigene, wieder sichtbare Regel.
@@ -1287,6 +1287,61 @@ auf Inhaltsbreite begrenzen würde — hier soll es Kante zu Kante laufen.
 Dieses Band wird ersetzt, sobald echte Fotos aus der Bremer Gemeinde
 existieren; CLAUDE.md Regel 9 bleibt davon unberührt, sie gilt weiterhin für
 Personen-/Gemeindeaufnahmen.
+
+## Verlorene Utility
+
+**18. September 2026.** Beim Umbau der Typografie am 17. September ist
+`.visually-hidden` aus `global.css` verschwunden. Nicht durch eine
+Entscheidung, sondern durch einen Fehler beim Ersetzen eines CSS-Blocks:
+Der Ersatztext wurde an die Stelle des alten Blocks geschrieben, ohne den
+Rest der Datei wieder anzuhängen — die Regel stand am Dateiende und fiel
+mit ab.
+
+Folge: Auf `/predigten` standen 13 nackte Radio-Knöpfe (13 × 13 px,
+`position: static`) links vor den Filter-Pills. Das verletzt CLAUDE.md
+direkt, denn dort ist für die Predigtenseite festgehalten, dass Bibelbuch,
+Prediger und Predigtreihe „versteckt gestylt in je einem `<label>`" liegen.
+Die Regel ist wortgleich wiederhergestellt.
+
+Zwei Dinge daraus, die über den Einzelfall hinausgehen:
+
+- **Reine CSS-Utilities haben keinen Compiler, der ihr Fehlen meldet.** Ein
+  gelöschter Astro-Import bricht den Build; eine gelöschte Klasse rendert
+  weiter, nur falsch. Wer `global.css` ändert, prüft die Aufrufer selbst:
+  `grep -rn 'visually-hidden' src/`
+- **Die Regel steht jetzt mit einem Kommentar da, der ihre Aufrufer nennt.**
+  Das ist Absicht und keine Redundanz: Die nächste Person, die am Dateiende
+  aufräumt, soll sehen, was daran hängt, bevor sie es anfasst.
+
+Im selben Durchgang gefunden und behoben, alle aus derselben
+Umbauphase:
+
+- **Das geschlossene Menü-Sheet lag im Tab-Fokus jeder Seite.**
+  `.sheet` stand auf `display: grid`, ohne `:not(:popover-open)`-Ausnahme.
+  Gemessen: neun Tab-Stopps ins Nichts, bevor der erste sichtbare Link kam.
+- **Der Verdunkler über den Wolken lag falsch in der Stapelung.** In
+  `Overlay.astro` und `PageHeader.astro` lief die Abdunklung als
+  `background-image` auf demselben Element wie die Wolke und konnte sie
+  deshalb nicht überlagern. Jetzt eine eigene `::after`-Ebene auf
+  `z-index: -1`, die Wolke auf `-2`. Negative `z-index`-Kinder malen über
+  den Hintergrund des Elternelements, aber unter dessen Inhalt — genau die
+  gewünschte Reihenfolge, ohne den Text in einen eigenen Kontext zu heben.
+- **Die Pfeil-Knöpfe der Kachel-Reihe erschienen auch ohne Überlauf.**
+  `Slider.astro` blendet sie jetzt nur ein, wenn `scrollWidth` die
+  `clientWidth` übersteigt (Toleranz 4 px, Neuprüfung bei `resize`). Auf
+  dem Desktop zeigte die Startseite mit drei Predigten zwei tote Knöpfe.
+- **Sprungziele landeten hinter der klebenden Kopfzeile.** `html` bekommt
+  `scroll-padding-top: var(--header-height)`.
+- **Die Gemeindeleitungsseite gab ihrer Kachel-Reihe kein `label`.**
+  Die Reihe hatte damit keine zugängliche Benennung.
+- **`futura-500.woff2` wurde vorgeladen, aber nirgends benutzt.** Der
+  Preload stand noch aus einer früheren Schriftauswahl im Layout.
+- **`ElderCard.astro` brach ohne Foto.** Jetzt fällt die Kachel auf die
+  Wolkenfläche zurück, wie die übrigen Kachelarten auch.
+- **Das Eyebrow im Hero trug Gelb auf hellem Grund.** Gemessen 3,44 : 1,
+  also unter WCAG AA — die Ausnahme aus CLAUDE.md Regel 3 gilt
+  ausschließlich auf `--bg-inverted`, und der Hero ist ein helles Foto.
+  Jetzt Weiß, gemessen 5,00 : 1.
 
 ## Offene Fragen an Hamburg
 

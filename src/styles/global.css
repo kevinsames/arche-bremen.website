@@ -59,6 +59,13 @@
 html {
   scrollbar-gutter: stable;
 
+  /* Sprungziele (#wer-wir-sind, #mitbauen, Fußnoten im Glaubensbekenntnis)
+     landeten bündig an der Oberkante und damit vollständig hinter der
+     klebenden Kopfzeile — gemessen: Ziel bei top: 0, Kopfzeile 56 px hoch.
+     Der Wert ist derselbe, den Header.astro als min-height setzt; bei
+     Änderungen dort hier nachziehen. */
+  scroll-padding-top: var(--header-height);
+
   /* Sicherheitsnetz für width: 100vw (siehe .bar-bg in SermonFilter.astro):
      Auf Desktop-Browsern mit klassischer Scrollbar ist 100vw ein paar Pixel
      breiter als die sichtbare Breite, weil vw die Scrollbar-Spur mitzählt,
@@ -283,7 +290,7 @@ a:visited {
 /* Bibelstellen als Fußnoten (Glaubensbekenntnis, Markdown-Syntax `[^id]`).
    satteri() erzeugt automatisch <section class="footnotes"> mit einer
    <h2 class="sr-only">; „sr-only" ist im Projekt nicht definiert (unser
-   Pendant heißt .visually-hidden, siehe unten), die Überschrift bleibt
+   Pendant heißt .visually-hidden, siehe am Dateiende), die Überschrift bleibt
    deshalb absichtlich sichtbar — siehe DESIGN.md, Abschnitt „Fußnoten". */
 .prose .footnotes {
   margin-top: var(--sp-6);
@@ -526,4 +533,29 @@ a:visited {
       }
     }
   }
+}
+
+/* Textäquivalent für Inhalte, die visuell anders getragen werden.
+   Genutzt von den Radio-Buttons der Predigt-Filterleiste
+   (SermonFilter.astro): Sichtbar ist dort die Pill, der eigentliche Input
+   bleibt bedienbar, aber unsichtbar — so verlangt es CLAUDE.md für die
+   Predigtenseite („versteckt gestylt in je einem <label>").
+
+   Diese Regel war zwischen dem 17. und 18. September 2026 versehentlich
+   verschwunden (siehe DESIGN.md, „Verlorene Utility"). Folge: 13 nackte
+   Radio-Knöpfe vor den Filter-Pills. Nicht entfernen, ohne die Aufrufer
+   zu prüfen: grep -rn 'visually-hidden' src/
+
+   Die px-Werte hier sind kein Abstand im Sinne des Designsystems, sondern
+   die Zuschnitt-Mechanik selbst. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }

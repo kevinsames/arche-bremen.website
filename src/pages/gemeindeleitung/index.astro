@@ -29,7 +29,7 @@ const elders = (await getCollection('elders')).sort((a, b) => {
       elders.length === 0 ? (
         <p>Noch keine Profile hinterlegt.</p>
       ) : (
-        <Slider>
+        <Slider label="Gemeindeleitung">
           {elders.map((elder, index) => (
             <ElderCard elder={elder} index={index} />
           ))}

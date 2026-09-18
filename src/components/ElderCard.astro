@@ -25,9 +25,13 @@ const overlayId = `elder-${elder.id}`;
 const permalink = `/gemeindeleitung/${elder.id}`;
 ---
 
-<div class="card-wrap" style={`--reveal-offset: ${(index % 3) * 4}%`} data-reveal>
+<div
+  class="card-wrap"
+  style={`--cloud: var(--cloud-${(index % 4) + 1}); --reveal-offset: ${(index % 3) * 4}%`}
+  data-reveal
+>
   <a href={permalink} class="card">
-    <span class="frame">
+    <span class:list={['frame', !elder.data.photo && 'frame--cloud']}>
       {elder.data.photo && (
         // alt="": Der Name steht als Text unmittelbar darunter, ein
         // Alt-Text wäre für Screenreader nur eine Dopplung.
@@ -94,6 +98,16 @@ const permalink = `/gemeindeleitung/${elder.id}`;
     background-color: var(--bg-muted);
     box-shadow: var(--shadow-card);
     transition: box-shadow var(--duration-slow) var(--ease-out);
+  }
+
+  /* `photo` ist im Schema optional. Ohne Foto blieb hier eine leere graue
+     Fläche im Seitenverhältnis 4:5 stehen — schlechter als gar keine
+     Kachel. Stattdessen die Farbwolke der übrigen Kacheltypen: kein
+     Platzhalterfoto, keine Silhouette (CLAUDE.md Design-Regel 9), sondern
+     dieselbe abstrakte Fläche, die Gemeindeleben und Predigten tragen. */
+  .frame--cloud {
+    background-color: var(--bg-inverted);
+    background-image: var(--cloud);
   }
 
   .photo {
