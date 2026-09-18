@@ -17,7 +17,7 @@ Möglichkeit, es zu übertreten, wobei sie der Freiheit ihres eigenen Willens
 überlassen waren[^4-7].
 
 [^4-1]: Römer 1,20
-[^4-2]: 1\. Mose 1,1-2; Johannes 1,2-3; Hebräer 1,2
+[^4-2]: 1\. Mose 1,1–2; Johannes 1,2–3; Hebräer 1,2
 [^4-3]: Kolosser 1,16
 [^4-4]: 1\. Mose 1,31
 [^4-5]: 1\. Mose 1,27

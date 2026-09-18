@@ -23,13 +23,13 @@ durch Jesus Christus, der den Glauben in uns beginnt und auch vollendet[^13-15].
 [^13-3]: Hebräer 11,6
 [^13-4]: Markus 16,16
 [^13-5]: Apostelgeschichte 17,30; Markus 16,15; Matthäus 28,19
-[^13-6]: Jakobus 2,17; Johannes 2,23-24; 2\. Thessalonicher 3,2
+[^13-6]: Jakobus 2,17; Johannes 2,23–24; 2\. Thessalonicher 3,2
 [^13-7]: Epheser 2,8; Johannes 6,29; Hebräer 12,2
 [^13-8]: 1\. Petrus 1,23
-[^13-9]: 1\. Johannes 5,1; Johannes 1,12-13
+[^13-9]: 1\. Johannes 5,1; Johannes 1,12–13
 [^13-10]: Epheser 1,18; 2\. Korinther 4,6; Hebräer 11,1
 [^13-11]: Johannes 3,36; Johannes 6,40
 [^13-12]: Johannes 6,29
 [^13-13]: 2\. Thessalonicher 1,3
-[^13-14]: 1\. Johannes 5,4-5; Epheser 6,16
+[^13-14]: 1\. Johannes 5,4–5; Epheser 6,16
 [^13-15]: Hebräer 12,2

@@ -20,12 +20,12 @@ wir uns selber prüfen, ob wir nur äußerlich essen und trinken oder ob wir
 Christus auch von ganzem Herzen durch den Glauben in uns aufnehmen[^20-10].
 
 [^20-1]: Markus 14,24
-[^20-2]: 1\. Korinther 11,23-24
-[^20-3]: 1\. Korinther 11,25-26
-[^20-4]: 1\. Korinther 11,24-25
+[^20-2]: 1\. Korinther 11,23–24
+[^20-3]: 1\. Korinther 11,25–26
+[^20-4]: 1\. Korinther 11,24–25
 [^20-5]: 1\. Korinther 11,26
 [^20-6]: Matthäus 26,28
-[^20-7]: Johannes 6,53-56; Matthäus 26,26-28
+[^20-7]: Johannes 6,53–56; Matthäus 26,26–28
 [^20-8]: 1\. Korinther 10,16
 [^20-9]: 1\. Korinther 10,17; 12,12+27
-[^20-10]: 1\. Korinther 11,27-29
+[^20-10]: 1\. Korinther 11,27–29

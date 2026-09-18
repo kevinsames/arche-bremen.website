@@ -27,7 +27,7 @@ auf das Leben angewendet werden, damit sie weise werden zur Rettung durch den
 Glauben, der in Jesus Christus ist[^1-5].
 
 [^1-1]: Psalm 19,2
-[^1-2]: Römer 1,19-20
+[^1-2]: Römer 1,19–20
 [^1-3]: Römer 1,20+32; 2,1
 [^1-4]: 2\. Timotheus 3,16
 [^1-5]: 2\. Timotheus 3,15

@@ -35,16 +35,16 @@ Geistes jederzeit bereit sind[^25-16], Christus zu begegnen.
 [^25-1]: Matthäus 16,27; 24,30; Apostelgeschichte 1,11; Hebräer 9,28; Offenbarung 1,7
 [^25-2]: Matthäus 24,3; 16,27
 [^25-3]: 1\. Thessalonicher 4,17
-[^25-4]: 1\. Thessalonicher 4,16-17
-[^25-5]: Offenbarung 19,7-8; 21,9; Matthäus 22,2
+[^25-4]: 1\. Thessalonicher 4,16–17
+[^25-5]: Offenbarung 19,7–8; 21,9; Matthäus 22,2
 [^25-6]: Epheser 5,23
-[^25-7]: Matthäus 24,36+44; 1\. Thessalonicher 5,2-3
-[^25-8]: Matthäus 24,3+32-33
+[^25-7]: Matthäus 24,36+44; 1\. Thessalonicher 5,2–3
+[^25-8]: Matthäus 24,3+32–33
 [^25-9]: Matthäus 24,14
-[^25-10]: Römer 11,25-26
-[^25-11]: Matthäus 24,10+12; 2\. Timotheus 3,1-5; 2\. Thessalonicher 2,1-12; 2\. Petrus 3,3
-[^25-12]: Matthäus 24,9-10
-[^25-13]: Matthäus 24,4+11+23-25; 1\. Timotheus 4,1
-[^25-14]: Matthäus 24,6-7
+[^25-10]: Römer 11,25–26
+[^25-11]: Matthäus 24,10+12; 2\. Timotheus 3,1–5; 2\. Thessalonicher 2,1–12; 2\. Petrus 3,3
+[^25-12]: Matthäus 24,9–10
+[^25-13]: Matthäus 24,4+11+23–25; 1\. Timotheus 4,1
+[^25-14]: Matthäus 24,6–7
 [^25-15]: Matthäus 24,7; Lukas 21,11
 [^25-16]: Matthäus 24,44; 25,10
