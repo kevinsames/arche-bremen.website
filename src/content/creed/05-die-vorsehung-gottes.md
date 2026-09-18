@@ -20,9 +20,9 @@ es keinen Grund gibt, gegen Menschen, Umstände oder gar gegen Gott zu
 hadern[^5-7].
 
 [^5-1]: Kolosser 1,17; Psalm 135,6; Sprüche 16,9; Psalm 103,19; Apostelgeschichte 17,28; 1\. Timotheus 6,15
-[^5-2]: Matthäus 6,26-30; 10,29-31
+[^5-2]: Matthäus 6,26–30; 10,29–31
 [^5-3]: Jesaja 45,9; Sprüche 16,33; Amos 3,6; Jesaja 45,7
-[^5-4]: Psalm 31,15-16; Hiob 14,5; Psalm 39,4-5
+[^5-4]: Psalm 31,15–16; Hiob 14,5; Psalm 39,4–5
 [^5-5]: 1\. Mose 45,8; Johannes 19,11; Sprüche 16,4
 [^5-6]: Römer 8,28; Epheser 5,20
-[^5-7]: Klagelieder 3,34-39
+[^5-7]: Klagelieder 3,34–39

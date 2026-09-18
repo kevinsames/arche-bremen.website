@@ -18,8 +18,8 @@ das Evangelium zu glauben[^8-5]. Deshalb ist die Gemeinde Jesu auch
 aufgefordert, allen Menschen ohne Ausnahme das Evangelium zu verkündigen[^8-6].
 
 [^8-1]: 5\. Mose 30,15; Matthäus 23,37; 25,1ff; Römer 2,5; Galater 6,7
-[^8-2]: Römer 2,1; Jakobus 1,13-15
-[^8-3]: Amos 5,4; Jeremia 29,13-14; Apostelgeschichte 17,27
+[^8-2]: Römer 2,1; Jakobus 1,13–15
+[^8-3]: Amos 5,4; Jeremia 29,13–14; Apostelgeschichte 17,27
 [^8-4]: Hebräer 3,15
 [^8-5]: Markus 1,15; Apostelgeschichte 2,40; 14,15; 16,31; 2\. Korinther 5,20
-[^8-6]: Matthäus 28,18-20; Markus 16,15-18
+[^8-6]: Matthäus 28,18–20; Markus 16,15–18

@@ -30,10 +30,10 @@ Menschen so ungetrübt sein, dass er allein und ausschließlich das göttliche
 Gute will und es auch tut[^11-9].
 
 [^11-1]: Prediger 7,29; 1\. Mose 1,26
-[^11-2]: 1\. Mose 2,16-17; 3,6
+[^11-2]: 1\. Mose 2,16–17; 3,6
 [^11-3]: Matthäus 17,12; Jakobus 1,14; 5\. Mose 30,19
 [^11-4]: Epheser 2,1+5; Römer 8,7
-[^11-5]: Johannes 6,44+65; 1\. Korinther 2,14; Titus 3,3-5
+[^11-5]: Johannes 6,44+65; 1\. Korinther 2,14; Titus 3,3–5
 [^11-6]: Kolosser 1,13; Johannes 8,34+36
 [^11-7]: Philipper 2,13; Römer 6,18+22
 [^11-8]: Römer 7,15+18+19+21+23

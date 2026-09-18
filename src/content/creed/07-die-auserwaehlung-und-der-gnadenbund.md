@@ -18,10 +18,10 @@ das diejenigen freudig im geforderten Glauben[^7-6] ergreifen, die dazu
 bestimmt sind und deshalb durch den Heiligen Geist zum Glauben willig und
 fähig gemacht werden[^7-7].
 
-[^7-1]: Psalm 113,4-6; 5\. Mose 32,4+39; 2\. Samuel 10,12; Jesaja 46,9; Psalm 50,21; 97,9
-[^7-2]: 1\. Chronik 29,14; Hiob 22,2-3; Lukas 17,10; Römer 11,35
-[^7-3]: Hebräer 8,10-13; 10,15-17; Epheser 2,12-13; Hebräer 9,15
-[^7-4]: Römer 16,25-27; Epheser 3,5
-[^7-5]: Johannes 17,9+24; Epheser 1,3-11; 2\. Timotheus 1,9
+[^7-1]: Psalm 113,4–6; 5\. Mose 32,4+39; 2\. Samuel 10,12; Jesaja 46,9; Psalm 50,21; 97,9
+[^7-2]: 1\. Chronik 29,14; Hiob 22,2–3; Lukas 17,10; Römer 11,35
+[^7-3]: Hebräer 8,10–13; 10,15–17; Epheser 2,12–13; Hebräer 9,15
+[^7-4]: Römer 16,25–27; Epheser 3,5
+[^7-5]: Johannes 17,9+24; Epheser 1,3–11; 2\. Timotheus 1,9
 [^7-6]: Johannes 3,16; Römer 10,9; Galater 3,11
-[^7-7]: Hesekiel 36,26-27; Johannes 6,44+65
+[^7-7]: Hesekiel 36,26–27; Johannes 6,44+65

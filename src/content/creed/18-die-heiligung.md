@@ -29,15 +29,15 @@ vorsichtiger wandeln[^18-12], sodass die Gemeinschaft mit dem Herrn immer
 inniger wird[^18-13].
 
 [^18-1]: 1\. Korinther 6,11
-[^18-2]: Römer 6,5-6; 2\. Korinther 3,18; Galater 4,19; Philipper 3,10
-[^18-3]: 2\. Korinther 5,17; Römer 8,9-10; Kolosser 1,27
-[^18-4]: Galater 5,17; 1\. Petrus 2,11; Römer 7,14-23
+[^18-2]: Römer 6,5–6; 2\. Korinther 3,18; Galater 4,19; Philipper 3,10
+[^18-3]: 2\. Korinther 5,17; Römer 8,9–10; Kolosser 1,27
+[^18-4]: Galater 5,17; 1\. Petrus 2,11; Römer 7,14–23
 [^18-5]: Römer 6,14; Galater 5,24
-[^18-6]: Kolosser 1,11; Epheser 3,16-19
+[^18-6]: Kolosser 1,11; Epheser 3,16–19
 [^18-7]: 1\. Johannes 5,4; 2\. Korinther 3,18; 7,1
 [^18-8]: Johannes 17,17; Epheser 5,26; 2\. Thessalonicher 2,13
 [^18-9]: 1\. Thessalonicher 5,23; 1\. Korinther 1,8
-[^18-10]: 1\. Petrus 1,15-16; 3,15; Philipper 4,8; Epheser 2,10; Kolosser 3,12
-[^18-11]: Matthäus 6,12; 1\. Johannes 1,7+9; 2,1-2
+[^18-10]: 1\. Petrus 1,15–16; 3,15; Philipper 4,8; Epheser 2,10; Kolosser 3,12
+[^18-11]: Matthäus 6,12; 1\. Johannes 1,7+9; 2,1–2
 [^18-12]: 1\. Petrus 5,8; 1\. Thessalonicher 5,6
-[^18-13]: Johannes 17,20+22-24+26
+[^18-13]: Johannes 17,20+22–24+26

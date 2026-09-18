@@ -28,10 +28,10 @@ Gewissen[^19-9] haben und sein Heil ungetrübt genießen kann.
 
 [^19-1]: Matthäus 28,19
 [^19-2]: Apostelgeschichte 2,41; Galater 3,27
-[^19-3]: Römer 6,3-6
+[^19-3]: Römer 6,3–6
 [^19-4]: Apostelgeschichte 2,38; 22,16
 [^19-5]: Markus 16,16
 [^19-6]: Apostelgeschichte 8,37
-[^19-7]: Apostelgeschichte 8,35-38; 16,32-33
+[^19-7]: Apostelgeschichte 8,35–38; 16,32–33
 [^19-8]: Apostelgeschichte 2,41; 8,12; 9,18
 [^19-9]: 1\. Petrus 3,21
