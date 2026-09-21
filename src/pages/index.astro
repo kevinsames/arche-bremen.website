@@ -171,6 +171,13 @@ const jsonLd = {
           seine gute Nachricht allen Menschen weiterzugeben. Was wir im Einzelnen
           glauben, erfährst du in unserem <a href="/glaubensbekenntnis">Glaubensbekenntnis</a>.
         </p>
+        <figure class="verse">
+          <blockquote>
+            Denn einen anderen Grund kann niemand legen außer dem, der gelegt
+            ist, welcher ist Jesus Christus.
+          </blockquote>
+          <figcaption>1. Korinther 3,11 · Schlachter 2000</figcaption>
+        </figure>
       </div>
     </div>
   </Section>
@@ -654,8 +661,38 @@ const jsonLd = {
     max-width: var(--measure);
   }
 
-  .split-body p:last-child {
+  .split-body > :last-child {
     margin-bottom: 0;
+  }
+
+  /* Bibelvers als Abschluss des Fließtexts rechts, das Fundament, auf das
+     die Überschrift „Auf festem Grund gebaut." anspielt. Bleibt in
+     Body-Größe (erbt --fs-s) statt einer eigenen Schaugröße — er steht
+     neben Fließtext, nicht daneben in Konkurrenz zur h2. Gelb trägt hier
+     nur die Randlinie, also Fläche; die Quellenzeile nutzt
+     --text-accent-on-dark, die für --bg-inverted benannte Ausnahme
+     (8,38 : 1). Siehe DESIGN.md, „Bibelvers auf dunklem Grund". */
+  .verse {
+    margin: var(--sp-5) 0 0;
+    padding-left: var(--sp-3);
+    border-left: 3px solid var(--accent-warm);
+  }
+
+  .verse blockquote {
+    margin: 0;
+    line-height: var(--lh-body);
+    text-wrap: pretty;
+  }
+
+  .verse figcaption {
+    margin-top: var(--sp-2);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-label);
+    line-height: var(--lh-tight);
+    text-transform: uppercase;
+    color: var(--text-accent-on-dark);
   }
 
   .outro {
