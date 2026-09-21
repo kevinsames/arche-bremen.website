@@ -462,6 +462,41 @@ auseinanderlaufen kann.
 Das Client-JS-Budget ist unverändert: 0 KB auf allen Inhaltsseiten, einzige
 Ausnahme weiterhin die Filterleiste unter `/predigten`.
 
+### Bibelvers auf dunklem Grund (September 2026)
+
+Die Überschrift „Auf festem Grund gebaut." (Startseite, Sektion „Wer wir
+sind", `<Section tone="dark">`) spielt auf einen konkreten Vers an. Der steht
+jetzt als Beleg da: 1. Korinther 3,11, als Abschluss des Fließtexts in der
+rechten Spalte, nach dem Absatz mit dem Glaubensbekenntnis-Link.
+
+Das bestehende Zitat-Muster `.prose blockquote` (siehe „Sekundärfarben tragen
+keinen Text" bzw. `global.css`) scheidet aus: Es setzt `color:
+var(--text-secondary)`, Braun, gebaut für hellen Grund. Auf `--bg-inverted`
+wäre das nicht lesbar. Der neue Block `.verse` ist darum eine eigene,
+schmale Deklaration statt einer Wiederverwendung — kein neues Token, nur eine
+neue Zusammenstellung bestehender:
+
+- Randlinie in `--accent-warm`: Gelb trägt hier **Fläche**, nicht Schrift —
+  Regel 3 bleibt unverändert in Kraft.
+- Verstext ohne eigene Größe — er erbt `--fs-s` von `body`, steht also in
+  Fließtextgröße neben dem Absatz darüber und tritt nicht in Konkurrenz zur
+  `h2` (`--fs-xxl`). Unterschieden wird er allein durch Randlinie und
+  Quellenzeile, nicht durch Größe.
+- Quellenzeile („1. Korinther 3,11 · Schlachter 2000") in
+  `--text-accent-on-dark` — dieselbe, oben freigegebene Ausnahme für Gelb auf
+  `--bg-inverted` (8,38 : 1), hier auf ein kleines Versal-Label angewandt statt
+  auf einen Fließtextteil.
+
+Erster Versuch stand links unter der Überschrift, mit eigener Schaugröße
+(`--fs-l`) und Einzug. Verworfen: Ein eingerückter Block unter einer bündig
+linken Schauüberschrift bricht die linke Kante, die die ganze Seite trägt.
+
+Kein `cite`-Attribut am `<blockquote>`: Es gäbe keine URL, auf die es zeigen
+könnte, und Dritt-Requests sind ausgeschlossen (Regel 5). Die Quellenangabe
+steht stattdessen als `<figcaption>` — sie ist hier keine Stilfrage, sondern
+Bedingung des Zitatrechts an der geschützten Übersetzung und darf nicht
+entfallen.
+
 ## Neugestaltung, zweiter Durchgang (September 2026)
 
 Nach der ersten Runde (Abschnitt oben) lag ein zweiter, ausführlicherer
