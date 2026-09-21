@@ -204,7 +204,7 @@ nachträgliches Verschlagworten von 80 Predigten passiert nie.
   Predigtreihe sind Pill-Gruppen aus Radio-Buttons (versteckt gestylt in
   je einem `<label>`), damit der Bestand ohne Aufklappen sichtbar ist. Gilt
   auch für künftige Filterdimensionen.
-- Kontakt über Funktionsadresse (`kontakt@…`), nie personengebunden. WhatsApp
+- Kontakt über Funktionsadresse (`info.bremen@…`), nie personengebunden. WhatsApp
   später als `wa.me`-Link mit separater Nummer, nie einer privaten.
 - Pflichtseiten: Impressum, Datenschutzerklärung.
 

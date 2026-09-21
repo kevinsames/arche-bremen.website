@@ -30,7 +30,7 @@ Evangelisch-reformierte Freikirche
 Doerriesweg 7<br>
 22525 Hamburg
 
-E-Mail: info (at) bremen.arche-gemeinde.de
+E-Mail: info.bremen (at) arche-gemeinde.de
 
 ## Beim Aufruf dieser Seite
 

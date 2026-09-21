@@ -364,8 +364,11 @@ Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
   selben Zeitpunkt: `index.astro`, JSON-LD um ein `Church`-Objekt
   (`address`, `geo`, `openingHoursSpecification`) ergänzen — bis dahin bleibt
   es bei `WebSite`/`Organization` ohne Adresse (siehe Kommentar dort).
-- `CONTACT` ist mit `info@bremen.arche-gemeinde.de` eingerichtet. Die Domain
-  der veröffentlichten Seite ist `site` in `astro.config.mjs`
+- `CONTACT` ist mit `info.bremen@arche-gemeinde.de` eingerichtet — bewusst auf
+  der Hauptdomain, nicht auf `bremen.arche-gemeinde.de`: Die Website-Domain
+  ist nur ein CNAME auf Cloudflare Pages ohne MX-Eintrag, das Postfach liegt
+  im Microsoft-365-Tenant der Muttergemeinde. Die Domain der veröffentlichten
+  Seite ist `site` in `astro.config.mjs`
   (`https://bremen.arche-gemeinde.de`) — dort steht sie einmalig, nicht in
   `consts.ts`. Ändert sich die Domain, muss sie zusätzlich in
   `public/robots.txt` (`Sitemap:`-Zeile) nachgezogen werden — die einzige
@@ -474,9 +477,10 @@ Sanity-CORS-Origin (`sanity.io/manage` → Projekt → API → CORS origins) mus
 `https://bremen.arche-gemeinde.de` enthalten, sonst funktioniert `/studio` in
 Produktion nicht.
 
-Postfach `info@bremen.arche-gemeinde.de` existiert **nicht** — die Subdomain
-hat keinen MX-Eintrag. Bis das geklärt ist, ist die im Footer und auf
-`/kontakt` angezeigte Adresse nicht erreichbar.
+Postfach `info.bremen@arche-gemeinde.de` liegt im Microsoft-365-Tenant der
+Muttergemeinde, auf der Hauptdomain — nicht auf `bremen.arche-gemeinde.de`,
+die als reiner CNAME auf Cloudflare Pages keinen MX-Eintrag hat und auch
+keinen bekommt.
 
 `public/_headers` setzt Cache- und Sicherheits-Header für Cloudflare Pages.
 Nach jedem Deploy prüfen, ob Cloudflare die Datei akzeptiert hat (sie wird
