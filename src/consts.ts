@@ -85,9 +85,15 @@ export const PRAYER_REQUESTS = [
 // local/domain statt als ein String, damit sich HTML-Entities für die
 // @-Ersetzung im Footer sauber anwenden lassen, ohne die Adresse selbst zu
 // zerlegen.
+//
+// Bewusst `info.bremen@arche-gemeinde.de` und nicht `info@bremen.…`: Die
+// Subdomain `bremen.arche-gemeinde.de` ist ein reiner CNAME auf Cloudflare
+// Pages und hat keinen MX-Eintrag. Das Postfach liegt im
+// Microsoft-365-Tenant der Muttergemeinde auf der Hauptdomain. Nicht auf die
+// Subdomain-Form zurückändern.
 export const CONTACT = {
-  local: 'info',
-  domain: 'bremen.arche-gemeinde.de',
+  local: 'info.bremen',
+  domain: 'arche-gemeinde.de',
 };
 
 // Reiner Anzeigetext für die wöchentlichen Fixtermine. Keine

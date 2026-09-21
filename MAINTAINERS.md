@@ -18,5 +18,5 @@ die gehören in den Passwortmanager der Gemeinde.
 | Hosting (Cloudflare Pages) | | | |
 | Sanity (Projekt + Studio-Deploy) | | | |
 | Repo (GitHub) | | | |
-| Postfach `info@bremen.arche-gemeinde.de` | (noch nicht eingerichtet — kein MX auf der Subdomain, siehe README.md „Deployment") | | |
+| Postfach `info.bremen@arche-gemeinde.de` | Liegt im Microsoft-365-Tenant der Muttergemeinde (Hauptdomain, nicht die Subdomain — siehe README.md „Deployment"). Wer dort administriert, hier eintragen, sobald geklärt. | | |
 | Futura-Webfont-Lizenz | Kevin Sames | | Freigabe zur Web-Nutzung am 16.09.2026 erteilt; Quelldateien liegen in einem privaten iCloud-Ordner, nicht im Repo. Bei Rückfragen des Lizenzgebers erster Ansprechpartner. Details in `DESIGN.md`, Abschnitt „Futura für Headlines, Source Serif Pro für Fließtext". |
