@@ -164,8 +164,14 @@ const { title, eyebrow, lead, cloud = 1, back, verse } = Astro.props;
     border-left: 3px solid var(--accent-warm);
   }
 
+  /* Source Serif 600 statt 400: Direkt über dem Vers steht ein Vorspann
+     bzw. Fließtext in derselben Schrift und ähnlicher Größe — ohne eigenen
+     Schnitt las sich der Vers wie der nächste Absatz. Kursiv scheidet aus,
+     der Kursivschnitt ist nicht eingebunden (der Browser würde ihn
+     verzerren). */
   .verse blockquote {
     margin: 0;
+    font-weight: 600;
     font-size: var(--fs-m);
     line-height: var(--lh-body);
     text-wrap: pretty;
