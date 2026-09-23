@@ -33,6 +33,7 @@ const { Content: QuelleContent } = await render(quelle);
 
   <Section tone="light" width="measure">
     <div class="prose">
+      <h2>{vorwort.data.title}</h2>
       <VorwortContent />
     </div>
   </Section>
@@ -69,6 +70,14 @@ const { Content: QuelleContent } = await render(quelle);
     .creed-grid {
       grid-template-columns: repeat(3, 1fr);
     }
+  }
+
+  /* Ohne eigene Überschrift stand das Vorwort als kopfloser Textblock
+     unter dem dunklen Seitenkopf. Die globale .prose-h2-Regel setzt
+     --sp-6 Abstand nach oben — hier steht sie ganz oben im Band, der
+     Abstand kommt schon aus Section.astro. */
+  .prose h2:first-child {
+    margin-top: 0;
   }
 
   .quelle {

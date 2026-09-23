@@ -130,6 +130,22 @@ const railId = `rail-${(label ?? 'x').toLowerCase().replace(/[^a-z0-9]+/g, '-')}
     scrollbar-width: none;
   }
 
+  /* Seitlich reichten --sp-3 nicht für den Schatten: Der Scroll-Container
+     kappt ihn an seiner Kante, an der ersten Kachel sichtbar als harte
+     senkrechte Linie links neben dem Bild (bis September 2026). Auf
+     schmalen Bildschirmen liegt diese Kante am Bildschirmrand und fällt
+     nicht auf. Ab 78rem (--width-content plus 2 × 3rem) ist neben der
+     Inhaltsspalte genug Platz, um die Reihe bis --sp-6 auslaufen zu
+     lassen — Kachelposition und Snap-Punkt bleiben dieselben. Media
+     Queries kennen keine Custom Properties, daher der Zahlenwert. */
+  @media (min-width: 78rem) {
+    .rail {
+      margin-inline: calc(var(--sp-6) * -1);
+      padding-inline: var(--sp-6);
+      scroll-padding-inline: var(--sp-6);
+    }
+  }
+
   .rail::-webkit-scrollbar {
     display: none;
   }
