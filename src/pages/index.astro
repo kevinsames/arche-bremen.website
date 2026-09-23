@@ -682,14 +682,18 @@ const jsonLd = {
 
   .verse blockquote {
     margin: 0;
+    font-size: var(--fs-m);
     line-height: var(--lh-body);
     text-wrap: pretty;
   }
 
+  /* Futura 500 statt 700: Kleiner als --fs-xs gibt die Skala nichts her,
+     die Versangabe wird deshalb über den Schnitt zurückgenommen, damit sie
+     neben dem Vers nicht zu stark ins Auge sticht (September 2026). */
   .verse figcaption {
     margin-top: var(--sp-2);
     font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: 500;
     font-size: var(--fs-xs);
     letter-spacing: var(--tracking-label);
     line-height: var(--lh-tight);
