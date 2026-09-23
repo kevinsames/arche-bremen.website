@@ -19,6 +19,8 @@ const preacherProfiles = await getCollection('elders');
   title="Predigten"
   description="Alle Predigten der Arche Bremen in chronologischer Liste — mit Bibelstelle, Datum, Prediger und, wo vorhanden, Audioaufnahme."
 >
+  {/* Vers zitiert nach Elberfelder Bibel (2006); die Quellenzeile nennt
+      bewusst nur „Die Bibel" (DESIGN.md, „Bibelvers auf dunklem Grund"). */}
   <PageHeader
     eyebrow="Worte, die prägen"
     title="Predigten"
@@ -26,7 +28,6 @@ const preacherProfiles = await getCollection('elders');
     verse={{
       text: 'Das Wort des Christus wohne reichlich in euch; in aller Weisheit lehrt und ermahnt euch gegenseitig! Mit Psalmen, Lobliedern und geistlichen Liedern singt Gott in euren Herzen in Gnade!',
       reference: 'Kolosser 3,16',
-      translation: 'Elberfelder Bibel',
     }}
   />
 
