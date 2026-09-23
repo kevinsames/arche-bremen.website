@@ -482,10 +482,8 @@ neue Zusammenstellung bestehender:
   Fließtextgröße neben dem Absatz darüber und tritt nicht in Konkurrenz zur
   `h2` (`--fs-xxl`). Unterschieden wird er allein durch Randlinie und
   Quellenzeile, nicht durch Größe.
-- Quellenzeile („Die Bibel · 1. Korinther 3,11", seit 23. September 2026;
-  darunter klein und ohne Versalien die Übersetzung, „Schlachter 2000" —
-  die Verlage verlangen bei Zitaten deren Namen, deshalb nicht ganz
-  gestrichen) in
+- Quellenzeile („Die Bibel · 1. Korinther 3,11", seit 23. September 2026
+  ohne Übersetzungsnamen, siehe unten) in
   `--text-accent-on-dark` — dieselbe, oben freigegebene Ausnahme für Gelb auf
   `--bg-inverted` (8,38 : 1), hier auf ein kleines Versal-Label angewandt statt
   auf einen Fließtextteil.
@@ -496,16 +494,22 @@ linken Schauüberschrift bricht die linke Kante, die die ganze Seite trägt.
 
 Kein `cite`-Attribut am `<blockquote>`: Es gäbe keine URL, auf die es zeigen
 könnte, und Dritt-Requests sind ausgeschlossen (Regel 5). Die Quellenangabe
-steht stattdessen als `<figcaption>` — sie ist hier keine Stilfrage, sondern
-Bedingung des Zitatrechts an der geschützten Übersetzung und darf nicht
-entfallen.
+steht stattdessen als `<figcaption>`.
+
+**Übersetzungsname entfernt (23. September 2026), bewusste Entscheidung
+des Betreibers.** Bis dahin stand „Schlachter 2000" in der Quellenzeile,
+mit der Begründung, der Name sei Bedingung des Zitatrechts an der
+geschützten Übersetzung. Jetzt heißt es überall nur „Die Bibel · <Stelle>".
+Offen und nicht geprüft: ob die Nutzungsbedingungen der Genfer
+Bibelgesellschaft (Schlachter 2000) und von SCM R. Brockhaus (Elberfelder)
+das zulassen. Wer das klärt und einen Quellenhinweis braucht: Welche
+Übersetzung zitiert wird, steht als Kommentar an jedem Vers im Code.
 
 Seit 23. September 2026 steht dasselbe Muster auch im Seitenkopf
 (`PageHeader.astro`, Prop `verse`) auf drei Unterseiten, jeweils
 Elberfelder Bibel: Gemeindeleben (1. Thessalonicher 2,8), Predigten
 (Kolosser 3,16), Glaubensbekenntnis (Philipper 2,16). Die CSS-Regeln sind
-bewusst in beiden Dateien dupliziert. `translation` ist dort Pflichtfeld,
-damit der Übersetzungsname nicht versehentlich wegfällt.
+bewusst in beiden Dateien dupliziert.
 
 ## Neugestaltung, zweiter Durchgang (September 2026)
 

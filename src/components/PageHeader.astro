@@ -21,9 +21,10 @@ interface Props {
   cloud?: number;
   // Rücksprung, z.B. von einer Detailseite zur Übersicht.
   back?: { href: string; label: string };
-  // Bibelvers unter dem Einleitungssatz. translation bleibt Pflicht: Die
-  // Verlage verlangen bei Zitaten den Namen der Übersetzung.
-  verse?: { text: string; reference: string; translation: string };
+  // Bibelvers unter dem Einleitungssatz. Die Quellenzeile nennt bewusst
+  // keine Übersetzung, nur „Die Bibel" (siehe DESIGN.md, „Bibelvers auf
+  // dunklem Grund"). Welche zitiert wird, steht als Kommentar am Aufruf.
+  verse?: { text: string; reference: string };
 }
 
 const { title, eyebrow, lead, cloud = 1, back, verse } = Astro.props;
@@ -46,10 +47,7 @@ const { title, eyebrow, lead, cloud = 1, back, verse } = Astro.props;
       verse && (
         <figure class="verse">
           <blockquote>{verse.text}</blockquote>
-          <figcaption>
-            Die Bibel · {verse.reference}
-            <span class="translation">{verse.translation}</span>
-          </figcaption>
+          <figcaption>Die Bibel · {verse.reference}</figcaption>
         </figure>
       )
     }
@@ -181,16 +179,5 @@ const { title, eyebrow, lead, cloud = 1, back, verse } = Astro.props;
     line-height: var(--lh-tight);
     text-transform: uppercase;
     color: var(--text-accent-on-dark);
-  }
-
-  /* Übersetzung zurückgenommen, aber vorhanden (Quellenhinweis). */
-  .translation {
-    display: block;
-    margin-top: var(--sp-1);
-    font-family: var(--font-body);
-    font-weight: 400;
-    letter-spacing: normal;
-    text-transform: none;
-    color: color-mix(in srgb, var(--text-on-dark) 82%, transparent);
   }
 </style>

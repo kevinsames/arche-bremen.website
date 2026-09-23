@@ -24,6 +24,8 @@ const { Content: QuelleContent } = await render(quelle);
   title="Glaubensbekenntnis"
   description="Wofür wir als evangelisch-reformierte Freikirche stehen: das Glaubensbekenntnis der Arche in 25 Artikeln, mit Vorwort und Bibelstellen."
 >
+  {/* Vers zitiert nach Elberfelder Bibel (2006); die Quellenzeile nennt
+      bewusst nur „Die Bibel" (DESIGN.md, „Bibelvers auf dunklem Grund"). */}
   <PageHeader
     eyebrow="Was wir glauben"
     title="Glaubensbekenntnis"
@@ -32,7 +34,6 @@ const { Content: QuelleContent } = await render(quelle);
     verse={{
       text: '… indem ihr das Wort des Lebens festhaltet',
       reference: 'Philipper 2,16',
-      translation: 'Elberfelder Bibel',
     }}
   />
 
