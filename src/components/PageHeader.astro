@@ -21,9 +21,12 @@ interface Props {
   cloud?: number;
   // Rücksprung, z.B. von einer Detailseite zur Übersicht.
   back?: { href: string; label: string };
+  // Bibelvers unter dem Einleitungssatz. translation bleibt Pflicht: Die
+  // Verlage verlangen bei Zitaten den Namen der Übersetzung.
+  verse?: { text: string; reference: string; translation: string };
 }
 
-const { title, eyebrow, lead, cloud = 1, back } = Astro.props;
+const { title, eyebrow, lead, cloud = 1, back, verse } = Astro.props;
 ---
 
 <header class="page-head" style={`--cloud: var(--cloud-${((cloud - 1) % 4) + 1})`}>
@@ -39,6 +42,17 @@ const { title, eyebrow, lead, cloud = 1, back } = Astro.props;
     {eyebrow && <p class="eyebrow">{eyebrow}</p>}
     <h1>{title}</h1>
     {lead && <p class="lead">{lead}</p>}
+    {
+      verse && (
+        <figure class="verse">
+          <blockquote>{verse.text}</blockquote>
+          <figcaption>
+            Die Bibel · {verse.reference}
+            <span class="translation">{verse.translation}</span>
+          </figcaption>
+        </figure>
+      )
+    }
   </div>
 </header>
 
@@ -138,6 +152,45 @@ const { title, eyebrow, lead, cloud = 1, back } = Astro.props;
      Grund unlesbar. Hier eine leicht gedämpfte Variante von Weiß. */
   .lead {
     margin: var(--sp-4) 0 0;
+    color: color-mix(in srgb, var(--text-on-dark) 82%, transparent);
+  }
+
+  /* Dasselbe Muster wie der Vers auf der Startseite (index.astro, siehe
+     DESIGN.md „Bibelvers auf dunklem Grund"): gelbe Randlinie als Fläche,
+     Quellenzeile in --text-accent-on-dark. Bewusst dupliziert statt als
+     eigene Komponente — es sind zwei Stellen. */
+  .verse {
+    max-width: var(--measure);
+    margin: var(--sp-5) 0 0;
+    padding-left: var(--sp-3);
+    border-left: 3px solid var(--accent-warm);
+  }
+
+  .verse blockquote {
+    margin: 0;
+    line-height: var(--lh-body);
+    text-wrap: pretty;
+  }
+
+  .verse figcaption {
+    margin-top: var(--sp-2);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-label);
+    line-height: var(--lh-tight);
+    text-transform: uppercase;
+    color: var(--text-accent-on-dark);
+  }
+
+  /* Übersetzung zurückgenommen, aber vorhanden (Quellenhinweis). */
+  .translation {
+    display: block;
+    margin-top: var(--sp-1);
+    font-family: var(--font-body);
+    font-weight: 400;
+    letter-spacing: normal;
+    text-transform: none;
     color: color-mix(in srgb, var(--text-on-dark) 82%, transparent);
   }
 </style>
