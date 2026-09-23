@@ -478,10 +478,12 @@ neue Zusammenstellung bestehender:
 
 - Randlinie in `--accent-warm`: Gelb trägt hier **Fläche**, nicht Schrift —
   Regel 3 bleibt unverändert in Kraft.
-- Verstext ohne eigene Größe — er erbt `--fs-s` von `body`, steht also in
-  Fließtextgröße neben dem Absatz darüber und tritt nicht in Konkurrenz zur
-  `h2` (`--fs-xxl`). Unterschieden wird er allein durch Randlinie und
-  Quellenzeile, nicht durch Größe.
+- Verstext in `--fs-m`, eine Stufe über dem Fließtext (bis 23. September
+  2026 erbte er `--fs-s`). Mit Fließtextgröße stand die gelbe Versangabe
+  optisch stärker da als der Vers selbst. `--fs-m` bleibt unter dem
+  Vorspann im Seitenkopf (`--fs-l`) und weit unter der `h2` (`--fs-xxl`).
+- Versangabe in Futura 500 statt 700 — kleiner als `--fs-xs` geht die Skala
+  nicht, also über den Schnitt zurückgenommen.
 - Quellenzeile („Die Bibel · 1. Korinther 3,11", seit 23. September 2026
   ohne Übersetzungsnamen, siehe unten) in
   `--text-accent-on-dark` — dieselbe, oben freigegebene Ausnahme für Gelb auf
