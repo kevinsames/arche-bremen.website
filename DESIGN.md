@@ -482,6 +482,8 @@ neue Zusammenstellung bestehender:
   2026 erbte er `--fs-s`). Mit Fließtextgröße stand die gelbe Versangabe
   optisch stärker da als der Vers selbst. `--fs-m` bleibt unter dem
   Vorspann im Seitenkopf (`--fs-l`) und weit unter der `h2` (`--fs-xxl`).
+  Ausnahme Startseite: dort `--fs-l`, weil der Vers direkt unter Fließtext
+  steht und sich mit `--fs-m` zu wenig davon abhob.
 - Versangabe in Futura 500 statt 700 — kleiner als `--fs-xs` geht die Skala
   nicht, also über den Schnitt zurückgenommen.
 - Quellenzeile („Die Bibel · 1. Korinther 3,11", seit 23. September 2026

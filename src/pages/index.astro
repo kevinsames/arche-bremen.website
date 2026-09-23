@@ -680,9 +680,12 @@ const jsonLd = {
     border-left: 3px solid var(--accent-warm);
   }
 
+  /* Eine Stufe größer als im Seitenkopf der Unterseiten (--fs-m): Hier
+     steht der Vers nicht unter einem Vorspann, sondern direkt unter
+     Fließtext (--fs-s) und hob sich mit --fs-m zu wenig davon ab. */
   .verse blockquote {
     margin: 0;
-    font-size: var(--fs-m);
+    font-size: var(--fs-l);
     line-height: var(--lh-body);
     text-wrap: pretty;
   }
