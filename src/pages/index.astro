@@ -176,10 +176,9 @@ const jsonLd = {
             Denn einen anderen Grund kann niemand legen außer dem, der gelegt
             ist, welcher ist Jesus Christus.
           </blockquote>
-          <figcaption>
-            Die Bibel · 1. Korinther 3,11
-            <span class="translation">Schlachter 2000</span>
-          </figcaption>
+          {/* Zitiert nach Schlachter 2000; die Quellenzeile nennt bewusst
+              nur „Die Bibel" (DESIGN.md, „Bibelvers auf dunklem Grund"). */}
+          <figcaption>Die Bibel · 1. Korinther 3,11</figcaption>
         </figure>
       </div>
     </div>
@@ -696,18 +695,6 @@ const jsonLd = {
     line-height: var(--lh-tight);
     text-transform: uppercase;
     color: var(--text-accent-on-dark);
-  }
-
-  /* Übersetzung zurückgenommen, aber vorhanden: Die Verlage verlangen bei
-     Zitaten den Namen der Übersetzung. Gleiche Regel in PageHeader.astro. */
-  .verse .translation {
-    display: block;
-    margin-top: var(--sp-1);
-    font-family: var(--font-body);
-    font-weight: 400;
-    letter-spacing: normal;
-    text-transform: none;
-    color: color-mix(in srgb, var(--text-on-dark) 82%, transparent);
   }
 
   .outro {
