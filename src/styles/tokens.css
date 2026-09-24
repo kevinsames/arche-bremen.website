@@ -149,7 +149,8 @@
 
   /* Schaugrößen. Im Brandbook nicht vorhanden, für Web definiert — siehe
      DESIGN.md. --fs-display trägt die Überschrift des abschließenden
-     Kontaktbands und, erst ab 48rem, den Anspruch im Hero; --fs-numeral die
+     Kontaktbands, dieselbe Zeile als Kopf von /kontakt (PageHeader,
+     titleAccent) und den Anspruch im Hero; --fs-numeral die
      Datumszahlen der Meilenstein-Fläche (rein typografisches Schaubild,
      kein Fließtext).
 
