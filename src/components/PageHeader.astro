@@ -160,9 +160,13 @@ const { title, titleAccent, eyebrow, lead, cloud = 1, back, verse } = Astro.prop
     margin: 0;
   }
 
-  /* Siehe titleAccent oben und .closing-title in index.astro. */
+  /* Siehe titleAccent oben und .closing-title in index.astro.
+     --lh-tight statt --lh-display (1.02): Linksbündig steht der i-Punkt
+     von „Moin." genau unter der Unterlänge des „g" in „Sag" und berührte
+     sie. Auf der Startseite ist die Zeile zentriert, dort trifft nichts. */
   .display {
     font-size: var(--fs-display);
+    line-height: var(--lh-tight);
   }
 
   .accent {
