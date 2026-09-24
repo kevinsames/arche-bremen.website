@@ -7,16 +7,16 @@ import CreedCard from '../components/CreedCard.astro';
 
 // Bis August 2026 eine einzige 759-Zeilen-Markdown-Datei, die als lange
 // .prose-Spalte ausgegeben wurde (siehe Git-Historie). Jetzt ein
-// Kachelraster: Vorwort und Quelle bleiben Fließtext, die 25 Artikel
-// werden über die Collection `creed` einzeln geladen, sortiert nach
-// `number` (siehe content.config.ts).
+// Kachelraster: das Vorwort als erste Kachel (seit September 2026, vorher
+// Fließtext über dem Raster), danach die 25 Artikel aus der Collection
+// `creed`, sortiert nach `number` (siehe content.config.ts). Die Quelle
+// bleibt Fließtext unter dem Raster.
 const vorwort = await getEntry('creed', '00-vorwort');
 const quelle = await getEntry('creed', '99-quelle');
 const articles = (await getCollection('creed'))
   .filter((entry) => entry.data.number != null)
   .sort((a, b) => (a.data.number ?? 0) - (b.data.number ?? 0));
 
-const { Content: VorwortContent } = await render(vorwort);
 const { Content: QuelleContent } = await render(quelle);
 ---
 
@@ -37,17 +37,11 @@ const { Content: QuelleContent } = await render(quelle);
     }}
   />
 
-  <Section tone="light" width="measure">
-    <div class="prose">
-      <h2>{vorwort.data.title}</h2>
-      <VorwortContent />
-    </div>
-  </Section>
-
   <Section tone="muted">
     <div class="creed-grid">
+      <CreedCard article={vorwort} index={0} />
       {articles.map((article, index) => (
-        <CreedCard article={article} index={index} />
+        <CreedCard article={article} index={index + 1} />
       ))}
     </div>
   </Section>
@@ -76,14 +70,6 @@ const { Content: QuelleContent } = await render(quelle);
     .creed-grid {
       grid-template-columns: repeat(3, 1fr);
     }
-  }
-
-  /* Ohne eigene Überschrift stand das Vorwort als kopfloser Textblock
-     unter dem dunklen Seitenkopf. Die globale .prose-h2-Regel setzt
-     --sp-6 Abstand nach oben — hier steht sie ganz oben im Band, der
-     Abstand kommt schon aus Section.astro. */
-  .prose h2:first-child {
-    margin-top: 0;
   }
 
   .quelle {

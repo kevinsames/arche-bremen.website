@@ -20,6 +20,10 @@ const { Content } = await render(article);
 
 const overlayId = `creed-${article.id}`;
 const permalink = `/glaubensbekenntnis/${article.id}`;
+// Das Vorwort steht seit September 2026 als erste Kachel im Raster. Es hat
+// keine Nummer und deshalb auch kein „Artikel …"-Etikett — sein Titel sagt
+// schon, was es ist.
+const kicker = article.data.number != null ? `Artikel ${article.data.number}` : undefined;
 ---
 
 <div class="card-wrap"
@@ -29,7 +33,7 @@ const permalink = `/glaubensbekenntnis/${article.id}`;
     <span class="cloud" aria-hidden="true"></span>
     <span class="body">
       <span class="top">
-        <span class="number">Artikel {article.data.number}</span>
+        {kicker && <span class="number">{kicker}</span>}
         <span class="plus" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
             <path d="M12 5v14M5 12h14" />
@@ -44,20 +48,20 @@ const permalink = `/glaubensbekenntnis/${article.id}`;
     popovertarget={overlayId}
     class="open"
     tabindex="-1"
-    aria-label={`Artikel öffnen: ${article.data.title}`}
+    aria-label={`Öffnen: ${article.data.title}`}
   >
   </button>
 </div>
 
 <Overlay id={overlayId} label={article.data.title} cloud={(index % 4) + 1}>
   <Fragment slot="head">
-    <span class="kicker">Artikel {article.data.number}</span>
+    {kicker && <span class="kicker">{kicker}</span>}
     <h2>{article.data.title}</h2>
   </Fragment>
   <div class="prose">
     <Content />
   </div>
-  <p class="overlay-link"><a href={permalink}>Zum Artikel &rarr;</a></p>
+  <p class="overlay-link"><a href={permalink}>{kicker ? 'Zum Artikel' : 'Als eigene Seite'} &rarr;</a></p>
 </Overlay>
 
 <style>
