@@ -18,10 +18,16 @@ const elders = (await getCollection('elders')).sort((a, b) => {
   title="Gemeindeleitung"
   description="Die Gemeindeleitung der Arche Bremen: Wer die Gemeindegründung in Bremen leitet und wofür sie verantwortlich ist."
 >
+  {/* Vers zitiert nach Elberfelder Bibel (2006); die Quellenzeile nennt
+      bewusst nur „Die Bibel" (DESIGN.md, „Bibelvers auf dunklem Grund"). */}
   <PageHeader
     eyebrow="Verantwortung für Lehre und Leben der Gemeinde"
     title="Gemeindeleitung"
     cloud={3}
+    verse={{
+      text: 'So, in Liebe zu euch hingezogen, waren wir willig, euch nicht allein am Evangelium Gottes, sondern auch an unserem eigenen Leben Anteil zu geben, weil ihr uns lieb geworden wart.',
+      reference: '1. Thessalonicher 2,8',
+    }}
   />
 
   <Section tone="light">

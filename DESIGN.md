@@ -510,9 +510,10 @@ das zulassen. Wer das klärt und einen Quellenhinweis braucht: Welche
 Übersetzung zitiert wird, steht als Kommentar an jedem Vers im Code.
 
 Seit 23. September 2026 steht dasselbe Muster auch im Seitenkopf
-(`PageHeader.astro`, Prop `verse`) auf drei Unterseiten, jeweils
-Elberfelder Bibel: Gemeindeleben (1. Thessalonicher 2,8), Predigten
-(Kolosser 3,16), Glaubensbekenntnis (Philipper 2,16). Die CSS-Regeln sind
+(`PageHeader.astro`, Prop `verse`) auf den Unterseiten. Stand
+24. September 2026: Gemeindeleitung (1. Thessalonicher 2,8), Gemeindeleben
+(Kolosser 3,16), Predigten (Hebräer 4,12), Glaubensbekenntnis
+(Philipper 2,16). Die Übersetzung steht jeweils als Kommentar am Vers. Die CSS-Regeln sind
 bewusst in beiden Dateien dupliziert.
 
 ## Neugestaltung, zweiter Durchgang (September 2026)
