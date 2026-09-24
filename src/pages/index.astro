@@ -602,41 +602,35 @@ const jsonLd = {
     .hero-actions {
       margin-top: var(--sp-3);
     }
+  }
 
-    /* Gelbe Dachzeile — nur auf dem Telefon. Dort bricht die Zeile auf
-       zwei Zeilen um und stünde in Weiß als zweiter Block neben der
-       Überschrift; auf dem Desktop ist sie einzeilig und bleibt weiß, so
-       ist sie ausdrücklich gewünscht.
+  /* Gelbe Dachzeile — auf allen Breiten (bis 24. September 2026 nur auf
+     dem Telefon, auf dem Desktop weiß; auf Wunsch jetzt durchgehend gelb).
 
-       Dafür wird der oberste Stop von --scrim-hero von 58 auf 80 %
-       verstärkt, und ausdrücklich NUR der oberste. Der Stop bei 45 %
-       bleibt bei 78 %: Dort liegen die Giebel, und ein dunklerer Verlauf
-       an dieser Stelle nimmt dem Foto die Farbe, ohne dem Text zu helfen.
-       Gemessen bleibt die Bildhelligkeit auf Giebelhöhe bei 8–9, im
-       obersten Streifen fällt sie von 25 auf 18 — dort ist fast nur
-       Himmel.
+     Dafür wird der oberste Stop von --scrim-hero von 58 auf 80 %
+     verstärkt, und ausdrücklich NUR der oberste. Der Stop bei 45 %
+     bleibt bei 78 %: Dort liegen die Giebel, und ein dunklerer Verlauf
+     an dieser Stelle nimmt dem Foto die Farbe, ohne dem Text zu helfen.
 
-       Kontrast am hellsten Hintergrundpixel, alle drei Telefonbreiten:
-       Gelb 4,84 bis 4,92 : 1, über der AA-Schwelle von 4,5 : 1 für
-       14-px-Versalien. Ohne die Verstärkung 3,22 bis 3,24 : 1.
+     Kontrast am hellsten Hintergrundpixel: siehe DESIGN.md, „Gelbe
+     Dachzeile im Hero" (Telefon und Desktop gemessen). Ohne die
+     Verstärkung 3,22 bis 3,24 : 1, unter AA.
 
-       Das ist eine benannte Erweiterung von CLAUDE.md Regel 3: Der Token
-       --text-accent-on-dark war bisher an --bg-inverted gebunden, hier
-       steht er auf 80 % desselben Dunkelblaus über einem Foto. Siehe
-       DESIGN.md, „Gelbe Dachzeile im Hero". Wer die Zeile wieder weiß
-       will, löscht diese beiden Regeln. */
-    .hero {
-      --scrim-hero: linear-gradient(
-        to bottom,
-        color-mix(in srgb, var(--c-blue-dark) 80%, transparent) 0%,
-        color-mix(in srgb, var(--c-blue-dark) 78%, transparent) 45%,
-        color-mix(in srgb, var(--c-blue-dark) 95%, transparent) 100%
-      );
-    }
+     Das ist eine benannte Erweiterung von CLAUDE.md Regel 3: Der Token
+     --text-accent-on-dark war bisher an --bg-inverted gebunden, hier
+     steht er auf 80 % desselben Dunkelblaus über einem Foto. Wer die
+     Zeile wieder weiß will, löscht diese beiden Regeln. */
+  .hero {
+    --scrim-hero: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--c-blue-dark) 80%, transparent) 0%,
+      color-mix(in srgb, var(--c-blue-dark) 78%, transparent) 45%,
+      color-mix(in srgb, var(--c-blue-dark) 95%, transparent) 100%
+    );
+  }
 
-    .hero-inner > .eyebrow {
-      color: var(--text-accent-on-dark);
-    }
+  .hero-inner > .eyebrow {
+    color: var(--text-accent-on-dark);
   }
 
   /* ---------- Wiederkehrende Bausteine dieser Seite -------------------- */
