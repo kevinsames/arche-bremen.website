@@ -41,19 +41,13 @@ export const ADDRESS = {
 // und steht deshalb nicht auf der Seite. claim/milestone tragen above the
 // fold, was Gottesdienstzeit + Adresse vorher trugen.
 //
-// Das Datum steht genau einmal, als ISO-String. Anzeigetext, Wochentag und
-// die Einzelziffern für die Datumsfläche auf der Startseite werden daraus
-// zur Buildzeit abgeleitet — vorher standen Anzeigetext und Ziffern doppelt
-// da und konnten auseinanderlaufen. Zeitzone explizit Europe/Berlin: ein
-// reines Datum ist UTC-Mitternacht, und ein Build in einer westlicheren
-// Zeitzone würde sonst den Vortag anzeigen.
-const MILESTONE_ISO = '2027-05-02';
-const [milestoneYear, milestoneMonth, milestoneDay] = MILESTONE_ISO.split('-');
-const milestoneDateObject = new Date(`${MILESTONE_ISO}T12:00:00Z`);
-const milestoneFormat = (options: Intl.DateTimeFormatOptions) =>
-  new Intl.DateTimeFormat('de-DE', { timeZone: 'Europe/Berlin', ...options }).format(
-    milestoneDateObject,
-  );
+// Seit 24. September 2026 steht hier kein festes Datum mehr, sondern nur
+// Jahreszeit, Jahr und Stadtteil — der genaue Termin steht noch nicht fest.
+// Bis dahin gab es ein ISO-Datum, aus dem Anzeigetext, Wochentag und die
+// Ziffern der Datumsfläche per Intl.DateTimeFormat abgeleitet wurden (siehe
+// Git-Historie). Steht der Termin fest, kann das zurückkommen.
+const MILESTONE_SEASON = 'Frühjahr';
+const MILESTONE_YEAR = '2027';
 
 export const FOUNDING = {
   // Anspruch above the fold, in zwei Teile getrennt: Der Hero setzt den
@@ -64,15 +58,14 @@ export const FOUNDING = {
   claim: 'Wir gründen eine Gemeinde',
   claimAccent: 'in Bremen.',
   milestoneLabel: 'Geplanter erster Gottesdienst',
-  milestoneIso: MILESTONE_ISO,
-  /** "2. Mai 2027" — Fließtext-Schreibweise. */
-  milestoneDate: milestoneFormat({ dateStyle: 'long' }),
-  /** "Sonntag" — steht als Kicker über der Datumsfläche. */
-  milestoneWeekday: milestoneFormat({ weekday: 'long' }),
-  /** "02", "05", "2027" — nur für die Datumsfläche auf der Startseite. */
-  milestoneDay,
-  milestoneMonth,
-  milestoneYear,
+  /** "Frühjahr" — steht als Kicker über der Datumsfläche. */
+  milestoneSeason: MILESTONE_SEASON,
+  /** "2027" — die große Zahl der Datumsfläche auf der Startseite. */
+  milestoneYear: MILESTONE_YEAR,
+  /** "Frühjahr 2027" — Fließtext-Schreibweise, im Hero. */
+  milestoneDate: `${MILESTONE_SEASON} ${MILESTONE_YEAR}`,
+  /** Stadtteil, keine Adresse — die steht noch nicht fest (siehe ADDRESS). */
+  milestonePlace: 'Bremen Süd',
 };
 
 export const PRAYER_REQUESTS = [

@@ -14,7 +14,7 @@ import { getCollection } from 'astro:content';
 
 // Above the fold, ohne Scrollen: in der Gründungsphase Gründungsstatus und
 // geplanter erster Gottesdienst statt Gottesdienstzeit und Adresse (siehe
-// CLAUDE.md — kehrt zum 2. Mai 2027 um). Der Hero ist deshalb bewusst
+// CLAUDE.md — kehrt mit dem ersten Gottesdienst um, geplant Frühjahr 2027). Der Hero ist deshalb bewusst
 // inhaltsgroß, nicht bildschirmgroß — keine feste vh-Höhe, die auf kleinen
 // Geräten den Rest unter die Falz drückt. Seit September 2026 steht das
 // Ortsbild hinter dem Hero statt als eigenes Band in der Seitenmitte (siehe
@@ -56,8 +56,9 @@ function formatEventRange(event: Event) {
 
 // SITE.description + Meilenstein statt eines zweiten handgeschriebenen
 // Satzes — bleibt automatisch synchron, wenn FOUNDING.milestoneDate sich
-// ändert oder (2. Mai 2027) ganz entfällt (siehe README "Offene Punkte").
-const homeDescription = `${SITE.description} Erster Gottesdienst geplant für den ${FOUNDING.milestoneDate}.`;
+// ändert oder mit dem ersten Gottesdienst ganz entfällt (siehe README
+// "Offene Punkte").
+const homeDescription = `${SITE.description} Erster Gottesdienst im ${FOUNDING.milestoneDate} in ${FOUNDING.milestonePlace} geplant.`;
 
 
 // Structured Data, nur WebSite + Organization: Google liest WebSite.name
@@ -191,16 +192,14 @@ const jsonLd = {
     <div class="milestone">
       <p class="milestone-head">
         <span class="eyebrow">{FOUNDING.milestoneLabel}</span>
-        <span class="milestone-weekday">{FOUNDING.milestoneWeekday}</span>
+        <span class="milestone-season">{FOUNDING.milestoneSeason}</span>
       </p>
       <p class="numeral">
-        <time datetime={FOUNDING.milestoneIso}>
-          {FOUNDING.milestoneDay}<span class="numeral-slash">/</span>{FOUNDING.milestoneMonth}
-        </time>
+        <time datetime={FOUNDING.milestoneYear}>{FOUNDING.milestoneYear}</time>
       </p>
       <p class="milestone-foot">
-        <span class="milestone-year">{FOUNDING.milestoneYear}</span>
-        <span class="milestone-note">Ort und Uhrzeit stehen noch nicht fest.</span>
+        <span class="milestone-place">{FOUNDING.milestonePlace}</span>
+        <span class="milestone-note">Genaues Datum und Adresse folgen.</span>
       </p>
     </div>
   </Section>
@@ -775,8 +774,9 @@ const jsonLd = {
     border-top: 1px solid var(--text-primary);
   }
 
-  /* Der Wochentag flankiert die Zahlen als kleines Versal-Label. */
-  .milestone-weekday {
+  /* Die Jahreszeit flankiert die Zahl als kleines Versal-Label (bis
+     September 2026 stand hier der Wochentag eines festen Datums). */
+  .milestone-season {
     font-family: var(--font-display);
     font-weight: 700;
     text-transform: uppercase;
@@ -791,7 +791,7 @@ const jsonLd = {
     font-size: var(--fs-xs);
   }
 
-  /* Die Datumszahlen selbst. Einzige Stelle mit --fs-numeral (tokens.css):
+  /* Die Jahreszahl selbst. Einzige Stelle mit --fs-numeral (tokens.css):
      ein rein typografisches Schaubild, kein Fließtext. */
   .numeral {
     margin: 0;
@@ -802,16 +802,9 @@ const jsonLd = {
     letter-spacing: var(--tracking-tight);
   }
 
-  /* Der Schrägstrich trennt die Zahlen, ohne mit ihnen zu konkurrieren:
-     kleiner gesetzt statt abgeblendet — eine Deckkraft unter 1 mischt auf
-     Gelb ein Olivgrün ein, das nach einer vierten Markenfarbe aussieht. */
-  .numeral-slash {
-    font-size: 0.5em;
-    margin: 0 0.12em;
-    vertical-align: 0.18em;
-  }
-
-  .milestone-year {
+  /* Stadtteil unter der Zahl, an der Stelle, an der bis September 2026 das
+     Jahr stand — die große Zahl ist jetzt selbst das Jahr. */
+  .milestone-place {
     font-family: var(--font-display);
     font-weight: 700;
     font-size: var(--fs-l);

@@ -346,13 +346,11 @@ Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
   leer. Above the fold stehen stattdessen `FOUNDING.claim` +
   `FOUNDING.claimAccent` (zwei Felder, weil der Hero den zweiten Teil
   farblich absetzt — beim Ändern beide anfassen) und
-  `FOUNDING.milestoneDate` (aktuell 2. Mai 2027). Das Datum wird in
-  `FOUNDING` nur einmal als ISO-String gepflegt (`MILESTONE_ISO`);
-  Anzeigetext (`milestoneDate`), Wochentag (`milestoneWeekday`) und die
-  Einzelziffern für die Datumsfläche der Startseite (`milestoneDay`,
-  `milestoneMonth`, `milestoneYear`) leitet `Intl.DateTimeFormat` zur
-  Buildzeit daraus ab — ändert sich der Termin, ist genau diese eine Zeile
-  anzufassen. `ADDRESS` ist als
+  `FOUNDING.milestoneDate` (aktuell „Frühjahr 2027"). Seit September 2026
+  gibt es kein festes Datum mehr: Gepflegt werden `MILESTONE_SEASON` und
+  `MILESTONE_YEAR` in `src/consts.ts`, dazu `FOUNDING.milestonePlace`
+  („Bremen Süd"). Die Datumsfläche der Startseite zeigt die Jahreszahl groß,
+  darüber die Jahreszeit, darunter den Stadtteil. `ADDRESS` ist als
   `PLATZHALTER` markiert (Norderoog 2 ist die voraussichtliche, aber nicht
   bestätigte Adresse) und wird deshalb nirgends gerendert. `PRAYER_REQUESTS`
   enthält Gebetsanliegen für die Startseiten-Sektion „Werde Teil unserer
