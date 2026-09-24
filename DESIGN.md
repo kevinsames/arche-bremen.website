@@ -1717,9 +1717,28 @@ Gewählt: 80 %, nur unter 48rem. Im obersten Streifen ist ohnehin fast nur
 Himmel; die Giebel behalten ihre Farbe. Im ausgelieferten Zustand misst die
 Zeile 4,92 bis 5,00 : 1 über alle drei Telefonbreiten.
 
-### Warum nur auf dem Telefon
+### Seit 24. September 2026 auch auf dem Desktop
 
-Auf dem Desktop bleibt die Zeile weiß. Sie ist dort einzeilig, steht neben
+Auf Wunsch jetzt auf allen Breiten gelb; derselbe verstärkte oberste Stop
+(80 %) gilt dafür auch auf dem Desktop. Nachmessung am hellsten
+Hintergrundpixel, nur über der Textfläche (nicht über der ganzen
+Absatzbreite — dort läge rechts der gelbe Bogen):
+
+| Breite | Kontrast Gelb |
+| --- | --- |
+| 360, 390, 430, 768 px | 4,69 : 1 |
+| 1024, 1440 px | 4,61 : 1 |
+| 1280, 1920 px | 4,62 : 1 |
+
+Alle über 4,5 : 1, aber knapp. Die Telefonwerte liegen unter den am
+18. September dokumentierten 4,92 bis 5,00 : 1, obwohl sich dort am CSS
+nichts geändert hat — vermutlich ein Unterschied in der Messmethode;
+der niedrigere Wert ist der vorsichtigere. Der Abschnitt unten ist der
+Stand vom 18. September.
+
+### Warum damals nur auf dem Telefon
+
+Auf dem Desktop blieb die Zeile weiß. Sie ist dort einzeilig, steht neben
 einer über 300 px hohen Überschrift und braucht keine eigene Farbebene —
 und in der Sprachnachricht ist genau dieser Zustand benannt und gelobt
 worden („da oben in weiß … das ist so richtig clean"). Eine Farbe, die sich

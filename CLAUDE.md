@@ -82,8 +82,10 @@ Regeln:
    `--text-accent-on-dark`, nie über `--accent-warm` oder `--c-yellow`
    direkt:**
    - September 2026: Gelb auf `--bg-inverted` (8,38 : 1).
-   - September 2026, zweite Stufe: die Dachzeile im Hero auf dem Telefon,
-     4,92 bis 5,00 : 1 am hellsten Hintergrundpixel gemessen. Der Grund
+   - September 2026, zweite Stufe: die Dachzeile im Hero, seit
+     24. September 2026 auf allen Breiten (vorher nur auf dem Telefon),
+     4,61 bis 4,69 : 1 am hellsten Hintergrundpixel der Textfläche
+     gemessen (360 bis 1920 px). Der Grund
      ist dort kein Volltonfeld, sondern 80 % desselben Dunkelblaus über
      dem Marktplatzfoto. Bedingung: Das Foto bleibt — es wird nicht gegen
      ein anderes getauscht. Wer es doch tauscht, misst neu.
