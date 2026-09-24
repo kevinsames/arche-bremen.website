@@ -8,12 +8,12 @@ import Section from '../../components/Section.astro';
 // Popover-Unterstützung (siehe @supports-Block in CreedCard.astro) und
 // Ziel des Permalinks aus dessen Popup.
 export async function getStaticPaths() {
-  // Nur die 25 nummerierten Artikel bekommen eine Detailseite — Vorwort und
-  // Quelle stehen bereits als Fließtext auf /glaubensbekenntnis und haben
-  // keine Kachel, die hierher verlinken könnte.
+  // Die 25 Artikel und das Vorwort bekommen eine Detailseite — alle stehen
+  // als Kachel auf /glaubensbekenntnis. Die Quelle nicht: Sie steht dort als
+  // Fließtext und hat keine Kachel, die hierher verlinken könnte.
   const articles = await getCollection('creed');
   return articles
-    .filter((article) => article.data.number != null)
+    .filter((article) => article.id !== '99-quelle')
     .map((article) => ({
       params: { slug: article.id },
       props: { article },

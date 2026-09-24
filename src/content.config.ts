@@ -16,7 +16,8 @@ const pages = defineCollection({
 // Bewusst eine Datei pro Artikel statt eines einzigen langen Dokuments: So
 // wird die Seite /glaubensbekenntnis als Kachelraster überflieg- und
 // einzeln verlinkbar (siehe dortige Seiten). `number` fehlt bei Vorwort und
-// Quelle — nur nummerierte Einträge werden zu Kacheln.
+// Quelle. Kacheln sind die nummerierten Artikel und, als erste, das Vorwort;
+// die Quelle bleibt Fließtext.
 const creed = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/creed' }),
   schema: z.object({
