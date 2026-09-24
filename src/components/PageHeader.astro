@@ -13,6 +13,12 @@
 // benutzt diese Komponente nicht.
 interface Props {
   title: string;
+  // Zweiter Teil der Überschrift, in Gelb auf eigener Zeile — dasselbe
+  // Muster wie „Sag einfach Moin." am Ende der Startseite. Wer ihn setzt,
+  // bekommt die Überschrift auch in deren Schaugröße (--fs-display): Beides
+  // zusammen ist der Wiedererkennungseffekt, eins allein wirkt halb.
+  // Derzeit nur /kontakt.
+  titleAccent?: string;
   // Kleines Versal-Label über der Überschrift.
   eyebrow?: string;
   // Einleitungssatz unter der Überschrift.
@@ -27,7 +33,7 @@ interface Props {
   verse?: { text: string; reference: string };
 }
 
-const { title, eyebrow, lead, cloud = 1, back, verse } = Astro.props;
+const { title, titleAccent, eyebrow, lead, cloud = 1, back, verse } = Astro.props;
 ---
 
 <header class="page-head" style={`--cloud: var(--cloud-${((cloud - 1) % 4) + 1})`}>
@@ -41,7 +47,15 @@ const { title, eyebrow, lead, cloud = 1, back, verse } = Astro.props;
       )
     }
     {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-    <h1>{title}</h1>
+    {
+      titleAccent ? (
+        <h1 class="display">
+          {title} <span class="accent">{titleAccent}</span>
+        </h1>
+      ) : (
+        <h1>{title}</h1>
+      )
+    }
     {lead && <p class="lead">{lead}</p>}
     {
       verse && (
@@ -144,6 +158,16 @@ const { title, eyebrow, lead, cloud = 1, back, verse } = Astro.props;
 
   h1 {
     margin: 0;
+  }
+
+  /* Siehe titleAccent oben und .closing-title in index.astro. */
+  .display {
+    font-size: var(--fs-display);
+  }
+
+  .accent {
+    display: block;
+    color: var(--text-accent-on-dark);
   }
 
   /* Die globale .lead-Stufe setzt --text-secondary (Braun) — auf dunklem
