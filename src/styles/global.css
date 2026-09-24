@@ -248,6 +248,12 @@ svg {
 
 a {
   color: var(--link);
+  /* Browser sparen die Unterstreichung standardmäßig unter Unterlängen
+     aus (g, p, y, j). Endet ein Link auf einen solchen Buchstaben —
+     „Gemeindeleitung" auf /kontakt —, hört die Linie sichtbar vor dem Wort
+     auf und der Link wirkt zu kurz. Durchgezogen ist sie immer so lang wie
+     das Wort. */
+  text-decoration-skip-ink: none;
 }
 
 a:visited {

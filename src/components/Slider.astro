@@ -31,6 +31,10 @@ const railId = `rail-${(label ?? 'x').toLowerCase().replace(/[^a-z0-9]+/g, '-')}
 ---
 
 <div class="rail-wrap" data-reveal>
+  <div class="rail" id={railId} data-rail>
+    <slot />
+  </div>
+
   {
     label && (
       <div class="rail-nav" data-rail-nav hidden>
@@ -47,10 +51,6 @@ const railId = `rail-${(label ?? 'x').toLowerCase().replace(/[^a-z0-9]+/g, '-')}
       </div>
     )
   }
-
-  <div class="rail" id={railId} data-rail>
-    <slot />
-  </div>
 </div>
 
 {
@@ -85,12 +85,24 @@ const railId = `rail-${(label ?? 'x').toLowerCase().replace(/[^a-z0-9]+/g, '-')}
     position: relative;
   }
 
+  /* Unter der Reihe statt darüber (seit September 2026): Über den Kacheln
+     kostete die Pfeilzeile eine eigene Zeile zwischen Seitenkopf und
+     Kacheln — auf /gemeindeleben und /gemeindeleitung, wo die Reihe direkt
+     unter dem Kopf steht, sichtbar zu viel Weißraum. Den Abstand nach oben
+     trägt das Schattenpolster der Reihe (padding-bottom in .rail). */
   .rail-nav {
     display: flex;
     justify-content: flex-end;
     gap: var(--sp-2);
-    margin-bottom: var(--sp-3);
     color: var(--border-subtle);
+  }
+
+  /* display: flex oben schlägt die Browser-Regel für [hidden]. Ohne diese
+     Zeile blieben die Knöpfe sichtbar und funktionslos stehen, auch wenn
+     das Skript sie ausblendet, weil alle Kacheln passen (bis September
+     2026 so auf /gemeindeleitung). */
+  .rail-nav[hidden] {
+    display: none;
   }
 
   .rail-nav :global(.icon-button:hover),
