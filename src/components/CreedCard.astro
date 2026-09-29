@@ -24,6 +24,21 @@ const permalink = `/glaubensbekenntnis/${article.id}`;
 // keine Nummer und deshalb auch kein „Artikel …"-Etikett — sein Titel sagt
 // schon, was es ist.
 const kicker = article.data.number != null ? `Artikel ${article.data.number}` : undefined;
+
+// Vorschau auf der Kachel: der Anfang des ersten Absatzes, wörtlich. Gleiche
+// Aufbereitung wie die Meta-Description in glaubensbekenntnis/[slug].astro
+// (Fußnotenverweise und Sternchen raus, Zeilenumbrüche geglättet), bewusst
+// dort nicht herausgelöst, sondern doppelt. Hier auf rund 160 Zeichen an
+// einer Wortgrenze gekürzt, damit nicht 26 volle Absätze ein zweites Mal im
+// HTML stehen; wie viel davon sichtbar ist, regelt das CSS (drei Zeilen).
+const firstParagraph = (article.body ?? '').trim().split(/\n\s*\n/)[0];
+const plainText = firstParagraph
+  .replace(/\[\^[^\]]+\]/g, '')
+  .replace(/\*/g, '')
+  .replace(/\s+/g, ' ')
+  .trim();
+const shortened = plainText.slice(0, plainText.lastIndexOf(' ', 159)).replace(/[,;:–—]+$/, '');
+const preview = plainText.length <= 160 ? plainText : `${shortened} …`;
 ---
 
 <div class="card-wrap"
@@ -40,7 +55,12 @@ const kicker = article.data.number != null ? `Artikel ${article.data.number}` : 
           </svg>
         </span>
       </span>
-      <span class="title">{article.data.title}</span>
+      <span class="text">
+        <span class="title">{article.data.title}</span>
+        {/* aria-hidden: Sonst liest ein Screenreader den Anfang des Artikels
+            als Teil des Linknamens vor. Der volle Text steht am Linkziel. */}
+        {preview && <span class="preview" aria-hidden="true">{preview}</span>}
+      </span>
     </span>
   </a>
   <button
@@ -226,6 +246,26 @@ const kicker = article.data.number != null ? `Artikel ${article.data.number}` : 
     -webkit-hyphens: auto;
     hyphens: auto;
     overflow-wrap: break-word;
+  }
+
+  .text {
+    display: grid;
+    gap: var(--sp-2);
+  }
+
+  /* Drei Zeilen, dann Auslassungspunkte. Die Länge schneidet schon das
+     Frontmatter-Skript grob zu; die genaue Grenze hängt von der
+     Kachelbreite ab und gehört deshalb ins CSS. */
+  .preview {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+    font-family: var(--font-body);
+    font-size: var(--fs-s);
+    line-height: var(--lh-body);
+    color: var(--text-on-dark);
   }
 
   .open {
