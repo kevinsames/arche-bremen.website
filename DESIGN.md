@@ -118,9 +118,9 @@ dazu, beim Filtern die Flächen der sichtbar bleibenden Kacheln neu zu
 vergeben (`card.dataset.surface`) — reine Folgelogik der Dekoration, mit ihr
 entfernt. `--surface-nature`, `--surface-nature-strong` und
 `--surface-warm-alt-strong` sind seither ungenutzt und aus `tokens.css`
-gestrichen; `--surface-warm-alt` bleibt, `.notice`/`.prayer-list` in
-`index.astro` und seit der Kontaktseite (September 2026) `.mail` in
-`kontakt.astro` nutzen es weiterhin. Grün (`--accent-nature`) hat damit keine
+gestrichen; `--surface-warm-alt` bleibt, `.notice` in `index.astro` nutzt
+es weiterhin (Gebetsanliegen und die Adresse auf `/kontakt` trugen es bis
+September 2026 ebenfalls). Grün (`--accent-nature`) hat damit keine
 Verwendung mehr auf der Website — die Rohfarbe bleibt trotzdem in
 `tokens.css` stehen, sie ist Markenpalette aus dem Brandbook, nicht an eine
 Anwendung gebunden.
@@ -394,7 +394,10 @@ westlicheren Build-Zeitzone den Vortag ergeben).
 **Gebetsanliegen.** Statt einer Aufzählung auf `--surface-warm-alt` jetzt
 drei nummerierte Felder nebeneinander. Gleiche Inhalte aus
 `PRAYER_REQUESTS`, nur als Raster. Bewusst **ohne** Hover-Zustand: Die
-Felder sind Text, keine Kacheln — es gibt nichts zu öffnen.
+Felder sind Text, keine Kacheln — es gibt nichts zu öffnen. **Seit
+29. September 2026 überholt:** Ohne Hover blieb auf dem Telefon die Fläche
+selbst, und die lud zum Antippen ein. Jetzt eine typografische Liste, siehe
+„Kacheln, die nichts tun".
 
 **Kontaktband.** Neues dunkles Abschlussband über dem (ebenfalls dunklen)
 Fuß, mit `--fs-display` als größter Schrift der Seite. Der Satz darin stammt
@@ -827,7 +830,8 @@ linker Akzentkante waren übrig:
 
 - Die E-Mail-Adresse auf `/kontakt` ist der Inhalt dieser Seite und
   bekommt deshalb die stärkste Fläche des Projekts: dieselbe Wolkenkachel
-  wie Gemeindeleben, Predigten und Glaubensbekenntnis.
+  wie Gemeindeleben, Predigten und Glaubensbekenntnis. Seit 29. September
+  2026 auch ein Link, siehe „Kacheln, die nichts tun".
 - Der Hinweis auf ausgefallene Termine auf der Startseite bleibt bewusst
   hell und behält die Akzentkante. Er ist eine Warnung und soll sich von
   den dunklen Kacheln unterscheiden, nicht mit ihnen verschmelzen —
@@ -1124,11 +1128,10 @@ Termine (`index.astro`, `.notice`) nutzt dieselben Tokens wie die
 Kachelflächen — `--surface-warm-alt` als Fläche, `--accent-warm-alt` als
 Rahmenstreifen. Kein neues Tokenpaar für „Warnung"/„Hinweis": Die Farbwerte
 und ihre Kontrastprüfung oben gelten unverändert, Orange bleibt Fläche und
-Rahmen, nie Text. Dieselbe Fläche trägt seit August 2026 auch die
-Gebetsanliegen-Liste (`.prayer-list`) und seit September 2026 den
-Adressblock auf `/kontakt` (`.mail`) — jeweils eigene Klasse, gleiche
-Tokens, aus demselben Grund: kein weiteres Tokenpaar für einen weiteren
-Anwendungsfall derselben Fläche.
+Rahmen, nie Text. Dieselbe Fläche trug von August bis September 2026 auch
+die Gebetsanliegen-Liste und kurz den Adressblock auf `/kontakt` — beide
+sind seither dunkel beziehungsweise flächenlos, `.notice` ist die einzige
+verbliebene Verwendung.
 
 **Hero in der Gründungsphase (August 2026):** Above the fold stand ursprünglich
 Gottesdienstzeit und Adresse (`SERVICE`/`ADDRESS`). Es gibt noch keinen
@@ -1776,6 +1779,88 @@ Verlauf drei Stützstellen hat und nur eine davon dem Text dient. Aus einer
 Messung, die eine Option zu teuer erscheinen ließ, wurde ein „geht nicht".
 Wer hier etwas ablehnt, weil eine Messung dagegen spricht, prüfe zuerst, ob
 die Messung die billigste Fassung der Option abbildet.
+
+## Kacheln, die nichts tun (29. September 2026)
+
+Zwei Flächen sahen aus wie Kacheln, taten beim Antippen aber nichts: die
+Gebetsanliegen auf der Startseite und die E-Mail-Adresse auf `/kontakt`.
+Dieselbe Ursache, entgegengesetzte Lösungen.
+
+**Die Ursache.** Klickbar wirkt eine Kachel durch ihre Fläche: abgerundeter
+Kasten, Schatten, wandernde Farbwolke. Hover-Zustand und Plus-Kreis
+bestätigen das nur. Bei den Gebetsanliegen waren genau diese beiden
+Bestätigungen weggelassen worden, die Fläche blieb. Auf dem Telefon gibt es
+kein Hover — dort war der einzige Unterschied zu einer echten Kachel der
+fehlende Kreis. Und zwei Sektionen tiefer stehen auf derselben Startseite
+die Gemeindeleben-Kacheln mit genau dieser Fläche: Die Seite bringt selbst
+bei, dass man darauf tippt.
+
+**Die Regel daraus:** Die Wolkenfläche mit Schatten gehört dem, was sich
+öffnen oder anwählen lässt. Was nichts zu öffnen hat, bekommt keine — oder
+es wird etwas, das sich öffnen lässt.
+
+### Gebetsanliegen ohne Fläche
+
+Typografische Liste statt dreier Felder (`index.astro`, `.prayer-list`):
+
+- Die Ziffer (`--fs-xl`, `--text-secondary`) über dem Anliegen (`--fs-l`,
+  `--text-primary`), als Oberkante eine 4 px starke Linie in
+  `--accent-warm`. Gelb ist hier Linie, keine Schrift (Abweichung 1,
+  CLAUDE.md Design-Regel 3).
+- Telefon und Desktop sehen gleich aus, nur die Spaltenzahl wechselt: eine
+  Spalte, ab 48rem drei. Am selben Tag zuerst auf dem Telefon anders
+  gebaut — graue Haarlinien, Ziffer links neben dem Text —, auf Wunsch
+  angeglichen: Die gelbe Linie ist das Erkennungszeichen der Liste und
+  soll auf dem Gerät stehen, auf dem die meisten die Seite sehen.
+- Keine neuen Tokens, keine Farbwolke, kein Schatten. Die Liste ist bei
+  390 px Breite rund 445 px hoch statt rund 650 px (drei Felder mit
+  `min-height: 13rem`).
+
+Verworfen: ein durchgehendes dunkles Band mit der Liste darin. Ein Band
+liest sich als Abschnitt, nicht als Knopf — es stünde aber direkt unter dem
+gelben Datumsband, zwei laute Flächen hintereinander. Ebenfalls verworfen:
+zurück zur hellen `--surface-warm-alt`-Fläche, der Bildsprache, die im
+September 2026 überall ersetzt worden ist.
+
+### Die Mail-Kachel wird ein Link
+
+Anders als bei den Gebetsanliegen will man die Adresse antippen. Vorher hieß
+das auf dem Telefon: lange drücken, markieren, kopieren, Mail-App öffnen,
+einfügen. Die Kachel versprach einen Tipp, den harte Regel 8 verbot.
+
+Seit 29. September 2026 ist die Fläche ein `mailto:`-Link, eine benannte
+Ausnahme von CLAUDE.md, harte Regel 8. Das @ steht im `href` als `&#64;`,
+wie im Sichttext daneben. Wer als Adresssammler den Sichttext auflöst, löst
+auch den Link auf — geschützt ist die Adresse damit nicht schlechter als
+vorher, aber auch nicht besser. Der Browser dekodiert das Entity, bevor er
+die URL an das Mail-Programm übergibt; dort kommt ein normales @ an.
+
+- **Verhalten wie `MinistryCard.astro`:** Anheben um 8 px,
+  `--shadow-card-hover`, Wolkenzoom. Statt des Plus-Kreises ein Pfeil im
+  selben Glaskreis, der beim Überfahren nach rechts rückt — ein Plus hieße
+  „öffnet ein Popup".
+- **Adresse im `href` doppelt ausgeschrieben.** Astro maskiert in einem
+  berechneten Attribut das `&`; aus `&#64;` würde ein wörtliches „&#64;" in
+  der URL. Nur ein festes Attribut kommt unverändert an. Die Alternative
+  ohne Doppelung wäre `%40` in der URL — dann hinge es daran, dass jedes
+  Mail-Programm Prozent-Codierung auflöst. Ändert sich `CONTACT` in
+  `consts.ts`, ist `kontakt.astro` nachzuziehen; beide Stellen sagen das.
+- **Umbruch vor dem @.** Die Adresse brach auf dem Telefon nach „arche-"
+  um, und der Strich am Zeilenende las sich wie eine Silbentrennung: Wer
+  abtippt, schreibt „archegemeinde.de". Jetzt zwei Hälften mit
+  `white-space: nowrap`, dazwischen `<wbr>`. `<wbr>` allein reicht nicht —
+  der Browser nimmt die letzte Umbruchstelle, die noch passt, und das ist
+  der Bindestrich. Bei 320 px ragt „@arche-gemeinde.de" 5 px in den
+  Innenabstand der Kachel, bleibt aber vollständig sichtbar.
+
+Offen, nicht beauftragt:
+
+- Der Footer zeigt die Adresse weiterhin unverlinkt.
+- Auf einem Telefon mit 390 × 844 beginnt die Adresse erst bei rund
+  790 px (vor dem Pfeilkreis 775 px), mit Browserleisten also unterhalb
+  des ersten Bildschirms. Abhilfe
+  wäre, sie in den dunklen Seitenkopf zu ziehen (`PageHeader.astro`
+  bräuchte dafür einen Slot oder Prop).
 
 ## Offene Fragen an Hamburg
 

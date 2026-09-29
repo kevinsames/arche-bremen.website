@@ -230,16 +230,13 @@ const jsonLd = {
     <ol class="prayer-list">
       {
         PRAYER_REQUESTS.map((request, index) => (
-          <li style={`--cloud: var(--cloud-${(index % 4) + 1}); --reveal-offset: ${index * 4}%`} data-reveal>
-            <span class="cloud" aria-hidden="true"></span>
-            <span class="prayer-body">
-              {/* Nur die Ziffer, ohne das Wort "Anliegen" davor. Damit ist
-                  sie rein dekorativ: Die Zählung steht bereits in der
-                  <ol>-Semantik, Screenreader sagen "1 von 6" ohnehin an.
-                  Ein zusätzlich vorgelesenes "01" wäre Doppelung. */}
-              <span class="eyebrow" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
-              <span class="prayer-text">{request}</span>
-            </span>
+          <li style={`--reveal-offset: ${index * 4}%`} data-reveal>
+            {/* Nur die Ziffer, ohne das Wort "Anliegen" davor. Damit ist
+                sie rein dekorativ: Die Zählung steht bereits in der
+                <ol>-Semantik, Screenreader sagen "1 von 6" ohnehin an.
+                Ein zusätzlich vorgelesenes "01" wäre Doppelung. */}
+            <span class="prayer-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+            <span class="prayer-text">{request}</span>
           </li>
         ))
       }
@@ -819,80 +816,62 @@ const jsonLd = {
 
   /* ---------- Gebetsanliegen ------------------------------------------ */
 
-  /* Dieselbe Bildsprache wie die Kacheln (Farbwolke auf Dunklem Blau,
-     siehe MinistryCard.astro), aber bewusst ohne Hover-Zustand und ohne
-     Plus-Kreis: Die Felder sind Text, keine Kacheln — es gibt nichts zu
-     öffnen. Deshalb auch kein Hochformat, sondern eine Mindesthöhe. */
+  /* Typografische Liste ohne Fläche. Bis September 2026 standen die
+     Anliegen auf derselben Wolkenfläche wie die Kacheln, nur ohne Hover
+     und Plus-Kreis. Auf dem Telefon gibt es kein Hover, der einzige
+     Unterschied zu einer echten Kachel war dort der fehlende Kreis — die
+     Felder luden zum Antippen ein, und es passierte nichts. Als Kachel
+     lesbar macht etwas die Fläche selbst (Schatten, Radius, Wolke), und
+     zwei Sektionen weiter unten stehen die echten Gemeindeleben-Kacheln
+     mit genau dieser Fläche. Was nichts zu öffnen hat, bekommt deshalb
+     keine. Siehe DESIGN.md, „Gebetsanliegen ohne Fläche". */
   .prayer-list {
     list-style: none;
     margin: var(--sp-6) 0 0;
     padding: 0;
     display: grid;
-    gap: var(--sp-3);
+    gap: var(--sp-4);
+  }
+
+  /* Ziffer über dem Text, als Oberkante eine gelbe Linie. Gelb ist hier
+     Linie, keine Schrift — auf hellem Grund bleibt es Stilelement
+     (CLAUDE.md, Design-Regel 3). Telefon und Desktop gleich, nur die
+     Spaltenzahl wechselt (bis 29. September 2026 standen auf dem Telefon
+     graue Haarlinien und die Ziffer links neben dem Text).
+     minmax(0, 1fr) aus demselben Grund wie in MinistryCard.astro: Sonst
+     wächst die Spalte mit ihrem längsten Wort über den Rand. */
+  .prayer-list li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    row-gap: var(--sp-3);
+    padding-top: var(--sp-4);
+    border-top: 4px solid var(--accent-warm);
   }
 
   @media (min-width: 48rem) {
     .prayer-list {
       grid-template-columns: repeat(3, 1fr);
+      column-gap: var(--sp-5);
     }
   }
 
-  .prayer-list li {
-    position: relative;
-    min-height: 13rem;
-    border-radius: var(--radius-lg);
-    overflow: clip;
-    background-color: var(--bg-inverted);
-    color: var(--text-on-dark);
-    box-shadow: var(--shadow-card);
-  }
-
-  .prayer-list .cloud {
-    position: absolute;
-    inset: -26%;
-    background-image: var(--cloud);
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .prayer-list .cloud {
-      animation: cloud-drift 14s var(--ease-in-out) infinite alternate;
-    }
-
-    @keyframes cloud-drift {
-      from {
-        translate: -6% -4%;
-        rotate: -10deg;
-      }
-      to {
-        translate: 6% 4%;
-        rotate: 10deg;
-      }
-    }
-  }
-
-  .prayer-body {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    align-content: end;
-    gap: var(--sp-2);
-    min-height: 13rem;
-    padding: var(--sp-4);
-    background-image: var(--scrim-card);
-  }
-
-  .prayer-body .eyebrow {
-    margin: 0;
-    color: color-mix(in srgb, var(--text-on-dark) 72%, transparent);
+  .prayer-number {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--fs-xl);
+    line-height: 1;
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-secondary);
   }
 
   .prayer-text {
-    display: block;
     font-family: var(--font-display);
     font-weight: 700;
     font-size: var(--fs-l);
     line-height: var(--lh-tight);
     letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
   }
 
   /* ---------- Termine -------------------------------------------------- */
