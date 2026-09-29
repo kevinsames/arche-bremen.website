@@ -14,9 +14,13 @@ interface Props {
   // (WebSite + Organization). Wird als <script type="application/ld+json">
   // in den Head geschrieben.
   jsonLd?: Record<string, unknown>;
+  // Nur die 404-Seite. Schreibt <meta name="robots" content="noindex"> und
+  // lässt dafür den Canonical weg — "nicht indexieren" und "das hier ist
+  // die maßgebliche Adresse" widersprächen sich.
+  noindex?: boolean;
 }
 
-const { title, description, titleSuffix = true, jsonLd } = Astro.props;
+const { title, description, titleSuffix = true, jsonLd, noindex = false } = Astro.props;
 const pageTitle = titleSuffix ? `${title} · ${SITE.name}` : title;
 
 if (!Astro.site) {
@@ -40,7 +44,7 @@ const canonical = new URL(path, Astro.site).href;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     {description && <meta name="description" content={description} />}
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
 
     <!-- Open Graph: steuert die Vorschaukarte beim Teilen in WhatsApp,
          Signal, Telegram, Facebook. Für eine Gemeindegründung der

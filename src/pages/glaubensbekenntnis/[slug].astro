@@ -22,9 +22,26 @@ export async function getStaticPaths() {
 
 const { article } = Astro.props;
 const { Content } = await render(article);
+
+// Meta-Description: der Anfang des ersten Absatzes, wörtlich — keine
+// eigene Zusammenfassung, das Bekenntnis ist ein fester Text (siehe
+// 99-quelle.md). Fußnotenverweise ([^19-1]) und Markdown-Sternchen raus,
+// Zeilenumbrüche geglättet, auf rund 155 Zeichen an einer Wortgrenze
+// gekürzt — mehr zeigt Google im Suchergebnis nicht an. Ein Satzzeichen an
+// der Schnittstelle fällt weg, sonst stünde dort „erkennen, …". Ohne all das
+// hätten die 26 Bekenntnisseiten keine Description und in
+// WhatsApp-Vorschauen keinen Text.
+const firstParagraph = (article.body ?? '').trim().split(/\n\s*\n/)[0];
+const plainText = firstParagraph
+  .replace(/\[\^[^\]]+\]/g, '')
+  .replace(/\*/g, '')
+  .replace(/\s+/g, ' ')
+  .trim();
+const shortened = plainText.slice(0, plainText.lastIndexOf(' ', 154)).replace(/[,;:–—]+$/, '');
+const description = plainText.length <= 155 ? plainText : `${shortened} …`;
 ---
 
-<BaseLayout title={`${article.data.title} — Glaubensbekenntnis`}>
+<BaseLayout title={`${article.data.title} — Glaubensbekenntnis`} description={description}>
   <PageHeader
     eyebrow={article.data.number != null ? `Artikel ${article.data.number}` : undefined}
     title={article.data.title}
