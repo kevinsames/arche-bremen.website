@@ -18,6 +18,7 @@
 import type { Sermon } from '../lib/sanity';
 import type { CollectionEntry } from 'astro:content';
 import { formatPassages } from '../lib/bible';
+import TextBlock from './TextBlock.astro';
 
 interface Props {
   sermon: Sermon;
@@ -45,7 +46,7 @@ const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
 
 {sermon.series && <p class="series">Predigtreihe: {sermon.series}</p>}
 
-{sermon.description && <p>{sermon.description}</p>}
+{sermon.description && <TextBlock text={sermon.description} />}
 
 {
   (sermon.audioUrl || sermon.audioFile) && (
