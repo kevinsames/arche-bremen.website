@@ -79,6 +79,10 @@ export const PRAYER_REQUESTS = [
 // @-Ersetzung im Footer sauber anwenden lassen, ohne die Adresse selbst zu
 // zerlegen.
 //
+// Ein zweites Mal ausgeschrieben steht die Adresse im mailto:-Link auf
+// /kontakt (src/pages/kontakt.astro, Begründung dort). Wer sie hier ändert,
+// zieht sie dort nach.
+//
 // Bewusst `info.bremen@arche-gemeinde.de` und nicht `info@bremen.…`: Die
 // Subdomain `bremen.arche-gemeinde.de` ist ein reiner CNAME auf Cloudflare
 // Pages und hat keinen MX-Eintrag. Das Postfach liegt im

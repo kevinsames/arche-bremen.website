@@ -79,7 +79,7 @@
      Bis August 2026 rotierten Predigt- und Ältesten-Kacheln zusätzlich
      über --surface-warm-alt/--surface-nature nach Listenindex — entfernt,
      siehe DESIGN.md, Abschnitt „Kachel-Muster". --surface-warm-alt bleibt,
-     .notice/.prayer-list in index.astro nutzen es weiterhin. */
+     .notice in index.astro nutzt es weiterhin. */
   --surface-warm:      color-mix(in srgb, var(--accent-warm) 14%, var(--c-white));
   --surface-warm-alt:  color-mix(in srgb, var(--accent-warm-alt) 14%, var(--c-white));
 
