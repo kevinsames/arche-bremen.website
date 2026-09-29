@@ -114,6 +114,11 @@ export const sermon = defineType({
       name: 'description',
       title: 'Beschreibung',
       type: 'text',
+      description:
+        'Leerzeile trennt Absätze. Links einfach als vollständige Adresse ' +
+        'einfügen (https://…) — sie werden automatisch klickbar. Bitte ' +
+        'keine E-Mail-Adresse eintragen, sondern auf die Kontaktseite ' +
+        'verweisen.',
     }),
   ],
   preview: {

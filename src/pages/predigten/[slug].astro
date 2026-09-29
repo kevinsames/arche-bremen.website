@@ -27,10 +27,14 @@ const dateFormatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' });
 // (Datum, Bibelstelle, Prediger), statt die Seite ohne Description
 // auszuliefern, wenn das optionale sermon.description-Feld leer ist. Kein
 // KI- oder Freitext-Zusammenfassen — nur vorhandene Metadaten aneinander.
-const description =
+// Whitespace geglättet: Redakteure gliedern die Beschreibung mit Leerzeilen
+// (siehe TextBlock.astro) — im <meta name="description"> soll daraus kein
+// mehrzeiliger Rohtext werden.
+const description = (
   sermon.description ??
   `${sermon.title} — Predigt vom ${dateFormatter.format(new Date(sermon.date))} über ` +
-    `${formatPassages(sermon.passages)}, gehalten von ${sermon.preacher}. Arche Bremen.`;
+    `${formatPassages(sermon.passages)}, gehalten von ${sermon.preacher}. Arche Bremen.`
+).replace(/\s+/g, ' ').trim();
 ---
 
 <BaseLayout title={sermon.title} description={description}>

@@ -443,6 +443,46 @@ Historie aufbaut — schlägt der Merge fehl, ist `release` bereits aktuell oder
 jemand hat direkt auf `release` committet, was nicht vorgesehen ist. Danach
 baut Cloudflare automatisch neu und veröffentlicht.
 
+### Täglicher Build
+
+Die Seite ist statisch: Termine und Predigten aus Sanity werden nur beim Build
+abgefragt, nie im Browser. Zwei Folgen ohne neuen Build: Neue Inhalte aus dem
+Studio erscheinen nicht, und vergangene Termine bleiben stehen, weil der
+Filter `start >= now()` in `src/lib/sanity.ts` mit dem Build-Zeitpunkt
+rechnet.
+
+Deshalb baut `.github/workflows/daily-release-build.yml` den Branch `release`
+jede Nacht um 02:00 UTC neu (03:00 Uhr im Winter, 04:00 Uhr im Sommer). Der
+Workflow checkt nichts aus und baut nichts selbst, er ruft nur einen Cloudflare
+Deploy Hook auf. Von Hand auslösen: GitHub → Actions → „Daily release build" →
+„Run workflow".
+
+Beteiligte Teile:
+
+- **Cloudflare:** Deploy Hook namens `release`, fest an den Branch `release`
+  gebunden (*Settings → Builds & deployments → Deploy hooks*). Welcher Branch
+  gebaut wird, steht nur dort, nicht im Workflow. Den Hook nie auf `main`
+  umstellen, sonst ginge unfertiger Stand von `main` live.
+- **GitHub:** Die Hook-URL liegt als Repository-Secret
+  `CLOUDFLARE_DEPLOY_HOOK_RELEASE` (*Settings → Secrets and variables →
+  Actions*). Die URL ist ein Secret: Wer sie kennt, kann beliebig Builds
+  auslösen. Nie ins Repo, nie in einen Chat. Ist sie doch durchgesickert: Hook
+  in Cloudflare löschen, neu anlegen, Secret ersetzen.
+
+**Fehlerbilder:**
+
+- *Workflow rot mit „Secret fehlt":* Secret nicht angelegt oder falsch
+  benannt.
+- *Workflow rot mit HTTP-Fehler:* Hook wurde in Cloudflare gelöscht oder neu
+  erzeugt. Neue URL ins Secret eintragen.
+- *Workflow läuft gar nicht mehr:* GitHub deaktiviert geplante Workflows in
+  öffentlichen Repos nach 60 Tagen ohne Commit. Unter Actions → „Daily release
+  build" wieder aktivieren („Enable workflow"). GitHub schickt vorher eine
+  E-Mail an den Repo-Besitzer.
+
+Cloudflare Pages erlaubt im Free-Plan 500 Builds pro Monat. Der tägliche Build
+belegt davon etwa 30.
+
 ### Die Domain liegt in fremder Hand
 
 `bremen.arche-gemeinde.de` (siehe `astro.config.mjs`, `site`) ist eine

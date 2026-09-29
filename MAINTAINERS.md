@@ -15,7 +15,7 @@ die gehören in den Passwortmanager der Gemeinde.
 |---|---|---|---|
 | Domain `arche-gemeinde.de` | (gehört der Muttergemeinde Arche Hamburg, nicht uns) | | |
 | DNS `arche-gemeinde.de` | Zone liegt im Microsoft-365-Tenant der Muttergemeinde (Nameserver `*.bdm.microsoftonline.com`), betreut über den Dienstleister Wielis. Wer den `bremen`-CNAME konkret ändern kann, hier eintragen, sobald geklärt. | | |
-| Hosting (Cloudflare Pages) | | | |
+| Hosting (Cloudflare Pages) | | | Deploy Hook `release` für den täglichen Build; seine URL liegt als GitHub-Secret `CLOUDFLARE_DEPLOY_HOOK_RELEASE`, siehe README.md „Täglicher Build". |
 | Sanity (Projekt + Studio-Deploy) | | | |
 | Repo (GitHub) | | | |
 | Postfach `info.bremen@arche-gemeinde.de` | Liegt im Microsoft-365-Tenant der Muttergemeinde (Hauptdomain, nicht die Subdomain — siehe README.md „Deployment"). Wer dort administriert, hier eintragen, sobald geklärt. | | |
