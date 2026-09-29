@@ -4,6 +4,7 @@ import Section from '../components/Section.astro';
 import SermonCard from '../components/SermonCard.astro';
 import Slider from '../components/Slider.astro';
 import Overlay from '../components/Overlay.astro';
+import TextBlock from '../components/TextBlock.astro';
 import { Image } from 'astro:assets';
 import { SITE, FOUNDING, PRAYER_REQUESTS, WEEKLY_EVENTS } from '../consts';
 import logoWhite from '../assets/brand/arche-logo-white.svg';
@@ -296,7 +297,11 @@ const jsonLd = {
                   {eventDateLongFormatter.format(new Date(event.start))}
                   {event.location && <> &middot; {event.location}</>}
                 </span>
-                {event.description && <p class="notice-reason">{event.description}</p>}
+                {event.description && (
+                  <div class="notice-reason">
+                    <TextBlock text={event.description} />
+                  </div>
+                )}
               </li>
             ))}
           </ul>
@@ -355,7 +360,7 @@ const jsonLd = {
                   </Fragment>
                   <p class="overlay-meta">{formatEventRange(event)}</p>
                   {event.location && <p class="overlay-meta">{event.location}</p>}
-                  {event.description && <p>{event.description}</p>}
+                  {event.description && <TextBlock text={event.description} />}
                 </Overlay>
               </li>
             ))}
@@ -1013,10 +1018,6 @@ const jsonLd = {
   .notice-detail,
   .notice-reason {
     color: var(--text-secondary);
-  }
-
-  .notice-reason {
-    margin: 0;
   }
 
   /* ---------- Abschließender Aufruf ------------------------------------ */

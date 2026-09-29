@@ -1,0 +1,101 @@
+---
+// Rendert Freitext aus Sanity (event.description, sermon.description) als
+// Absätze mit klickbaren Links — ohne Markdown, ohne Portable Text, ohne
+// set:html. Das Feld bleibt in Sanity ein einfaches Textfeld; Redakteure
+// gliedern über Leerzeilen und fügen Links als vollständige Adresse ein
+// (siehe Hilfetext an den Feldern in sanity/schemaTypes/event.ts und
+// sermon.ts). Alles wird als Astro-Ausdruck ausgegeben, nie als rohes HTML —
+// Sanity Free ist öffentlich beschreibbar für jeden Redakteur (siehe
+// CLAUDE.md, "Wichtige Randbedingung"), da darf aus dem Feld kein HTML
+// entstehen.
+//
+// Rendert bewusst keinen umschließenden Wrapper, nur eine Folge von <p> —
+// die Außenabstände dafür trägt die Umgebung (global.css für p, Overlay.astro
+// für das erste/letzte Kind eines Slots).
+//
+// Keine mailto:-Links (harte Regel 8): eine eingetippte E-Mail-Adresse
+// bleibt schlichter Text.
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+
+const paragraphs = text
+  .trim()
+  .split(/\r?\n\s*\r?\n/)
+  .map((paragraph) => paragraph.trim())
+  .filter(Boolean);
+
+// Erkennt http(s)- und www.-Adressen; schneidet einen Satzzeichen-Rest am
+// Ende ab, damit ein Schlusspunkt oder eine schließende Klammer nicht mit
+// im Link landet.
+const urlPattern = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
+const trailingPunctuation = /[.,;:!?)\]"»'']+$/;
+
+interface Segment {
+  text: string;
+  href?: string;
+}
+
+function splitLine(line: string): Segment[] {
+  const segments: Segment[] = [];
+  let lastIndex = 0;
+
+  for (const match of line.matchAll(urlPattern)) {
+    const start = match.index ?? 0;
+    if (start > lastIndex) {
+      segments.push({ text: line.slice(lastIndex, start) });
+    }
+
+    let url = match[0];
+    let trailing = '';
+    const punctuationMatch = url.match(trailingPunctuation);
+    if (punctuationMatch) {
+      trailing = punctuationMatch[0];
+      url = url.slice(0, -trailing.length);
+    }
+
+    segments.push({
+      text: url,
+      href: url.startsWith('www.') ? `https://${url}` : url,
+    });
+    if (trailing) {
+      segments.push({ text: trailing });
+    }
+
+    lastIndex = start + match[0].length;
+  }
+
+  if (lastIndex < line.length) {
+    segments.push({ text: line.slice(lastIndex) });
+  }
+
+  return segments;
+}
+---
+
+{
+  paragraphs.map((paragraph) => (
+    <p>
+      {paragraph.split(/\r?\n/).map((line, index, lines) => (
+        <>
+          {splitLine(line).map((segment) =>
+            segment.href ? <a href={segment.href}>{segment.text}</a> : segment.text,
+          )}
+          {index < lines.length - 1 && <br />}
+        </>
+      ))}
+    </p>
+  ))
+}
+
+<style>
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  a {
+    overflow-wrap: anywhere;
+  }
+</style>
