@@ -1,0 +1,40 @@
+# Baut die Live-Seite (Branch `release`) einmal täglich neu.
+#
+# Warum: Die Seite ist statisch. Termine und Predigten aus Sanity werden nur
+# beim Build abgefragt, und der Filter `start >= now()` in src/lib/sanity.ts
+# rechnet mit dem Build-Zeitpunkt. Ohne neuen Build bleiben vergangene
+# Termine stehen. Details: README.md, „Täglicher Build".
+#
+# Welcher Branch gebaut wird, entscheidet NICHT diese Datei, sondern der
+# Deploy Hook in Cloudflare: Er ist dort fest an den Branch `release`
+# gebunden. Diese Datei ruft nur dessen URL auf.
+#
+# Die URL ist ein Secret (wer sie kennt, kann Builds auslösen) und liegt als
+# Repository-Secret CLOUDFLARE_DEPLOY_HOOK_RELEASE in GitHub, nie im Repo.
+
+name: Daily release build
+
+on:
+  schedule:
+    # 02:00 UTC = 03:00 Uhr im Winter, 04:00 Uhr im Sommer (deutsche Zeit).
+    # GitHub startet geplante Läufe oft einige Minuten verspätet.
+    - cron: '0 2 * * *'
+  # Knopf „Run workflow" im Actions-Tab, zum Testen oder für einen
+  # sofortigen Neubau.
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Cloudflare Pages deploy hook (release)
+        env:
+          DEPLOY_HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_RELEASE }}
+        run: |
+          if [ -z "$DEPLOY_HOOK" ]; then
+            echo "Secret CLOUDFLARE_DEPLOY_HOOK_RELEASE fehlt, siehe README.md, „Täglicher Build"."
+            exit 1
+          fi
+          curl --fail --silent --show-error --request POST "$DEPLOY_HOOK" > /dev/null
