@@ -1288,7 +1288,19 @@ Verwendung:
 | `arche-logo-white.svg` | Vollständiges Lockup, identisch zu `arche-logo.svg`, einzige Änderung: die drei `fill:#003a57` auf `fill:#ffffff` gesetzt | Footer (dunkler Grund, `--bg-inverted`) |
 | `bogen.svg` | Nur der Bogen — ein einzelner Pfad aus `arche-logo.svg` herausgelöst, viewBox auf diesen Pfad zugeschnitten (plus Rand), sonst keine Änderung | Stilelement (Termine-Sektion) |
 | `public/favicon.svg` / `public/favicon.png` | Derselbe Pfad wie `bogen.svg`, unverändert übernommen, per `transform` auf `<g>` in ein quadratisches 64×64-Format zentriert (kein Neuzeichnen). Farbe Dunkelblau (`#003a56`, Token `--c-blue-dark`), Hintergrund transparent | Tab-Icon |
-| `og.svg` / `public/og.png` | Vollständiges Lockup, unverändert, zentriert auf `--c-offwhite`-Fläche mit schmalem `--c-blue-dark`-Abschlussbalken, 1200×630. Kein `<text>`-Element (Source Serif Pro ist kein Systemfont, siehe „Futura für Headlines, Source Serif Pro für Fließtext" oben) | Open-Graph-Vorschaukarte (`BaseLayout.astro`) |
+| `og.html` / `public/og.jpg` | HTML-Quelle mit `tokens.css` und den Schriften aus `public/fonts/`, gerendert auf 1200×630 (Export-Weg: README, „Markendateien"). Aufbau wie der Kopf von `/kontakt`: `--bg-inverted`, Farbwolke `--cloud-2`, Verlauf `--scrim-card`; weißes Lockup (`arche-logo-white.svg`), gelber Bogen wie im Hero (Pfad aus `bogen.svg`, eingebettet), Überschrift „Sag einfach / Moin." in Futura 700 (`--fs-display`, „Moin." in `--text-accent-on-dark`), darunter „Wir gründen eine Gemeinde in Bremen." in Source Serif Pro 400 (`--fs-xl`). Bis September 2026: `og.svg`, nur das dunkelblaue Lockup auf `--c-offwhite` | Open-Graph-Vorschaukarte (`BaseLayout.astro`) |
+
+**Kontrast auf der Vorschaukarte (29. September 2026 gemessen).** Die Karte
+liegt nicht auf Vollton-Dunkelblau, sondern auf Wolke und Verlauf wie der
+Kopf von `/kontakt`. Gemessen wie bei der Hero-Dachzeile: Karte einmal ohne
+Schrift gerendert, dann das hellste Hintergrundpixel innerhalb der jeweiligen
+Textfläche. Weiße Überschrift „Sag einfach" 8,02 : 1, gelbes „Moin."
+(`--text-accent-on-dark`) 6,18 : 1, weiße Unterzeile 10,38 : 1. Das Gelb
+liegt damit unter den 8,38 : 1 auf Vollton, aber über AA auch für normale
+Schrift (4,5 : 1). Es ist dieselbe Lage wie das gelbe „Moin." im Kopf von
+`/kontakt`, keine neue Ausnahme von CLAUDE.md, Design-Regel 3: Der Grund ist
+`--bg-inverted`. Wer Wolke, Verlauf oder Textlage in `og.html` ändert, misst
+neu.
 
 Eingebunden per direktem Astro-Asset-Import (`import logo from
 '.../arche-logo.svg'`, `<img src={logo.src} ...>`), nicht über die

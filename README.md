@@ -321,16 +321,34 @@ Browser) verwendet denselben Bogen-Pfad wie `bogen.svg`, unverändert, nur per
 Kontrastregel (Sichtbarkeit im Dark-Mode-Tab) in `DESIGN.md`, Abschnitt
 „Logo".
 
-`src/assets/brand/og.svg` ist die Quelle für `public/og.png` (Open-Graph-
-Vorschaukarte, 1200×630, siehe `BaseLayout.astro`). Bewusst ohne
-`<text>`-Element — reine Pfade sind mit jedem Konverter identisch
-reproduzierbar, Text hängt an installierten Systemfonts und Source Serif Pro
-ist keiner.
-Ändert sich das Bild: `og.svg` bearbeiten, dann verlustfrei auf exakt
-1200×630 nach `public/og.png` rendern (kein neues Paket in
-`package.json` — lokal reicht das bereits im `node_modules`-Baum liegende
-`sharp`, z. B. `node -e "require('sharp')('src/assets/brand/og.svg',{density:96}).resize(1200,630).png().toFile('public/og.png')"`),
-beide Dateien committen.
+`src/assets/brand/og.html` ist die Quelle für `public/og.jpg` (Open-Graph-
+Vorschaukarte, 1200×630, siehe `BaseLayout.astro`). Eine HTML-Seite statt
+eines SVG, weil die Karte Text trägt („Sag einfach Moin.") und Text nur dann
+überall gleich aussieht, wenn die Schrift mitkommt: Die Seite lädt
+`src/styles/tokens.css` und die Schriften aus `public/fonts/` per relativem
+Pfad — dieselben Dateien wie die Website. Bis September 2026 war die Quelle
+`og.svg` (nur Logo-Pfade auf gebrochenem Weiß, siehe Git-Historie).
+
+Ändert sich das Bild: `og.html` bearbeiten (zur Kontrolle einfach im Browser
+öffnen), dann rendern und nach JPEG wandeln. Zwei Schritte, kein neues Paket
+in `package.json` — `playwright` kommt einmalig über `npx`, `sharp` liegt
+bereits im `node_modules`-Baum:
+
+```sh
+npx -y playwright@1.56.1 install chromium   # nur beim ersten Mal
+npx -y playwright@1.56.1 screenshot --viewport-size="1200, 630" --wait-for-timeout=500 \
+  "file://$PWD/src/assets/brand/og.html" og-render.png
+node -e "require('sharp')('og-render.png').jpeg({quality:90,chromaSubsampling:'4:4:4',mozjpeg:true}).toFile('public/og.jpg')"
+rm og-render.png
+```
+
+Nicht über `chrome --headless --screenshot`: Der aktuelle Headless-Modus
+zieht vom Fenster die Browserleiste ab, das Bild wird unten rund 90 px
+abgeschnitten. JPEG mit `4:4:4`, weil die übliche Farbunterabtastung die
+Kanten der gelben Schrift auf Blau verschmiert; als PNG wöge die Karte wegen
+der Verläufe rund 290 KB (siehe Kommentar in `BaseLayout.astro`). Danach
+`og.html` und `og.jpg` committen, und nach Änderungen an Wolke, Verlauf oder
+Textlage den Kontrast neu messen (`DESIGN.md`, Abschnitt „Logo").
 
 Noch offen:
 
@@ -383,11 +401,12 @@ Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
   Sobald ein Dienst mit Speicherzugriff dazukommt (eingebettete Karte,
   Newsletter, Zahlungsformular auf der eigenen Seite), wird ein
   Consent-Banner Pflicht und diese Erklärung muss erweitert werden.
-- **og.png:** Reine Lockup-Karte ohne das Wort „Bremen" — bewusste
-  Entscheidung, kein Versehen (Textrendering bräuchte einen Font-Renderer für
-  Source Serif Pro, siehe Abschnitt „Markendateien"). Der Ortsname steht
-  weiterhin im
-  `og:image:alt`, Seitentitel und Footer.
+- **og.jpg:** Die Vorschaukarte trägt seit September 2026 „Sag einfach
+  Moin." und „Wir gründen eine Gemeinde in Bremen.". Der Text ist
+  linksbündig; Dienste, die das Bild auf ein Quadrat in der Mitte
+  beschneiden (etwa die kleine WhatsApp-Vorschau), schneiden dabei die
+  Überschrift an. Bewusst hingenommen, die große Vorschau zeigt die Karte
+  vollständig.
 - Kalenderansicht, Audio-Player, Über-uns- und Gemeindeleben-Seiten,
   Deployment, Studio-Deploy.
 
