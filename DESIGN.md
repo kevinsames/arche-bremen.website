@@ -1803,14 +1803,17 @@ es wird etwas, das sich öffnen lässt.
 
 Typografische Liste statt dreier Felder (`index.astro`, `.prayer-list`):
 
-- **Telefon:** Zeilen zwischen Haarlinien in `--border-subtle`, die Ziffer
-  (`--fs-xl`, `--text-secondary`) links neben dem Anliegen (`--fs-l`,
-  `--text-primary`).
-- **Ab 48rem:** drei Spalten, Ziffer über dem Text, als Oberkante eine
-  4 px starke Linie in `--accent-warm`. Gelb ist hier Linie, keine Schrift
-  (Abweichung 1, CLAUDE.md Design-Regel 3).
+- Die Ziffer (`--fs-xl`, `--text-secondary`) über dem Anliegen (`--fs-l`,
+  `--text-primary`), als Oberkante eine 4 px starke Linie in
+  `--accent-warm`. Gelb ist hier Linie, keine Schrift (Abweichung 1,
+  CLAUDE.md Design-Regel 3).
+- Telefon und Desktop sehen gleich aus, nur die Spaltenzahl wechselt: eine
+  Spalte, ab 48rem drei. Am selben Tag zuerst auf dem Telefon anders
+  gebaut — graue Haarlinien, Ziffer links neben dem Text —, auf Wunsch
+  angeglichen: Die gelbe Linie ist das Erkennungszeichen der Liste und
+  soll auf dem Gerät stehen, auf dem die meisten die Seite sehen.
 - Keine neuen Tokens, keine Farbwolke, kein Schatten. Die Liste ist bei
-  390 px Breite rund 365 px hoch statt rund 650 px (drei Felder mit
+  390 px Breite rund 445 px hoch statt rund 650 px (drei Felder mit
   `min-height: 13rem`).
 
 Verworfen: ein durchgehendes dunkles Band mit der Liste darin. Ein Band

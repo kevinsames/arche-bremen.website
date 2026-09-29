@@ -830,36 +830,29 @@ const jsonLd = {
     margin: var(--sp-6) 0 0;
     padding: 0;
     display: grid;
-    border-bottom: 1px solid var(--border-subtle);
+    gap: var(--sp-4);
   }
 
-  /* Telefon: Zeilen mit Haarlinien dazwischen, Ziffer links neben dem
-     Text. minmax(0, 1fr) aus demselben Grund wie in MinistryCard.astro:
-     Sonst wächst die Textspalte mit ihrem längsten Wort über den Rand. */
+  /* Ziffer über dem Text, als Oberkante eine gelbe Linie. Gelb ist hier
+     Linie, keine Schrift — auf hellem Grund bleibt es Stilelement
+     (CLAUDE.md, Design-Regel 3). Telefon und Desktop gleich, nur die
+     Spaltenzahl wechselt (bis 29. September 2026 standen auf dem Telefon
+     graue Haarlinien und die Ziffer links neben dem Text).
+     minmax(0, 1fr) aus demselben Grund wie in MinistryCard.astro: Sonst
+     wächst die Spalte mit ihrem längsten Wort über den Rand. */
   .prayer-list li {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    column-gap: var(--sp-4);
-    align-items: baseline;
-    padding: var(--sp-4) 0;
-    border-top: 1px solid var(--border-subtle);
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    row-gap: var(--sp-3);
+    padding-top: var(--sp-4);
+    border-top: 4px solid var(--accent-warm);
   }
 
-  /* Desktop: drei Spalten, Ziffer über dem Text. Die gelbe Oberkante ist
-     Linie, keine Schrift — Gelb auf hellem Grund bleibt Stilelement
-     (CLAUDE.md, Design-Regel 3). */
   @media (min-width: 48rem) {
     .prayer-list {
       grid-template-columns: repeat(3, 1fr);
       column-gap: var(--sp-5);
-      border-bottom: 0;
-    }
-
-    .prayer-list li {
-      grid-template-columns: minmax(0, 1fr);
-      align-content: start;
-      row-gap: var(--sp-3);
-      border-top: 4px solid var(--accent-warm);
     }
   }
 
