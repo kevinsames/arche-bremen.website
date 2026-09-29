@@ -7,10 +7,15 @@ import { CONTACT } from '../consts';
 // Eigene .astro-Route statt Markdown in src/content/pages/ (anders als
 // /impressum, /datenschutz, /spenden): Astros Markdown-Pipeline dekodiert
 // &#64; vor der GFM-Autolink-Erkennung und macht daraus einen mailto:-Link
-// (CLAUDE.md Regel 8 verbietet genau das, siehe Kommentar in
-// content/pages/impressum.md). Hier ist die Adresse der Hauptinhalt und soll
-// normal lesbar bleiben, deshalb das &#64;-Muster aus Footer.astro direkt im
-// Template.
+// mit dem @ im Klartext (CLAUDE.md Regel 8 verbietet genau das, siehe
+// Kommentar in content/pages/impressum.md). Hier ist die Adresse der
+// Hauptinhalt, deshalb das &#64;-Muster aus Footer.astro direkt im Template —
+// im Sichttext wie im Link.
+//
+// Die Adressfläche ist seit 29. September 2026 die einzige mailto:-Verlinkung
+// der Website, eine benannte Ausnahme von Regel 8. Vorher sah sie aus wie eine
+// Kachel, tat beim Antippen aber nichts; auf dem Telefon hieß das: lange
+// drücken, markieren, kopieren, Mail-App öffnen, einfügen.
 ---
 
 <BaseLayout
@@ -26,13 +31,30 @@ import { CONTACT } from '../consts';
 
   <Section tone="light" width="measure">
 
-    <p class="mail">
+    {/* Die Adresse steht im href ein zweites Mal ausgeschrieben, statt aus
+        CONTACT zusammengesetzt zu werden: Astro maskiert in einem
+        berechneten Attribut das & und machte aus &#64; ein wörtliches
+        „&#64;" in der Link-URL. Nur ein festes Attribut kommt unverändert
+        im HTML an. Ändert sich CONTACT in consts.ts, hier nachziehen.
+
+        Im Sichttext zwei Hälften, die selbst nicht umbrechen, mit der
+        Bruchstelle vor dem @. Ohne das brach die Adresse auf dem Telefon
+        nach „arche-" um, und der Strich am Zeilenende las sich wie eine
+        Silbentrennung: Wer abtippt, schreibt „archegemeinde.de". */}
+    <a class="mail" href="mailto:info.bremen&#64;arche-gemeinde.de">
       <span class="cloud" aria-hidden="true"></span>
       <span class="mail-body">
-        <span class="mail-label">E-Mail</span>
-        <span class="mail-address">{CONTACT.local}&#64;{CONTACT.domain}</span>
+        <span class="mail-top">
+          <span class="mail-label">E-Mail</span>
+          <span class="arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </span>
+        </span>
+        <span class="mail-address"><span class="nowrap">{CONTACT.local}</span><wbr /><span class="nowrap">&#64;{CONTACT.domain}</span></span>
       </span>
-    </p>
+    </a>
 
     {/* .prose statt nackter <p>: Der Text hat seit September 2026 eine
         Liste, und Listen sind im Projekt ausschließlich dort gestaltet
@@ -81,7 +103,12 @@ import { CONTACT } from '../consts';
      Gemeindeleben, Predigten und Glaubensbekenntnis (siehe
      MinistryCard.astro). Bis September 2026 war es die letzte Fläche der
      alten Bildsprache — blassorange mit linker Akzentkante — und stand
-     nach dem Umbau aller Kacheln sichtbar daneben. */
+     nach dem Umbau aller Kacheln sichtbar daneben.
+
+     Seit 29. September 2026 ein Link (mailto:) und damit auch im Verhalten
+     eine Kachel: Anheben, Schatten und Wolkenzoom wie MinistryCard.astro,
+     statt des Plus-Kreises ein Pfeil — hier öffnet sich kein Popup, sondern
+     das Mail-Programm. */
   .mail {
     position: relative;
     isolation: isolate;
@@ -93,6 +120,20 @@ import { CONTACT } from '../consts';
     color: var(--text-on-dark);
     box-shadow: var(--shadow-card);
     margin: var(--sp-5) 0;
+    text-decoration: none;
+    transition:
+      translate var(--duration-slow) var(--ease-out),
+      box-shadow var(--duration-slow) var(--ease-out);
+  }
+
+  .mail:visited {
+    color: var(--text-on-dark);
+  }
+
+  .mail:hover,
+  .mail:focus-visible {
+    translate: 0 -8px;
+    box-shadow: var(--shadow-card-hover);
   }
 
   .cloud {
@@ -100,6 +141,12 @@ import { CONTACT } from '../consts';
     inset: -26%;
     z-index: -1;
     background-image: var(--cloud-2);
+    transition: scale var(--duration-slow) var(--ease-out);
+  }
+
+  .mail:hover .cloud,
+  .mail:focus-visible .cloud {
+    scale: 1.06;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -126,6 +173,38 @@ import { CONTACT } from '../consts';
     padding: var(--sp-5) var(--sp-4);
   }
 
+  .mail-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+  }
+
+  /* Glaskreis wie der Plus-Kreis in MinistryCard.astro, gleiche Maße. */
+  .arrow {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 2.375rem;
+    height: 2.375rem;
+    background-color: color-mix(in srgb, var(--text-on-dark) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--text-on-dark) 28%, transparent);
+    border-radius: var(--radius-pill);
+    -webkit-backdrop-filter: blur(var(--blur-glass));
+    backdrop-filter: blur(var(--blur-glass));
+  }
+
+  .arrow svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    transition: translate var(--duration-slow) var(--ease-out);
+  }
+
+  .mail:hover .arrow svg,
+  .mail:focus-visible .arrow svg {
+    translate: 3px 0;
+  }
+
   .mail-label {
     font-family: var(--font-display);
     font-weight: 700;
@@ -141,6 +220,9 @@ import { CONTACT } from '../consts';
     font-size: var(--fs-l);
     line-height: var(--lh-tight);
     letter-spacing: var(--tracking-tight);
-    overflow-wrap: anywhere;
+  }
+
+  .nowrap {
+    white-space: nowrap;
   }
 </style>

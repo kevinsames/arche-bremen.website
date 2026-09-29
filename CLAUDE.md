@@ -43,7 +43,12 @@ Begründung — stattdessen fragen.
    Sonderfall.
 7. **Kein Framework für Wiederholungstermine.** Kein RRULE, keine
    Recurrence-Logik.
-8. **Keine E-Mail-Adresse als Klartext-`mailto:`** im HTML.
+8. **Keine E-Mail-Adresse als Klartext-`mailto:`** im HTML. **Eine
+   benannte Ausnahme** (29. September 2026): Die Adresskachel auf
+   `/kontakt` ist ein `mailto:`-Link, das @ im `href` als `&#64;` codiert
+   wie im Sichttext. Footer, Impressum, Datenschutz und alle Markdown- und
+   CMS-Texte bleiben ohne Link. Vor einer weiteren Ausnahme: fragen. Siehe
+   DESIGN.md, „Kacheln, die nichts tun".
 9. **Keine Feature-Erweiterung ohne Auftrag.** Wenn eine Anforderung sinnvoll
    erscheint, aber nicht in der Aufgabe steht: nennen, nicht bauen.
 
