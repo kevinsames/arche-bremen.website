@@ -8,6 +8,7 @@ import TextBlock from '../components/TextBlock.astro';
 import { Image } from 'astro:assets';
 import { SITE, FOUNDING, PRAYER_REQUESTS, WEEKLY_EVENTS } from '../consts';
 import logoWhite from '../assets/brand/arche-logo-white.svg';
+import logo from '../assets/brand/arche-logo.svg';
 import mark from '../assets/brand/bogen.svg';
 import marktplatz from '../assets/photos/bremen-marktplatz.jpg';
 import { getSermons, getEvents, type Event } from '../lib/sanity';
@@ -89,6 +90,10 @@ const jsonLd = {
       '@id': new URL('/#organization', Astro.site).href,
       name: SITE.name,
       url: new URL('/', Astro.site).href,
+      // Google verlangt für das Organisationslogo eine Datei, die auf reinem
+      // Weiß so aussieht wie gedacht — deshalb die dunkelblaue
+      // Originaldatei, nicht die weiße Variante aus dem Hero.
+      logo: new URL(logo.src, Astro.site).href,
       description: SITE.description,
       parentOrganization: {
         '@type': 'Organization',
