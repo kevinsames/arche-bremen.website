@@ -7,10 +7,12 @@ import Section from '../components/Section.astro';
 // sie automatisch für jeden unbekannten Pfad aus — keine Konfiguration in
 // public/_headers oder einer _redirects-Datei nötig.
 //
-// Keine description: Die Seite soll nicht als Suchergebnis auftauchen.
+// noindex: Die Seite soll nicht als Suchergebnis auftauchen. Die fehlende
+// Description allein hätte das nicht verhindert — sie bestimmt nur den
+// Vorschautext, nicht ob Google die Seite aufnimmt.
 ---
 
-<BaseLayout title="Seite nicht gefunden">
+<BaseLayout title="Seite nicht gefunden" noindex>
   <PageHeader
     eyebrow="404"
     title="Seite nicht gefunden"

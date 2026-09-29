@@ -37,10 +37,13 @@ export const GET: APIRoute = async ({ site }) => {
   const paths = [
     ...STATIC_PATHS,
     ...pages.map((page) => `/${page.id}`),
-    // Nur nummerierte Artikel haben eine Detailseite — gleiche Bedingung
-    // wie in src/pages/glaubensbekenntnis/[slug].astro.
+    // Die 25 Artikel und das Vorwort haben eine Detailseite, die Quelle
+    // nicht — gleiche Bedingung wie in
+    // src/pages/glaubensbekenntnis/[slug].astro. Bis September 2026 stand
+    // hier `number != null`; damit fehlte das Vorwort in der Sitemap, seit
+    // es eine eigene Seite hat.
     ...creed
-      .filter((article) => article.data.number != null)
+      .filter((article) => article.id !== '99-quelle')
       .map((article) => `/glaubensbekenntnis/${article.id}`),
     ...elders.map((elder) => `/gemeindeleitung/${elder.id}`),
     ...sermons.map((sermon) => `/predigten/${sermon.slug}`),

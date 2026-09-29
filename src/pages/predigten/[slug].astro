@@ -35,9 +35,15 @@ const description = (
   `${sermon.title} — Predigt vom ${dateFormatter.format(new Date(sermon.date))} über ` +
     `${formatPassages(sermon.passages)}, gehalten von ${sermon.preacher}. Arche Bremen.`
 ).replace(/\s+/g, ' ').trim();
+
+// "— Predigt" im Tab- und Suchergebnistitel, gleiches Muster wie
+// "— Glaubensbekenntnis" bei den Artikeln: Ein Predigttitel allein ("Der gute
+// Hirte · Arche Bremen") sagt im Suchergebnis nicht, was hinter dem Link
+// liegt. Die Überschrift auf der Seite bleibt ohne.
+const pageTitle = `${sermon.title} — Predigt`;
 ---
 
-<BaseLayout title={sermon.title} description={description}>
+<BaseLayout title={pageTitle} description={description}>
   <PageHeader
     eyebrow={formatPassages(sermon.passages)}
     title={sermon.title}
