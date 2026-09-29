@@ -57,10 +57,15 @@ const canonical = new URL(path, Astro.site).href;
     <meta property="og:title" content={pageTitle} />
     {description && <meta property="og:description" content={description} />}
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={new URL('/og.png', Astro.site).href} />
+    <!-- JPEG statt PNG: Die Karte hat Farbverläufe, als PNG wiegt sie
+         rund 290 KB, als JPEG rund 90 KB. Für WhatsApp wird eine Grenze
+         von etwa 300 KB berichtet, darüber fehlt das Bild in der Vorschau
+         (nicht offiziell dokumentiert). Quelle und Export-Weg:
+         src/assets/brand/og.html, README „Markendateien". -->
+    <meta property="og:image" content={new URL('/og.jpg', Astro.site).href} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Arche Bremen — Evangelisch-reformierte Freikirche" />
+    <meta property="og:image:alt" content="Arche Bremen: Sag einfach Moin. Wir gründen eine Gemeinde in Bremen." />
 
     <!-- Nur diese eine Zeile: X fällt für Titel, Beschreibung und Bild
          automatisch auf die og:-Angaben oben zurück. Ein zweiter Satz
