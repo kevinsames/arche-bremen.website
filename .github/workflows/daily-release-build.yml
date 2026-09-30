@@ -34,7 +34,7 @@ jobs:
           DEPLOY_HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_RELEASE }}
         run: |
           if [ -z "$DEPLOY_HOOK" ]; then
-            echo "Secret CLOUDFLARE_DEPLOY_HOOK_RELEASE fehlt, siehe README.md, „Täglicher Build"."
+            echo 'Secret CLOUDFLARE_DEPLOY_HOOK_RELEASE fehlt, siehe README.md, Abschnitt Taeglicher Build.'
             exit 1
           fi
           curl --fail --silent --show-error --request POST "$DEPLOY_HOOK" > /dev/null
