@@ -20,3 +20,4 @@ die gehören in den Passwortmanager der Gemeinde.
 | Repo (GitHub) | | | |
 | Postfach `info.bremen@arche-gemeinde.de` | Liegt im Microsoft-365-Tenant der Muttergemeinde (Hauptdomain, nicht die Subdomain — siehe README.md „Deployment"). Wer dort administriert, hier eintragen, sobald geklärt. | | |
 | Futura-Webfont-Lizenz | Kevin Sames | | Freigabe zur Web-Nutzung am 16.09.2026 erteilt; Quelldateien liegen in einem privaten iCloud-Ordner, nicht im Repo. Bei Rückfragen des Lizenzgebers erster Ansprechpartner. Details in `DESIGN.md`, Abschnitt „Futura für Headlines, Source Serif Pro für Fließtext". |
+| Google Search Console (`bremen.arche-gemeinde.de`) | Kevin Sames | | Verifiziert über Dateimethode, `public/googlef1e371c99bb0ddd0.html`; Details in README.md „Deployment → Google Search Console". |
