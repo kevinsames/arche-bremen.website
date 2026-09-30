@@ -31,16 +31,30 @@ const events = await getEvents();
 // chronologischen Liste — sonst übersieht sie, wer nur die Wochenzeiten liest.
 const cancelledEvents = events.filter((event) => event.cancelled);
 const upcomingEvents = events.filter((event) => !event.cancelled);
+// Zeitzone immer explizit: Sanity speichert Termine in UTC, und der Build
+// läuft auf einem Server in UTC. Ohne timeZone erscheint ein Termin um 10 Uhr
+// als 9 Uhr (Winterzeit) bzw. 8 Uhr (Sommerzeit). Lokal auf einem deutschen
+// Laptop fällt der Fehler nicht auf.
 const eventDateFormatter = new Intl.DateTimeFormat('de-DE', {
   dateStyle: 'medium',
   timeStyle: 'short',
+  timeZone: 'Europe/Berlin',
 });
 // Popup zeigt das Datum ausgeschrieben, die Zeile bleibt kompakt.
 const eventDateLongFormatter = new Intl.DateTimeFormat('de-DE', {
   dateStyle: 'full',
   timeStyle: 'short',
+  timeZone: 'Europe/Berlin',
 });
-const eventTimeFormatter = new Intl.DateTimeFormat('de-DE', { timeStyle: 'short' });
+const eventTimeFormatter = new Intl.DateTimeFormat('de-DE', {
+  timeStyle: 'short',
+  timeZone: 'Europe/Berlin',
+});
+// Nur für den Vergleich "selber Tag?" — toDateString() würde in UTC rechnen.
+const eventDayFormatter = new Intl.DateTimeFormat('de-DE', {
+  dateStyle: 'short',
+  timeZone: 'Europe/Berlin',
+});
 
 // Endzeit nur mit Uhrzeit, wenn der Termin am selben Tag endet — sonst mit
 // vollem Datum (z.B. eine mehrtägige Gemeindefreizeit).
@@ -50,7 +64,7 @@ function formatEventRange(event: Event) {
   if (!event.end) return startText;
   const end = new Date(event.end);
   const endText =
-    start.toDateString() === end.toDateString()
+    eventDayFormatter.format(start) === eventDayFormatter.format(end)
       ? eventTimeFormatter.format(end)
       : eventDateLongFormatter.format(end);
   return `${startText} – ${endText}`;
