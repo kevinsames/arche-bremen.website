@@ -452,15 +452,37 @@ eigene Vorschau-Deployment-URL, aber nur `release` geht live unter
 **Release-Vorgang**, wenn `main` veröffentlicht werden soll:
 
 ```sh
+git fetch origin
 git checkout release
-git merge --ff-only main
+git merge --no-ff origin/main -m "release: merge main (kurze Beschreibung)"
+git diff origin/main release   # muss leer sein
 git push
 ```
 
-`--ff-only` erzwingt, dass `release` nie vor `main` steht und keine eigene
-Historie aufbaut — schlägt der Merge fehl, ist `release` bereits aktuell oder
-jemand hat direkt auf `release` committet, was nicht vorgesehen ist. Danach
-baut Cloudflare automatisch neu und veröffentlicht.
+`release` bekommt pro Veröffentlichung einen eigenen Merge-Commit; die
+Klammer nennt in ein paar Worten, was live geht. Deshalb steht `release` in
+der Historie immer vor `main` — ein `git merge --ff-only main` schlägt
+fehl und ist nicht der Weg.
+
+Was zählt, ist der Inhalt: Nach dem Merge muss `git diff origin/main release`
+leer sein. Zeigt es etwas, liegt auf `release` eine Änderung, die `main`
+nicht hat — dann nicht pushen, sondern klären. Direkt auf `release` wird
+nicht committet. Nach dem Push baut Cloudflare automatisch neu und
+veröffentlicht.
+
+### Google Search Console
+
+Verifiziert über die Dateimethode: `public/googlef1e371c99bb0ddd0.html`
+landet unverändert in `dist/` und damit unter
+`bremen.arche-gemeinde.de/googlef1e371c99bb0ddd0.html`. **Diese Datei nie
+löschen oder umbenennen** — Google prüft sie fortlaufend, ihr Fehlen
+entzieht die Verifizierung.
+
+Cloudflare Pages leitet jede `.html`-URL per 308 auf den Pfad ohne
+Endung um (z. B. `/404.html` → `/404`). Falls Google die Verifizierung
+deshalb ablehnt: zweite Methode „HTML-Tag" in der Search Console wählen
+und den `content`-Wert als `<meta name="google-site-verification">` in
+`src/layouts/BaseLayout.astro` ergänzen.
 
 ### Täglicher Build
 
