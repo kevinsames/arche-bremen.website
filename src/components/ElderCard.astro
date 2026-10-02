@@ -13,8 +13,7 @@ import Overlay from './Overlay.astro';
 // würde das Porträt beschädigen. Unten rechts auf dem Foto steht dauerhaft
 // derselbe Plus-Kreis wie auf den übrigen Kacheln — auf dem Telefon das
 // einzige Zeichen, dass sich hinter dem Porträt mehr verbirgt. Beim
-// Überfahren zoomt das Bild leicht, der Plus-Kreis tritt zurück und ein
-// „Mehr lesen"-Pill blendet sich unten links ein.
+// Überfahren zoomt das Bild leicht und der Plus-Kreis dreht sich.
 interface Props {
   elder: CollectionEntry<'elders'>;
   index?: number;
@@ -47,7 +46,6 @@ const permalink = `/gemeindeleitung/${elder.id}`;
           class="photo"
         />
       )}
-      <span class="hint" aria-hidden="true">Mehr lesen &rarr;</span>
       <span class="plus" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <path d="M12 5v14M5 12h14" />
@@ -134,45 +132,18 @@ const permalink = `/gemeindeleitung/${elder.id}`;
     box-shadow: var(--shadow-card-hover);
   }
 
-  /* Der Pill an der Unterkante erscheint erst beim Überfahren. Auf Touch
-     gibt es keinen Hover — dort trägt der Plus-Kreis (unten) allein das
-     Signal. Name und Rolle unter dem Foto reichten dafür nicht: Die
-     Gemeindeleitung hat im Oktober 2026 berichtet, dass die Kachel auf
-     dem Telefon nicht als antippbar erkannt wurde. */
-  .hint {
-    position: absolute;
-    left: var(--sp-3);
-    bottom: var(--sp-3);
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: var(--fs-xs);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    line-height: 1;
-    padding: var(--sp-2) var(--sp-3);
-    border-radius: var(--radius-pill);
-    background-color: var(--bg-inverted);
-    color: var(--text-on-dark);
-    opacity: 0;
-    translate: 0 8px;
-    transition:
-      opacity var(--duration-slow) var(--ease-out),
-      translate var(--duration-slow) var(--ease-out);
-  }
-
-  .card-wrap:has(.open:hover) .hint,
-  .card:focus-visible .hint {
-    opacity: 1;
-    translate: 0 0;
-  }
-
-  /* Dauerhaft sichtbar, anders als der Pill. Unten rechts statt oben
-     rechts wie bei Predigten und Gemeindeleben: Im 4:5-Porträt sitzt das
+  /* Dauerhaft sichtbar. Unten rechts statt oben rechts wie bei
+     Predigten und Gemeindeleben: Im 4:5-Porträt sitzt das
      Gesicht im oberen Drittel, die untere Ecke ist meist Schulter oder
      Hintergrund. Volle Fläche in --bg-inverted statt der Glasfläche der
      übrigen Kacheln — die ist auf einen dunklen Farbverlauf gerechnet und
-     verschwände auf einem hellen Fotohintergrund. Beim Überfahren tritt
-     der Kreis zurück, damit nicht zwei Hinweise zugleich stehen. */
+     verschwände auf einem hellen Fotohintergrund.
+
+     Bis Oktober 2026 blendete sich beim Überfahren zusätzlich ein
+     „Mehr lesen →"-Pill ein. Entfernt, weil er auf dem Telefon trotzdem
+     auftauchte: Touch-Browser setzen nach dem Antippen einen klebenden
+     Hover-Zustand, und iOS Safari wertet den beim Schließen des Popups
+     zurückgesetzten Fokus teils als sichtbar. Ein Signal reicht. */
   .plus {
     position: absolute;
     right: var(--sp-3);
@@ -184,9 +155,7 @@ const permalink = `/gemeindeleitung/${elder.id}`;
     border-radius: var(--radius-pill);
     background-color: var(--bg-inverted);
     color: var(--text-on-dark);
-    transition:
-      opacity var(--duration-slow) var(--ease-out),
-      rotate var(--duration-slow) var(--ease-out);
+    transition: rotate var(--duration-slow) var(--ease-out);
   }
 
   .plus svg {
@@ -196,7 +165,6 @@ const permalink = `/gemeindeleitung/${elder.id}`;
 
   .card-wrap:has(.open:hover) .plus,
   .card:focus-visible .plus {
-    opacity: 0;
     rotate: 90deg;
   }
 
