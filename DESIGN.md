@@ -177,7 +177,10 @@ CLAUDE.md) auffällt, weil dort kein Hover existiert:
    Klickbarkeit bisher nur über Hover (Flächenwechsel, Lift, Unterstreichung)
    — auf Touch unsichtbar. Ergänzt: der gleiche Chevron, jetzt dauerhaft
    unten rechts in der Kachel, der bei Hover/Fokus zusätzlich 2 px nach
-   rechts wandert.
+   rechts wandert. (Stand August 2026. Heute tragen die Kacheln einen
+   Plus-Kreis statt des Chevrons, siehe „Kacheln" unten. Bei den
+   Ältesten fehlte das Signal von der Umstellung auf Fotos bis Oktober
+   2026.)
 3. Die wischbare Predigt-Reihe (`Slider.astro`) hatte keinen Hinweis auf
    weitere Kacheln außer der angeschnittenen nächsten Kachel. Ergänzt: eine
    schmale `mask-image`-Ausblendung am rechten Rand (`--sp-3` breit). Nur
@@ -598,8 +601,13 @@ bräuchte, als sie Code spart).
   die Farbwolke zoomt auf 1.06.
 - **Ältesten-Kacheln** tragen statt der Farbwolke das echte Foto und haben
   Name und Rolle **unter** dem Bild: Ein Verlauf über dem Gesicht würde
-  das Porträt beschädigen. Statt des Plus-Kreises blendet sich unten links
-  ein „Mehr lesen →"-Pill ein.
+  das Porträt beschädigen. Der Plus-Kreis sitzt dauerhaft **unten rechts**
+  auf dem Foto (das Gesicht liegt im oberen Drittel), als volle Fläche in
+  `--bg-inverted` statt als Glas, damit er auch auf hellem Fotohintergrund
+  trägt. Beim Überfahren tritt er zurück, und unten links blendet sich ein
+  „Mehr lesen →"-Pill ein. Der Pill bleibt bewusst hover-only. Bis Oktober
+  2026 fehlte der Plus-Kreis hier ganz; die Gemeindeleitung meldete, dass
+  die Kacheln auf dem Telefon nicht als antippbar erkannt wurden.
 - **Glaubensbekenntnis-Kacheln** haben bewusst **kein** 4:5-Format,
   sondern eine Mindesthöhe: Bei 25 Artikeln ergäbe Hochformat eine Seite
   von mehreren Bildschirmhöhen.
