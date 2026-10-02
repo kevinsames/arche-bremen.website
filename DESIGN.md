@@ -604,10 +604,12 @@ bräuchte, als sie Code spart).
   das Porträt beschädigen. Der Plus-Kreis sitzt dauerhaft **unten rechts**
   auf dem Foto (das Gesicht liegt im oberen Drittel), als volle Fläche in
   `--bg-inverted` statt als Glas, damit er auch auf hellem Fotohintergrund
-  trägt. Beim Überfahren tritt er zurück, und unten links blendet sich ein
-  „Mehr lesen →"-Pill ein. Der Pill bleibt bewusst hover-only. Bis Oktober
-  2026 fehlte der Plus-Kreis hier ganz; die Gemeindeleitung meldete, dass
-  die Kacheln auf dem Telefon nicht als antippbar erkannt wurden.
+  trägt. Beim Überfahren dreht er sich wie auf den übrigen Kacheln. Bis
+  Oktober 2026 fehlte der Plus-Kreis hier ganz; die Gemeindeleitung
+  meldete, dass die Kacheln auf dem Telefon nicht als antippbar erkannt
+  wurden. Der frühere „Mehr lesen →"-Pill (nur bei Hover) ist im selben
+  Zug entfallen: Er tauchte auf dem Telefon nach dem Antippen trotzdem
+  auf (klebender Hover-Zustand, iOS-Fokus nach dem Schließen).
 - **Glaubensbekenntnis-Kacheln** haben bewusst **kein** 4:5-Format,
   sondern eine Mindesthöhe: Bei 25 Artikeln ergäbe Hochformat eine Seite
   von mehreren Bildschirmhöhen.
