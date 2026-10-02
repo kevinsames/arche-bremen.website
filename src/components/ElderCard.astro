@@ -10,9 +10,11 @@ import Overlay from './Overlay.astro';
 // Anders als die übrigen Kacheln (Gemeindeleben, Predigten, Glaubens-
 // bekenntnis) steht hier ein echtes Foto und keine Farbwolke, und Name und
 // Rolle stehen UNTER dem Bild statt darüber: Ein Verlauf über dem Gesicht
-// würde das Porträt beschädigen. Beim Überfahren zoomt das Bild leicht und
-// ein Hinweis-Pill blendet sich unten links ein — dasselbe Muster wie die
-// Plus-Kreise der anderen Kacheln, nur an das Foto angepasst.
+// würde das Porträt beschädigen. Unten rechts auf dem Foto steht dauerhaft
+// derselbe Plus-Kreis wie auf den übrigen Kacheln — auf dem Telefon das
+// einzige Zeichen, dass sich hinter dem Porträt mehr verbirgt. Beim
+// Überfahren zoomt das Bild leicht, der Plus-Kreis tritt zurück und ein
+// „Mehr lesen"-Pill blendet sich unten links ein.
 interface Props {
   elder: CollectionEntry<'elders'>;
   index?: number;
@@ -46,6 +48,11 @@ const permalink = `/gemeindeleitung/${elder.id}`;
         />
       )}
       <span class="hint" aria-hidden="true">Mehr lesen &rarr;</span>
+      <span class="plus" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+      </span>
     </span>
     <span class="text">
       <span class="name">{elder.data.name}</span>
@@ -127,11 +134,11 @@ const permalink = `/gemeindeleitung/${elder.id}`;
     box-shadow: var(--shadow-card-hover);
   }
 
-  /* Hinweis statt Plus-Kreis: Am Foto wäre ein Icon über dem Gesicht
-     störend, deshalb ein Pill an der Unterkante, das erst beim Überfahren
-     erscheint. Auf Touch gibt es keinen Hover — dort bleibt die Kachel
-     trotzdem erkennbar klickbar, weil sie als Ganzes ein Link ist und
-     Name und Rolle darunter stehen. */
+  /* Der Pill an der Unterkante erscheint erst beim Überfahren. Auf Touch
+     gibt es keinen Hover — dort trägt der Plus-Kreis (unten) allein das
+     Signal. Name und Rolle unter dem Foto reichten dafür nicht: Die
+     Gemeindeleitung hat im Oktober 2026 berichtet, dass die Kachel auf
+     dem Telefon nicht als antippbar erkannt wurde. */
   .hint {
     position: absolute;
     left: var(--sp-3);
@@ -157,6 +164,40 @@ const permalink = `/gemeindeleitung/${elder.id}`;
   .card:focus-visible .hint {
     opacity: 1;
     translate: 0 0;
+  }
+
+  /* Dauerhaft sichtbar, anders als der Pill. Unten rechts statt oben
+     rechts wie bei Predigten und Gemeindeleben: Im 4:5-Porträt sitzt das
+     Gesicht im oberen Drittel, die untere Ecke ist meist Schulter oder
+     Hintergrund. Volle Fläche in --bg-inverted statt der Glasfläche der
+     übrigen Kacheln — die ist auf einen dunklen Farbverlauf gerechnet und
+     verschwände auf einem hellen Fotohintergrund. Beim Überfahren tritt
+     der Kreis zurück, damit nicht zwei Hinweise zugleich stehen. */
+  .plus {
+    position: absolute;
+    right: var(--sp-3);
+    bottom: var(--sp-3);
+    display: grid;
+    place-items: center;
+    width: 2.375rem;
+    height: 2.375rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--bg-inverted);
+    color: var(--text-on-dark);
+    transition:
+      opacity var(--duration-slow) var(--ease-out),
+      rotate var(--duration-slow) var(--ease-out);
+  }
+
+  .plus svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .card-wrap:has(.open:hover) .plus,
+  .card:focus-visible .plus {
+    opacity: 0;
+    rotate: 90deg;
   }
 
   .text {
