@@ -1,11 +1,11 @@
 ---
 name: Niklas Meyer
-role: Pastor cand.
+role: Pastor i.A.
 photo: ./niklas-meyer.jpg
 familyPhoto: ./niklas-meyer-familie.jpg
 ---
 
-Niklas Meyer ist Pastor cand. der Arche Gemeinde in Bremen. Ausgebildet ist er
+Niklas Meyer ist Pastor i.A. der Arche Gemeinde in Bremen. Ausgebildet ist er
 als Arzt, doch den Wunsch, Gott zu dienen, trug er schon lange im Herzen. Heute
 gilt seine Fürsorge nicht mehr den physischen, sondern den geistlichen Herzen
 der Menschen. Lange Jahre war er Mitglied der Arche Gemeinde in Hamburg. Seine
