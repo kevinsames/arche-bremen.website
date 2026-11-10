@@ -367,10 +367,12 @@ Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
   `FOUNDING.milestoneDate` (aktuell „Frühjahr 2027"). Seit September 2026
   gibt es kein festes Datum mehr: Gepflegt werden `MILESTONE_SEASON` und
   `MILESTONE_YEAR` in `src/consts.ts`, dazu `FOUNDING.milestonePlace`
-  („Bremen Süd"). Die Datumsfläche der Startseite zeigt die Jahreszahl groß,
-  darüber die Jahreszeit, darunter den Stadtteil. `ADDRESS` ist als
-  `PLATZHALTER` markiert (Norderoog 2 ist die voraussichtliche, aber nicht
-  bestätigte Adresse) und wird deshalb nirgends gerendert. `PRAYER_REQUESTS`
+  („Bremen-Huchting", aus `ADDRESS` zusammengesetzt). Die Datumsfläche der
+  Startseite zeigt die Jahreszahl groß, darüber die Jahreszeit, darunter den
+  Stadtteil und die volle Anschrift. `ADDRESS` (Norderoog 2, 28259 Bremen)
+  ist seit 9. November 2026 bestätigt (Nutzungsänderung genehmigt) und steht
+  auf der Datumsfläche und auf `/kontakt` — noch nicht im Hero, im Footer
+  und im JSON-LD. `PRAYER_REQUESTS`
   enthält Gebetsanliegen für die Startseiten-Sektion „Werde Teil unserer
   Vision"; die mit `PLATZHALTER` markierten Einträge sind ein Vorschlag und
   brauchen

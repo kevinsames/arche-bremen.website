@@ -27,13 +27,17 @@ export const SITE = {
 // Gottesdienstzeit. SERVICE kehrt zurück, sobald der erste Gottesdienst
 // stattfindet — dann zusammen mit ADDRESS wieder above the fold im Hero.
 
-// PLATZHALTER: voraussichtliche Adresse, noch nicht bestätigt. Deshalb aktuell
-// nirgends öffentlich gerendert (nicht im Hero, nicht im Footer) — erst wenn
-// sie feststeht.
+// Bestätigt am 9. November 2026: Die Nutzungsänderung für die Räume ist
+// genehmigt. Gerendert wird die Adresse bisher nur auf der Datumsfläche der
+// Startseite und auf /kontakt. Hero, Footer und JSON-LD bekommen sie erst
+// zusammen mit SERVICE, wenn der erste Gottesdienst feststeht (siehe README,
+// "Offene Punkte").
 export const ADDRESS = {
   street: 'Norderoog 2',
   postalCode: '28259',
   city: 'Bremen',
+  /** Stadtteil — steht auch als FOUNDING.milestonePlace auf der Startseite. */
+  district: 'Huchting',
 };
 
 // Gründungsphase: Es gibt noch keinen öffentlichen Termin. Das Team trifft
@@ -64,8 +68,9 @@ export const FOUNDING = {
   milestoneYear: MILESTONE_YEAR,
   /** "Frühjahr 2027" — Fließtext-Schreibweise, im Hero. */
   milestoneDate: `${MILESTONE_SEASON} ${MILESTONE_YEAR}`,
-  /** Stadtteil, keine Adresse — die steht noch nicht fest (siehe ADDRESS). */
-  milestonePlace: 'Bremen Süd',
+  /** Ort des ersten Gottesdienstes, groß auf der Datumsfläche. Die volle
+      Anschrift steht darunter (siehe ADDRESS). */
+  milestonePlace: `${ADDRESS.city}-${ADDRESS.district}`,
 };
 
 export const PRAYER_REQUESTS = [

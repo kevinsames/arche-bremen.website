@@ -6,7 +6,7 @@ import Slider from '../components/Slider.astro';
 import Overlay from '../components/Overlay.astro';
 import TextBlock from '../components/TextBlock.astro';
 import { Image } from 'astro:assets';
-import { SITE, FOUNDING, PRAYER_REQUESTS, WEEKLY_EVENTS } from '../consts';
+import { SITE, FOUNDING, ADDRESS, PRAYER_REQUESTS, WEEKLY_EVENTS } from '../consts';
 import logoWhite from '../assets/brand/arche-logo-white.svg';
 import logo from '../assets/brand/arche-logo.svg';
 import mark from '../assets/brand/bogen.svg';
@@ -81,13 +81,14 @@ const homeDescription = `${SITE.description} Erster Gottesdienst im ${FOUNDING.m
 // von der Startseite, um den Seitennamen über den Suchergebnissen zu
 // bestimmen — ohne das rät es aus Title und Domain.
 //
-// BEWUSST OHNE address/geo/openingHours (Church-Schema): ADDRESS in
-// consts.ts ist unbestätigt (siehe dort), und die einzige bestätigte
-// Adresse im Repo ist Hamburg (Doerriesweg 7, siehe impressum.md) — die des
-// Rechtsträgers, nicht der Bremer Versammlung. Sie hier einzutragen würde
-// Google mitteilen, die Arche Bremen sitze in Hamburg. Nachtragen, sobald
-// beides feststeht: die Bremer Adresse bestätigt UND der erste Gottesdienst
-// läuft (siehe README "Offene Punkte", Abschnitt Gründungsphase).
+// BEWUSST OHNE address/geo/openingHours (Church-Schema): Die Bremer Adresse
+// (ADDRESS in consts.ts) ist seit November 2026 bestätigt, aber dort findet
+// noch kein Gottesdienst statt. Ein Church-Objekt mit Adresse und ohne
+// Öffnungszeiten würde Google einen Ort melden, an dem niemand anzutreffen
+// ist. Die Hamburger Adresse aus impressum.md (Doerriesweg 7) ist die des
+// Rechtsträgers und gehört hier ebenfalls nicht hinein. Nachtragen, sobald
+// der erste Gottesdienst läuft (siehe README "Offene Punkte", Abschnitt
+// Gründungsphase).
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -222,7 +223,9 @@ const jsonLd = {
       </p>
       <p class="milestone-foot">
         <span class="milestone-place">{FOUNDING.milestonePlace}</span>
-        <span class="milestone-note">Genaues Datum und Adresse folgen.</span>
+        <span class="milestone-note">
+          {ADDRESS.street}, {ADDRESS.postalCode} {ADDRESS.city}. Genaues Datum folgt.
+        </span>
       </p>
     </div>
   </Section>
