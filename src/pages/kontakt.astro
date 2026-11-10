@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Section from '../components/Section.astro';
-import { CONTACT } from '../consts';
+import { CONTACT, ADDRESS } from '../consts';
 
 // Eigene .astro-Route statt Markdown in src/content/pages/ (anders als
 // /impressum, /datenschutz, /spenden): Astros Markdown-Pipeline dekodiert
@@ -78,8 +78,14 @@ import { CONTACT } from '../consts';
       <p>Weitere Infos für dich:</p>
       <ul>
         <li>
-          <strong>Gottesdienste:</strong> Sobald wir einen festen Ort in Bremen
-          haben, findest du die genaue Anfahrt hier.
+          <strong>Gottesdienste:</strong> Unser fester Ort in Bremen steht:{' '}
+          {/* Zwei Hälften, die selbst nicht umbrechen — sonst trennte die
+              Silbentrennung von .prose auf dem Telefon „Bre-men" und brach
+              nach „Bremen-" um. */}
+          <span class="nowrap">{ADDRESS.street},</span>{' '}
+          <span class="nowrap">{ADDRESS.postalCode} {ADDRESS.city}-{ADDRESS.district}</span>.
+          Wann der erste Gottesdienst dort stattfindet, steht hier, sobald
+          das Datum feststeht.
         </li>
         <li>
           <strong>Mitbeten &amp; Mitbauen:</strong> Unsere aktuellen
