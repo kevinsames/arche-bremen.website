@@ -40,6 +40,16 @@ export const ADDRESS = {
   district: 'Huchting',
 };
 
+// Wegbeschreibung. Bewusst ein Link und kein Karten-Embed: erst der Klick
+// verbindet zu Google (CLAUDE.md Regel 5, Datenschutz „Links auf externe
+// Angebote"). Die Anschrift selbst bleibt Text, damit sie sich markieren
+// lässt.
+export const ADDRESS_DIRECTIONS_URL =
+  'https://www.google.com/maps/dir/?api=1&destination=' +
+  encodeURIComponent(
+    `${ADDRESS.street}, ${ADDRESS.postalCode} ${ADDRESS.city}-${ADDRESS.district}`,
+  );
+
 // Gründungsphase: Es gibt noch keinen öffentlichen Termin. Das Team trifft
 // sich wöchentlich intern zur Vorbereitung; das ist kein Angebot an Besucher
 // und steht deshalb nicht auf der Seite. claim/milestone tragen above the

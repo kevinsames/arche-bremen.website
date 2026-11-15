@@ -52,6 +52,23 @@ const { tone = 'light', width = 'content' } = Astro.props;
     color: var(--text-primary);
   }
 
+  /* Markierung auf Gelb. Die globale ::selection ist selbst --accent-warm
+     mit --text-primary — auf diesem Band unsichtbar. Markierter Text sieht
+     aus wie unmarkierter, Kopieren wirkt, als wäre die Zeile ein Bild.
+     Deshalb das Farbpaar der dunklen Flächen, das hier schon geprüft ist. */
+  .section--accent :global(::selection) {
+    background-color: var(--bg-inverted);
+    color: var(--text-on-dark);
+  }
+
+  /* --link-visited (Braun) erreicht auf Gelb nur 4,27 : 1. Links bleiben
+     die Textfarbe, der Unterstrich unterscheidet sie. Wie .section--dark. */
+  .section--accent :global(a:not(.button)),
+  .section--accent :global(a:not(.button):visited) {
+    color: inherit;
+    text-decoration: underline;
+  }
+
   /* Der globale Link-Stil (var(--link), Dunkles Blau) ist auf dunklem
      Grund unlesbar. Innerhalb einer dunklen Sektion bleiben Links darum
      schlicht die Textfarbe, mit Unterstrich als Erkennungsmerkmal. Der
