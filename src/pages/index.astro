@@ -6,7 +6,7 @@ import Slider from '../components/Slider.astro';
 import Overlay from '../components/Overlay.astro';
 import TextBlock from '../components/TextBlock.astro';
 import { Image } from 'astro:assets';
-import { SITE, FOUNDING, ADDRESS, PRAYER_REQUESTS, WEEKLY_EVENTS } from '../consts';
+import { SITE, FOUNDING, ADDRESS, ADDRESS_DIRECTIONS_URL, PRAYER_REQUESTS, WEEKLY_EVENTS } from '../consts';
 import logoWhite from '../assets/brand/arche-logo-white.svg';
 import logo from '../assets/brand/arche-logo.svg';
 import mark from '../assets/brand/bogen.svg';
@@ -224,7 +224,9 @@ const jsonLd = {
       <p class="milestone-foot">
         <span class="milestone-place">{FOUNDING.milestonePlace}</span>
         <span class="milestone-note">
-          {ADDRESS.street}, {ADDRESS.postalCode} {ADDRESS.city}. Genaues Datum folgt.
+          {ADDRESS.street}, {ADDRESS.postalCode} {ADDRESS.city}.{' '}
+          <a href={ADDRESS_DIRECTIONS_URL} rel="noopener">Wegbeschreibung</a>.
+          Genaues Datum folgt.
         </span>
       </p>
     </div>

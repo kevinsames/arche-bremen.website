@@ -371,8 +371,9 @@ Diese Punkte sind bewusst nicht Teil des aktuellen Stands:
   Startseite zeigt die Jahreszahl groß, darüber die Jahreszeit, darunter den
   Stadtteil und die volle Anschrift. `ADDRESS` (Norderoog 2, 28259 Bremen)
   ist seit 9. November 2026 bestätigt (Nutzungsänderung genehmigt) und steht
-  auf der Datumsfläche und auf `/kontakt` — noch nicht im Hero, im Footer
-  und im JSON-LD. `PRAYER_REQUESTS`
+  auf der Datumsfläche und auf `/kontakt`, dort jeweils mit Link auf die
+  Wegbeschreibung in Google Maps (Link, kein Embed) — noch nicht im Hero, im
+  Footer und im JSON-LD. `PRAYER_REQUESTS`
   enthält Gebetsanliegen für die Startseiten-Sektion „Werde Teil unserer
   Vision"; die mit `PLATZHALTER` markierten Einträge sind ein Vorschlag und
   brauchen
