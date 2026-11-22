@@ -74,7 +74,16 @@ function formatEventRange(event: Event) {
 // Satzes — bleibt automatisch synchron, wenn FOUNDING.milestoneDate sich
 // ändert oder mit dem ersten Gottesdienst ganz entfällt (siehe README
 // "Offene Punkte").
-const homeDescription = `${SITE.description} Erster Gottesdienst im ${FOUNDING.milestoneDate} in ${FOUNDING.milestonePlace} geplant.`;
+//
+// Reihenfolge nach Wichtigkeit, weil Google nach rund 155 Zeichen kürzt
+// (Pixelbreite, kein festes Limit): „geplant" steht vor dem Datum, der
+// Stadtteil am Schluss. Bis November 2026 stand „geplant" als letztes Wort
+// bei 168 Zeichen — gekürzt las sich das Suchergebnis wie ein feststehender
+// Termin. Nur der Stadtteil statt FOUNDING.milestonePlace
+// („Bremen-Huchting"): Bremen steht schon im ersten Satz, und so bleibt der
+// Text bei 161 Zeichen. Wird doch gekürzt, fällt nur der Ort weg, nie die
+// Einschränkung. Gleiches Muster wie /gemeindeleben.
+const homeDescription = `${SITE.description} Erster Gottesdienst geplant im ${FOUNDING.milestoneDate} in ${ADDRESS.district}.`;
 
 
 // Structured Data, nur WebSite + Organization: Google liest WebSite.name
@@ -131,6 +140,20 @@ const jsonLd = {
        Kante zu Kante. Die Höhe kommt aus dem Inhalt, nicht aus einer
        Viewport-Einheit (siehe Kommentar im Frontmatter). -->
   <section class="hero">
+    <!-- priority statt nur loading="eager": Das Foto ist auf dem Telefon das
+         größte Element im ersten Bildschirm und damit das, woran Google die
+         Ladezeit misst (Largest Contentful Paint). Ohne fetchpriority holte
+         Chrome es mit niedriger Priorität. `priority` setzt
+         loading="eager", decoding="sync" und fetchpriority="high".
+
+         Gemessen im November 2026, lokal mit gedrosseltem Mobilprofil:
+         kein Unterschied (LCP-Median 1,2 s vorher wie nachher). Der lokale
+         Vorschau-Server spricht HTTP/1.1, dort konkurriert das Bild kaum mit
+         anderen Dateien. Ein Effekt ist allenfalls über HTTP/2 bei
+         Cloudflare zu erwarten und dann klein. Es bleibt die
+         Standardempfehlung für genau ein Bild pro Seite, mehr nicht. Nicht
+         auf weitere Bilder ausweiten — mehrere „wichtige" Bilder machen
+         keines davon schneller. -->
     <Image
       src={marktplatz}
       alt=""
@@ -139,7 +162,7 @@ const jsonLd = {
       sizes="100vw"
       format="webp"
       quality={55}
-      loading="eager"
+      priority
       class="hero-photo"
     />
 
