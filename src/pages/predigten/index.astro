@@ -13,11 +13,22 @@ import { getSermons } from '../../lib/sanity';
 // vollständige Liste unverändert sichtbar (Progressive Enhancement).
 const sermons = await getSermons();
 const preacherProfiles = await getCollection('elders');
+
+// Solange keine Predigt veröffentlicht ist, steht hier nur „Noch keine
+// Predigten veröffentlicht." Google wertet so eine Seite als leer
+// („Soft 404"), und die Description unten verspräche Inhalte, die es nicht
+// gibt. Deshalb noindex, bis die erste Predigt da ist. Das schaltet sich von
+// selbst um: Der nächste Build nach der ersten Veröffentlichung (spätestens
+// der nächtliche, siehe README „Täglicher Build") nimmt das noindex weg.
+// Gegenstück in src/pages/sitemap.xml.ts — dort fehlt /predigten unter
+// derselben Bedingung.
+const noindex = sermons.length === 0;
 ---
 
 <BaseLayout
   title="Predigten"
   description="Alle Predigten der Arche Bremen in chronologischer Liste — mit Bibelstelle, Datum, Prediger und, wo vorhanden, Audioaufnahme."
+  noindex={noindex}
 >
   {/* Wortlaut vom Betreiber geliefert, Übersetzung nicht angegeben — beim
       nächsten Quellenabgleich klären. Die Quellenzeile nennt bewusst nur

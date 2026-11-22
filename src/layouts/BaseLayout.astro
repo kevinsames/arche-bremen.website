@@ -14,7 +14,8 @@ interface Props {
   // (WebSite + Organization). Wird als <script type="application/ld+json">
   // in den Head geschrieben.
   jsonLd?: Record<string, unknown>;
-  // Nur die 404-Seite. Schreibt <meta name="robots" content="noindex"> und
+  // Die 404-Seite immer, /predigten nur solange es keine Predigt gibt
+  // (Begründung dort). Schreibt <meta name="robots" content="noindex"> und
   // lässt dafür den Canonical weg — "nicht indexieren" und "das hier ist
   // die maßgebliche Adresse" widersprächen sich.
   noindex?: boolean;
