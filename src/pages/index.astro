@@ -140,6 +140,20 @@ const jsonLd = {
        Kante zu Kante. Die Höhe kommt aus dem Inhalt, nicht aus einer
        Viewport-Einheit (siehe Kommentar im Frontmatter). -->
   <section class="hero">
+    <!-- priority statt nur loading="eager": Das Foto ist auf dem Telefon das
+         größte Element im ersten Bildschirm und damit das, woran Google die
+         Ladezeit misst (Largest Contentful Paint). Ohne fetchpriority holte
+         Chrome es mit niedriger Priorität. `priority` setzt
+         loading="eager", decoding="sync" und fetchpriority="high".
+
+         Gemessen im November 2026, lokal mit gedrosseltem Mobilprofil:
+         kein Unterschied (LCP-Median 1,2 s vorher wie nachher). Der lokale
+         Vorschau-Server spricht HTTP/1.1, dort konkurriert das Bild kaum mit
+         anderen Dateien. Ein Effekt ist allenfalls über HTTP/2 bei
+         Cloudflare zu erwarten und dann klein. Es bleibt die
+         Standardempfehlung für genau ein Bild pro Seite, mehr nicht. Nicht
+         auf weitere Bilder ausweiten — mehrere „wichtige" Bilder machen
+         keines davon schneller. -->
     <Image
       src={marktplatz}
       alt=""
@@ -148,7 +162,7 @@ const jsonLd = {
       sizes="100vw"
       format="webp"
       quality={55}
-      loading="eager"
+      priority
       class="hero-photo"
     />
 
