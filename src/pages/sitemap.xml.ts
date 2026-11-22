@@ -13,11 +13,15 @@ import { getSermons } from '../lib/sanity';
 // Seiten-Templates, bewusst dupliziert statt in einen gemeinsamen Helfer
 // gezogen (Regel 2). Nach dem Build prüfen: dist/sitemap.xml öffnen und
 // zählen, oder `grep -c '<loc>' dist/sitemap.xml` gegen die Anzahl der
-// gebauten Seiten (ohne /studio) vergleichen.
+// gebauten Seiten vergleichen — ohne /studio, ohne /404 und, solange es
+// keine Predigt gibt, ohne /predigten (siehe unten).
 
+// /predigten steht nicht hier, sondern unten bei den Predigten: Die Seite
+// ist noindex, solange es keine einzige Predigt gibt (siehe
+// src/pages/predigten/index.astro), und gehört so lange nicht in die
+// Sitemap.
 const STATIC_PATHS = [
   '/',
-  '/predigten',
   '/gemeindeleben',
   '/gemeindeleitung',
   '/glaubensbekenntnis',
@@ -46,6 +50,8 @@ export const GET: APIRoute = async ({ site }) => {
       .filter((article) => article.id !== '99-quelle')
       .map((article) => `/glaubensbekenntnis/${article.id}`),
     ...elders.map((elder) => `/gemeindeleitung/${elder.id}`),
+    // Dieselbe Bedingung wie das noindex in src/pages/predigten/index.astro.
+    ...(sermons.length > 0 ? ['/predigten'] : []),
     ...sermons.map((sermon) => `/predigten/${sermon.slug}`),
   ];
 
